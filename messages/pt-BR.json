@@ -1,0 +1,308 @@
+{
+    "common": {
+        "loading": "Carregando...",
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "close": "Fechar",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "add": "Adicionar",
+        "search": "Buscar",
+        "confirm": "Confirmar",
+        "back": "Voltar",
+        "next": "Próximo",
+        "previous": "Anterior",
+        "yes": "Sim",
+        "no": "Não",
+        "error": "Erro",
+        "success": "Sucesso",
+        "loading_data": "Carregando dados..."
+    },
+    "landing": {
+        "header": {
+            "login": "Entrar",
+            "start": "Começar"
+        },
+        "hero": {
+            "badge": "Transforme seu negócio hoje",
+            "title": "Gerenciamento Completo de",
+            "titleHighlight": "Clientes",
+            "description": "Organize agendamentos, clientes, profissionais, financeiro, notas, checklist, metas e relatórios em uma única plataforma.",
+            "startNow": "Começar Agora",
+            "viewDemo": "Ver Demo"
+        },
+        "virabot": {
+            "badge": "Powered by AI",
+            "title": "Conheça o",
+            "titleHighlight": "ViraBot IA",
+            "description": "Seu assistente inteligente que revoluciona a gestão do seu negócio com inteligência artificial de última geração",
+            "question1": "Quantos agendamentos tenho hoje?",
+            "answer1": "Você tem {count} agendamentos hoje:",
+            "confirmed": "{count} consultas confirmadas",
+            "pending": "{count} aguardando confirmação",
+            "cancelled": "{count} cancelamento",
+            "question2": "Como posso melhorar a taxa de ocupação?",
+            "answer2": "Baseado nos seus dados, sugiro...",
+            "feature1Title": "Conversas Naturais",
+            "feature1Desc": "Converse naturalmente com o ViraBot como se fosse um assistente humano. Faça perguntas sobre seu negócio e receba respostas instantâneas.",
+            "feature2Title": "Análise Inteligente",
+            "feature2Desc": "O ViraBot analisa seus dados e identifica padrões, tendências e oportunidades de melhoria para seu negócio.",
+            "feature3Title": "Insights Acionáveis",
+            "feature3Desc": "Receba sugestões práticas e personalizadas para otimizar processos, aumentar eficiência e melhorar resultados.",
+            "feature4Title": "Automação Inteligente",
+            "feature4Desc": "Automatize tarefas repetitivas e deixe o ViraBot cuidar do trabalho pesado enquanto você foca no atendimento.",
+            "availability": "ViraBot IA está disponível nos planos",
+            "premium": "Premium",
+            "and": "e",
+            "lifetime": "Vitalício",
+            "startWith": "Começar com ViraBot"
+        },
+        "features": {
+            "title": "Tudo que você precisa",
+            "description": "Recursos poderosos projetados para negócios de agendamento modernos",
+            "appointments": "Agendamentos",
+            "appointmentsDesc": "Gerencie agendamentos com facilidade, evite conflitos e otimize o tempo dos profissionais.",
+            "clients": "Gestão de Clientes",
+            "clientsDesc": "Mantenha histórico completo de clientes, agendamentos e serviços em um só lugar.",
+            "reports": "Relatórios",
+            "reportsDesc": "Analise dados, acompanhe desempenho e tome decisões baseadas em informações reais.",
+            "financial": "Financeiro Inteligente",
+            "financialDesc": "Controle pagamentos, descontos e presença automaticamente. Relatórios diários, semanais e mensais com gráficos e visão completa do fluxo de caixa.",
+            "efficiency": "Eficiência",
+            "efficiencyDesc": "Economize tempo com automação e processos otimizados para seu negócio.",
+            "security": "Segurança",
+            "securityDesc": "Dados protegidos com criptografia e conformidade com regulamentações de saúde.",
+            "fast": "Rápido",
+            "fastDesc": "Interface responsiva e rápida que funciona perfeitamente em qualquer dispositivo."
+        },
+        "pricing": {
+            "badge": "💎 Planos Premium",
+            "title": "Escolha o Plano Ideal",
+            "description": "Transparência total. Sem taxas ocultas. Cancele quando quiser.",
+            "popular": "Mais Popular",
+            "perMonth": "/mês",
+            "oneTime": "único",
+            "choose": "Escolher",
+            "includedFeatures": "Recursos Inclusos",
+            "compareDetails": "Comparar Planos em Detalhes"
+        },
+        "benefits": {
+            "title": "Por que escolher ViraWeb?",
+            "benefit1": "Reduz tempo administrativo em até 70%",
+            "benefit2": "Aumenta satisfação dos clientes",
+            "benefit3": "Melhora organização do negócio",
+            "benefit4": "Suporte técnico dedicado",
+            "benefit5": "Integração com sistemas existentes",
+            "benefit6": "Backup automático de dados"
+        },
+        "cta": {
+            "title": "Pronto para transformar seu negócio?",
+            "description": "Escolha seu plano e comece a usar ViraWeb hoje. Veja como podemos melhorar significativamente a gestão do seu negócio.",
+            "startNow": "Começar Agora",
+            "haveAccount": "Já tenho conta"
+        },
+        "footer": {
+            "description": "Gerenciamento completo para negócios de agendamento modernos.",
+            "product": "Produto",
+            "features": "Recursos",
+            "prices": "Preços",
+            "security": "Segurança",
+            "company": "Empresa",
+            "about": "Sobre",
+            "blog": "Blog",
+            "contact": "Contato",
+            "legal": "Legal",
+            "privacy": "Privacidade",
+            "terms": "Termos",
+            "lgpd": "LGPD",
+            "copyright": "© 2025 ViraWeb. Todos os direitos reservados."
+        }
+    },
+    "auth": {
+        "login": {
+            "back": "Voltar",
+            "title": "Bem-vindo",
+            "subtitle": "Faça login na sua conta ViraWeb",
+            "email": "Email",
+            "emailPlaceholder": "seu@email.com",
+            "password": "Senha",
+            "passwordPlaceholder": "••••••••",
+            "submit": "Entrar",
+            "loading": "Entrando...",
+            "forgotPassword": "Esqueceu a senha?",
+            "noAccount": "Não tem conta?",
+            "signup": "Cadastre-se",
+            "demoCredentials": "Demo Credentials",
+            "securityNote": "Seus dados estão seguros e protegidos com criptografia de ponta a ponta.",
+            "requiredFields": "Campos obrigatórios",
+            "fillAllFields": "Por favor, preencha todos os campos",
+            "error": "Erro ao fazer login",
+            "checkCredentials": "Verifique suas credenciais e tente novamente",
+            "incorrectCredentials": "Email ou senha incorretos",
+            "welcomeBack": "Bem-vindo de volta",
+            "successMessage": "Login realizado!",
+            "googleUnavailable": "Login com Google indisponível",
+            "googleError": "Erro no login com Google",
+            "tryAgain": "Tente novamente"
+        },
+        "signup": {
+            "title": "Criar conta",
+            "subtitle": "Comece sua jornada com ViraWeb",
+            "name": "Nome",
+            "namePlaceholder": "Seu nome",
+            "email": "Email",
+            "emailPlaceholder": "seu@email.com",
+            "password": "Senha",
+            "passwordPlaceholder": "••••••••",
+            "confirmPassword": "Confirmar Senha",
+            "submit": "Criar Conta",
+            "loading": "Criando...",
+            "haveAccount": "Já tem conta?",
+            "login": "Entrar",
+            "success": "Conta criada com sucesso!",
+            "checkEmail": "Verifique seu email para confirmar sua conta",
+            "error": "Erro ao criar conta",
+            "unexpectedError": "Ocorreu um erro inesperado. Tente novamente."
+        },
+        "forgotPassword": {
+            "title": "Redefinir Senha",
+            "description": "Digite seu email para receber o link de redefinição de senha",
+            "email": "Email",
+            "submit": "Enviar Link",
+            "back": "Voltar para o login",
+            "success": "Email enviado",
+            "successMessage": "Verifique sua caixa de entrada para o link de reset",
+            "error": "Erro",
+            "errorMessage": "Não foi possível enviar o email"
+        },
+        "resetPassword": {
+            "title": "Nova Senha",
+            "description": "Digite sua nova senha",
+            "password": "Nova Senha",
+            "confirmPassword": "Confirmar Nova Senha",
+            "submit": "Redefinir Senha",
+            "success": "Senha redefinida com sucesso",
+            "error": "Erro ao redefinir senha"
+        }
+    },
+    "dashboard": {
+        "header": {
+            "logout": "Sair"
+        },
+        "nav": {
+            "overview": "Visão Geral",
+            "notes": "Notas",
+            "checklist": "Checklist",
+            "ai": "ViraBot IA",
+            "goals": "Metas",
+            "appointments": "Agendamentos",
+            "patients": "Clientes",
+            "financial": "Financeiro",
+            "professionals": "Profissionais",
+            "reports": "Relatórios",
+            "subscriptions": "Assinatura",
+            "support": "Suporte",
+            "tutorial": "Tutorial",
+            "settings": "Configurações"
+        },
+        "overview": {
+            "welcome": "Bem-vindo,",
+            "summary": "Aqui está um resumo do seu dia na clínica/empresa",
+            "newHere": "Novo por aqui?",
+            "watchTutorial": "Assista ao nosso tutorial para aprender a usar todas as funcionalidades da plataforma.",
+            "buttonTutorial": "Assistir Tutorial",
+            "birthdays": "Aniversariantes do Dia! 🎉",
+            "noBirthdays": "Nenhum aniversariante hoje",
+            "client": "Cliente",
+            "professional": "Profissional",
+            "stats": {
+                "appointmentsToday": "Agendamentos Hoje",
+                "activePatients": "Clientes Ativos",
+                "completionRate": "Taxa de Conclusão",
+                "growthMonth": "Crescimento Mês"
+            },
+            "upcoming": {
+                "title": "Próximos Agendamentos",
+                "scheduled": "Agendado",
+                "completed": "Concluído",
+                "canceled": "Cancelado",
+                "empty": "Nenhum agendamento cadastrado",
+                "createBtn": "Criar Primeiro Agendamento"
+            },
+            "recentClients": {
+                "title": "Clientes Recentes",
+                "empty": "Nenhum cliente cadastrado",
+                "addBtn": "Adicionar Cliente"
+            },
+            "quickActions": {
+                "title": "Ações Rápidas",
+                "newAppointment": "Novo Agendamento",
+                "newClient": "Novo Cliente",
+                "settings": "Configurações",
+                "metrics": "Ver Métricas"
+            }
+        }
+    },
+    "onboarding": {
+        "title": "Escolha seu plano",
+        "subtitle": "Comece a usar o ViraWeb hoje",
+        "selectPlan": "Selecionar Plano",
+        "loading": "Processando...",
+        "success": "Plano selecionado!",
+        "successMessage": "Seu plano foi ativado com sucesso",
+        "error": "Erro ao selecionar plano",
+        "securePayment": "🔒 Pagamento seguro processado pelo Stripe. Cancele quando quiser."
+    },
+    "notifications": {
+        "title": "Notificações",
+        "empty": "Nenhuma notificação",
+        "markAllRead": "Marcar todas como lidas"
+    },
+    "errors": {
+        "generic": "Ocorreu um erro. Tente novamente.",
+        "network": "Erro de conexão. Verifique sua internet.",
+        "unauthorized": "Sessão expirada. Faça login novamente.",
+        "notFound": "Página não encontrada."
+    },
+    "products": {
+        "basic": {
+            "name": "Plano Básico",
+            "description": "Perfeito para começar sua clínica",
+            "features": {
+                "0": "Até 75 clientes",
+                "1": "Até 7 profissionais",
+                "2": "50 agendamentos/mês",
+                "3": "Relatórios básicos",
+                "4": "Suporte via email"
+            }
+        },
+        "premium": {
+            "name": "Plano Premium",
+            "description": "Recursos avançados com IA",
+            "features": {
+                "0": "Até 500 clientes",
+                "1": "Até 50 profissionais",
+                "2": "500 agendamentos/mês",
+                "3": "Relatórios avançados",
+                "4": "ViraBot AI 24/7",
+                "5": "Suporte prioritário",
+                "6": "Suporte via email e WhatsApp",
+                "7": "Horário: 8:00-18:00 (5 dias/semana)"
+            }
+        },
+        "master": {
+            "name": "Plano Master",
+            "description": "Recursos ilimitados e suporte premium",
+            "features": {
+                "0": "Clientes ilimitados",
+                "1": "Profissionais ilimitados",
+                "2": "Agendamentos ilimitados",
+                "3": "Relatórios avançados",
+                "4": "ViraBot AI 24/7",
+                "5": "Suporte prioritário 24/7",
+                "6": "Suporte via email e WhatsApp",
+                "7": "Gerente de conta dedicado"
+            }
+        }
+    }
+}

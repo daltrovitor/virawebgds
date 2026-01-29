@@ -22,6 +22,7 @@ import {
   getRecentPatients,
   getTodayBirthdays,
 } from "@/app/actions/dashboard"
+import { useTranslations } from "next-intl"
 import { createClient } from "@/lib/supabase-client"
 
 interface OverviewTabProps {
@@ -41,9 +42,8 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
   const [birthdays, setBirthdays] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasWatchedTutorial, setHasWatchedTutorial] = useState(true)
+  const t = useTranslations('dashboard.overview')
   const supabase = createClient()
-
-
 
   useEffect(() => {
     const loadData = async () => {
@@ -55,7 +55,6 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
           getTodayBirthdays(),
         ])
 
-        // Carregar status do tutorial
         const { data: { user: currentUser } } = await supabase.auth.getUser()
         if (currentUser) {
           const { data: tutorialData } = await supabase
@@ -82,25 +81,25 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
 
   const statsCards = [
     {
-      label: "Agendamentos Hoje",
+      label: t('stats.appointmentsToday'),
       value: stats.appointmentsToday.toString(),
       icon: <Calendar className="w-6 h-6" />,
       color: "from-blue-500 to-blue-600",
     },
     {
-      label: "Clientes Ativos",
+      label: t('stats.activePatients'),
       value: stats.activePatients.toString(),
       icon: <Users className="w-6 h-6" />,
       color: "from-green-500 to-green-600",
     },
     {
-      label: "Taxa de Conclusão",
+      label: t('stats.completionRate'),
       value: `${stats.completionRate}%`,
       icon: <CheckCircle2 className="w-6 h-6" />,
       color: "from-purple-500 to-purple-600",
     },
     {
-      label: "Crescimento Mês",
+      label: t('stats.growthMonth'),
       value: `${stats.growthRate > 0 ? "+" : ""}${stats.growthRate}%`,
       icon: <TrendingUp className="w-6 h-6" />,
       color: "from-orange-500 to-orange-600",
@@ -120,10 +119,10 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-xl p-6 sm:p-8 cursor-pointer hover:shadow-lg transition-shadow">
         <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
-          Bem-vindo,{" "}
+          {t('welcome')}{" "}
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{user.name}</span>
         </h1>
-        <p className="text-muted-foreground">Aqui está um resumo do seu dia na clínica/empresa</p>
+        <p className="text-muted-foreground">{t('summary')}</p>
       </div>
 
       {/* Tutorial Notification */}
@@ -134,13 +133,13 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
               <PlayCircle className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-foreground mb-2">Novo por aqui?</h3>
+              <h3 className="text-lg font-bold text-foreground mb-2">{t('newHere')}</h3>
               <p className="text-muted-foreground mb-4">
-                Assista ao nosso tutorial para aprender a usar todas as funcionalidades da plataforma.
+                {t('watchTutorial')}
               </p>
               <Button onClick={() => onNavigate("tutorial")} variant="outline" className="gap-2">
                 <PlayCircle className="w-4 h-4" />
-                Assistir Tutorial
+                {t('buttonTutorial')}
               </Button>
             </div>
           </div>
@@ -153,7 +152,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
             <Cake className="w-6 h-6" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-foreground mb-2">Aniversariantes do Dia! 🎉</h3>
+            <h3 className="text-lg font-bold text-foreground mb-2">{t('birthdays')}</h3>
             <div className="space-y-2">
               {birthdays.length > 0 ? (
                 birthdays.map((person) => (
@@ -171,11 +170,10 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
                         <div className="flex items-center gap-2">
                           <p className="text-sm text-muted-foreground break-words">{person.phone}</p>
                           <span
-                            className={`text-xs px-2 py-0.5 rounded-full ${
-                              person.type === "client" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200" : "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
-                            }`}
+                            className={`text-xs px-2 py-0.5 rounded-full ${person.type === "client" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200" : "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
+                              }`}
                           >
-                            {person.type === "client" ? "Cliente" : "Profissional"}
+                            {person.type === "client" ? t('client') : t('professional')}
                           </span>
                         </div>
                       </div>
@@ -183,7 +181,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
                   </div>
                 ))
               ) : (
-                <div className="p-4 bg-muted rounded-lg text-muted-foreground">Nenhum aniversariante hoje</div>
+                <div className="p-4 bg-muted rounded-lg text-muted-foreground">{t('noBirthdays')}</div>
               )}
             </div>
           </div>
@@ -209,7 +207,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
         <div className="lg:col-span-2">
           <Card className="p-6 border border-border cursor-pointer hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-foreground">Próximos Agendamentos</h2>
+              <h2 className="text-xl font-bold text-foreground">{t('upcoming.title')}</h2>
               <Clock className="w-5 h-5 text-muted-foreground" />
             </div>
 
@@ -227,19 +225,18 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
                     <div className="text-right">
                       <p className="font-semibold text-foreground">{apt.time}</p>
                       <span
-                        className={`text-xs font-medium px-2 py-1 rounded-full ${
-                          apt.status === "scheduled"
-                            ? "bg-green-100 text-green-700"
-                            : apt.status === "completed"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-yellow-100 text-yellow-700"
-                        }`}
+                        className={`text-xs font-medium px-2 py-1 rounded-full ${apt.status === "scheduled"
+                          ? "bg-green-100 text-green-700"
+                          : apt.status === "completed"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-yellow-100 text-yellow-700"
+                          }`}
                       >
                         {apt.status === "scheduled"
-                          ? "Agendado"
+                          ? t('upcoming.scheduled')
                           : apt.status === "completed"
-                            ? "Concluído"
-                            : "Cancelado"}
+                            ? t('upcoming.completed')
+                            : t('upcoming.canceled')}
                       </span>
                     </div>
                   </div>
@@ -247,10 +244,10 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
               ) : (
                 <div className="text-center py-12">
                   <Calendar className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-4">Nenhum agendamento cadastrado</p>
+                  <p className="text-muted-foreground mb-4">{t('upcoming.empty')}</p>
                   <Button onClick={() => onNavigate("appointments")} size="sm" className="gap-2">
                     <Plus className="w-4 h-4" />
-                    Criar Primeiro Agendamento
+                    {t('upcoming.createBtn')}
                   </Button>
                 </div>
               )}
@@ -261,7 +258,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
         <div>
           <Card className="p-6 border border-border cursor-pointer hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-foreground">Clientes Recentes</h2>
+              <h2 className="text-xl font-bold text-foreground">{t('recentClients.title')}</h2>
               <Users className="w-5 h-5 text-muted-foreground" />
             </div>
 
@@ -281,10 +278,10 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
               ) : (
                 <div className="text-center py-12">
                   <Users className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground text-sm mb-4">Nenhum cliente cadastrado</p>
+                  <p className="text-muted-foreground text-sm mb-4">{t('recentClients.empty')}</p>
                   <Button onClick={() => onNavigate("patients")} size="sm" variant="outline" className="gap-2">
                     <Plus className="w-4 h-4" />
-                    Adicionar Cliente
+                    {t('recentClients.addBtn')}
                   </Button>
                 </div>
               )}
@@ -295,7 +292,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
 
       {/* Quick Actions */}
       <Card className="p-6 border border-border bg-gradient-to-br from-primary/5 to-secondary/5 cursor-pointer hover:shadow-lg transition-shadow">
-        <h2 className="text-lg font-bold text-foreground mb-4">Ações Rápidas</h2>
+        <h2 className="text-lg font-bold text-foreground mb-4">{t('quickActions.title')}</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <Button
             onClick={() => onNavigate("appointments")}
@@ -303,7 +300,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
             className="p-4 h-auto flex-col items-start bg-background hover:border-primary/50"
           >
             <Calendar className="w-5 h-5 text-primary mb-2" />
-            <p className="text-sm font-semibold text-foreground">Novo Agendamento</p>
+            <p className="text-sm font-semibold text-foreground">{t('quickActions.newAppointment')}</p>
           </Button>
           <Button
             onClick={() => onNavigate("patients")}
@@ -311,7 +308,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
             className="p-4 h-auto flex-col items-start bg-background hover:border-primary/50"
           >
             <Users className="w-5 h-5 text-primary mb-2" />
-            <p className="text-sm font-semibold text-foreground">Novo Cliente</p>
+            <p className="text-sm font-semibold text-foreground">{t('quickActions.newClient')}</p>
           </Button>
           <Button
             onClick={() => onNavigate("subscriptions")}
@@ -319,7 +316,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
             className="p-4 h-auto flex-col items-start bg-background hover:border-primary/50"
           >
             <AlertCircle className="w-5 h-5 text-primary mb-2" />
-            <p className="text-sm font-semibold text-foreground">Configurações</p>
+            <p className="text-sm font-semibold text-foreground">{t('quickActions.settings')}</p>
           </Button>
           <Button
             onClick={() => onNavigate("reports")}
@@ -327,7 +324,7 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
             className="p-4 h-auto flex-col items-start bg-background hover:border-primary/50"
           >
             <TrendingUp className="w-5 h-5 text-primary mb-2" />
-            <p className="text-sm font-semibold text-foreground">Ver Métricas</p>
+            <p className="text-sm font-semibold text-foreground">{t('quickActions.metrics')}</p>
           </Button>
         </div>
       </Card>

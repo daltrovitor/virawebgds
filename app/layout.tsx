@@ -4,17 +4,15 @@ import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import { Providers } from "./providers"
-import { Inter, JetBrains_Mono, Outfit } from 'next/font/google'
+import { Outfit } from 'next/font/google'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, getLocale } from 'next-intl/server'
 
-const inter = Inter({ subsets: ['latin'] })
-const mono = JetBrains_Mono({ subsets: ['latin'] })
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
   display: 'swap',
 })
-
-
 
 export const metadata: Metadata = {
   title: "ViraWeb — Gestor de Clientes e Agendamentos",
@@ -27,7 +25,7 @@ export const metadata: Metadata = {
     "profissionais de saúde",
     "ViraWeb",
   ],
-  metadataBase: new URL("https://viraweb.online"), // domínio de produção
+  metadataBase: new URL("https://viraweb.online"),
   alternates: { canonical: "https://viraweb.online" },
   robots: undefined,
   openGraph: {
@@ -60,14 +58,17 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="pt-BR">
-      {/* JSON-LD: Organization & WebSite - atualize `url` e `logo` para seu domínio */}
+    <html lang={locale} suppressHydrationWarning>
+      {/* JSON-LD: Organization & WebSite */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -121,18 +122,11 @@ export default function RootLayout({
       <meta name="theme-color" content={process.env.NEXT_PUBLIC_THEME_COLOR || "#0ea5a4"} />
       <link rel="apple-touch-icon" href={process.env.NEXT_PUBLIC_APPLE_TOUCH_ICON || "/viraweb6.ico"} />
       <body className={`${outfit.variable} font-sans antialiased selection:bg-primary selection:text-white`}>
-        {/*
-          Inline script to set the initial theme class on the <html> element
-          before React hydrates. This prevents a hydration mismatch where the
-          client mutates document.documentElement (next-themes) and the server
-          render didn't include the class.
-        */}
+        {/* Theme initialization script */}
         <script dangerouslySetInnerHTML={{
           __html: `
           (function() {
             try {
-              // Start light by default. Only enable dark if the user explicitly
-              // selected it previously (localStorage 'theme' === 'dark').
               var theme = localStorage.getItem('theme');
               if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -147,9 +141,11 @@ export default function RootLayout({
           })();
         ` }} />
 
-        <Providers>
-          {children}
-        </Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers>
+            {children}
+          </Providers>
+        </NextIntlClientProvider>
         <Toaster />
         <Analytics />
       </body>

@@ -1,0 +1,308 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "save": "Save",
+        "cancel": "Cancel",
+        "close": "Close",
+        "delete": "Delete",
+        "edit": "Edit",
+        "add": "Add",
+        "search": "Search",
+        "confirm": "Confirm",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "yes": "Yes",
+        "no": "No",
+        "error": "Error",
+        "success": "Success",
+        "loading_data": "Loading data..."
+    },
+    "landing": {
+        "header": {
+            "login": "Login",
+            "start": "Get Started"
+        },
+        "hero": {
+            "badge": "Transform your business today",
+            "title": "Complete Management of",
+            "titleHighlight": "Clients",
+            "description": "Organize appointments, clients, professionals, finances, notes, checklists, goals, and reports in a single platform.",
+            "startNow": "Start Now",
+            "viewDemo": "View Demo"
+        },
+        "virabot": {
+            "badge": "Powered by AI",
+            "title": "Meet",
+            "titleHighlight": "ViraBot AI",
+            "description": "Your intelligent assistant that revolutionizes your business management with cutting-edge artificial intelligence",
+            "question1": "How many appointments do I have today?",
+            "answer1": "You have {count} appointments today:",
+            "confirmed": "{count} confirmed consultations",
+            "pending": "{count} awaiting confirmation",
+            "cancelled": "{count} cancellation",
+            "question2": "How can I improve the occupancy rate?",
+            "answer2": "Based on your data, I suggest...",
+            "feature1Title": "Natural Conversations",
+            "feature1Desc": "Converse naturally with ViraBot as if it were a human assistant. Ask questions about your business and receive instant answers.",
+            "feature2Title": "Intelligent Analysis",
+            "feature2Desc": "ViraBot analyzes your data and identifies patterns, trends, and improvement opportunities for your business.",
+            "feature3Title": "Actionable Insights",
+            "feature3Desc": "Receive practical and personalized suggestions to optimize processes, increase efficiency, and improve results.",
+            "feature4Title": "Intelligent Automation",
+            "feature4Desc": "Automate repetitive tasks and let ViraBot handle the heavy work while you focus on customer service.",
+            "availability": "ViraBot AI is available on",
+            "premium": "Premium",
+            "and": "and",
+            "lifetime": "Lifetime",
+            "startWith": "Start with ViraBot"
+        },
+        "features": {
+            "title": "Everything you need",
+            "description": "Powerful features designed for modern scheduling businesses",
+            "appointments": "Appointments",
+            "appointmentsDesc": "Manage appointments with ease, avoid conflicts, and optimize professionals' time.",
+            "clients": "Client Management",
+            "clientsDesc": "Keep complete history of clients, appointments, and services in one place.",
+            "reports": "Reports",
+            "reportsDesc": "Analyze data, track performance, and make decisions based on real information.",
+            "financial": "Smart Finance",
+            "financialDesc": "Control payments, discounts, and attendance automatically. Daily, weekly, and monthly reports with graphs and complete cash flow visibility.",
+            "efficiency": "Efficiency",
+            "efficiencyDesc": "Save time with automation and optimized processes for your business.",
+            "security": "Security",
+            "securityDesc": "Data protected with encryption and compliance with health regulations.",
+            "fast": "Fast",
+            "fastDesc": "Responsive and fast interface that works perfectly on any device."
+        },
+        "pricing": {
+            "badge": "💎 Premium Plans",
+            "title": "Choose the Ideal Plan",
+            "description": "Total transparency. No hidden fees. Cancel anytime.",
+            "popular": "Most Popular",
+            "perMonth": "/month",
+            "oneTime": "one-time",
+            "choose": "Choose",
+            "includedFeatures": "Included Features",
+            "compareDetails": "Compare Plans in Detail"
+        },
+        "benefits": {
+            "title": "Why choose ViraWeb?",
+            "benefit1": "Reduce administrative time by up to 70%",
+            "benefit2": "Increase customer satisfaction",
+            "benefit3": "Improve business organization",
+            "benefit4": "Dedicated technical support",
+            "benefit5": "Integration with existing systems",
+            "benefit6": "Automatic data backup"
+        },
+        "cta": {
+            "title": "Ready to transform your business?",
+            "description": "Choose your plan and start using ViraWeb today. See how we can significantly improve your business management.",
+            "startNow": "Start Now",
+            "haveAccount": "I already have an account"
+        },
+        "footer": {
+            "description": "Complete management for modern scheduling businesses.",
+            "product": "Product",
+            "features": "Features",
+            "prices": "Pricing",
+            "security": "Security",
+            "company": "Company",
+            "about": "About",
+            "blog": "Blog",
+            "contact": "Contact",
+            "legal": "Legal",
+            "privacy": "Privacy",
+            "terms": "Terms",
+            "lgpd": "LGPD",
+            "copyright": "© 2025 ViraWeb. All rights reserved."
+        }
+    },
+    "auth": {
+        "login": {
+            "back": "Back",
+            "title": "Welcome",
+            "subtitle": "Log in to your ViraWeb account",
+            "email": "Email",
+            "emailPlaceholder": "your@email.com",
+            "password": "Password",
+            "passwordPlaceholder": "••••••••",
+            "submit": "Log In",
+            "loading": "Logging in...",
+            "forgotPassword": "Forgot password?",
+            "noAccount": "Don't have an account?",
+            "signup": "Sign Up",
+            "demoCredentials": "Demo Credentials",
+            "securityNote": "Your data is secure and protected with end-to-end encryption.",
+            "requiredFields": "Required fields",
+            "fillAllFields": "Please fill in all fields",
+            "error": "Login error",
+            "checkCredentials": "Check your credentials and try again",
+            "incorrectCredentials": "Incorrect email or password",
+            "welcomeBack": "Welcome back",
+            "successMessage": "Login successful!",
+            "googleUnavailable": "Google login unavailable",
+            "googleError": "Google login error",
+            "tryAgain": "Try again"
+        },
+        "signup": {
+            "title": "Create Account",
+            "subtitle": "Start your journey with ViraWeb",
+            "name": "Name",
+            "namePlaceholder": "Your name",
+            "email": "Email",
+            "emailPlaceholder": "your@email.com",
+            "password": "Password",
+            "passwordPlaceholder": "••••••••",
+            "confirmPassword": "Confirm Password",
+            "submit": "Create Account",
+            "loading": "Creating...",
+            "haveAccount": "Already have an account?",
+            "login": "Log In",
+            "success": "Account created successfully!",
+            "checkEmail": "Check your email to confirm your account",
+            "error": "Error creating account",
+            "unexpectedError": "An unexpected error occurred. Please try again."
+        },
+        "forgotPassword": {
+            "title": "Reset Password",
+            "description": "Enter your email to receive the password reset link",
+            "email": "Email",
+            "submit": "Send Link",
+            "back": "Back to login",
+            "success": "Email sent",
+            "successMessage": "Check your inbox for the reset link",
+            "error": "Error",
+            "errorMessage": "Could not send email"
+        },
+        "resetPassword": {
+            "title": "New Password",
+            "description": "Enter your new password",
+            "password": "New Password",
+            "confirmPassword": "Confirm New Password",
+            "submit": "Reset Password",
+            "success": "Password reset successfully",
+            "error": "Error resetting password"
+        }
+    },
+    "dashboard": {
+        "header": {
+            "logout": "Logout"
+        },
+        "nav": {
+            "overview": "Overview",
+            "notes": "Notes",
+            "checklist": "Checklist",
+            "ai": "ViraBot AI",
+            "goals": "Goals",
+            "appointments": "Appointments",
+            "patients": "Clients",
+            "financial": "Financial",
+            "professionals": "Professionals",
+            "reports": "Reports",
+            "subscriptions": "Subscription",
+            "support": "Support",
+            "tutorial": "Tutorial",
+            "settings": "Settings"
+        },
+        "overview": {
+            "welcome": "Welcome,",
+            "summary": "Here is a summary of your day at the clinic/business",
+            "newHere": "New here?",
+            "watchTutorial": "Watch our tutorial to learn how to use all the platform features.",
+            "buttonTutorial": "Watch Tutorial",
+            "birthdays": "Today's Birthdays! 🎉",
+            "noBirthdays": "No birthdays today",
+            "client": "Client",
+            "professional": "Professional",
+            "stats": {
+                "appointmentsToday": "Appointments Today",
+                "activePatients": "Active Clients",
+                "completionRate": "Completion Rate",
+                "growthMonth": "Monthly Growth"
+            },
+            "upcoming": {
+                "title": "Upcoming Appointments",
+                "scheduled": "Scheduled",
+                "completed": "Completed",
+                "canceled": "Canceled",
+                "empty": "No appointments registered",
+                "createBtn": "Create First Appointment"
+            },
+            "recentClients": {
+                "title": "Recent Clients",
+                "empty": "No clients registered",
+                "addBtn": "Add Client"
+            },
+            "quickActions": {
+                "title": "Quick Actions",
+                "newAppointment": "New Appointment",
+                "newClient": "New Client",
+                "settings": "Settings",
+                "metrics": "View Metrics"
+            }
+        }
+    },
+    "onboarding": {
+        "title": "Choose your plan",
+        "subtitle": "Start using ViraWeb today",
+        "selectPlan": "Select Plan",
+        "loading": "Processing...",
+        "success": "Plan selected!",
+        "successMessage": "Your plan has been activated successfully",
+        "error": "Error selecting plan",
+        "securePayment": "🔒 Secure payment processed by Stripe. Cancel anytime."
+    },
+    "notifications": {
+        "title": "Notifications",
+        "empty": "No notifications",
+        "markAllRead": "Mark all as read"
+    },
+    "errors": {
+        "generic": "An error occurred. Please try again.",
+        "network": "Connection error. Check your internet.",
+        "unauthorized": "Session expired. Please log in again.",
+        "notFound": "Page not found."
+    },
+    "products": {
+        "basic": {
+            "name": "Basic Plan",
+            "description": "Perfect to start your clinic",
+            "features": {
+                "0": "Up to 75 clients",
+                "1": "Up to 7 professionals",
+                "2": "50 appointments/month",
+                "3": "Basic reports",
+                "4": "Email support"
+            }
+        },
+        "premium": {
+            "name": "Premium Plan",
+            "description": "Advanced features with AI",
+            "features": {
+                "0": "Up to 500 clients",
+                "1": "Up to 50 professionals",
+                "2": "500 appointments/month",
+                "3": "Advanced reports",
+                "4": "ViraBot AI 24/7",
+                "5": "Priority support",
+                "6": "Email & WhatsApp support",
+                "7": "Hours: 8:00-18:00 (5 days/week)"
+            }
+        },
+        "master": {
+            "name": "Master Plan",
+            "description": "Unlimited features and premium support",
+            "features": {
+                "0": "Unlimited clients",
+                "1": "Unlimited professionals",
+                "2": "Unlimited appointments",
+                "3": "Advanced reports",
+                "4": "ViraBot AI 24/7",
+                "5": "Priority support 24/7",
+                "6": "Email & WhatsApp support",
+                "7": "Dedicated account manager"
+            }
+        }
+    }
+}
