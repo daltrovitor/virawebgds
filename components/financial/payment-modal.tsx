@@ -9,6 +9,7 @@ import { getPatients } from "@/app/actions/patients"
 import { recordPayment, getPendingPaymentsForPatient, markPendingPaymentAsPaid } from "@/app/actions/financial-actions"
 import { useToast } from "@/hooks/use-toast"
 import { mapDbErrorToUserMessage } from "@/lib/error-messages"
+import { useTranslations } from "next-intl"
 
 
 interface Props {
@@ -36,6 +37,8 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
   // recurrence simplified: only allow monthly recurrence on a given day
   const [recurrenceDay, setRecurrenceDay] = useState<number>(Number(new Date().toISOString().slice(8, 10)) || 1)
   const { toast } = useToast()
+  const t = useTranslations("dashboard.financial.paymentModal")
+  const tCommon = useTranslations("dashboard.financial")
 
   useEffect(() => {
     const load = async () => {
@@ -82,7 +85,7 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
 
   const handleSubmit = async () => {
     if (!amount || Number(amount) <= 0) {
-      toast({ title: "Valor inválido", description: "Informe um valor maior que zero." })
+      toast({ title: t("toast.invalidAmount"), description: t("toast.invalidAmountDesc") })
       return
     }
 
@@ -92,7 +95,7 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
     if (discountMode === 'percent') {
       const pct = Number(discount || 0)
       if (isNaN(pct) || pct < 0) {
-        toast({ title: 'Desconto inválido', description: 'Informe uma porcentagem válida.' })
+        toast({ title: t("toast.invalidDiscount"), description: t("toast.invalidDiscountPercent") })
         return
       }
       discountReais = Math.round((amountNumber * (pct / 100)) * 100) / 100
@@ -101,7 +104,7 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
     }
 
     if (discountReais < 0 || discountReais > amountNumber) {
-      toast({ title: 'Desconto inválido', description: 'O desconto deve ser entre 0 e o valor do pagamento.' })
+      toast({ title: t("toast.invalidDiscount"), description: t("toast.invalidDiscountRange") })
       return
     }
 
@@ -130,11 +133,11 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
         } catch (err) {
           console.error('Erro ao marcar pendente como pago:', err)
           // Não impedimos o fluxo de sucesso do novo pagamento, apenas avisamos
-          toast({ title: 'Aviso', description: 'Pagamento salvo, mas falhou ao quitar o pendente selecionado.', variant: 'destructive' })
+          toast({ title: tCommon("status.pending"), description: t("toast.settleError"), variant: 'destructive' })
         }
       }
 
-      toast({ title: "Pagamento registrado", description: "Pagamento salvo com sucesso." })
+      toast({ title: t("toast.success"), description: t("toast.successDesc") })
       onOpenChange(false)
       if (onSaved) onSaved()
     } catch (err) {
@@ -143,7 +146,7 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
       const friendly = mapDbErrorToUserMessage(raw)
       // In development show the raw server/db message too to help debugging.
       const description = process.env.NODE_ENV !== "production" ? `${friendly}\n\n[DEBUG] ${raw}` : friendly
-      toast({ title: "Erro ao salvar", description, variant: "destructive" })
+      toast({ title: t("toast.error"), description, variant: "destructive" })
     } finally {
       setLoading(false)
     }
@@ -153,18 +156,18 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg bg-popover dark:bg-slate-900">
         <DialogHeader>
-          <DialogTitle>Registrar Pagamento</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
 
         <div className="grid grid-cols-1 gap-3 mt-4">
           <div>
-            <label className="text-sm text-muted-foreground mb-1 block">Cliente (opcional)</label>
+            <label className="text-sm text-muted-foreground mb-1 block">{t("patient")}</label>
             <Select value={patientId ?? "none"} onValueChange={(v) => setPatientId(v === "none" ? null : v)}>
               <SelectTrigger>
-                <SelectValue placeholder="Selecione um cliente" />
+                <SelectValue placeholder={t("selectPatient")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Sem cliente</SelectItem>
+                <SelectItem value="none">{t("noPatient")}</SelectItem>
                 {patients.map((p) => (
                   <SelectItem key={p.id} value={p.id}>
                     {p.name}
@@ -177,19 +180,19 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
               (() => {
                 const sel = patients.find((p) => p.id === patientId)
                 return sel ? (
-                  <p className="text-sm text-muted-foreground mt-2">Cliente selecionado: <span className="font-medium text-foreground">{sel.name}</span></p>
+                  <p className="text-sm text-muted-foreground mt-2">{t("selectedPatient").replace("{name}", sel.name)}</p>
                 ) : null
               })()
             )}
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground mb-1 block">Valor (R$)</label>
+            <label className="text-sm text-muted-foreground mb-1 block">{t("amount")}</label>
             <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" />
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground mb-1 block">Desconto</label>
+            <label className="text-sm text-muted-foreground mb-1 block">{t("discount")}</label>
             <div className="flex items-center gap-2">
               <div className="w-28">
                 <Select value={discountMode} onValueChange={(v) => setDiscountMode(v as 'amount' | 'percent')}>
@@ -210,40 +213,40 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
                 inputMode={discountMode === 'percent' ? 'numeric' : 'decimal'}
               />
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Se selecionar %, o desconto será calculado em reais a partir do valor informado.</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("percentHint")}</p>
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground mb-1 block">Status</label>
+            <label className="text-sm text-muted-foreground mb-1 block">{t("status")}</label>
             <Select value={status} onValueChange={(v) => setStatus(v)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="paid">Pago</SelectItem>
-                <SelectItem value="pending">Pendente</SelectItem>
-                <SelectItem value="overdue">Atrasado</SelectItem>
-                <SelectItem value="refunded">Estornado</SelectItem>
+                <SelectItem value="paid">{tCommon("status.paid")}</SelectItem>
+                <SelectItem value="pending">{tCommon("status.pending")}</SelectItem>
+                <SelectItem value="overdue">{tCommon("status.overdue")}</SelectItem>
+                <SelectItem value="refunded">{tCommon("status.refunded")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground mb-1 block">Data do Pagamento</label>
+            <label className="text-sm text-muted-foreground mb-1 block">{t("date")}</label>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground mb-1 block">Recorrência</label>
+            <label className="text-sm text-muted-foreground mb-1 block">{t("recurrence")}</label>
             <div className="flex items-center gap-2">
               <input id="is-recurring" type="checkbox" checked={isRecurring} onChange={(e) => setIsRecurring(e.target.checked)} />
-              <label htmlFor="is-recurring" className="text-sm">Recorrente</label>
+              <label htmlFor="is-recurring" className="text-sm">{t("recurring")}</label>
             </div>
             {isRecurring && (
               <div className="mt-2 grid grid-cols-1 gap-2">
-                <p className="text-xs text-muted-foreground">A cobrança será gerada mensalmente no dia selecionado.</p>
+                <p className="text-xs text-muted-foreground">{t("recurringHint")}</p>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm">Dia do pagamento</label>
+                  <label className="text-sm">{t("recurrenceDay")}</label>
                   <Input
                     type="number"
                     min={1}
@@ -259,10 +262,10 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
 
           <div className="flex gap-2 justify-end mt-4">
             <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
-              Cancelar
+              {t("cancel")}
             </Button>
             <Button onClick={handleSubmit} disabled={loading}>
-              {loading ? "Salvando..." : "Salvar Pagamento"}
+              {loading ? t("saving") : t("save")}
             </Button>
           </div>
         </div>

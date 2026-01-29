@@ -8,6 +8,7 @@ import { Loader2, Plus, Trash2 } from "lucide-react"
 import { getTodos, createTodo, updateTodo, toggleTodoComplete, deleteTodo, Todo } from "@/app/actions/todos"
 import { useToast } from "@/hooks/use-toast"
 import { formatDateString } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 export default function ChecklistTab() {
   const [todos, setTodos] = useState<Todo[]>([])
@@ -16,6 +17,7 @@ export default function ChecklistTab() {
   const [newTitle, setNewTitle] = useState("")
   const [newDue, setNewDue] = useState<string | undefined>(undefined)
   const { toast } = useToast()
+  const t = useTranslations('dashboard.checklist')
 
   const load = async () => {
     setLoading(true)
@@ -23,7 +25,11 @@ export default function ChecklistTab() {
       const data = await getTodos()
       setTodos(data || [])
     } catch (err) {
-      toast({ title: "Erro ao carregar checklist", description: err instanceof Error ? err.message : String(err), variant: "destructive" })
+      toast({
+        title: t('toast.loadError'),
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive"
+      })
     } finally {
       setLoading(false)
     }
@@ -37,13 +43,17 @@ export default function ChecklistTab() {
     if (!newTitle.trim()) return
     setSaving(true)
     try {
-      const t = await createTodo({ title: newTitle.trim(), due_date: newDue || null })
-      setTodos((s) => [t, ...s])
+      const t_item = await createTodo({ title: newTitle.trim(), due_date: newDue || null })
+      setTodos((s) => [t_item, ...s])
       setNewTitle("")
       setNewDue(undefined)
-      toast({ title: "Item adicionado" })
+      toast({ title: t('toast.added') })
     } catch (err) {
-      toast({ title: "Erro ao adicionar", description: err instanceof Error ? err.message : String(err), variant: "destructive" })
+      toast({
+        title: t('toast.addError'),
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive"
+      })
     } finally {
       setSaving(false)
     }
@@ -54,7 +64,11 @@ export default function ChecklistTab() {
       const updated = await toggleTodoComplete(id, completed)
       setTodos((s) => s.map((x) => (x.id === id ? updated : x)))
     } catch (err) {
-      toast({ title: "Erro ao atualizar", description: err instanceof Error ? err.message : String(err), variant: "destructive" })
+      toast({
+        title: t('toast.updateError'),
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive"
+      })
     }
   }
 
@@ -62,9 +76,13 @@ export default function ChecklistTab() {
     try {
       await deleteTodo(id)
       setTodos((s) => s.filter((x) => x.id !== id))
-      toast({ title: "Item removido" })
+      toast({ title: t('toast.removed') })
     } catch (err) {
-      toast({ title: "Erro ao remover", description: err instanceof Error ? err.message : String(err), variant: "destructive" })
+      toast({
+        title: t('toast.removeError'),
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive"
+      })
     }
   }
 
@@ -72,10 +90,20 @@ export default function ChecklistTab() {
     <div className="space-y-4">
       <Card className="p-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3">
-          <h3 className="text-lg font-bold">Checklist</h3>
+          <h3 className="text-lg font-bold">{t('title')}</h3>
           <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
-            <Input placeholder="Título do item" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} className="w-full sm:w-64" />
-            <Input type="date" value={newDue || ""} onChange={(e) => setNewDue(e.target.value || undefined)} className="w-full sm:w-40" />
+            <Input
+              placeholder={t('placeholder')}
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              className="w-full sm:w-64"
+            />
+            <Input
+              type="date"
+              value={newDue || ""}
+              onChange={(e) => setNewDue(e.target.value || undefined)}
+              className="w-full sm:w-40"
+            />
             <Button className="bg-primary text-primary-foreground w-full sm:w-auto" onClick={handleCreate} disabled={saving}>
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
             </Button>
@@ -87,20 +115,22 @@ export default function ChecklistTab() {
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
         ) : todos.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">Nenhum item na checklist</div>
+          <div className="text-center py-8 text-muted-foreground">{t('empty')}</div>
         ) : (
           <div className="space-y-2">
-            {todos.map((t) => (
-              <div key={t.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-muted/50 rounded-lg">
+            {todos.map((item) => (
+              <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-3 w-full min-w-0">
-                  <input type="checkbox" checked={t.completed} onChange={(e) => handleToggle(t.id, e.target.checked)} />
+                  <input type="checkbox" checked={item.completed} onChange={(e) => handleToggle(item.id, e.target.checked)} />
                   <div className="min-w-0 w-full">
-                    <div className={`font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}>{t.title}</div>
-                    <div className="text-sm text-muted-foreground mt-1 sm:mt-0 sm:ml-2 whitespace-nowrap">{t.due_date ? formatDateString(t.due_date) : "Sem data"}</div>
+                    <div className={`font-medium truncate ${item.completed ? "line-through text-muted-foreground" : ""}`}>{item.title}</div>
+                    <div className="text-sm text-muted-foreground mt-1 sm:mt-0 sm:ml-2 whitespace-nowrap">
+                      {item.due_date ? formatDateString(item.due_date) : t('noDate')}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 mt-3 sm:mt-0">
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(t.id)} className="text-destructive">
+                  <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)} className="text-destructive">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>

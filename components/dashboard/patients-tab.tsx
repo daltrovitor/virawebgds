@@ -26,6 +26,8 @@ import { checkLimit } from "@/lib/usage-stats"
 import { parseISO, format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 
+import { useTranslations } from 'next-intl'
+
 export default function PatientsTab() {
   const [patients, setPatients] = useState<Patient[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,6 +50,8 @@ export default function PatientsTab() {
     notes: "",
   })
   const { toast } = useToast()
+  const t = useTranslations('dashboard.patients')
+  const tCommon = useTranslations('common')
   const [saving, setSaving] = useState(false)
   const router = useRouter()
 
@@ -71,8 +75,8 @@ export default function PatientsTab() {
       setPatients(data)
     } catch (error) {
       toast({
-        title: "Erro ao carregar clientes",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t('toast.loadError'),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: "destructive",
       })
     } finally {
@@ -84,8 +88,8 @@ export default function PatientsTab() {
     setSaving(true)
     if (!formData.name) {
       toast({
-        title: "Nome obrigatório",
-        description: "Por favor, preencha o nome do cliente",
+        title: t('toast.nameRequired'),
+        description: t('toast.nameRequiredDesc'),
         variant: "destructive",
       })
       return
@@ -108,7 +112,7 @@ export default function PatientsTab() {
         const result = await updatePatient(editingId, formData)
         if (!result.success) {
           toast({
-            title: "Erro ao atualizar cliente",
+            title: t('toast.updateError'),
             description: result.error,
             variant: "destructive",
           })
@@ -116,14 +120,14 @@ export default function PatientsTab() {
           return
         }
         toast({
-          title: "Cliente atualizado",
-          description: "As informações foram atualizadas com sucesso",
+          title: t('toast.updated'),
+          description: t('toast.updatedDesc'),
         })
       } else {
         const result = await createPatient(formData)
         if (!result.success) {
           toast({
-            title: "Erro ao salvar cliente",
+            title: t('toast.saveError'),
             description: result.error,
             variant: "destructive",
           })
@@ -131,8 +135,8 @@ export default function PatientsTab() {
           return
         }
         toast({
-          title: "Cliente criado",
-          description: "Novo cliente adicionado com sucesso",
+          title: t('toast.created'),
+          description: t('toast.createdDesc'),
         })
       }
 
@@ -148,7 +152,7 @@ export default function PatientsTab() {
         const description = mapDbErrorToUserMessage(raw)
 
         toast({
-          title: "Erro ao salvar cliente",
+          title: t('toast.saveError'),
           description,
           variant: "destructive",
         })
@@ -175,30 +179,28 @@ export default function PatientsTab() {
   }
 
   const handleDeletePatient = async (id: string) => {
-    const t = toast({
-      title: "Confirmar exclusão?",
-      description: "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+    const toastId = toast({
+      title: t('toast.confirmDelete'),
+      description: t('toast.confirmDeleteDesc'),
       action: (
         <ToastAction
-          altText="Confirmar exclusão"
+          altText={t('toast.delete')}
           onClick={async () => {
             try {
-              t.update({ id: t.id, title: "Excluindo...", description: "Aguarde" } as any)
+              // toastId.update({ id: toastId.id, title: t('toast.deleting'), description: "Aguarde" } as any)
               await deletePatient(id)
-              t.update({ id: t.id, title: "Cliente excluído", description: "Cliente removido com sucesso" } as any)
+              toast({ title: t('toast.deleted'), description: t('toast.deletedDesc') })
               await loadPatients()
-              setTimeout(() => t.dismiss(), 1500)
             } catch (error) {
-              t.update({
-                id: t.id,
-                title: "Erro ao excluir cliente",
-                description: error instanceof Error ? error.message : "Tente novamente",
+              toast({
+                title: t('toast.deleteError'),
+                description: error instanceof Error ? error.message : t('common.error'),
                 variant: "destructive",
-              } as any)
+              })
             }
           }}
         >
-          Excluir
+          {t('toast.delete')}
         </ToastAction>
       ),
     })
@@ -208,14 +210,14 @@ export default function PatientsTab() {
     try {
       await updatePatientStatus(id, newStatus)
       toast({
-        title: "Status atualizado",
-        description: `Cliente ${newStatus === "active" ? "ativado" : "desativado"} com sucesso`,
+        title: t('toast.statusUpdated'),
+        description: t('toast.statusUpdatedDesc', { status: newStatus === "active" ? t('status.active') : t('status.inactive') }),
       })
       await loadPatients()
     } catch (error) {
       toast({
-        title: "Erro ao atualizar status",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t('toast.statusError'),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: "destructive",
       })
     }
@@ -247,8 +249,8 @@ export default function PatientsTab() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Clientes</h2>
-          <p className="text-muted-foreground mt-1">Gerencie o cadastro de clientes da empresa</p>
+          <h2 className="text-3xl font-bold text-foreground">{t('title')}</h2>
+          <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
         </div>
         <Button
           onClick={() => {
@@ -268,7 +270,7 @@ export default function PatientsTab() {
           className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 shadow-lg"
         >
           <Plus className="w-4 h-4" />
-          Novo Cliente
+          {t('newPatient')}
         </Button>
       </div>
 
@@ -280,48 +282,48 @@ export default function PatientsTab() {
 
       {showForm && (
         <Card className="p-6 border border-border bg-gradient-to-br from-primary/5 to-secondary/5">
-          <h3 className="text-lg font-bold text-foreground mb-4">{editingId ? "Editar Cliente" : "Novo Cliente"}</h3>
+          <h3 className="text-lg font-bold text-foreground mb-4">{editingId ? t('editPatient') : t('newPatient')}</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <Input
-              placeholder="Nome Completo *"
+              placeholder={t('form.name')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="bg-background"
             />
             <Input
               type="email"
-              placeholder="Email"
+              placeholder={t('form.email')}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Telefone"
+              placeholder={t('form.phone')}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="CPF (opcional)"
+              placeholder={t('form.cpf')}
               value={formData.cpf}
               onChange={(e) => setFormData({ ...formData, cpf: e.target.value })}
               className="bg-background"
             />
             <Input
               type="date"
-              placeholder="Data de Nascimento"
+              placeholder={t('form.birthday')}
               value={formData.birthday || formData.date_of_birth}
               onChange={(e) => setFormData({ ...formData, birthday: e.target.value, date_of_birth: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Endereço"
+              placeholder={t('form.address')}
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Notas (opcional)"
+              placeholder={t('form.notes')}
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               className="sm:col-span-2 bg-background"
@@ -332,10 +334,10 @@ export default function PatientsTab() {
               {saving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  {editingId ? "Atualizando..." : "Salvando..."}
+                  {editingId ? t('form.updating') : t('form.saving')}
                 </>
               ) : (
-                editingId ? "Atualizar" : "Salvar"
+                editingId ? t('form.update') : t('form.save')
               )}
             </Button>
             <Button
@@ -345,7 +347,7 @@ export default function PatientsTab() {
                 setEditingId(null)
               }}
             >
-              Cancelar
+              {t('form.cancel')}
             </Button>
           </div>
         </Card>
@@ -355,7 +357,7 @@ export default function PatientsTab() {
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Buscar por nome, email ou CPF..."
+            placeholder={t('searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -363,16 +365,16 @@ export default function PatientsTab() {
         </div>
         <div className="flex gap-2">
           <Button variant={filterStatus === "all" ? "default" : "outline"} onClick={() => setFilterStatus("all")}>
-            Todos
+            {t('filter.all')}
           </Button>
           <Button variant={filterStatus === "active" ? "default" : "outline"} onClick={() => setFilterStatus("active")}>
-            Ativos
+            {t('filter.active')}
           </Button>
           <Button
             variant={filterStatus === "inactive" ? "default" : "outline"}
             onClick={() => setFilterStatus("inactive")}
           >
-            Inativos
+            {t('filter.inactive')}
           </Button>
         </div>
       </div>
@@ -401,7 +403,7 @@ export default function PatientsTab() {
                         className={`text-xs font-semibold px-2 py-1 rounded-full ${patient.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
                           }`}
                       >
-                        {patient.status === "active" ? "Ativo" : "Inativo"}
+                        {patient.status === "active" ? t('status.active') : t('status.inactive')}
                       </span>
                     </div>
                   </div>
@@ -427,17 +429,17 @@ export default function PatientsTab() {
                     )}
                     {(patient.date_of_birth || patient.birthday) && (
                       <div className="text-sm text-muted-foreground">
-                        Nascimento: {
+                        {t('form.birthday')}: {
                           new Date(
                             `${(patient.birthday ?? patient.date_of_birth) || ""}T00:00:00`
-                          ).toLocaleDateString("pt-BR")
+                          ).toLocaleDateString("pt-BR") // Keep locale fixed for date format consistency or change to user locale if desired
                         }
                       </div>
                     )}
                   </div>
 
-                  {patient.address && <p className="text-sm text-muted-foreground mb-2">Endereço: {patient.address}</p>}
-                  {patient.notes && <p className="text-sm text-muted-foreground italic">Notas: {patient.notes}</p>}
+                  {patient.address && <p className="text-sm text-muted-foreground mb-2">{t('form.address')}: {patient.address}</p>}
+                  {patient.notes && <p className="text-sm text-muted-foreground italic">{t('form.notes')}: {patient.notes}</p>}
                 </div>
 
                 <div className="flex gap-2 w-full sm:w-auto">
@@ -448,7 +450,7 @@ export default function PatientsTab() {
                     className="flex-1 sm:flex-none gap-2"
                   >
                     <Eye className="w-4 h-4" />
-                    Ver Perfil
+                    {t('viewProfile')}
                   </Button>
                   <Button
                     variant="outline"
@@ -472,10 +474,10 @@ export default function PatientsTab() {
           ))
         ) : (
           <Card className="p-8 border border-border text-center">
-            <p className="text-muted-foreground">Nenhum cliente encontrado</p>
+            <p className="text-muted-foreground">{t('empty')}</p>
             <Button onClick={() => setShowForm(true)} className="mt-4" variant="outline">
               <Plus className="w-4 h-4 mr-2" />
-              Adicionar Primeiro Cliente
+              {t('createFirst')}
             </Button>
           </Card>
         )}

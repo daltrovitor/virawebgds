@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { useToast } from "@/hooks/use-toast"
+import { useTranslations, useLocale } from 'next-intl'
 
 interface Appointment {
   id: string
@@ -44,6 +45,8 @@ export function WeeklyView({
   const [currentWeek, setCurrentWeek] = useState(new Date())
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+  const t = useTranslations('dashboard.appointments.weeklyView')
+  const locale = useLocale()
 
   // Get start and end of week
   const startOfWeek = new Date(currentWeek)
@@ -79,10 +82,10 @@ export function WeeklyView({
           onValueChange={onSelectProfessional}
         >
           <SelectTrigger className="w-full sm:w-[200px]">
-            <SelectValue placeholder="Selecionar profissional" />
+            <SelectValue placeholder={t('placeholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos os profissionais</SelectItem>
+            <SelectItem value="all">{t('allProfessionals')}</SelectItem>
             {professionals?.map((professional) => (
               <SelectItem key={professional.id} value={professional.id}>
                 {professional.name}
@@ -100,14 +103,14 @@ export function WeeklyView({
             }}
             className="px-2 md:px-4 py-2 border rounded-md hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap"
           >
-            <span className="hidden md:inline">Semana anterior</span>
-            <span className="md:hidden">Anterior</span>
+            <span className="hidden md:inline">{t('prevWeek')}</span>
+            <span className="md:hidden">{t('prev')}</span>
           </button>
           <button
             onClick={() => setCurrentWeek(new Date())}
             className="px-2 md:px-4 py-2 border rounded-md hover:bg-gray-100 text-xs md:text-sm"
           >
-            Hoje
+            {t('today')}
           </button>
           <button
             onClick={() => {
@@ -117,8 +120,8 @@ export function WeeklyView({
             }}
             className="px-2 md:px-4 py-2 border rounded-md hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap"
           >
-            <span className="hidden md:inline">Próxima semana</span>
-            <span className="md:hidden">Próxima</span>
+            <span className="hidden md:inline">{t('nextWeek')}</span>
+            <span className="md:hidden">{t('next')}</span>
           </button>
         </div>
       </div>
@@ -127,17 +130,17 @@ export function WeeklyView({
         <div className="min-w-[320px] md:min-w-[800px]">
           {/* Calendar Header */}
           <div className="grid grid-cols-8 gap-1 md:gap-2 mb-2 text-xs md:text-base">
-            <div className="p-1 md:p-2 font-semibold text-center">Hora</div>
+            <div className="p-1 md:p-2 font-semibold text-center">{t('hour')}</div>
             {weekDays.map((day, index) => (
               <div
                 key={index}
                 className="p-1 md:p-2 font-semibold text-center"
               >
                 <span className="hidden md:inline">
-                  {day.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric' })}
+                  {day.toLocaleDateString(locale, { weekday: 'short', day: 'numeric' })}
                 </span>
                 <span className="md:hidden">
-                  {day.toLocaleDateString('pt-BR', { weekday: 'short' }).substring(0, 3)}
+                  {day.toLocaleDateString(locale, { weekday: 'short' }).substring(0, 3)}
                   <br />
                   {day.getDate()}
                 </span>
@@ -186,14 +189,14 @@ export function WeeklyView({
                           }
                         >
                           <div className="flex items-center justify-between mb-1 w-full">
-                            <span className={`font-bold text-sm md:text-base ${theme === 'dark' ? 'text-white' : 'text-white'}` }>
-                              {professionals.find(p => p.id === apt.professional_id)?.name || 'Cliente'}
+                            <span className={`font-bold text-sm md:text-base ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
+                              {professionals.find(p => p.id === apt.professional_id)?.name || t('client')}
                             </span>
                           </div>
                           <div className={`text-xs md:block hidden md:text-sm mb-1 ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
-                            {apt.appointment_time} - {apt.notes || 'Sem descrição'} ({apt.duration_minutes} min)
+                            {apt.appointment_time} - {apt.notes || t('noDescription')} ({apt.duration_minutes} min)
                           </div>
-                         
+
                         </div>
                       ))}
                     </div>

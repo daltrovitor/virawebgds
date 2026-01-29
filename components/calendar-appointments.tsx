@@ -19,6 +19,7 @@ import { getPatients } from "@/app/actions/patients"
 import { getProfessionals } from "@/app/actions/professionals"
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
+import { useTranslations, useLocale } from 'next-intl'
 
 interface Appointment {
   id: string
@@ -42,6 +43,8 @@ export default function CalendarAppointments() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const { toast } = useToast()
+  const t = useTranslations('dashboard.appointments')
+  const locale = useLocale()
 
   const [currentDate, setCurrentDate] = useState(() => {
     const now = new Date()
@@ -82,8 +85,8 @@ export default function CalendarAppointments() {
       setProfessionals(professionalsData.map((p) => ({ id: p.id, name: p.name })))
     } catch (error) {
       toast({
-        title: "Erro ao carregar dados",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t('toast.loadError'),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: "destructive",
       })
     } finally {
@@ -159,8 +162,8 @@ export default function CalendarAppointments() {
           const updated = await updateAppointment(editingId, formData)
           setAppointments(appointments.map((a) => (a.id === editingId ? updated : a)))
           toast({
-            title: "Agendamento atualizado",
-            description: "O agendamento foi atualizado com sucesso",
+            title: t('toast.updated'),
+            description: t('toast.updatedDesc'),
           })
         } else {
           const payload: any = {
@@ -189,8 +192,8 @@ export default function CalendarAppointments() {
           }
 
           toast({
-            title: "Agendamento criado",
-            description: "O agendamento foi criado com sucesso",
+            title: t('toast.created'),
+            description: t('toast.createdDesc'),
           })
         }
         setFormData({
@@ -208,8 +211,8 @@ export default function CalendarAppointments() {
         setShowForm(false)
       } catch (error) {
         toast({
-          title: "Erro ao salvar agendamento",
-          description: error instanceof Error ? error.message : "Tente novamente",
+          title: t('toast.saveError'),
+          description: error instanceof Error ? error.message : t('common.error'),
           variant: "destructive",
         })
       } finally {
@@ -236,30 +239,28 @@ export default function CalendarAppointments() {
   }
 
   const handleDeleteAppointment = async (id: string) => {
-    const t = toast({
-      title: "Confirmar exclusão?",
-      description: "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+    const toastId = toast({
+      title: t('toast.confirmDelete'),
+      description: t('toast.confirmDeleteDesc'),
       action: (
         <ToastAction
-          altText="Confirmar exclusão"
+          altText={t('toast.delete')}
           onClick={async () => {
             try {
-              t.update({ id: t.id, title: "Excluindo...", description: "Aguarde" } as any)
+              // toastId.update({ id: toastId.id, title: t('toast.deleting'), description: "Aguarde" } as any)
               await deleteAppointment(id)
               setAppointments(appointments.filter((a) => a.id !== id))
-              t.update({ id: t.id, title: "Agendamento excluído", description: "O agendamento foi excluído com sucesso" } as any)
-              setTimeout(() => t.dismiss(), 1500)
+              toast({ title: t('toast.deleted'), description: t('toast.deletedDesc') })
             } catch (error) {
-              t.update({
-                id: t.id,
-                title: "Erro ao excluir agendamento",
-                description: error instanceof Error ? error.message : "Tente novamente",
+              toast({
+                title: t('toast.deleteError'),
+                description: error instanceof Error ? error.message : t('common.error'),
                 variant: "destructive",
-              } as any)
+              })
             }
           }}
         >
-          Excluir
+          {t('toast.delete')}
         </ToastAction>
       ),
     })
@@ -270,13 +271,13 @@ export default function CalendarAppointments() {
       await updateAppointmentStatus(id, newStatus)
       setAppointments(appointments.map((a) => (a.id === id ? { ...a, status: newStatus } : a)))
       toast({
-        title: "Status atualizado",
-        description: "O status do agendamento foi atualizado",
+        title: t('toast.statusUpdated'),
+        description: t('toast.statusUpdatedDesc'),
       })
     } catch (error) {
       toast({
-        title: "Erro ao atualizar status",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t('toast.statusError'),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: "destructive",
       })
     }
@@ -308,22 +309,20 @@ export default function CalendarAppointments() {
     }
   }
 
-  const monthNames = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
-  ]
+  const getDayNames = () => {
+    // Generate day names based on locale
+    const formatter = new Intl.DateTimeFormat(locale, { weekday: 'short' })
+    const days = []
+    // Start from Sunday (which is often index 0 in some contexts, but let's just pick a known week)
+    // Jan 5 2025 is Sunday
+    for (let i = 5; i < 12; i++) {
+      const date = new Date(2025, 0, i)
+      days.push(formatter.format(date))
+    }
+    return days
+  }
 
-  const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
+  const dayNames = getDayNames()
 
   const getPatientName = (patientId: string) => {
     return patients.find((p) => p.id === patientId)?.name || "Cliente não encontrado"
@@ -346,8 +345,8 @@ export default function CalendarAppointments() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Agendamentos</h2>
-          <p className="text-muted-foreground mt-1">Visualize e gerencie agendamentos por calendário</p>
+          <h2 className="text-3xl font-bold text-foreground">{t('title')}</h2>
+          <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
         </div>
         <Button
           onClick={() => {
@@ -368,7 +367,7 @@ export default function CalendarAppointments() {
           className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 shadow-lg"
         >
           <Plus className="w-4 h-4" />
-          Novo Agendamento
+          {t('newAppointment')}
         </Button>
       </div>
 
@@ -376,7 +375,7 @@ export default function CalendarAppointments() {
       {showForm && (
         <Card className="p-6 border border-border bg-gradient-to-br from-primary/5 to-secondary/5">
           <h3 className="text-lg font-bold text-foreground mb-4">
-            {editingId ? "Editar Agendamento" : "Novo Agendamento"}
+            {editingId ? t('editAppointment') : t('newAppointment')}
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <select
@@ -384,7 +383,7 @@ export default function CalendarAppointments() {
               onChange={(e) => setFormData({ ...formData, patient_id: e.target.value })}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
-              <option value="">Selecione um cliente</option>
+              <option value="">{t('form.patient')}</option>
               {patients.map((patient) => (
                 <option key={patient.id} value={patient.id}>
                   {patient.name}
@@ -396,7 +395,7 @@ export default function CalendarAppointments() {
               onChange={(e) => setFormData({ ...formData, professional_id: e.target.value })}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
-              <option value="">Selecione um profissional</option>
+              <option value="">{t('form.professional')}</option>
               {professionals.map((professional) => (
                 <option key={professional.id} value={professional.id}>
                   {professional.name}
@@ -417,13 +416,13 @@ export default function CalendarAppointments() {
             />
             <Input
               type="number"
-              placeholder="Duração (minutos)"
+              placeholder={t('form.duration')}
               value={formData.duration_minutes}
               onChange={(e) => setFormData({ ...formData, duration_minutes: Number.parseInt(e.target.value) || 60 })}
               className="bg-background"
             />
             <Input
-              placeholder="Notas (opcional)"
+              placeholder={t('form.notes')}
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               className="bg-background"
@@ -431,22 +430,22 @@ export default function CalendarAppointments() {
 
             {/* Recurrence options */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-foreground mb-2">Recorrência</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t('form.recurrence.label')}</label>
               <select
                 value={formData.recurrence_type}
                 onChange={(e) => setFormData({ ...formData, recurrence_type: e.target.value })}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
-                <option value="none">Nenhuma</option>
-                <option value="daily">Diária</option>
-                <option value="weekly">Semanal (dias da semana)</option>
-                <option value="monthly">Mensal (dia do mês)</option>
+                <option value="none">{t('form.recurrence.none')}</option>
+                <option value="daily">{t('form.recurrence.daily')}</option>
+                <option value="weekly">{t('form.recurrence.weekly')}</option>
+                <option value="monthly">{t('form.recurrence.monthly')}</option>
               </select>
             </div>
 
             {formData.recurrence_type === 'weekly' && (
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-foreground mb-2">Dias da semana</label>
+                <label className="block text-sm font-medium text-foreground mb-2">{t('form.recurrence.days')}</label>
                 <div className="flex gap-2 flex-wrap">
                   {dayNames.map((d, idx) => (
                     <button
@@ -471,7 +470,7 @@ export default function CalendarAppointments() {
 
             {formData.recurrence_type !== 'none' && (
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Repetir (quantas vezes)</label>
+                <label className="block text-sm font-medium text-foreground mb-2">{t('form.recurrence.count')}</label>
                 <Input
                   type="number"
                   min={1}
@@ -490,12 +489,12 @@ export default function CalendarAppointments() {
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Salvando...
+                  {t('form.saving')}
                 </>
               ) : editingId ? (
-                "Atualizar"
+                t('form.update')
               ) : (
-                "Salvar"
+                t('form.save')
               )}
             </Button>
             <Button
@@ -505,7 +504,7 @@ export default function CalendarAppointments() {
                 setEditingId(null)
               }}
             >
-              Cancelar
+              {t('form.cancel')}
             </Button>
           </div>
         </Card>
@@ -516,25 +515,25 @@ export default function CalendarAppointments() {
         {/* Calendar */}
         <Card className="lg:col-span-1 p-6 border border-border">
           {/* Professional filter on top */}
-          
+
 
           <div className="flex items-center justify-between mb-2">
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
               <div className="flex-1">
-                <h3 className="font-bold text-foreground">
-                  {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                <h3 className="font-bold text-foreground capitalize">
+                  {new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(currentDate)}
                 </h3>
-                <p className="text-xs text-muted-foreground">Selecione um dia para ver agendamentos</p>
+                <p className="text-xs text-muted-foreground">{t('calendar.selectDay')}</p>
               </div>
 
               {/* Professional filter: stack under title on mobile, inline on desktop */}
               <div className="w-full sm:w-44 mt-2 sm:mt-0">
                 <Select value={selectedProfessional} onValueChange={(v) => setSelectedProfessional(v as any)}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Geral (todos profissionais)" />
+                    <SelectValue placeholder={t('filter.all')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Geral (todos profissionais)</SelectItem>
+                    <SelectItem value="all">{t('filter.all')}</SelectItem>
                     {professionals.map((p) => (
                       <SelectItem key={p.id} value={p.id}>
                         <div className="cursor-pointer">{p.name}</div>
@@ -573,11 +572,10 @@ export default function CalendarAppointments() {
                 <button
                   key={index}
                   onClick={() => handleDayClick(day)}
-                  className={`w-10 h-10 flex flex-col cursor-pointer items-center justify-center text-sm font-medium transition-all relative ${
-                    isSelected
-                      ? "bg-primary text-primary-foreground rounded-full shadow-lg"
-                      : "bg-background rounded-md border border-border hover:bg-primary/5"
-                  }`}
+                  className={`w-10 h-10 flex flex-col cursor-pointer items-center justify-center text-sm font-medium transition-all relative ${isSelected
+                    ? "bg-primary text-primary-foreground rounded-full shadow-lg"
+                    : "bg-background rounded-md border border-border hover:bg-primary/5"
+                    }`}
                 >
                   <span className="leading-none">{day}</span>
 
@@ -610,7 +608,7 @@ export default function CalendarAppointments() {
         <div className="lg:col-span-2 space-y-4">
           <div>
             <h3 className="text-lg font-bold text-foreground mb-4">
-              Agendamentos de {new Date(selectedDate + "T00:00:00").toLocaleDateString("pt-BR")}
+              {t('calendar.appointmentsOf')} {new Date(selectedDate + "T00:00:00").toLocaleDateString(locale)}
             </h3>
 
             {selectedDateAppointments.length > 0 ? (
@@ -627,9 +625,9 @@ export default function CalendarAppointments() {
                               className={`px-2 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(appointment.status)}`}
                             >
                               {getStatusIcon(appointment.status)}
-                              {appointment.status === "scheduled" && "Agendado"}
-                              {appointment.status === "completed" && "Concluído"}
-                              {appointment.status === "cancelled" && "Cancelado"}
+                              {appointment.status === "scheduled" && t('status.scheduled')}
+                              {appointment.status === "completed" && t('status.completed')}
+                              {appointment.status === "cancelled" && t('status.cancelled')}
                             </span>
                           </div>
                           <p className="text-sm text-muted-foreground mb-1">
@@ -665,7 +663,7 @@ export default function CalendarAppointments() {
                               onClick={() => handleStatusChange(appointment.id, "completed")}
                               className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white"
                             >
-                              Concluir
+                              {t('status.complete')}
                             </Button>
                           )}
                         </div>
@@ -675,7 +673,7 @@ export default function CalendarAppointments() {
               </div>
             ) : (
               <Card className="p-8 border border-border text-center">
-                <p className="text-muted-foreground">Nenhum agendamento para este dia</p>
+                <p className="text-muted-foreground">{t('emptyDay')}</p>
               </Card>
             )}
           </div>
@@ -684,7 +682,7 @@ export default function CalendarAppointments() {
 
       {/* Weekly Calendar View */}
       <div className="mt-8 border-t pt-8">
-        <h3 className="text-lg font-semibold mb-4">Visualização Semanal</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('tabs.weekly')}</h3>
         <WeeklyView
           appointments={appointments.map(apt => ({
             ...apt,

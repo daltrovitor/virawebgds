@@ -16,7 +16,47 @@
         "no": "No",
         "error": "Error",
         "success": "Success",
-        "loading_data": "Loading data..."
+        "loading_data": "Loading data...",
+        "months": {
+            "0": "January",
+            "1": "February",
+            "2": "March",
+            "3": "April",
+            "4": "May",
+            "5": "June",
+            "6": "July",
+            "7": "August",
+            "8": "September",
+            "9": "October",
+            "10": "November",
+            "11": "December"
+        },
+        "days": {
+            "0": "Sun",
+            "1": "Mon",
+            "2": "Tue",
+            "3": "Wed",
+            "4": "Thu",
+            "5": "Fri",
+            "6": "Sat"
+        },
+        "plans": {
+            "basic": "Basic",
+            "premium": "Premium",
+            "master": "Master"
+        },
+        "usage": {
+            "title": "Plan Usage",
+            "upgrade": "Upgrade",
+            "patients": "Clients",
+            "professionals": "Professionals",
+            "appointments": "Appointments (month)",
+            "unlimited": "Unlimited",
+            "remaining": "{count} remaining",
+            "renewOn": "Renews on: {date}",
+            "recommendationUnlimited": "Upgrade to {plan} plan for unlimited {limit}!",
+            "recommendationIncrease": "Upgrade to {plan} plan to increase your limit to {count} {limit}."
+        }
     },
     "landing": {
         "header": {
@@ -189,7 +229,7 @@
         "header": {
             "logout": "Logout"
         },
-        "nav": {
+        "sidebar": {
             "overview": "Overview",
             "notes": "Notes",
             "checklist": "Checklist",
@@ -207,11 +247,11 @@
         },
         "overview": {
             "welcome": "Welcome,",
-            "summary": "Here is a summary of your day at the clinic/business",
+            "summary": "Here's a summary of your day at the clinic/company",
             "newHere": "New here?",
-            "watchTutorial": "Watch our tutorial to learn how to use all the platform features.",
+            "watchTutorial": "Watch our tutorial to learn how to use all the platform's features.",
             "buttonTutorial": "Watch Tutorial",
-            "birthdays": "Today's Birthdays! 🎉",
+            "birthdays": "Birthdays of the Day! 🎉",
             "noBirthdays": "No birthdays today",
             "client": "Client",
             "professional": "Professional",
@@ -240,6 +280,787 @@
                 "newClient": "New Client",
                 "settings": "Settings",
                 "metrics": "View Metrics"
+            }
+        },
+        "ai": {
+            "title": "ViraBot AI",
+            "subtitle": "Your intelligent assistant",
+            "description": "Empower your business with artificial intelligence. ViraBot helps you manage clients, schedule appointments, and get valuable insights instantly.",
+            "startChat": "Chat with ViraBot",
+            "back": "Back",
+            "premiumFeature": "Premium Feature",
+            "premiumDesc": "Upgrade to Premium or Master to access ViraBot AI",
+            "viewPlans": "View Plans",
+            "features": {
+                "analysis": {
+                    "title": "Intelligent Analysis",
+                    "desc": "Get insights on scheduling patterns and client behavior"
+                },
+                "instant": {
+                    "title": "Instant Answers",
+                    "desc": "Ask questions about business management and get real-time suggestions"
+                },
+                "automation": {
+                    "title": "Intelligent Automation",
+                    "desc": "Automate repetitive tasks and focus on what really matters"
+                }
+            },
+            "prompts": {
+                "title": "Try asking:",
+                "p1": "How many appointments do I have today?",
+                "p2": "Show recent clients",
+                "p3": "What is the company occupancy rate?",
+                "p4": "How can I improve service?"
+            },
+            "chat": {
+                "welcome": "Hello! I am ViraBot, your ViraWeb AI assistant. How can I help you today?",
+                "placeholder": "Type your question...",
+                "online": "Online",
+                "premiumTitle": "ViraBot Premium",
+                "premiumMessage": "ViraBot is available only for Premium and Master plans.",
+                "upgrade": "Upgrade Now"
+            }
+        },
+        "checklist": {
+            "title": "Checklist",
+            "placeholder": "Item title",
+            "add": "Add",
+            "empty": "No items in checklist",
+            "noDate": "No date",
+            "toast": {
+                "loadError": "Error loading checklist",
+                "added": "Item added",
+                "addError": "Error adding item",
+                "updateError": "Error updating item",
+                "removed": "Item removed",
+                "removeError": "Error removing item"
+            }
+        },
+        "notes": {
+            "title": "My Notes",
+            "subtitle": "Organize your notes and reminders",
+            "newNote": "New Note",
+            "editNote": "Edit Note",
+            "placeholderTitle": "Note title",
+            "placeholderContent": "Note content...",
+            "save": "Save",
+            "saving": "Saving...",
+            "update": "Update",
+            "updating": "Updating...",
+            "cancel": "Cancel",
+            "empty": "No notes created",
+            "createFirst": "Create First Note",
+            "updatedAt": "Updated at",
+            "fieldsRequired": {
+                "title": "Required fields",
+                "desc": "Please fill in title and content"
+            },
+            "toast": {
+                "loadError": "Error loading notes",
+                "updated": "Note updated",
+                "updatedDesc": "Your note was successfully updated",
+                "created": "Note created",
+                "createdDesc": "New note successfully added",
+                "saveError": "Error saving note",
+                "confirmDelete": "Confirm deletion?",
+                "confirmDeleteDesc": "Click Delete to confirm or close this notification to cancel.",
+                "delete": "Delete",
+                "deleting": "Deleting...",
+                "deleted": "Note deleted",
+                "deletedDesc": "Note successfully removed",
+                "deleteError": "Error deleting note"
+            }
+        },
+        "goals": {
+            "title": "My Goals",
+            "subtitle": "Define and track your objectives",
+            "newGoal": "New Goal",
+            "editGoal": "Edit Goal",
+            "createGoal": "Create Goal",
+            "activeGoals": "Active Goals",
+            "completedGoals": "Completed Goals",
+            "successRate": "Success Rate",
+            "inProgress": "In progress",
+            "achieved": "Achieved",
+            "ofAllGoals": "Of all goals",
+            "empty": "No goals created",
+            "emptyDesc": "Start by defining your first goals to track your progress",
+            "createFirst": "Create First Goal",
+            "form": {
+                "title": "Goal Title *",
+                "titlePlaceholder": "Ex: Serve 100 clients this month",
+                "description": "Description",
+                "descriptionPlaceholder": "Describe your goal in detail...",
+                "category": "Category",
+                "categoryPlaceholder": "Select...",
+                "categories": {
+                    "financial": "Financial",
+                    "clients": "Clients",
+                    "appointments": "Appointments",
+                    "professionals": "Professionals"
+                },
+                "deadline": "Deadline",
+                "targetValue": "Target Value",
+                "currentValue": "Current Value",
+                "unit": "Unit",
+                "unitPlaceholder": "clients",
+                "cancel": "Cancel",
+                "save": "Save",
+                "saving": "Saving...",
+                "update": "Update",
+                "updating": "Updating..."
+            },
+            "toast": {
+                "loadError": "Error loading goals",
+                "created": "Goal created!",
+                "createdDesc": "Your goal was successfully created.",
+                "updated": "Goal updated!",
+                "updatedDesc": "Your goal was successfully updated.",
+                "savedError": "Error saving goal",
+                "confirmDelete": "Confirm deletion?",
+                "confirmDeleteDesc": "Click Delete to confirm or close this notification to cancel.",
+                "delete": "Delete",
+                "deleting": "Deleting...",
+                "deleted": "Goal deleted",
+                "deletedDesc": "The goal was successfully removed.",
+                "deleteError": "Error deleting goal",
+                "completed": "Congratulations! 🎉",
+                "completedDesc": "Goal successfully completed!",
+                "updateError": "Error updating goal",
+                "autoCreated": "Goal created",
+                "autoCreatedDesc": "Appointment goal created successfully.",
+                "autoCreateError": "Error creating automatic goal"
+            }
+        },
+        "appointments": {
+            "title": "Appointments",
+            "subtitle": "View and manage appointments by calendar",
+            "newAppointment": "New Appointment",
+            "editAppointment": "Edit Appointment",
+            "filter": {
+                "all": "General (all professionals)",
+                "select": "Select a professional"
+            },
+            "calendar": {
+                "selectDay": "Select a day to view appointments",
+                "appointmentsOf": "Appointments for"
+            },
+            "tabs": {
+                "weekly": "Weekly View"
+            },
+            "weeklyView": {
+                "placeholder": "Select professional",
+                "allProfessionals": "All professionals",
+                "prevWeek": "Previous week",
+                "prev": "Previous",
+                "today": "Today",
+                "nextWeek": "Next week",
+                "next": "Next",
+                "hour": "Hour",
+                "client": "Client",
+                "noDescription": "No description"
+            },
+            "emptyDay": "No appointments for this day",
+            "form": {
+                "patient": "Select a client",
+                "professional": "Select a professional",
+                "duration": "Duration (minutes)",
+                "notes": "Notes (optional)",
+                "recurrence": {
+                    "label": "Recurrence",
+                    "none": "None",
+                    "daily": "Daily",
+                    "weekly": "Weekly (days of week)",
+                    "monthly": "Monthly (day of month)",
+                    "days": "Days of week",
+                    "count": "Repeat (times)"
+                },
+                "cancel": "Cancel",
+                "save": "Save",
+                "saving": "Saving...",
+                "update": "Update"
+            },
+            "status": {
+                "scheduled": "Scheduled",
+                "completed": "Completed",
+                "cancelled": "Cancelled",
+                "complete": "Complete"
+            },
+            "toast": {
+                "loadError": "Error loading data",
+                "updated": "Appointment updated",
+                "updatedDesc": "The appointment was successfully updated",
+                "created": "Appointment created",
+                "createdDesc": "The appointment was successfully created",
+                "saveError": "Error saving appointment",
+                "confirmDelete": "Confirm deletion?",
+                "confirmDeleteDesc": "Click Delete to confirm or close this notification to cancel.",
+                "delete": "Delete",
+                "deleting": "Deleting...",
+                "deleted": "Appointment deleted",
+                "deletedDesc": "The appointment was successfully deleted",
+                "deleteError": "Error deleting appointment",
+                "statusUpdated": "Status updated",
+                "statusUpdatedDesc": "The appointment status was updated",
+                "statusError": "Error updating status"
+            }
+        },
+        "patients": {
+            "title": "Clients",
+            "subtitle": "Manage company client records",
+            "newPatient": "New Client",
+            "editPatient": "Edit Client",
+            "searchPlaceholder": "Search by name, email or CPF...",
+            "filter": {
+                "all": "All",
+                "active": "Active",
+                "inactive": "Inactive"
+            },
+            "viewProfile": "View Profile",
+            "empty": "No clients found",
+            "createFirst": "Add First Client",
+            "status": {
+                "active": "Active",
+                "inactive": "Inactive"
+            },
+            "form": {
+                "name": "Full Name *",
+                "email": "Email",
+                "phone": "Phone",
+                "cpf": "CPF (optional)",
+                "birthDate": "Date of Birth",
+                "address": "Address",
+                "birthday": "Date of Birth",
+                "notes": "Notes (optional)",
+                "cancel": "Cancel",
+                "save": "Save",
+                "saving": "Saving...",
+                "update": "Update",
+                "updating": "Updating..."
+            },
+            "toast": {
+                "loadError": "Error loading clients",
+                "nameRequired": "Name required",
+                "nameRequiredDesc": "Please fill in the client's name",
+                "updated": "Client updated",
+                "updatedDesc": "Information was successfully updated",
+                "created": "Client created",
+                "createdDesc": "New client successfully added",
+                "saveError": "Error saving client",
+                "confirmDelete": "Confirm deletion?",
+                "confirmDeleteDesc": "Click Delete to confirm or close this notification to cancel.",
+                "delete": "Delete",
+                "deleting": "Deleting...",
+                "deleted": "Client deleted",
+                "deletedDesc": "Client successfully removed",
+                "deleteError": "Error deleting client",
+                "statusUpdated": "Status updated",
+                "statusActive": "Client activated successfully",
+                "statusInactive": "Client deactivated successfully",
+                "statusError": "Error updating status"
+            }
+        },
+        "financial": {
+            "title": "Financial",
+            "tabs": {
+                "finance": "Financial",
+                "attendance": "Attendance"
+            },
+            "cards": {
+                "received": "Received (month)",
+                "pending": "Pending",
+                "discounts": "Discounts (month)"
+            },
+            "summary": "Summary",
+            "summaryStats": {
+                "received": "Received (month)",
+                "pending": "Pending",
+                "discounts": "Discounts (month)"
+            },
+            "recentPayments": "Recent Payments",
+            "registerPayment": "Register Payment",
+            "managePending": "Manage Pending",
+            "noPayments": "No payments found.",
+            "emptyPayments": "No payments found.",
+            "report": "Financial Report",
+            "resume": "Summary",
+            "chartTitle": "Receipts (last {days} days)",
+            "chartLabel": "Received (R$)",
+            "chartValue": "Received",
+            "status": {
+                "paid": "Paid",
+                "pending": "Pending",
+                "overdue": "Overdue",
+                "refunded": "Refunded"
+            },
+            "chart": {
+                "loading": "Loading chart..."
+            },
+            "paymentModal": {
+                "title": "Register Payment",
+                "patient": "Client (optional)",
+                "selectPatient": "Select a client",
+                "noPatient": "No client",
+                "selectedPatient": "Selected client: {name}",
+                "amount": "Amount (R$)",
+                "discount": "Discount",
+                "percentHint": "If you select %, the discount will be calculated in reais from the informed value.",
+                "status": "Status",
+                "date": "Payment Date",
+                "recurrence": "Recurrence",
+                "recurring": "Recurring",
+                "recurringHint": "The charge will be generated monthly on the selected day.",
+                "recurrenceDay": "Payment day",
+                "cancel": "Cancel",
+                "save": "Save Payment",
+                "saving": "Saving...",
+                "toast": {
+                    "invalidAmount": "Invalid amount",
+                    "invalidAmountDesc": "Enter an amount greater than zero.",
+                    "invalidDiscount": "Invalid discount",
+                    "invalidDiscountPercent": "Enter a valid percentage.",
+                    "invalidDiscountRange": "Discount must be between 0 and the payment amount.",
+                    "success": "Payment registered",
+                    "successDesc": "Payment saved successfully.",
+                    "settleError": "Payment saved, but failed to settle the selected pending payment.",
+                    "error": "Error saving"
+                }
+            },
+            "patientFinancialTab": {
+                "title": "History",
+                "columns": {
+                    "date": "Date",
+                    "amount": "Amount",
+                    "discount": "Discount",
+                    "status": "Status",
+                    "dueDate": "Due Date",
+                    "actions": "Actions"
+                },
+                "actions": {
+                    "settle": "Register payment"
+                },
+                "empty": "No payments found"
+            }
+        },
+        "professionals": {
+            "title": "Professionals",
+            "subtitle": "Manage your business professionals",
+            "workDays": "Work Days",
+            "newProfessional": "New Professional",
+            "editProfessional": "Edit Professional",
+            "searchPlaceholder": "Search by name or specialty...",
+            "filter": {
+                "all": "All",
+                "active": "Active",
+                "inactive": "Inactive"
+            },
+            "empty": "No professionals found",
+            "createFirst": "Add First Professional",
+            "status": {
+                "active": "Active",
+                "inactive": "Inactive"
+            },
+            "form": {
+                "name": "Full Name *",
+                "specialty": "Specialty",
+                "email": "Email",
+                "phone": "Phone",
+                "workDays": "Work Days",
+                "notes": "Notes (optional)",
+                "cancel": "Cancel",
+                "save": "Save",
+                "saving": "Saving...",
+                "update": "Update",
+                "updating": "Updating..."
+            },
+            "toast": {
+                "loadError": "Error loading professionals",
+                "nameRequired": "Name required",
+                "nameRequiredDesc": "Please fill in the professional's name",
+                "updated": "Professional updated",
+                "updatedDesc": "Information was successfully updated",
+                "created": "Professional created",
+                "createdDesc": "New professional successfully added",
+                "saveError": "Error saving professional",
+                "confirmDelete": "Confirm deletion?",
+                "confirmDeleteDesc": "Click Delete to confirm or close this notification to cancel.",
+                "delete": "Delete",
+                "deleting": "Deleting...",
+                "deleted": "Professional deleted",
+                "deletedDesc": "Professional successfully removed",
+                "deleteError": "Error deleting professional"
+            }
+        },
+        "reports": {
+            "title": "Reports",
+            "subtitle": "Overview of appointments and clients.",
+            "stats": {
+                "totalAppointments": "Total Appointments",
+                "totalAppointmentsDesc": "All records",
+                "activePatients": "Active Clients",
+                "activePatientsDesc": "Currently registered",
+                "completionRate": "Completion Rate",
+                "performanceExcellent": "Excellent performance",
+                "performanceGood": "Good performance"
+            },
+            "appointmentsChart": "Appointments by Month",
+            "patientsChart": "Client Growth",
+            "completed": "Completed",
+            "cancelled": "Cancelled",
+            "total": "Total",
+            "new": "New",
+            "noData": "No data available"
+        },
+        "subscriptions": {
+            "title": "Subscription",
+            "subtitle": "Manage your subscription and payment method",
+            "noSubscription": "No subscription found",
+            "noSubscriptionDesc": "You don't have an active subscription yet.",
+            "choosePlan": "Choose Plan",
+            "invalidPlan": "Invalid Plan",
+            "invalidPlanDesc": "The provided plan type is not recognized:",
+            "validPlans": "Valid plans: basic, premium, master",
+            "active": "Active",
+            "canceled": "Canceled",
+            "expired": "Expired",
+            "month": "month",
+            "startDate": "Start Date",
+            "nextBilling": "Next Billing",
+            "paymentMethod": "Payment Method",
+            "creditCard": "Credit Card",
+            "notConfigured": "Not configured",
+            "cancelSubscription": "Cancel Subscription",
+            "cancelConfirm": "Cancel Subscription",
+            "cancelConfirmDesc": "Are you sure you want to cancel your subscription? You will lose access to all your plan features.",
+            "yesCancel": "Yes, Cancel",
+            "noKeep": "No, Keep",
+            "canceling": "Canceling...",
+            "benefits": "Benefits of your plan",
+            "viewCurrent": "View your current plan.",
+            "unlimited": "Unlimited",
+            "perMonth": "per month",
+            "support247": "24 hours, 7 days a week",
+            "upgrade": "Upgrade",
+            "processing": "Processing...",
+            "toast": {
+                "updated": "Subscription updated!",
+                "updatedDesc": "Your plan has been updated to {plan}. Enjoy the new features!",
+                "canceled": "Subscription canceled",
+                "canceledDesc": "Your subscription was successfully canceled",
+                "cancelError": "Error canceling subscription"
+            }
+        },
+        "theme": {
+            "button": "Theme",
+            "title": "Personalize Dashboard",
+            "mode": "Mode",
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System",
+            "accent": "Palette (Accent)",
+            "accentBlue": "Primary Blue / Secondary Yellow",
+            "accentYellow": "Primary Yellow / Secondary Blue",
+            "density": "Density",
+            "comfortable": "Comfortable",
+            "compact": "Compact",
+            "radius": "Card Radius",
+            "restore": "Restore",
+            "close": "Close"
+        },
+        "tutorial": {
+            "title": "ViraWeb Tutorial",
+            "subtitle": "Learn how to use all the platform features to make the most of your tools.",
+            "videoUrl": "https://youtu.be/DxDah2D--bw",
+            "concluded": "Tutorial Completed",
+            "markWatched": "Mark as Watched",
+            "videoSoon": "Video coming soon!",
+            "topics": "Tutorial Topics",
+            "step1": "First Steps",
+            "step1Desc": "Initial setup and basic navigation",
+            "step2": "Client Management",
+            "step2Desc": "How to add and manage your clients",
+            "step3": "Appointments",
+            "step3Desc": "Appointment system and calendar",
+            "step4": "Reports and Analysis",
+            "step4Desc": "How to access and interpret your data",
+            "toast": {
+                "success": "Tutorial completed!",
+                "successDesc": "Thank you for watching the tutorial.",
+                "error": "Error marking tutorial as seen"
+            }
+        },
+        "settings": {
+            "title": "Settings",
+            "profile": {
+                "title": "Profile",
+                "desc": "Update your personal information.",
+                "name": "Full Name",
+                "phone": "Phone"
+            },
+            "clinic": {
+                "title": "Clinic",
+                "desc": "Update your clinic information.",
+                "name": "Clinic Name"
+            },
+            "email": {
+                "title": "Email",
+                "desc": "Update your email address.",
+                "new": "New Email"
+            },
+            "password": {
+                "title": "Password",
+                "desc": "Update your password.",
+                "new": "New Password",
+                "confirm": "Confirm Password",
+                "invalid": "Invalid password",
+                "length": "Password must be at least 6 characters",
+                "mismatch": "Passwords do not match",
+                "confirmCorrect": "Please confirm your password correctly"
+            },
+            "plan": {
+                "title": "Plan",
+                "desc": "View your current plan.",
+                "viraBotActive": "ViraBot AI Active",
+                "perMonth": "{price}/month",
+                "patients": "Clients:",
+                "professionals": "Professionals:",
+                "appointments": "Appointments/month:",
+                "support": "Support:",
+                "unlimited": "Unlimited"
+            },
+            "save": "Save",
+            "saving": "Saving...",
+            "toast": {
+                "loadError": "Error loading settings",
+                "updatedAuto": "Settings updated automatically.",
+                "settingsUpdated": "Settings updated",
+                "profileUpdated": "Profile updated",
+                "profileUpdatedDesc": "Your information has been successfully updated",
+                "profileError": "Error updating profile",
+                "clinicUpdated": "Clinic updated",
+                "clinicUpdatedDesc": "Clinic information updated successfully",
+                "clinicError": "Error updating clinic",
+                "emailUpdated": "Email updated",
+                "emailError": "Error updating email",
+                "passwordUpdated": "Password updated",
+                "passwordError": "Error updating password",
+                "emailInvalid": "Invalid email",
+                "emailInvalidDesc": "Please enter a new email"
+            }
+        },
+        "patientProfile": {
+            "title": "Client Profile",
+            "active": "Active",
+            "inactive": "Inactive",
+            "tabs": {
+                "info": "Information",
+                "financial": "Financial"
+            },
+            "info": {
+                "title": "Client Information",
+                "email": "Email",
+                "phone": "Phone",
+                "cpf": "CPF",
+                "birthday": "Date of Birth",
+                "address": "Address"
+            },
+            "notes": {
+                "title": "Client Notes",
+                "placeholder": "Add notes about the client, history, observations, etc...",
+                "save": "Save Notes"
+            },
+            "financial": {
+                "title": "Financial Summary",
+                "register": "Register Payment",
+                "totalPaid": "Total Paid",
+                "totalDue": "Total Due",
+                "discounts": "Discounts",
+                "loading": "Loading financial summary..."
+            },
+            "photo": {
+                "invalid": "Invalid file",
+                "invalidDesc": "Please select an image"
+            },
+            "toast": {
+                "loadError": "Error loading client",
+                "notesSaved": "Notes saved",
+                "notesSavedDesc": "Client notes updated successfully",
+                "notesError": "Error saving notes",
+                "photoUpdated": "Photo updated",
+                "photoUpdatedDesc": "Profile photo updated successfully",
+                "uploadError": "Error uploading"
+            }
+        },
+        "attendance": {
+            "title": "Attendance Control",
+            "selectPatient": "Select a client",
+            "attendanceRate": "Attendance Rate",
+            "totalSessions": "Total Sessions",
+            "paidSessions": "Paid Sessions",
+            "absences": "Absences",
+            "calendarTitle": "Attendance Calendar",
+            "recentRecords": "Recent Records",
+            "edit": "Edit",
+            "dialogTitle": "Attendance Record - {date}",
+            "status": "Status",
+            "present": "Present",
+            "absent": "Absent",
+            "late": "Late",
+            "cancelled": "Cancelled",
+            "payment": "Payment",
+            "amount": "Amount",
+            "method": "Method",
+            "paymentStatus": "Payment Status",
+            "cash": "Cash",
+            "credit": "Credit Card",
+            "debit": "Debit Card",
+            "pix": "PIX",
+            "transfer": "Transfer",
+            "paid": "Paid",
+            "pending": "Pending",
+            "notes": "Notes",
+            "notesPlaceholder": "Add notes about the session...",
+            "cancel": "Cancel",
+            "save": "Save",
+            "saving": "Saving...",
+            "toast": {
+                "loadPatientsError": "Error loading clients",
+                "loadAttendanceError": "Error loading attendance",
+                "invalidDate": "Invalid date",
+                "invalidDateDesc": "It is only possible to register attendance on days with appointments",
+                "success": "Attendance registered",
+                "successDesc": "Attendance record updated successfully",
+                "saveError": "Error saving attendance"
+            }
+        },
+        "usage": {
+            "title": "Plan Usage",
+            "upgrade": "Upgrade",
+            "patients": "Clients",
+            "professionals": "Professionals",
+            "appointments": "Appointments (month)",
+            "unlimited": "Unlimited",
+            "remaining": "{count} remaining",
+            "renewOn": "Renews on: {date}",
+            "recommendationUnlimited": "Upgrade to {plan} plan for unlimited {limit}!",
+            "recommendationIncrease": "Upgrade to {plan} plan to increase your limit to {count} {limit}."
+        },
+        "upgradeModal": {
+            "title": "Limit Reached",
+            "description": "You reached the limit of {limit} {type} of your {plan} plan.",
+            "currentUsage": "Current Usage",
+            "upgradeToContinue": "Upgrade to continue adding {type}.",
+            "choosePlan": "Choose a plan to upgrade:",
+            "perMonth": "/month",
+            "unlimited": "Unlimited",
+            "upTo": "Up to {count}",
+            "processing": "Processing...",
+            "upgrade": "Upgrade",
+            "alreadyMaster": "You are already on the Master plan!",
+            "alreadyMasterDesc": "You have access to all unlimited features. If you need more, contact support.",
+            "close": "Close",
+            "limitNear": "Close to Limit",
+            "limitReached": "Limit Reached!",
+            "usingCount": "You are using {current} of {limit} {type} available in your plan."
+        },
+        "support": {
+            "title": "Support",
+            "subtitle": "Help center and service",
+            "newTicket": "New Ticket (Coming soon)",
+            "hours": "Support Hours",
+            "channels": "Available Channels",
+            "channelsList": "Email, WhatsApp",
+            "viraBotTitle": "ViraBot AI - 24/7 Assistant",
+            "viraBotDesc": "Chat with our intelligent assistant for instant help about the system, ask questions and receive real-time guidance.",
+            "openAIChat": "Open Chat with ViraBot",
+            "backToSupport": "← Back to Support",
+            "email": "Email",
+            "whatsapp": "WhatsApp",
+            "sendEmail": "Send Email",
+            "openWhatsapp": "Open WhatsApp",
+            "viraBotAI": "ViraBot AI",
+            "plans": {
+                "basic": {
+                    "title": "Basic Support",
+                    "desc": "Email support during business hours",
+                    "hours": "Business hours",
+                    "features": [
+                        "Basic client management",
+                        "Limited appointments",
+                        "Basic reports",
+                        "Email support"
+                    ]
+                },
+                "premium": {
+                    "title": "Premium Support + ViraBot AI",
+                    "desc": "Priority support via Email and WhatsApp + AI Chat 24/7",
+                    "hours": "8:00 to 18:00 (5 days a week)",
+                    "features": [
+                        "500 clients",
+                        "50 professionals",
+                        "500 appointments/month",
+                        "ViraBot AI 24/7",
+                        "Priority support",
+                        "Email and WhatsApp",
+                        "Support 8:00-18:00 (5 days a week)"
+                    ]
+                },
+                "master": {
+                    "title": "Master Support 24/7 + ViraBot AI",
+                    "desc": "Immediate response via Email and WhatsApp + AI Chat 24/7",
+                    "hours": "24 hours, 7 days a week",
+                    "features": [
+                        "Unlimited clients",
+                        "Unlimited professionals",
+                        "Unlimited appointments",
+                        "ViraBot AI 24/7",
+                        "Priority support 24/7",
+                        "Email and WhatsApp",
+                        "24-hour support"
+                    ]
+                }
+            },
+            "resources": "Help Resources",
+            "helpCenter": "Help Center",
+            "helpCenterDesc": "Access our complete documentation and video tutorials",
+            "faq": "Frequently Asked Questions",
+            "faqDesc": "Find quick answers to common questions",
+            "videoTutorials": "Video Tutorials",
+            "videoTutorialsDesc": "Learn how to use all system features",
+            "ticketSystem": "Ticket System",
+            "comingSoon": "Available soon",
+            "comingSoonDesc": "We are developing an advanced ticket system for you.",
+            "featuresTitle": "Soon you will be able to:",
+            "features": {
+                "0": "Open support tickets",
+                "1": "Track real-time status",
+                "2": "Service history",
+                "3": "Integrated communication"
+            },
+            "inDevelopment": "In development",
+            "toast": {
+                "loadError": "Error loading data",
+                "fieldsRequired": "Required fields",
+                "fieldsRequiredDesc": "Please fill in the subject and message",
+                "ticketCreated": "Ticket created",
+                "ticketCreatedDesc": "Your support ticket has been created and sent to our team",
+                "createError": "Error creating ticket",
+                "loadMessagesError": "Error loading messages",
+                "messageSent": "Message sent",
+                "messageSentDesc": "Your message has been sent to our team",
+                "sendError": "Error sending message"
+            },
+            "status": {
+                "open": "Open",
+                "in_progress": "In Progress",
+                "resolved": "Resolved",
+                "closed": "Closed"
+            },
+            "priority": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High",
+                "urgent": "Urgent"
             }
         }
     },

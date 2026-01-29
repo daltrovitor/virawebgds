@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { AlertTriangle, TrendingUp } from "lucide-react"
 import { getUserSubscription } from "@/app/actions/subscription"
 import { PLAN_LIMITS, type PlanType } from "@/lib/plan-limits"
+import { useTranslations } from "next-intl"
 
 interface PlanLimitBannerProps {
   currentCount: number
@@ -17,6 +18,8 @@ interface PlanLimitBannerProps {
 export default function PlanLimitBanner({ currentCount, limitType, onUpgrade }: PlanLimitBannerProps) {
   const [planType, setPlanType] = useState<PlanType | null>(null)
   const [loading, setLoading] = useState(true)
+  const tUpgrade = useTranslations("upgradeModal")
+  const tUsage = useTranslations("dashboard.usage")
 
   useEffect(() => {
     const loadPlan = async () => {
@@ -45,9 +48,9 @@ export default function PlanLimitBanner({ currentCount, limitType, onUpgrade }: 
   if (!isNearLimit) return null
 
   const labels = {
-    patients: "clientes",
-    professionals: "profissionais",
-    appointmentsPerMonth: "agendamentos este mês",
+    patients: tUsage("patients"),
+    professionals: tUsage("professionals"),
+    appointmentsPerMonth: tUsage("appointments"),
   }
 
   return (
@@ -57,15 +60,19 @@ export default function PlanLimitBanner({ currentCount, limitType, onUpgrade }: 
           <AlertTriangle className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1">
-          <h4 className="font-bold text-foreground mb-2">{isAtLimit ? "Limite Atingido!" : "Próximo do Limite"}</h4>
+          <h4 className="font-bold text-foreground mb-2">{isAtLimit ? tUpgrade("limitReached") : tUpgrade("limitNear")}</h4>
           <p className="text-sm text-muted-foreground mb-3">
-            Você está usando {currentCount} de {limitNumber} {labels[limitType]} disponíveis no seu plano.
+            {tUpgrade("usingCount", {
+              current: currentCount,
+              limit: limitNumber,
+              type: labels[limitType].toLowerCase()
+            })}
           </p>
           <Progress value={percentage} className="mb-3" />
           {onUpgrade && (
             <Button onClick={onUpgrade} size="sm" className="gap-2">
               <TrendingUp className="w-4 h-4" />
-              Fazer Upgrade
+              {tUpgrade("upgrade")}
             </Button>
           )}
         </div>

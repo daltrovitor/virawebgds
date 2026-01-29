@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { PlayCircle, CheckCircle2, AlertCircle } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
-import { TUTORIAL_VIDEO_URL } from "@/lib/tutorial-config"
+import { useTranslations } from "next-intl"
 
 function getEmbedUrl(url: string) {
   try {
@@ -30,6 +30,8 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
   const supabase = createClient()
+  const t = useTranslations("dashboard.tutorial")
+  const tCommon = useTranslations("common")
 
   useEffect(() => {
     loadTutorialStatus()
@@ -44,12 +46,15 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
         .from('user_settings')
         .select('has_watched_tutorial')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
-      if (error) throw error
-      setHasWatchedTutorial(data?.has_watched_tutorial || false)
+      if (error) {
+        console.error('Supabase error loading tutorial status:', error)
+      } else {
+        setHasWatchedTutorial(data?.has_watched_tutorial || false)
+      }
     } catch (error) {
-      console.error('Error loading tutorial status:', error)
+      console.error('Unexpected error loading tutorial status:', error)
     } finally {
       setLoading(false)
     }
@@ -59,80 +64,67 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
     try {
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       if (userError) {
-        console.error('Error getting supabase user before marking tutorial:', userError)
         throw userError
       }
 
       if (!user) {
-        console.warn('No authenticated user found when marking tutorial as watched')
-        throw new Error('Usuário não autenticado')
+        throw new Error(tCommon("errors.unauthorized"))
       }
 
-      // Use upsert with onConflict and request the updated row back so we
-      // can inspect any returned data/errors and provide clearer logs.
-      const upsertRes: any = await supabase
+      const { error: upsertError } = await supabase
         .from('user_settings')
-        .upsert([
-          {
-            user_id: user.id,
-            has_watched_tutorial: true,
-          },
-        ], { onConflict: 'user_id' })
-        .select()
-        .single()
+        .upsert({
+          user_id: user.id,
+          has_watched_tutorial: true,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' })
 
-      if (upsertRes.error) {
-        // Log the full error object returned by Supabase for diagnosis
-        console.error('Supabase upsert error for user_settings:', upsertRes.error, upsertRes)
-        throw upsertRes.error
-      }
+      if (upsertError) throw upsertError
 
-      // Success
       setHasWatchedTutorial(true)
-      // Notify parent (Dashboard) so it can remove the notification badge
       if (onMarkWatched) onMarkWatched()
       toast({
-        title: 'Tutorial concluído!',
-        description: 'Obrigado por assistir ao tutorial.',
+        title: t("toast.success"),
+        description: t("toast.successDesc"),
       })
     } catch (err: any) {
-      // Provide more detailed message when available
       console.error('Error marking tutorial as watched:', err)
-      const message = err?.message || (err?.error_description ?? 'Por favor, tente novamente.')
       toast({
-        title: 'Erro ao marcar tutorial como visto',
-        description: message,
+        title: t("toast.error"),
+        description: err.message || tCommon("errors.generic"),
         variant: 'destructive',
       })
     }
   }
+
+  const videoUrl = t("videoUrl")
 
   return (
     <div className="space-y-6">
       <Card className="p-6">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden">
-            {TUTORIAL_VIDEO_URL ? (
+            {videoUrl && videoUrl !== "videoUrl" ? (
               <iframe
-                src={getEmbedUrl(TUTORIAL_VIDEO_URL)}
+                src={getEmbedUrl(videoUrl)}
                 className="w-full h-full"
                 frameBorder={0}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title="Tutorial ViraWeb"
+                title={t("title")}
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <PlayCircle className="w-16 h-16 text-primary" />
-                <span className="absolute mt-24 text-muted-foreground">Vídeo em breve!</span>
+                <span className="absolute mt-24 text-muted-foreground">{t("videoSoon")}</span>
               </div>
             )}
           </div>
 
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-bold">Tutorial do ViraWeb</h2>
+            <h2 className="text-2xl font-bold">{t("title")}</h2>
             <p className="text-muted-foreground">
-              Aprenda a usar todas as funcionalidades da plataforma para aproveitar ao máximo suas ferramentas.
+              {t("subtitle")}
             </p>
           </div>
 
@@ -140,12 +132,12 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
             {hasWatchedTutorial ? (
               <Button variant="outline" className="gap-2" disabled>
                 <CheckCircle2 className="w-4 h-4" />
-                Tutorial Concluído
+                {t("concluded")}
               </Button>
             ) : (
               <Button onClick={markTutorialAsWatched} className="gap-2">
                 <PlayCircle className="w-4 h-4" />
-                Marcar como Visto
+                {t("markWatched")}
               </Button>
             )}
           </div>
@@ -153,15 +145,15 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
       </Card>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Tópicos do Tutorial</h3>
+        <h3 className="text-lg font-semibold mb-4">{t("topics")}</h3>
         <div className="space-y-4">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-primary/10">
               <CheckCircle2 className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h4 className="font-medium">Primeiros Passos</h4>
-              <p className="text-sm text-muted-foreground">Configuração inicial e navegação básica</p>
+              <h4 className="font-medium">{t("step1")}</h4>
+              <p className="text-sm text-muted-foreground">{t("step1Desc")}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -169,8 +161,8 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
               <CheckCircle2 className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h4 className="font-medium">Gerenciamento de clientes</h4>
-              <p className="text-sm text-muted-foreground">Como adicionar e gerenciar seus clientes</p>
+              <h4 className="font-medium">{t("step2")}</h4>
+              <p className="text-sm text-muted-foreground">{t("step2Desc")}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -178,8 +170,8 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
               <CheckCircle2 className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h4 className="font-medium">Agendamentos</h4>
-              <p className="text-sm text-muted-foreground">Sistema de agendamento e calendário</p>
+              <h4 className="font-medium">{t("step3")}</h4>
+              <p className="text-sm text-muted-foreground">{t("step3Desc")}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -187,8 +179,8 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
               <CheckCircle2 className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h4 className="font-medium">Relatórios e Análises</h4>
-              <p className="text-sm text-muted-foreground">Como acessar e interpretar seus dados</p>
+              <h4 className="font-medium">{t("step4")}</h4>
+              <p className="text-sm text-muted-foreground">{t("step4Desc")}</p>
             </div>
           </div>
         </div>

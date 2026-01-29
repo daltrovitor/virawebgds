@@ -7,6 +7,7 @@ import { Sparkles, MessageSquare, Brain, Zap, ArrowRight, Lock, Loader2 } from "
 import AIAssistant from "@/components/ai-assistant"
 import { hasViraBotAccess } from "@/lib/plan-limits"
 import { getCurrentPlan } from "@/app/actions/subscription"
+import { useTranslations } from "next-intl"
 
 interface AISectionProps {
   planType: "basic" | "premium" | "master"
@@ -16,6 +17,7 @@ export default function AISection({ planType }: AISectionProps) {
   const [showAssistant, setShowAssistant] = useState(false)
   const [hasAccess, setHasAccess] = useState(false)
   const [loading, setLoading] = useState(true)
+  const t = useTranslations('dashboard.ai')
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -44,7 +46,7 @@ export default function AISection({ planType }: AISectionProps) {
     return (
       <div className="space-y-4">
         <Button variant="outline" onClick={() => setShowAssistant(false)} className="mb-4">
-          ← Voltar
+          ← {t('back')}
         </Button>
         <AIAssistant hasAccess={hasAccess} />
       </div>
@@ -65,14 +67,13 @@ export default function AISection({ planType }: AISectionProps) {
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold">ViraBot IA</h2>
-              <p className="text-sm text-gray-400">Seu assistente inteligente</p>
+              <h2 className="text-3xl font-bold">{t('title')}</h2>
+              <p className="text-sm text-gray-400">{t('subtitle')}</p>
             </div>
           </div>
 
           <p className="text-lg text-gray-300 mb-8 max-w-2xl leading-relaxed">
-            Potencialize sua empresa com inteligência artificial. O ViraBot ajuda você a gerenciar clientes, agendar
-            consultas e obter insights valiosos instantaneamente.
+            {t('description')}
           </p>
 
           {hasAccess ? (
@@ -82,19 +83,19 @@ export default function AISection({ planType }: AISectionProps) {
               className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all group"
             >
               <MessageSquare className="w-5 h-5 mr-2" />
-              Conversar com ViraBot
+              {t('startChat')}
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           ) : (
             <div className="flex items-start gap-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700">
               <Lock className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-white mb-1">Recurso Premium</p>
+                <p className="text-sm font-semibold text-white mb-1">{t('premiumFeature')}</p>
                 <p className="text-sm text-gray-400 mb-3">
-                  Faça upgrade para Premium ou Master para acessar o ViraBot IA
+                  {t('premiumDesc')}
                 </p>
                 <Button size="sm" className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
-                  Ver Planos
+                  {t('viewPlans')}
                 </Button>
               </div>
             </div>
@@ -108,9 +109,9 @@ export default function AISection({ planType }: AISectionProps) {
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:scale-110 transition-all">
             <Brain className="w-5 h-5 text-primary group-hover:text-white transition-colors" />
           </div>
-          <h3 className="font-bold text-foreground mb-2">Análise Inteligente</h3>
+          <h3 className="font-bold text-foreground mb-2">{t('features.analysis.title')}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Obtenha insights sobre padrões de agendamento e comportamento de clientes
+            {t('features.analysis.desc')}
           </p>
         </Card>
 
@@ -118,9 +119,9 @@ export default function AISection({ planType }: AISectionProps) {
           <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary group-hover:scale-110 transition-all">
             <MessageSquare className="w-5 h-5 text-secondary group-hover:text-secondary-foreground transition-colors" />
           </div>
-          <h3 className="font-bold text-foreground mb-2">Respostas Instantâneas</h3>
+          <h3 className="font-bold text-foreground mb-2">{t('features.instant.title')}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Tire dúvidas sobre gestão da empresa e obtenha sugestões em tempo real
+            {t('features.instant.desc')}
           </p>
         </Card>
 
@@ -128,9 +129,9 @@ export default function AISection({ planType }: AISectionProps) {
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:scale-110 transition-all">
             <Zap className="w-5 h-5 text-primary group-hover:text-white transition-colors" />
           </div>
-          <h3 className="font-bold text-foreground mb-2">Automação Inteligente</h3>
+          <h3 className="font-bold text-foreground mb-2">{t('features.automation.title')}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Automatize tarefas repetitivas e foque no que realmente importa
+            {t('features.automation.desc')}
           </p>
         </Card>
       </div>
@@ -140,14 +141,14 @@ export default function AISection({ planType }: AISectionProps) {
         <Card className="p-6 border border-border bg-muted/30">
           <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-primary" />
-            Experimente perguntar:
+            {t('prompts.title')}
           </h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {[
-              "Quantos agendamentos tenho hoje?",
-              "Mostre os clientes mais recentes",
-              "Qual a taxa de ocupação da empresa?",
-              "Como posso melhorar o atendimento?",
+              t('prompts.p1'),
+              t('prompts.p2'),
+              t('prompts.p3'),
+              t('prompts.p4'),
             ].map((prompt, i) => (
               <button
                 key={i}

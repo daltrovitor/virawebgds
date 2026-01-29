@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Send, MessageCircle, X, Lock, Loader2 } from "lucide-react"
 import { fetchRaw } from "@/lib/fetch-client"
+import { useTranslations, useLocale } from "next-intl"
 
 interface Message {
   id: string
@@ -22,14 +23,24 @@ interface AIAssistantProps {
 
 export default function AIAssistant({ isOpen = true, onClose, hasAccess = false }: AIAssistantProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const t = useTranslations('dashboard.ai.chat')
+  const locale = useLocale()
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content: "Olá! Sou o ViraBot, seu assistente IA do ViraWeb. Como posso ajudá-lo hoje?",
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
+
+  // Set initial welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([
+        {
+          id: "welcome",
+          role: "assistant",
+          content: t('welcome'),
+        },
+      ])
+    }
+  }, [t])
+
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -58,6 +69,7 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
             role: m.role,
             content: m.content,
           })),
+          locale,
         }),
       })
 
@@ -93,7 +105,7 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
       }
     } catch (err) {
       console.error(" Chat error:", err)
-      setError(err instanceof Error ? err.message : "Erro ao enviar mensagem")
+      setError(err instanceof Error ? err.message : t('error') || "Erro ao enviar mensagem")
       setMessages((prev) => prev.filter((m) => m.content !== ""))
     } finally {
       setIsLoading(false)
@@ -116,7 +128,7 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
         <div className="flex items-center justify-between p-4 border-b border-border bg-primary/5">
           <div className="flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-primary" />
-            <h3 className="font-semibold text-foreground">ViraBot IA</h3>
+            <h3 className="font-semibold text-foreground">{t('title') || 'ViraBot IA'}</h3>
           </div>
           {onClose && (
             <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
@@ -127,9 +139,9 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
 
         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center min-h-[300px]">
           <Lock className="w-16 h-16 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-bold text-foreground mb-2">ViraBot Premium</h3>
-          <p className="text-muted-foreground mb-4">O ViraBot está disponível apenas para planos Premium e Master.</p>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">Fazer Upgrade</Button>
+          <h3 className="text-lg font-bold text-foreground mb-2">{t('premiumTitle')}</h3>
+          <p className="text-muted-foreground mb-4">{t('premiumMessage')}</p>
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">{t('upgrade')}</Button>
         </div>
       </Card>
     )
@@ -140,8 +152,8 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
       <div className="flex items-center justify-between p-4 border-b border-border bg-primary/5">
         <div className="flex items-center gap-2">
           <MessageCircle className="w-5 h-5 text-primary" />
-          <h3 className="font-semibold text-foreground">ViraBot IA</h3>
-          <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">Online</span>
+          <h3 className="font-semibold text-foreground">{t('title') || 'ViraBot IA'}</h3>
+          <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">{t('online')}</span>
         </div>
         {onClose && (
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
@@ -154,11 +166,10 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
         {messages.map((message) => (
           <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
-              className={`max-w-[80%] px-4 py-2 rounded-lg ${
-                message.role === "user"
+              className={`max-w-[80%] px-4 py-2 rounded-lg ${message.role === "user"
                   ? "bg-primary text-primary-foreground rounded-br-none"
                   : "bg-muted text-foreground rounded-bl-none"
-              }`}
+                }`}
             >
               <p className="text-sm whitespace-pre-wrap">{message.content}</p>
             </div>
@@ -177,7 +188,7 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
         )}
         {error && (
           <div className="flex justify-center">
-            <div className="bg-destructive/10 text-destructive px-4 py-2 rounded-lg text-sm">Erro: {error}</div>
+            <div className="bg-destructive/10 text-destructive px-4 py-2 rounded-lg text-sm">Error: {error}</div>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -187,7 +198,7 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Digite sua pergunta..."
+          placeholder={t('placeholder')}
           disabled={isLoading}
           className="flex-1"
         />

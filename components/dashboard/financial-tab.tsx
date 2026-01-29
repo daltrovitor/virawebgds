@@ -12,6 +12,7 @@ import { AttendanceTab } from "@/components/financial/attendance-tab"
 import PaymentModal from "@/components/financial/payment-modal"
 import FinancialChart from "./financial-chart"
 import PendingPaymentsModal from "@/components/financial/pending-payments-modal"
+import { useTranslations } from 'next-intl'
 
 export default function FinancialTab() {
   const [activeTab, setActiveTab] = useState("payments")
@@ -19,6 +20,7 @@ export default function FinancialTab() {
   const [recentPayments, setRecentPayments] = useState<any[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showPendingModal, setShowPendingModal] = useState(false)
+  const t = useTranslations('dashboard.financial')
 
   const loadSummary = async () => {
     try {
@@ -39,24 +41,22 @@ export default function FinancialTab() {
     <div className="space-y-8 px-2 sm:px-0">
       <div className="flex gap-2 border-b">
         <button
-          className={`px-4 py-2 font-medium ${
-            activeTab === "payments"
-              ? "border-b-2 border-primary text-primary"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+          className={`px-4 py-2 font-medium ${activeTab === "payments"
+            ? "border-b-2 border-primary text-primary"
+            : "text-muted-foreground hover:text-foreground"
+            }`}
           onClick={() => setActiveTab("payments")}
         >
-          Financeiro
+          {t('tabs.finance')}
         </button>
         <button
-          className={`px-4 py-2 font-medium ${
-            activeTab === "attendance"
-              ? "border-b-2 border-primary text-primary"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+          className={`px-4 py-2 font-medium ${activeTab === "attendance"
+            ? "border-b-2 border-primary text-primary"
+            : "text-muted-foreground hover:text-foreground"
+            }`}
           onClick={() => setActiveTab("attendance")}
         >
-          Presenças
+          {t('tabs.attendance')}
         </button>
       </div>
 
@@ -70,7 +70,7 @@ export default function FinancialTab() {
                   <DollarSign className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-foreground">Recebido (mês)</p>
+                  <p className="text-xs font-semibold text-foreground">{t('cards.received')}</p>
                   <p className="text-3xl font-bold text-emerald-400">R$ {Number(summary.totalReceived || 0).toFixed(2)}</p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ export default function FinancialTab() {
                   <Clock className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-foreground">Pendente</p>
+                  <p className="text-xs font-semibold text-foreground">{t('cards.pending')}</p>
                   <p className="text-3xl font-bold text-foreground">R$ {Number(summary.totalPending || 0).toFixed(2)}</p>
                 </div>
               </div>
@@ -92,22 +92,21 @@ export default function FinancialTab() {
                   <CreditCard className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-foreground">Descontos (mês)</p>
+                  <p className="text-xs font-semibold text-foreground">{t('cards.discounts')}</p>
                   <p className="text-3xl font-bold text-foreground">R$ {Number(summary.totalDiscounts || 0).toFixed(2)}</p>
                 </div>
               </div>
             </Card>
           </div>
 
-          {/* Título e botão */}
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
-            <h3 className="text-xl font-bold text-foreground">Pagamentos Recentes</h3>
+            <h3 className="text-xl font-bold text-foreground">{t('recentPayments')}</h3>
             <div className="flex gap-2">
               <Button onClick={() => setShowModal(true)} className="bg-primary text-primary-foreground shadow">
-                Registrar Pagamento
+                {t('registerPayment')}
               </Button>
               <Button onClick={() => setShowPendingModal(true)} variant="outline">
-                Gerenciar Pendentes
+                {t('managePending')}
               </Button>
             </div>
           </div>
@@ -116,7 +115,7 @@ export default function FinancialTab() {
           <div className="flex flex-col gap-4">
             {recentPayments.length === 0 ? (
               <div className="text-center py-6 text-muted-foreground rounded-lg border bg-white dark:bg-slate-900 shadow">
-                Nenhum pagamento encontrado.
+                {t('noPayments')}
               </div>
             ) : (
               recentPayments.map((payment) => (
@@ -133,31 +132,29 @@ export default function FinancialTab() {
                     </div>
                     <div className="flex flex-row gap-6 items-center ml-0 sm:ml-8">
                       <span
-                        className={`text-base font-bold ${
-                          payment.status === "paid" ? "text-emerald-400" : "text-foreground"
-                        }`}
+                        className={`text-base font-bold ${payment.status === "paid" ? "text-emerald-400" : "text-foreground"
+                          }`}
                       >
                         R$ {Number(payment.amount).toFixed(2)}
                       </span>
                       <span className="text-sm text-muted-foreground font-medium">
-                        {payment.discount ? `Desconto: R$ ${Number(payment.discount).toFixed(2)}` : ""}
+                        {payment.discount ? `${t('discount')}: R$ ${Number(payment.discount).toFixed(2)}` : ""}
                       </span>
                     </div>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ml-0 sm:ml-8 ${
-                        payment.status === "paid"
-                          ? "bg-emerald-600 text-white"
-                          : payment.status === "pending"
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ml-0 sm:ml-8 ${payment.status === "paid"
+                        ? "bg-emerald-600 text-white"
+                        : payment.status === "pending"
                           ? "bg-amber-600 text-white"
                           : payment.status === "overdue"
-                          ? "bg-red-600 text-white"
-                          : "bg-gray-500 text-white"
-                      }`}
+                            ? "bg-red-600 text-white"
+                            : "bg-gray-500 text-white"
+                        }`}
                     >
-                      {payment.status === "paid" && "Pago"}
-                      {payment.status === "pending" && "Pendente"}
-                      {payment.status === "overdue" && "Atrasado"}
-                      {payment.status === "refunded" && "Reembolsado"}
+                      {payment.status === "paid" && t('status.paid')}
+                      {payment.status === "pending" && t('status.pending')}
+                      {payment.status === "overdue" && t('status.overdue')}
+                      {payment.status === "refunded" && t('status.refunded')}
                     </span>
                   </div>
                 </div>
@@ -167,25 +164,25 @@ export default function FinancialTab() {
 
           {/* Seção de relatórios financeiros */}
           <div className="mt-6">
-            <h3 className="text-xl font-bold mb-3">Relatório Financeiro</h3>
+            <h3 className="text-xl font-bold mb-3">{t('report')}</h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <FinancialChart days={30} />
               <div className="bg-white dark:bg-card rounded-xl border border-border dark:border-slate-700 p-4 shadow-sm">
-                <h4 className="font-semibold mb-2">Resumo</h4>
+                <h4 className="font-semibold mb-2">{t('summary')}</h4>
                 <div className="flex flex-col gap-2">
                   <div className="flex justify-between text-sm">
                     <span className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-500" />{" "}
-                      <span className="text-foreground">Recebido (mês)</span>
+                      <span className="text-foreground">{t('summaryStats.received')}</span>
                     </span>
                     <span className="font-medium text-emerald-400">R$ {Number(summary.totalReceived || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-foreground">Descontos (mês)</span>
+                    <span className="text-foreground">{t('summaryStats.discounts')}</span>
                     <span className="font-medium text-foreground">R$ {Number(summary.totalDiscounts || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-foreground">Pendente</span>
+                    <span className="text-foreground">{t('summaryStats.pending')}</span>
                     <span className="font-medium text-foreground">R$ {Number(summary.totalPending || 0).toFixed(2)}</span>
                   </div>
                 </div>

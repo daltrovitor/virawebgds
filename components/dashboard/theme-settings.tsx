@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { useTheme } from "next-themes"
 import { Settings } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 const STORAGE_KEY = "vwd:ui-settings"
 
@@ -14,6 +15,7 @@ type Density = "comfortable" | "compact"
 
 export default function ThemeSettings() {
   const { theme, setTheme } = useTheme()
+  const t = useTranslations("dashboard.theme")
   const [open, setOpen] = useState(false)
   const [accent, setAccent] = useState<Accent>("blue")
   const [density, setDensity] = useState<Density>("comfortable")
@@ -40,7 +42,7 @@ export default function ThemeSettings() {
     applyRadius(radius)
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ accent, density, radius }))
-    } catch (e) {}
+    } catch (e) { }
   }, [accent, density, radius])
 
   function applyAccent(a: Accent) {
@@ -79,54 +81,54 @@ export default function ThemeSettings() {
       <div className="fixed right-6 bottom-6 z-50">
         <Button onClick={() => setOpen(true)} className="shadow-lg rounded-full px-4 py-3 bg-gradient-to-br from-primary to-secondary text-white flex items-center gap-2">
           <Settings className="w-4 h-4" />
-          Tema
+          {t("button")}
         </Button>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Personalizar Dashboard</DialogTitle>
+            <DialogTitle>{t("title")}</DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-4 mt-4">
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Modo</p>
+              <p className="text-sm text-muted-foreground mb-2">{t("mode")}</p>
               <Select value={theme || "system"} onValueChange={(v) => setTheme(v === "system" ? "light" : v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Claro</SelectItem>
-                  <SelectItem value="dark">Escuro</SelectItem>
-                  <SelectItem value="system">Sistema</SelectItem>
+                  <SelectItem value="light">{t("light")}</SelectItem>
+                  <SelectItem value="dark">{t("dark")}</SelectItem>
+                  <SelectItem value="system">{t("system")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Paleta (Accent)</p>
+              <p className="text-sm text-muted-foreground mb-2">{t("accent")}</p>
               <Select value={accent} onValueChange={(v) => setAccent(v as Accent)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="blue">Primário Azul / Secundário Amarelo</SelectItem>
-                  <SelectItem value="yellow">Primário Amarelo / Secundário Azul</SelectItem>
+                  <SelectItem value="blue">{t("accentBlue")}</SelectItem>
+                  <SelectItem value="yellow">{t("accentYellow")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Densidade</p>
+              <p className="text-sm text-muted-foreground mb-2">{t("density")}</p>
               <div className="flex items-center gap-3">
-                <Button variant={density === "comfortable" ? undefined : "outline"} onClick={() => setDensity("comfortable")}>Confortável</Button>
-                <Button variant={density === "compact" ? undefined : "outline"} onClick={() => setDensity("compact")}>Compacto</Button>
+                <Button variant={density === "comfortable" ? undefined : "outline"} onClick={() => setDensity("comfortable")}>{t("comfortable")}</Button>
+                <Button variant={density === "compact" ? undefined : "outline"} onClick={() => setDensity("compact")}>{t("compact")}</Button>
               </div>
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Raio dos cards</p>
+              <p className="text-sm text-muted-foreground mb-2">{t("radius")}</p>
               <div className="flex items-center gap-2">
                 <input type="range" min="2" max="20" value={parseFloat(radius) * 16} onChange={(e) => setRadius(`${Number(e.target.value) / 16}rem`)} />
                 <span className="text-sm">{radius}</span>
@@ -134,15 +136,15 @@ export default function ThemeSettings() {
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
-                <Button variant="outline" onClick={() => {
+              <Button variant="outline" onClick={() => {
                 // reset
                 setAccent("blue")
                 setDensity("comfortable")
                 setRadius("0.75rem")
                 // system should behave like light per user request
                 setTheme("light")
-              }}>Restaurar</Button>
-              <Button onClick={() => setOpen(false)}>Fechar</Button>
+              }}>{t("restore")}</Button>
+              <Button onClick={() => setOpen(false)}>{t("close")}</Button>
             </div>
           </div>
         </DialogContent>

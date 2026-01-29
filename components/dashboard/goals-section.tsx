@@ -24,6 +24,7 @@ import { getGoals, createGoal, updateGoal, deleteGoal, type Goal } from "@/app/a
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { formatDateString } from "@/lib/utils"
+import { useTranslations } from 'next-intl'
 
 export function GoalsSection() {
   const [goals, setGoals] = useState<Goal[]>([])
@@ -31,6 +32,7 @@ export function GoalsSection() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null)
   const { toast } = useToast()
+  const t = useTranslations('dashboard.goals')
 
   const [formData, setFormData] = useState({
     title: "",
@@ -52,8 +54,8 @@ export function GoalsSection() {
       setGoals(data)
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Não foi possível carregar as metas",
+        title: t('common.error'),
+        description: t('toast.loadError'),
         variant: "destructive",
       })
     } finally {
@@ -106,14 +108,14 @@ export function GoalsSection() {
       if (editingGoal) {
         await updateGoal(editingGoal.id, goalData)
         toast({
-          title: "Meta atualizada!",
-          description: "Sua meta foi atualizada com sucesso.",
+          title: t('toast.updated'),
+          description: t('toast.updatedDesc'),
         })
       } else {
         await createGoal(goalData)
         toast({
-          title: "Meta criada!",
-          description: "Sua meta foi criada com sucesso.",
+          title: t('toast.created'),
+          description: t('toast.createdDesc'),
         })
       }
 
@@ -122,8 +124,8 @@ export function GoalsSection() {
       resetForm()
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Não foi possível salvar a meta",
+        title: t('common.error'),
+        description: t('toast.savedError'),
         variant: "destructive",
       })
     } finally {
@@ -132,30 +134,28 @@ export function GoalsSection() {
   }
 
   async function handleDelete(goalId: string) {
-    const t = toast({
-      title: "Confirmar exclusão?",
-      description: "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+    const toastId = toast({
+      title: t('toast.confirmDelete'),
+      description: t('toast.confirmDeleteDesc'),
       action: (
         <ToastAction
-          altText="Confirmar exclusão"
+          altText={t('toast.delete')}
           onClick={async () => {
             try {
-              t.update({ id: t.id, title: "Excluindo...", description: "Aguarde" } as any)
+              // toastId.update({ id: toastId.id, title: t('toast.deleting'), description: "Aguarde" } as any)
               await deleteGoal(goalId)
-              t.update({ id: t.id, title: "Meta excluída", description: "A meta foi removida com sucesso." } as any)
+              toast({ title: t('toast.deleted'), description: t('toast.deletedDesc') })
               await loadGoals()
-              setTimeout(() => t.dismiss(), 1500)
             } catch (error) {
-              t.update({
-                id: t.id,
-                title: "Erro",
-                description: "Não foi possível excluir a meta",
+              toast({
+                title: t('common.error'),
+                description: t('toast.deleteError'),
                 variant: "destructive",
-              } as any)
+              })
             }
           }}
         >
-          Excluir
+          {t('toast.delete')}
         </ToastAction>
       ),
     })
@@ -165,47 +165,47 @@ export function GoalsSection() {
     try {
       await updateGoal(goal.id, { status: "concluida" })
       toast({
-        title: "Parabéns! 🎉",
-        description: "Meta concluída com sucesso!",
+        title: t('toast.completed'),
+        description: t('toast.completedDesc'),
       })
       await loadGoals()
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Não foi possível atualizar a meta",
+        title: t('common.error'),
+        description: t('toast.updateError'),
         variant: "destructive",
       })
     }
   }
 
-  async function createAppointmentGoal() {
-    setLoading(true)
-    try {
-      await createGoal({
-        title: "Meta de Agendamentos",
-        description: "Meta automática de agendamentos",
-        target_value: 100,
-        current_value: 0,
-        unit: "agendamentos",
-        category: "agendamentos",
-      })
-
-      toast({
-        title: "Meta criada",
-        description: "Meta de agendamentos criada com sucesso.",
-      })
-
-      await loadGoals()
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível criar a meta automática",
-        variant: "destructive",
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
+  //   async function createAppointmentGoal() {
+  //     setLoading(true)
+  //     try {
+  //       await createGoal({
+  //         title: "Meta de Agendamentos",
+  //         description: "Meta automática de agendamentos",
+  //         target_value: 100,
+  //         current_value: 0,
+  //         unit: "agendamentos",
+  //         category: "agendamentos",
+  //       })
+  //
+  //       toast({
+  //         title: t('toast.autoCreated'),
+  //         description: t('toast.autoCreatedDesc'),
+  //       })
+  //
+  //       await loadGoals()
+  //     } catch (error) {
+  //       toast({
+  //         title: t('common.error'),
+  //         description: t('toast.autoCreateError'),
+  //         variant: "destructive",
+  //       })
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
 
   function getProgressPercentage(goal: Goal) {
     if (!goal.target_value || goal.target_value === 0) return 0
@@ -221,7 +221,7 @@ export function GoalsSection() {
       case "profissionais":
         return "bg-purple-500/10 text-purple-500 border-purple-500/20"
       default:
-        return "bg-gray-500/10 text-gray-500 border-gray-500/20"
+        return "bg-gray-100/10 text-gray-500 border-gray-500/20"
     }
   }
 
@@ -233,8 +233,8 @@ export function GoalsSection() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Minhas Metas</h2>
-          <p className="text-muted-foreground">Defina e acompanhe seus objetivos</p>
+          <h2 className="text-3xl font-bold tracking-tight">{t('title')}</h2>
+          <p className="text-muted-foreground">{t('subtitle')}</p>
         </div>
         <Dialog
           open={isDialogOpen}
@@ -247,22 +247,22 @@ export function GoalsSection() {
             <DialogTrigger asChild>
               <Button className="gap-2">
                 <Plus className="h-4 w-4" />
-                Nova Meta
+                {t('newGoal')}
               </Button>
             </DialogTrigger>
 
           </div>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>{editingGoal ? "Editar Meta" : "Criar Nova Meta"}</DialogTitle>
-              <DialogDescription>Defina uma meta para acompanhar seu progresso</DialogDescription>
+              <DialogTitle>{editingGoal ? t('editGoal') : t('createGoal')}</DialogTitle>
+              <DialogDescription>{t('form.descriptionPlaceholder')}</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Título da Meta *</Label>
+                <Label htmlFor="title">{t('form.title')}</Label>
                 <Input
                   id="title"
-                  placeholder="Ex: Atender 100 clientes este mês"
+                  placeholder={t('form.titlePlaceholder')}
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
@@ -270,10 +270,10 @@ export function GoalsSection() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Descrição</Label>
+                <Label htmlFor="description">{t('form.description')}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Descreva sua meta em detalhes..."
+                  placeholder={t('form.descriptionPlaceholder')}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
@@ -282,25 +282,25 @@ export function GoalsSection() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="category">Categoria</Label>
+                  <Label htmlFor="category">{t('form.category')}</Label>
                   <Select
                     value={formData.category}
                     onValueChange={(value) => setFormData({ ...formData, category: value })}
                   >
                     <SelectTrigger id="category">
-                      <SelectValue placeholder="Selecione..." />
+                      <SelectValue placeholder={t('form.categoryPlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="financeiro">Financeiro</SelectItem>
-                        <SelectItem value="clientes">Clientes</SelectItem>
-                        <SelectItem value="agendamentos">Agendamentos</SelectItem>
-                        <SelectItem value="profissionais">Profissionais</SelectItem>
-                      </SelectContent>
+                      <SelectItem value="financeiro">{t('form.categories.financial')}</SelectItem>
+                      <SelectItem value="clientes">{t('form.categories.clients')}</SelectItem>
+                      <SelectItem value="agendamentos">{t('form.categories.appointments')}</SelectItem>
+                      <SelectItem value="profissionais">{t('form.categories.professionals')}</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="deadline">Prazo</Label>
+                  <Label htmlFor="deadline">{t('form.deadline')}</Label>
                   <Input
                     id="deadline"
                     type="date"
@@ -312,7 +312,7 @@ export function GoalsSection() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="target_value">Valor Alvo</Label>
+                  <Label htmlFor="target_value">{t('form.targetValue')}</Label>
                   <Input
                     id="target_value"
                     type="number"
@@ -323,7 +323,7 @@ export function GoalsSection() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="current_value">Valor Atual</Label>
+                  <Label htmlFor="current_value">{t('form.currentValue')}</Label>
                   <Input
                     id="current_value"
                     type="number"
@@ -334,10 +334,10 @@ export function GoalsSection() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="unit">Unidade</Label>
+                  <Label htmlFor="unit">{t('form.unit')}</Label>
                   <Input
                     id="unit"
-                    placeholder="clientes"
+                    placeholder={t('form.unitPlaceholder')}
                     value={formData.unit}
                     onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
                   />
@@ -353,16 +353,16 @@ export function GoalsSection() {
                     resetForm()
                   }}
                 >
-                  Cancelar
+                  {t('form.cancel')}
                 </Button>
                 <Button type="submit" disabled={loading}>
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      {editingGoal ? "Atualizando..." : "Salvando..."}
+                      {editingGoal ? t('form.updating') : t('form.saving')}
                     </>
                   ) : (
-                    editingGoal ? "Atualizar" : "Criar Meta"
+                    editingGoal ? t('form.update') : t('createGoal')
                   )}
                 </Button>
               </div>
@@ -375,36 +375,36 @@ export function GoalsSection() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Metas Ativas</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('activeGoals')}</CardTitle>
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeGoals.length}</div>
-            <p className="text-xs text-muted-foreground">Em progresso</p>
+            <p className="text-xs text-muted-foreground">{t('inProgress')}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Metas Concluídas</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('completedGoals')}</CardTitle>
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{completedGoals.length}</div>
-            <p className="text-xs text-muted-foreground">Alcançadas</p>
+            <p className="text-xs text-muted-foreground">{t('achieved')}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Taxa de Sucesso</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('successRate')}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {goals.length > 0 ? Math.round((completedGoals.length / goals.length) * 100) : 0}%
             </div>
-            <p className="text-xs text-muted-foreground">De todas as metas</p>
+            <p className="text-xs text-muted-foreground">{t('ofAllGoals')}</p>
           </CardContent>
         </Card>
       </div>
@@ -412,19 +412,19 @@ export function GoalsSection() {
       {/* Goals List */}
       {loading && goals.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Carregando metas...</p>
+          <p className="text-muted-foreground">{t('common.loading')}</p>
         </div>
       ) : goals.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Target className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Nenhuma meta criada</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('empty')}</h3>
             <p className="text-muted-foreground text-center mb-4">
-              Comece definindo suas primeiras metas para acompanhar seu progresso
+              {t('emptyDesc')}
             </p>
             <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
               <Plus className="h-4 w-4" />
-              Criar Primeira Meta
+              {t('createFirst')}
             </Button>
           </CardContent>
         </Card>
@@ -446,7 +446,7 @@ export function GoalsSection() {
                         <CardTitle className="text-lg">{goal.title}</CardTitle>
                         {isCompleted && (
                           <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                            Concluída
+                            {t('achieved')}
                           </Badge>
                         )}
                       </div>
@@ -483,7 +483,7 @@ export function GoalsSection() {
                   {goal.target_value && (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Progresso</span>
+                        <span className="text-muted-foreground">{t('inProgress')}</span>
                         <span className="font-medium">
                           {goal.current_value} / {goal.target_value} {goal.unit}
                         </span>

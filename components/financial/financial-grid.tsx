@@ -122,7 +122,7 @@ export function FinancialGrid({ data, loading, onPeriodChange, onSearch, onExpor
           Exportar
         </Button>
       </div>
-      
+
       <DataTable
         columns={columns}
         data={data}

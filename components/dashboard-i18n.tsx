@@ -114,7 +114,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     const navItems = [
         {
             id: "overview",
-            label: t('nav.overview'),
+            label: t('sidebar.overview'),
             icon: <Home className="w-5 h-5" />,
             notification: !hasWatchedTutorial ? (
                 <div className="absolute -right-1 -top-1">
@@ -122,20 +122,20 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                 </div>
             ) : null
         },
-        { id: "notes", label: t('nav.notes'), icon: <StickyNote className="w-5 h-5" /> },
-        { id: "checklist", label: t('nav.checklist'), icon: <List className="w-5 h-5" /> },
-        { id: "ai", label: t('nav.ai'), icon: <Sparkles className="w-5 h-5" /> },
-        { id: "goals", label: t('nav.goals'), icon: <Target className="w-5 h-5" /> },
-        { id: "appointments", label: t('nav.appointments'), icon: <Calendar className="w-5 h-5" /> },
-        { id: "patients", label: t('nav.patients'), icon: <Users className="w-5 h-5" /> },
-        { id: "financial", label: t('nav.financial'), icon: <CreditCard className="w-5 h-5" /> },
-        { id: "professionals", label: t('nav.professionals'), icon: <Users className="w-5 h-5" /> },
-        { id: "reports", label: t('nav.reports'), icon: <BarChart3 className="w-5 h-5" /> },
-        { id: "subscriptions", label: t('nav.subscriptions'), icon: <CreditCard className="w-5 h-5" /> },
-        { id: "support", label: t('nav.support'), icon: <HeadphonesIcon className="w-5 h-5" /> },
+        { id: "notes", label: t('sidebar.notes'), icon: <StickyNote className="w-5 h-5" /> },
+        { id: "checklist", label: t('sidebar.checklist'), icon: <List className="w-5 h-5" /> },
+        { id: "ai", label: t('sidebar.ai'), icon: <Sparkles className="w-5 h-5" /> },
+        { id: "goals", label: t('sidebar.goals'), icon: <Target className="w-5 h-5" /> },
+        { id: "appointments", label: t('sidebar.appointments'), icon: <Calendar className="w-5 h-5" /> },
+        { id: "patients", label: t('sidebar.patients'), icon: <Users className="w-5 h-5" /> },
+        { id: "financial", label: t('sidebar.financial'), icon: <CreditCard className="w-5 h-5" /> },
+        { id: "professionals", label: t('sidebar.professionals'), icon: <Users className="w-5 h-5" /> },
+        { id: "reports", label: t('sidebar.reports'), icon: <BarChart3 className="w-5 h-5" /> },
+        { id: "subscriptions", label: t('sidebar.subscriptions'), icon: <CreditCard className="w-5 h-5" /> },
+        { id: "support", label: t('sidebar.support'), icon: <HeadphonesIcon className="w-5 h-5" /> },
         {
             id: "tutorial",
-            label: t('nav.tutorial'),
+            label: t('sidebar.tutorial'),
             icon: <PlayCircle className="w-5 h-5" />,
             notification: !hasWatchedTutorial ? (
                 <div className="absolute -right-1 -top-1">
@@ -143,7 +143,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                 </div>
             ) : null
         },
-        { id: "settings", label: t('nav.settings'), icon: <Settings className="w-5 h-5" /> },
+        { id: "settings", label: t('sidebar.settings'), icon: <Settings className="w-5 h-5" /> },
     ]
 
     return (

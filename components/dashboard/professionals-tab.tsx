@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation"
 import UpgradeModal from "@/components/upgrade-modal"
 import { getCurrentPlan } from "@/app/actions/subscription"
 import { checkLimit } from "@/lib/usage-stats"
+import { useTranslations } from 'next-intl'
 
 type Professional = ProfessionalType
 
@@ -42,6 +43,8 @@ export default function ProfessionalsTab() {
   const { toast } = useToast()
   const [saving, setSaving] = useState(false)
   const router = useRouter()
+  const t = useTranslations('dashboard.professionals')
+  const tCommon = useTranslations('common')
 
   useEffect(() => {
     loadProfessionals()
@@ -63,8 +66,8 @@ export default function ProfessionalsTab() {
       setProfessionals(data)
     } catch (error) {
       toast({
-        title: "Erro ao carregar profissionais",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t('toast.loadError'),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: "destructive",
       })
     } finally {
@@ -76,8 +79,8 @@ export default function ProfessionalsTab() {
     setSaving(true)
     if (!formData.name) {
       toast({
-        title: "Nome obrigatório",
-        description: "Por favor, preencha o nome do profissional",
+        title: t('toast.nameRequired'),
+        description: t('toast.nameRequiredDesc'),
         variant: "destructive",
       })
       return
@@ -99,14 +102,14 @@ export default function ProfessionalsTab() {
       if (editingId) {
         await updateProfessional(editingId, formData)
         toast({
-          title: "Profissional atualizado",
-          description: "As informações foram atualizadas com sucesso",
+          title: t('toast.updated'),
+          description: t('toast.updatedDesc'),
         })
       } else {
         await createProfessional(formData)
         toast({
-          title: "Profissional criado",
-          description: "Novo profissional adicionado com sucesso",
+          title: t('toast.created'),
+          description: t('toast.createdDesc'),
         })
       }
 
@@ -119,13 +122,13 @@ export default function ProfessionalsTab() {
         setShowUpgradeModal(true)
       } else {
         toast({
-          title: "Erro ao salvar profissional",
-          description: error instanceof Error ? error.message : "Tente novamente",
+          title: t('toast.saveError'),
+          description: error instanceof Error ? error.message : t('common.error'),
           variant: "destructive",
         })
       }
     }
-    finally{
+    finally {
       setSaving(false)
     }
   }
@@ -144,30 +147,28 @@ export default function ProfessionalsTab() {
   }
 
   const handleDeleteProfessional = async (id: string) => {
-    const t = toast({
-      title: "Confirmar exclusão?",
-      description: "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+    const toastId = toast({
+      title: t('toast.confirmDelete'),
+      description: t('toast.confirmDeleteDesc'),
       action: (
         <ToastAction
-          altText="Confirmar exclusão"
+          altText={t('toast.delete')}
           onClick={async () => {
             try {
-              t.update({ id: t.id, title: "Excluindo...", description: "Aguarde" } as any)
+              // toastId.update({ id: toastId.id, title: t('toast.deleting'), description: "Aguarde" } as any)
               await deleteProfessional(id)
-              t.update({ id: t.id, title: "Profissional excluído", description: "Profissional removido com sucesso" } as any)
+              toast({ title: t('toast.deleted'), description: t('toast.deletedDesc') })
               await loadProfessionals()
-              setTimeout(() => t.dismiss(), 1500)
             } catch (error) {
-              t.update({
-                id: t.id,
-                title: "Erro ao excluir profissional",
-                description: error instanceof Error ? error.message : "Tente novamente",
+              toast({
+                title: t('toast.deleteError'),
+                description: error instanceof Error ? error.message : t('common.error'),
                 variant: "destructive",
-              } as any)
+              })
             }
           }}
         >
-          Excluir
+          {t('toast.delete')}
         </ToastAction>
       ),
     })
@@ -193,8 +194,8 @@ export default function ProfessionalsTab() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Profissionais</h2>
-          <p className="text-muted-foreground mt-1">Gerencie os profissionais do seu negócio</p>
+          <h2 className="text-3xl font-bold text-foreground">{t('title')}</h2>
+          <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
         </div>
         <Button
           onClick={() => {
@@ -205,7 +206,7 @@ export default function ProfessionalsTab() {
           className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 shadow-lg"
         >
           <Plus className="w-4 h-4" />
-          Novo Profissional
+          {t('newProfessional')}
         </Button>
       </div>
 
@@ -218,42 +219,42 @@ export default function ProfessionalsTab() {
       {showForm && (
         <Card className="p-6 border border-border bg-gradient-to-br from-primary/5 to-secondary/5">
           <h3 className="text-lg font-bold text-foreground mb-4">
-            {editingId ? "Editar Profissional" : "Novo Profissional"}
+            {editingId ? t('editProfessional') : t('newProfessional')}
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <Input
-              placeholder="Nome Completo *"
+              placeholder={t('form.name')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Especialidade"
+              placeholder={t('form.specialty')}
               value={formData.specialty}
               onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
               className="bg-background"
             />
             <Input
               type="email"
-              placeholder="Email"
+              placeholder={t('form.email')}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Telefone"
+              placeholder={t('form.phone')}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Dias de Trabalho"
+              placeholder={t('form.workDays')}
               value={formData.work_days}
               onChange={(e) => setFormData({ ...formData, work_days: e.target.value })}
               className="bg-background"
             />
             <Input
-              placeholder="Notas (opcional)"
+              placeholder={t('form.notes')}
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               className="bg-background"
@@ -264,10 +265,10 @@ export default function ProfessionalsTab() {
               {saving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  {editingId ? "Atualizando..." : "Salvando..."}
+                  {editingId ? t('form.updating') : t('form.saving')}
                 </>
               ) : (
-                editingId ? "Atualizar" : "Salvar"
+                editingId ? t('form.update') : t('form.save')
               )}
             </Button>
             <Button
@@ -277,7 +278,7 @@ export default function ProfessionalsTab() {
                 setEditingId(null)
               }}
             >
-              Cancelar
+              {t('form.cancel')}
             </Button>
           </div>
         </Card>
@@ -287,7 +288,7 @@ export default function ProfessionalsTab() {
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Buscar por nome ou especialidade..."
+            placeholder={t('searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -295,16 +296,16 @@ export default function ProfessionalsTab() {
         </div>
         <div className="flex gap-2">
           <Button variant={filterStatus === "all" ? "default" : "outline"} onClick={() => setFilterStatus("all")}>
-            Todos
+            {t('filter.all')}
           </Button>
           <Button variant={filterStatus === "active" ? "default" : "outline"} onClick={() => setFilterStatus("active")}>
-            Ativos
+            {t('filter.active')}
           </Button>
           <Button
             variant={filterStatus === "inactive" ? "default" : "outline"}
             onClick={() => setFilterStatus("inactive")}
           >
-            Inativos
+            {t('filter.inactive')}
           </Button>
         </div>
       </div>
@@ -326,13 +327,12 @@ export default function ProfessionalsTab() {
                           <Badge className="bg-primary/10 text-primary border-0">{professional.specialty}</Badge>
                         )}
                         <span
-                          className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                            professional.status === "active"
+                          className={`text-xs font-semibold px-2 py-1 rounded-full ${professional.status === "active"
                               ? "bg-green-100 text-green-700"
                               : "bg-gray-100 text-gray-700"
-                          }`}
+                            }`}
                         >
-                          {professional.status === "active" ? "Ativo" : "Inativo"}
+                          {professional.status === "active" ? t('status.active') : t('status.inactive')}
                         </span>
                       </div>
                     </div>
@@ -352,12 +352,12 @@ export default function ProfessionalsTab() {
                       </div>
                     )}
                     {professional.work_days && (
-                      <div className="text-sm text-muted-foreground">Dias: {professional.work_days}</div>
+                      <div className="text-sm text-muted-foreground">{t('workDays')}: {professional.work_days}</div>
                     )}
                   </div>
 
                   {professional.notes && (
-                    <p className="text-sm text-muted-foreground italic">Notas: {professional.notes}</p>
+                    <p className="text-sm text-muted-foreground italic">{t('form.notes')}: {professional.notes}</p>
                   )}
                 </div>
 
@@ -384,10 +384,10 @@ export default function ProfessionalsTab() {
           ))
         ) : (
           <Card className="p-8 border border-border text-center">
-            <p className="text-muted-foreground">Nenhum profissional encontrado</p>
+            <p className="text-muted-foreground">{t('empty')}</p>
             <Button onClick={() => setShowForm(true)} className="mt-4" variant="outline">
               <Plus className="w-4 h-4 mr-2" />
-              Adicionar Primeiro Profissional
+              {t('createFirst')}
             </Button>
           </Card>
         )}

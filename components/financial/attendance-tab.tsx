@@ -11,9 +11,10 @@ import { Check, Clock, XCircle, AlertTriangle, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import "react-day-picker/dist/style.css"
 import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { ptBR, enUS } from "date-fns/locale"
 import { useAttendance } from "@/hooks/use-attendance"
 import { getPatients } from "@/app/actions/patients"
+import { useTranslations, useLocale } from "next-intl"
 
 interface Patient {
   id: string
@@ -36,6 +37,10 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "credit" | "debit" | "pix" | "transfer">("cash")
   const [paymentStatus, setPaymentStatus] = useState<"pending" | "paid" | "cancelled">("pending")
   const { toast } = useToast()
+  const tAtt = useTranslations("dashboard.attendance")
+  const tCommon = useTranslations("common")
+  const locale = useLocale()
+  const dateLocale = locale === "en" ? enUS : ptBR
 
   const {
     records,
@@ -43,9 +48,9 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
     loading,
     error,
     appointments,
-  isDateScheduled,
-  updateAttendance,
-  loadAttendance
+    isDateScheduled,
+    updateAttendance,
+    loadAttendance
   } = useAttendance(selectedPatient)
 
   // Reload attendance when payments change elsewhere in the app
@@ -79,8 +84,8 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
           setPatients(data || [])
         } catch (error) {
           toast({
-            title: "Erro ao carregar clientes",
-            description: error instanceof Error ? error.message : "Falha ao carregar lista de clientes",
+            title: tAtt("toast.loadPatientsError"),
+            description: error instanceof Error ? error.message : tAtt("toast.loadPatientsError"),
             variant: "destructive"
           })
         }
@@ -92,7 +97,7 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
   useEffect(() => {
     if (error) {
       toast({
-        title: "Erro ao carregar presenças",
+        title: tAtt("toast.loadAttendanceError"),
         description: error,
         variant: "destructive"
       })
@@ -110,18 +115,18 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
 
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) return
-    
+
     // Allow editing an existing attendance record even if there is no
     // scheduled appointment for that date. If there is no existing
     // record, only allow creating a new one on scheduled dates.
-    const existingRecord = records.find(r => 
+    const existingRecord = records.find(r =>
       format(new Date(r.sessionDate), "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
     )
 
     if (!existingRecord && !isDateScheduled(date)) {
       toast({
-        title: "Data inválida",
-        description: "Só é possível registrar presença em dias com agendamento",
+        title: tAtt("toast.invalidDate"),
+        description: tAtt("toast.invalidDateDesc"),
         variant: "destructive"
       })
       return
@@ -140,16 +145,16 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
         setPaymentMethod("cash")
         setPaymentStatus("paid")
       }
-      } else {
-        setStatus("present")
-        setNotes("")
-        setAmount(0)
-        setPaymentMethod("cash")
-        // Default new attendance payment status to 'pending' so it won't
-        // be counted as paid until a payment record with status 'paid'
-        // exists.
-        setPaymentStatus("pending")
-      }
+    } else {
+      setStatus("present")
+      setNotes("")
+      setAmount(0)
+      setPaymentMethod("cash")
+      // Default new attendance payment status to 'pending' so it won't
+      // be counted as paid until a payment record with status 'paid'
+      // exists.
+      setPaymentStatus("pending")
+    }
     setShowDialog(true)
   }
 
@@ -177,13 +182,13 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
       // limpar seleção para permitir reabrir o mesmo dia sem refresh
       setSelectedDate(undefined)
       toast({
-        title: "Presença registrada",
-        description: "O registro de presença foi atualizado com sucesso"
+        title: tAtt("toast.success"),
+        description: tAtt("toast.successDesc")
       })
     } catch (error) {
       toast({
-        title: "Erro ao salvar",
-        description: error instanceof Error ? error.message : "Falha ao salvar presença",
+        title: tAtt("toast.saveError"),
+        description: error instanceof Error ? error.message : tAtt("toast.saveError"),
         variant: "destructive"
       })
     }
@@ -228,11 +233,11 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
         <Card className="p-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Controle de Presença</h3>
+              <h3 className="text-lg font-semibold">{tAtt("title")}</h3>
             </div>
             <Select value={selectedPatient || ""} onValueChange={setSelectedPatient}>
-                <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecione um cliente" />
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={tAtt("selectPatient")} />
               </SelectTrigger>
               <SelectContent>
                 {patients.map((patient) => (
@@ -252,19 +257,19 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
           {stats && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Taxa de Presença</p>
+                <p className="text-sm text-muted-foreground">{tAtt("attendanceRate")}</p>
                 <p className="text-2xl font-bold">{stats.attendanceRate.toFixed(1)}%</p>
               </Card>
               <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Total de Sessões</p>
+                <p className="text-sm text-muted-foreground">{tAtt("totalSessions")}</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </Card>
               <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Sessões Pagas</p>
+                <p className="text-sm text-muted-foreground">{tAtt("paidSessions")}</p>
                 <p className="text-2xl font-bold">{stats.paid}</p>
               </Card>
               <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Faltas</p>
+                <p className="text-sm text-muted-foreground">{tAtt("absences")}</p>
                 <p className="text-2xl font-bold">{stats.absent + stats.cancelled}</p>
               </Card>
             </div>
@@ -272,7 +277,7 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
 
           {/* Calendar View */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Calendário de Presenças</h3>
+            <h3 className="text-lg font-semibold mb-4">{tAtt("calendarTitle")}</h3>
             <MonthlyCalendar
               selected={selectedDate}
               onSelect={handleDateSelect}
@@ -282,7 +287,7 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
 
           {/* Recent Records */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Registros Recentes</h3>
+            <h3 className="text-lg font-semibold mb-4">{tAtt("recentRecords")}</h3>
             <div className="space-y-2">
               {records.slice(0, 5).map(record => (
                 <div
@@ -296,7 +301,9 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
                     </div>
                     <div>
                       <p className="font-medium">
-                        {format(new Date(record.sessionDate), "dd 'de' MMMM", { locale: ptBR })}
+                        {locale === "en"
+                          ? format(new Date(record.sessionDate), "MMMM dd")
+                          : format(new Date(record.sessionDate), "dd 'de' MMMM", { locale: dateLocale })}
                       </p>
                       {record.notes && (
                         <p className="text-sm text-muted-foreground">{record.notes}</p>
@@ -304,7 +311,7 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
                     </div>
                   </div>
                   <Button variant="ghost" size="sm">
-                    Editar
+                    {tAtt("edit")}
                   </Button>
                 </div>
               ))}
@@ -318,24 +325,26 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {selectedDate 
-                ? `Registro de Presença - ${format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}`
-                : "Registro de Presença"}
+              {selectedDate
+                ? `${tAtt("dialogTitle").replace("{date}", locale === "en"
+                  ? format(selectedDate, "MMMM dd, yyyy")
+                  : format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: dateLocale }))}`
+                : tAtt("title")}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Status</label>
+              <label className="text-sm font-medium">{tAtt("status")}</label>
               <Select value={status} onValueChange={(value) => setStatus(value as typeof status)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="present">Presente</SelectItem>
-                  <SelectItem value="absent">Ausente</SelectItem>
-                  <SelectItem value="late">Atrasado</SelectItem>
-                  <SelectItem value="cancelled">Cancelado</SelectItem>
+                  <SelectItem value="present">{tAtt("present")}</SelectItem>
+                  <SelectItem value="absent">{tAtt("absent")}</SelectItem>
+                  <SelectItem value="late">{tAtt("late")}</SelectItem>
+                  <SelectItem value="cancelled">{tAtt("cancelled")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -343,10 +352,10 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
             {status === 'present' && (
               <>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Pagamento</label>
+                  <label className="text-sm font-medium">{tAtt("payment")}</label>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm">Valor</label>
+                      <label className="text-sm">{tAtt("amount")}</label>
                       <input
                         type="number"
                         value={amount}
@@ -358,31 +367,31 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm">Método</label>
+                      <label className="text-sm">{tAtt("method")}</label>
                       <Select value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as typeof paymentMethod)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="cash">Dinheiro</SelectItem>
-                          <SelectItem value="credit">Cartão de Crédito</SelectItem>
-                          <SelectItem value="debit">Cartão de Débito</SelectItem>
-                          <SelectItem value="pix">PIX</SelectItem>
-                          <SelectItem value="transfer">Transferência</SelectItem>
+                          <SelectItem value="cash">{tAtt("cash")}</SelectItem>
+                          <SelectItem value="credit">{tAtt("credit")}</SelectItem>
+                          <SelectItem value="debit">{tAtt("debit")}</SelectItem>
+                          <SelectItem value="pix">{tAtt("pix")}</SelectItem>
+                          <SelectItem value="transfer">{tAtt("transfer")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm">Status do Pagamento</label>
+                    <label className="text-sm">{tAtt("paymentStatus")}</label>
                     <Select value={paymentStatus} onValueChange={(value) => setPaymentStatus(value as typeof paymentStatus)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="paid">Pago</SelectItem>
-                        <SelectItem value="pending">Pendente</SelectItem>
-                        <SelectItem value="cancelled">Cancelado</SelectItem>
+                        <SelectItem value="paid">{tAtt("paid")}</SelectItem>
+                        <SelectItem value="pending">{tAtt("pending")}</SelectItem>
+                        <SelectItem value="cancelled">{tAtt("cancelled")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -391,27 +400,27 @@ export function AttendanceTab({ patientId }: AttendanceTabProps) {
             )}
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Observações</label>
+              <label className="text-sm font-medium">{tAtt("notes")}</label>
               <Textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
-                placeholder="Adicione observações sobre a sessão..."
+                placeholder={tAtt("notesPlaceholder")}
               />
             </div>
           </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => { setShowDialog(false); setSelectedDate(undefined); }}>
-              Cancelar
+              {tAtt("cancel")}
             </Button>
             <Button onClick={handleSave} disabled={saving}>
               {saving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Salvando...
+                  {tAtt("saving")}
                 </>
               ) : (
-                "Salvar"
+                tAtt("save")
               )}
             </Button>
           </DialogFooter>

@@ -16,6 +16,7 @@ import { getPatientFinancialSummary, getRecentPayments } from "@/app/actions/fin
 import PaymentModal from "@/components/financial/payment-modal"
 import { PatientFinancialTab } from "@/components/financial/patient-financial-tab"
 import { useToast } from "@/hooks/use-toast"
+import { useTranslations } from "next-intl"
 import type { Patient } from "@/app/actions/patients"
 
 interface PatientProfileModalProps {
@@ -37,6 +38,8 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [initialPendingPaymentId, setInitialPendingPaymentId] = useState<string | null>(null)
   const { toast } = useToast()
+  const t = useTranslations("dashboard.patientProfile")
+  const tCommon = useTranslations("common")
 
   useEffect(() => {
     if (patientId && isOpen) {
@@ -54,14 +57,14 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         getPatientFinancialSummary(patientId),
         getRecentPayments(50)
       ])
-      
+
       setPatient(data)
       setNotes(data.notes || "")
       setFinancialSummary(fin)
       setPayments(recentPayments)
     } catch (error) {
       toast({
-        title: "Erro ao carregar cliente",
+        title: t("toast.loadError"),
         description: mapDbErrorToUserMessage(error instanceof Error ? error.message : String(error)),
         variant: "destructive",
       })
@@ -77,13 +80,13 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     try {
       await updatePatientNotes(patientId, notes)
       toast({
-        title: "Notas salvas",
-        description: "As notas do cliente foram atualizadas com sucesso",
+        title: t("toast.notesSaved"),
+        description: t("toast.notesSavedDesc"),
       })
       if (onUpdate) onUpdate()
     } catch (error) {
       toast({
-        title: "Erro ao salvar notas",
+        title: t("toast.notesError"),
         description: mapDbErrorToUserMessage(error instanceof Error ? error.message : String(error)),
         variant: "destructive",
       })
@@ -98,8 +101,8 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     const file = e.target.files[0]
     if (!file.type.startsWith("image/")) {
       toast({
-        title: "Arquivo inválido",
-        description: "Por favor, selecione uma imagem",
+        title: t("photo.invalid"),
+        description: t("photo.invalidDesc"),
         variant: "destructive",
       })
       return
@@ -115,15 +118,15 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         await updatePatientPhoto(patientId, photoUrl)
         setPatient((prev) => (prev ? { ...prev, profile_photo_url: photoUrl } : null))
         toast({
-          title: "Foto atualizada",
-          description: "A foto do perfil foi atualizada com sucesso",
+          title: t("toast.photoUpdated"),
+          description: t("toast.photoUpdatedDesc"),
         })
         if (onUpdate) onUpdate()
       }
       reader.readAsDataURL(file)
     } catch (error) {
       toast({
-        title: "Erro ao fazer upload",
+        title: t("toast.uploadError"),
         description: mapDbErrorToUserMessage(error instanceof Error ? error.message : String(error)),
         variant: "destructive",
       })
@@ -138,7 +141,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Perfil do Cliente</DialogTitle>
+          <DialogTitle className="text-2xl">{t("title")}</DialogTitle>
         </DialogHeader>
 
         {loading ? (
@@ -181,11 +184,10 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="text-2xl font-bold text-foreground mb-2">{patient.name}</h3>
                   <span
-                    className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${
-                      patient.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
-                    }`}
+                    className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${patient.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
+                      }`}
                   >
-                    {patient.status === "active" ? "Ativo" : "Inativo"}
+                    {patient.status === "active" ? t("active") : t("inactive")}
                   </span>
                 </div>
               </div>
@@ -196,11 +198,11 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="info" className="gap-2">
                   <FileText className="w-4 h-4" />
-                  Informações
+                  {t("tabs.info")}
                 </TabsTrigger>
                 <TabsTrigger value="financial" className="gap-2">
                   <CreditCard className="w-4 h-4" />
-                  Financeiro
+                  {t("tabs.financial")}
                 </TabsTrigger>
               </TabsList>
 
@@ -208,7 +210,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 <div className="space-y-6">
                   {/* Patient Information */}
                   <Card className="p-6">
-                    <h4 className="text-lg font-bold text-foreground mb-4">Informações do Cliente</h4>
+                    <h4 className="text-lg font-bold text-foreground mb-4">{t("info.title")}</h4>
                     <div className="grid sm:grid-cols-2 gap-4 min-w-0">
                       {patient.email && (
                         <div className="flex items-start gap-3 min-w-0">
@@ -216,7 +218,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                             <Mail className="w-5 h-5 text-primary" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-xs text-muted-foreground">Email</p>
+                            <p className="text-xs text-muted-foreground">{t("info.email")}</p>
                             <p className="text-sm font-medium text-foreground truncate">{patient.email}</p>
                           </div>
                         </div>
@@ -228,7 +230,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                             <Phone className="w-5 h-5 text-primary" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-xs text-muted-foreground">Telefone</p>
+                            <p className="text-xs text-muted-foreground">{t("info.phone")}</p>
                             <p className="text-sm font-medium text-foreground">{patient.phone}</p>
                           </div>
                         </div>
@@ -240,7 +242,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                             <FileText className="w-5 h-5 text-primary" />
                           </div>
                           <div>
-                            <p className="text-xs text-muted-foreground">CPF</p>
+                            <p className="text-xs text-muted-foreground">{t("info.cpf")}</p>
                             <p className="text-sm font-medium text-foreground">{patient.cpf}</p>
                           </div>
                         </div>
@@ -252,7 +254,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                             <Calendar className="w-5 h-5 text-primary" />
                           </div>
                           <div>
-                            <p className="text-xs text-muted-foreground">Data de Nascimento</p>
+                            <p className="text-xs text-muted-foreground">{t("info.birthday")}</p>
                             <p className="text-sm font-medium text-foreground">
                               {(() => {
                                 const raw = (patient.birthday || patient.date_of_birth) as string | undefined
@@ -273,7 +275,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                             <MapPin className="w-5 h-5 text-primary" />
                           </div>
                           <div>
-                            <p className="text-xs text-muted-foreground">Endereço</p>
+                            <p className="text-xs text-muted-foreground">{t("info.address")}</p>
                             <p className="text-sm font-medium text-foreground">{patient.address}</p>
                           </div>
                         </div>
@@ -283,16 +285,16 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
                   {/* Notes Section */}
                   <Card className="p-6">
-                    <h4 className="text-lg font-bold text-foreground mb-4">Notas do Cliente</h4>
+                    <h4 className="text-lg font-bold text-foreground mb-4">{t("notes.title")}</h4>
                     <Textarea
-                      placeholder="Adicione notas sobre o cliente, histórico, observações, etc..."
+                      placeholder={t("notes.placeholder")}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       className="min-h-[200px] mb-4"
                     />
                     <Button onClick={handleSaveNotes} disabled={saving} className="gap-2">
                       {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                      Salvar Notas
+                      {t("notes.save")}
                     </Button>
                   </Card>
                 </div>
@@ -303,41 +305,41 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                   {/* Financial Summary Card */}
                   <Card className="p-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                      <h4 className="text-lg font-bold text-foreground">Resumo Financeiro</h4>
+                      <h4 className="text-lg font-bold text-foreground">{t("financial.title")}</h4>
                       <Button onClick={() => setShowPaymentModal(true)} className="mt-2 sm:mt-0">
-                        Registrar Pagamento
+                        {t("financial.register")}
                       </Button>
                     </div>
-                    
+
                     {financialSummary ? (
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                          <p className="text-sm text-muted-foreground">Total Pago</p>
+                          <p className="text-sm text-muted-foreground">{t("financial.totalPaid")}</p>
                           <p className="text-xl font-bold text-emerald-600">
                             R$ {financialSummary.paid.toFixed(2)}
                           </p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Total Devido</p>
+                          <p className="text-sm text-muted-foreground">{t("financial.totalDue")}</p>
                           <p className="text-xl font-bold text-amber-600">
                             R$ {financialSummary.due.toFixed(2)}
                           </p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Descontos</p>
+                          <p className="text-sm text-muted-foreground">{t("financial.discounts")}</p>
                           <p className="text-xl font-bold text-foreground">
                             R$ {financialSummary.discounts.toFixed(2)}
                           </p>
                         </div>
                       </div>
                     ) : (
-                      <p className="text-sm text-muted-foreground">Carregando resumo financeiro...</p>
+                      <p className="text-sm text-muted-foreground">{t("financial.loading")}</p>
                     )}
                   </Card>
 
                   {/* Financial Details */}
                   {patientId && (
-                    <PatientFinancialTab 
+                    <PatientFinancialTab
                       patientId={patientId}
                       payments={payments.filter(p => p.patient_id === patientId)}
                       onOpenPaymentModal={(pendingId) => {

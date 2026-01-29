@@ -9,6 +9,7 @@ import { Plus, Trash2, Edit2, Save, X, Loader2, StickyNote } from "lucide-react"
 import { getUserNotes, createUserNote, updateUserNote, deleteUserNote, type UserNote } from "@/app/actions/user-notes"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/hooks/use-toast"
+import { useTranslations } from "next-intl"
 
 export default function NotesTab() {
   const [notes, setNotes] = useState<UserNote[]>([])
@@ -21,6 +22,7 @@ export default function NotesTab() {
   })
   const { toast } = useToast()
   const [saving, setSaving] = useState(false)
+  const t = useTranslations('dashboard.notes')
 
   useEffect(() => {
     loadNotes()
@@ -32,7 +34,7 @@ export default function NotesTab() {
       setNotes(data)
     } catch (error) {
       toast({
-        title: "Erro ao carregar notas",
+        title: t('toast.loadError'),
         description: error instanceof Error ? error.message : "Tente novamente",
         variant: "destructive",
       })
@@ -44,8 +46,8 @@ export default function NotesTab() {
   const handleSaveNote = async () => {
     if (!formData.title || !formData.content) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Por favor, preencha o título e o conteúdo",
+        title: t('fieldsRequired.title'),
+        description: t('fieldsRequired.desc'),
         variant: "destructive",
       })
       return
@@ -56,14 +58,14 @@ export default function NotesTab() {
       if (editingId) {
         await updateUserNote(editingId, formData.title, formData.content)
         toast({
-          title: "Nota atualizada",
-          description: "Sua nota foi atualizada com sucesso",
+          title: t('toast.updated'),
+          description: t('toast.updatedDesc'),
         })
       } else {
         await createUserNote(formData.title, formData.content)
         toast({
-          title: "Nota criada",
-          description: "Nova nota adicionada com sucesso",
+          title: t('toast.created'),
+          description: t('toast.createdDesc'),
         })
       }
 
@@ -73,7 +75,7 @@ export default function NotesTab() {
       setEditingId(null)
     } catch (error) {
       toast({
-        title: "Erro ao salvar nota",
+        title: t('toast.saveError'),
         description: error instanceof Error ? error.message : "Tente novamente",
         variant: "destructive",
       })
@@ -93,27 +95,27 @@ export default function NotesTab() {
 
   const handleDeleteNote = async (id: string) => {
     // Show a toast confirmation instead of native confirm dialog
-    const t = toast({
-      title: "Confirmar exclusão?",
-      description: "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+    const t_toast = toast({
+      title: t('toast.confirmDelete'),
+      description: t('toast.confirmDeleteDesc'),
       // action must be a ToastAction element
       action: (
         <ToastAction
-          altText="Confirmar exclusão"
+          altText={t('toast.confirmDelete')}
           onClick={async () => {
             try {
               // show temporary feedback (include id to satisfy type)
-              t.update({ id: t.id, title: "Excluindo...", description: "Aguarde" } as any)
+              t_toast.update({ id: t_toast.id, title: t('toast.deleting'), description: "Aguarde" } as any)
               await deleteUserNote(id)
-              t.update({ id: t.id, title: "Nota excluída", description: "Nota removida com sucesso" } as any)
+              t_toast.update({ id: t_toast.id, title: t('toast.deleted'), description: t('toast.deletedDesc') } as any)
               // refresh list
               await loadNotes()
               // dismiss after short delay
-              setTimeout(() => t.dismiss(), 1500)
+              setTimeout(() => t_toast.dismiss(), 1500)
             } catch (error) {
-              t.update({
-                id: t.id,
-                title: "Erro ao excluir nota",
+              t_toast.update({
+                id: t_toast.id,
+                title: t('toast.deleteError'),
                 description: error instanceof Error ? error.message : "Tente novamente",
                 // mark as destructive
                 variant: "destructive",
@@ -121,7 +123,7 @@ export default function NotesTab() {
             }
           }}
         >
-          Excluir
+          {t('toast.delete')}
         </ToastAction>
       ),
     })
@@ -140,8 +142,8 @@ export default function NotesTab() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Minhas Notas</h2>
-          <p className="text-muted-foreground mt-1">Organize suas anotações e lembretes</p>
+          <h2 className="text-3xl font-bold text-foreground">{t('title')}</h2>
+          <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
         </div>
         <Button
           onClick={() => {
@@ -152,23 +154,23 @@ export default function NotesTab() {
           className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 shadow-lg"
         >
           <Plus className="w-4 h-4" />
-          Nova Nota
+          {t('newNote')}
         </Button>
       </div>
 
       {/* Form */}
       {showForm && (
         <Card className="p-6 border border-border bg-gradient-to-br from-primary/5 to-secondary/5">
-          <h3 className="text-lg font-bold text-foreground mb-4">{editingId ? "Editar Nota" : "Nova Nota"}</h3>
+          <h3 className="text-lg font-bold text-foreground mb-4">{editingId ? t('editNote') : t('newNote')}</h3>
           <div className="space-y-4">
             <Input
-              placeholder="Título da nota"
+              placeholder={t('placeholderTitle')}
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="bg-background"
             />
             <Textarea
-              placeholder="Conteúdo da nota..."
+              placeholder={t('placeholderContent')}
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               className="min-h-[200px] bg-background"
@@ -181,7 +183,7 @@ export default function NotesTab() {
               disabled={saving}
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {editingId ? (saving ? "Atualizando..." : "Atualizar") : saving ? "Salvando..." : "Salvar"}
+              {editingId ? (saving ? t('updating') : t('update')) : saving ? t('saving') : t('save')}
             </Button>
             <Button
               variant="outline"
@@ -192,7 +194,7 @@ export default function NotesTab() {
               className="gap-2"
             >
               <X className="w-4 h-4" />
-              Cancelar
+              {t('cancel')}
             </Button>
           </div>
         </Card>
@@ -221,17 +223,17 @@ export default function NotesTab() {
               <p className="text-sm text-muted-foreground line-clamp-4 mb-4">{note.content}</p>
 
               <div className="text-xs text-muted-foreground">
-                Atualizado em {new Date(note.updated_at).toLocaleDateString("pt-BR")}
+                {t('updatedAt')} {new Date(note.updated_at).toLocaleDateString("pt-BR")}
               </div>
             </Card>
           ))
         ) : (
           <Card className="p-8 border border-border text-center sm:col-span-2 lg:col-span-3">
             <StickyNote className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
-            <p className="text-muted-foreground mb-4">Nenhuma nota criada</p>
+            <p className="text-muted-foreground mb-4">{t('empty')}</p>
             <Button onClick={() => setShowForm(true)} variant="outline">
               <Plus className="w-4 h-4 mr-2" />
-              Criar Primeira Nota
+              {t('createFirst')}
             </Button>
           </Card>
         )}

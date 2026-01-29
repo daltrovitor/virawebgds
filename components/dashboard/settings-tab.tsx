@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge"
 import { PLAN_LIMITS } from "@/lib/plan-limits"
 import UsageDashboard from "@/components/usage-dashboard"
 import { createClient } from "@/lib/supabase-client"
+import { useTranslations } from "next-intl"
 
 export default function SettingsTab() {
   const [loading, setLoading] = useState(true)
@@ -34,6 +35,8 @@ export default function SettingsTab() {
   const [viraBotEnabled, setViraBotEnabled] = useState(false)
   const { toast } = useToast()
   const supabase = createClient()
+  const t = useTranslations("dashboard.settings")
+  const tCommon = useTranslations("common")
 
   useEffect(() => {
     loadSettings()
@@ -53,8 +56,8 @@ export default function SettingsTab() {
           console.log(" Subscription changed, reloading settings...")
           await loadSettings()
           toast({
-            title: "Configurações atualizadas",
-            description: "Suas configurações foram atualizadas automaticamente.",
+            title: t("toast.settingsUpdated"),
+            description: t("toast.updatedAuto"),
           })
         },
       )
@@ -89,8 +92,8 @@ export default function SettingsTab() {
     } catch (error) {
       console.log(" Error loading settings:", error)
       toast({
-        title: "Erro ao carregar configurações",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.loadError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     } finally {
@@ -103,13 +106,13 @@ export default function SettingsTab() {
     try {
       await updateUserProfile({ full_name: fullName, phone })
       toast({
-        title: "Perfil atualizado",
-        description: "Suas informações foram atualizadas com sucesso",
+        title: t("toast.profileUpdated"),
+        description: t("toast.profileUpdatedDesc"),
       })
     } catch (error) {
       toast({
-        title: "Erro ao atualizar perfil",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.profileError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     } finally {
@@ -122,13 +125,13 @@ export default function SettingsTab() {
     try {
       await updateClinicInfo({ clinic_name: clinicName })
       toast({
-        title: "Clínica atualizada",
-        description: "Informações da clínica atualizadas com sucesso",
+        title: t("toast.clinicUpdated"),
+        description: t("toast.clinicUpdatedDesc"),
       })
     } catch (error) {
       toast({
-        title: "Erro ao atualizar clínica",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.clinicError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     } finally {
@@ -139,8 +142,8 @@ export default function SettingsTab() {
   const handleUpdateEmail = async () => {
     if (!newEmail) {
       toast({
-        title: "Email inválido",
-        description: "Por favor, insira um novo email",
+        title: t("toast.emailInvalid"),
+        description: t("toast.emailInvalidDesc"),
         variant: "destructive",
       })
       return
@@ -151,21 +154,21 @@ export default function SettingsTab() {
       const result = await updateEmail(newEmail)
       if (result.success) {
         toast({
-          title: "Email atualizado",
+          title: t("toast.emailUpdated"),
           description: result.message,
         })
         setNewEmail("")
       } else {
         toast({
-          title: "Erro ao atualizar email",
+          title: t("toast.emailError"),
           description: result.message,
           variant: "destructive",
         })
       }
     } catch (error) {
       toast({
-        title: "Erro ao atualizar email",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.emailError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     } finally {
@@ -176,8 +179,8 @@ export default function SettingsTab() {
   const handleUpdatePassword = async () => {
     if (!newPassword || newPassword.length < 6) {
       toast({
-        title: "Senha inválida",
-        description: "A senha deve ter pelo menos 6 caracteres",
+        title: t("password.invalid"),
+        description: t("password.length"),
         variant: "destructive",
       })
       return
@@ -185,8 +188,8 @@ export default function SettingsTab() {
 
     if (newPassword !== confirmPassword) {
       toast({
-        title: "Senhas não coincidem",
-        description: "Por favor, confirme sua senha corretamente",
+        title: t("password.mismatch"),
+        description: t("password.confirmCorrect"),
         variant: "destructive",
       })
       return
@@ -197,22 +200,22 @@ export default function SettingsTab() {
       const result = await updatePassword(newPassword)
       if (result.success) {
         toast({
-          title: "Senha atualizada",
+          title: t("toast.passwordUpdated"),
           description: result.message,
         })
         setNewPassword("")
         setConfirmPassword("")
       } else {
         toast({
-          title: "Erro ao atualizar senha",
+          title: t("toast.passwordError"),
           description: result.message,
           variant: "destructive",
         })
       }
     } catch (error) {
       toast({
-        title: "Erro ao atualizar senha",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.passwordError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     } finally {
@@ -222,9 +225,9 @@ export default function SettingsTab() {
 
   const getPlanBadge = (planType: "basic" | "premium" | "master") => {
     const badges = {
-      basic: { label: "Básico", color: "bg-blue-500 text-white" },
-      premium: { label: "Premium", color: "bg-purple-500 text-white" },
-      master: { label: "Master", color: "bg-green-500 text-white" },
+      basic: { label: tCommon("plans.basic"), color: "bg-blue-500 text-white" },
+      premium: { label: tCommon("plans.premium"), color: "bg-purple-500 text-white" },
+      master: { label: tCommon("plans.master"), color: "bg-green-500 text-white" },
     }
 
     const planBadge = badges[planType]
@@ -234,23 +237,23 @@ export default function SettingsTab() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Badge className={planBadge.color}>{planBadge.label}</Badge>
-          {viraBotEnabled && <Badge className="bg-purple-600 text-white">ViraBot AI Ativo</Badge>}
+          {viraBotEnabled && <Badge className="bg-purple-600 text-white">{t("plan.viraBotActive")}</Badge>}
         </div>
-        <p className="text-sm text-muted-foreground mt-2">R$ {planInfo.price.toFixed(2)}/mês</p>
+        <p className="text-sm text-muted-foreground mt-2">{t("plan.perMonth", { price: planInfo.price.toFixed(2) })}</p>
         <div className="text-sm text-muted-foreground space-y-1 mt-2">
           <p>
-            <strong>Clientes:</strong> {planInfo.patients === "unlimited" ? "Ilimitados" : planInfo.patients}
+            <strong>{t("plan.patients")}</strong> {planInfo.patients === "unlimited" ? t("plan.unlimited") : planInfo.patients}
           </p>
           <p>
-            <strong>Profissionais:</strong>{" "}
-            {planInfo.professionals === "unlimited" ? "Ilimitados" : planInfo.professionals}
+            <strong>{t("plan.professionals")}</strong>{" "}
+            {planInfo.professionals === "unlimited" ? t("plan.unlimited") : planInfo.professionals}
           </p>
           <p>
-            <strong>Agendamentos/mês:</strong>{" "}
-            {planInfo.appointmentsPerMonth === "unlimited" ? "Ilimitados" : planInfo.appointmentsPerMonth}
+            <strong>{t("plan.appointments")}</strong>{" "}
+            {planInfo.appointmentsPerMonth === "unlimited" ? t("plan.unlimited") : planInfo.appointmentsPerMonth}
           </p>
           <p>
-            <strong>Suporte:</strong> {planInfo.supportHours}
+            <strong>{t("plan.support")}</strong> {planInfo.supportHours}
           </p>
         </div>
       </div>
@@ -272,13 +275,13 @@ export default function SettingsTab() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Perfil</CardTitle>
-            <CardDescription>Atualize suas informações pessoais.</CardDescription>
+            <CardTitle>{t("profile.title")}</CardTitle>
+            <CardDescription>{t("profile.desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="full-name" className="text-right">
-                Nome Completo
+                {t("profile.name")}
               </Label>
               <Input
                 id="full-name"
@@ -289,24 +292,24 @@ export default function SettingsTab() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4 mt-4">
               <Label htmlFor="phone" className="text-right">
-                Telefone
+                {t("profile.phone")}
               </Label>
               <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="col-span-3" />
             </div>
             <Button className="mt-4" onClick={handleUpdateProfile} disabled={saving}>
-              {saving ? "Salvando..." : "Salvar"}
+              {saving ? t("saving") : t("save")}
             </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Clínica</CardTitle>
-            <CardDescription>Atualize informações da sua clínica.</CardDescription>
+            <CardTitle>{t("clinic.title")}</CardTitle>
+            <CardDescription>{t("clinic.desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="clinic-name" className="text-right">
-                Nome da Clínica
+                {t("clinic.name")}
               </Label>
               <Input
                 id="clinic-name"
@@ -316,19 +319,19 @@ export default function SettingsTab() {
               />
             </div>
             <Button className="mt-4" onClick={handleUpdateClinic} disabled={saving}>
-              {saving ? "Salvando..." : "Salvar"}
+              {saving ? t("saving") : t("save")}
             </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Email</CardTitle>
-            <CardDescription>Atualize seu endereço de email.</CardDescription>
+            <CardTitle>{t("email.title")}</CardTitle>
+            <CardDescription>{t("email.desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="new-email" className="text-right">
-                Novo Email
+                {t("email.new")}
               </Label>
               <Input
                 id="new-email"
@@ -338,19 +341,19 @@ export default function SettingsTab() {
               />
             </div>
             <Button className="mt-4" onClick={handleUpdateEmail} disabled={saving}>
-              {saving ? "Salvando..." : "Salvar"}
+              {saving ? t("saving") : t("save")}
             </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Senha</CardTitle>
-            <CardDescription>Atualize sua senha.</CardDescription>
+            <CardTitle>{t("password.title")}</CardTitle>
+            <CardDescription>{t("password.desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="new-password" className="text-right">
-                Nova Senha
+                {t("password.new")}
               </Label>
               <Input
                 id="new-password"
@@ -362,7 +365,7 @@ export default function SettingsTab() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4 mt-4">
               <Label htmlFor="confirm-password" className="text-right">
-                Confirmar Senha
+                {t("password.confirm")}
               </Label>
               <Input
                 id="confirm-password"
@@ -373,14 +376,14 @@ export default function SettingsTab() {
               />
             </div>
             <Button className="mt-4" onClick={handleUpdatePassword} disabled={saving}>
-              {saving ? "Salvando..." : "Salvar"}
+              {saving ? t("saving") : t("save")}
             </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Plano</CardTitle>
-            <CardDescription>Veja o seu plano atual.</CardDescription>
+            <CardTitle>{t("plan.title")}</CardTitle>
+            <CardDescription>{t("plan.desc")}</CardDescription>
           </CardHeader>
           <CardContent>{getPlanBadge(currentPlan)}</CardContent>
         </Card>

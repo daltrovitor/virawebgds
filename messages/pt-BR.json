@@ -16,7 +16,47 @@
         "no": "Não",
         "error": "Erro",
         "success": "Sucesso",
-        "loading_data": "Carregando dados..."
+        "loading_data": "Carregando dados...",
+        "months": {
+            "0": "Janeiro",
+            "1": "Fevereiro",
+            "2": "Março",
+            "3": "Abril",
+            "4": "Maio",
+            "5": "Junho",
+            "6": "Julho",
+            "7": "Agosto",
+            "8": "Setembro",
+            "9": "Outubro",
+            "10": "Novembro",
+            "11": "Dezembro"
+        },
+        "days": {
+            "0": "Dom",
+            "1": "Seg",
+            "2": "Ter",
+            "3": "Qua",
+            "4": "Qui",
+            "5": "Sex",
+            "6": "Sáb"
+        },
+        "plans": {
+            "basic": "Básico",
+            "premium": "Premium",
+            "master": "Master"
+        },
+        "usage": {
+            "title": "Uso do Plano",
+            "upgrade": "Fazer Upgrade",
+            "patients": "Clientes",
+            "professionals": "Profissionais",
+            "appointments": "Agendamentos (mês)",
+            "unlimited": "Ilimitado",
+            "remaining": "{count} restante",
+            "renewOn": "Renova em: {date}",
+            "recommendationUnlimited": "Faça upgrade para o plano {plan} para ter {limit} ilimitados!",
+            "recommendationIncrease": "Faça upgrade para o plano {plan} para aumentar seu limite para {count} {limit}."
+        }
     },
     "landing": {
         "header": {
@@ -189,7 +229,7 @@
         "header": {
             "logout": "Sair"
         },
-        "nav": {
+        "sidebar": {
             "overview": "Visão Geral",
             "notes": "Notas",
             "checklist": "Checklist",
@@ -204,6 +244,786 @@
             "support": "Suporte",
             "tutorial": "Tutorial",
             "settings": "Configurações"
+        },
+        "ai": {
+            "title": "ViraBot IA",
+            "subtitle": "Seu assistente inteligente",
+            "description": "Potencialize sua empresa com inteligência artificial. O ViraBot ajuda você a gerenciar clientes, agendar consultas e obter insights valiosos instantaneamente.",
+            "startChat": "Conversar com ViraBot",
+            "back": "Voltar",
+            "premiumFeature": "Recurso Premium",
+            "premiumDesc": "Faça upgrade para Premium ou Master para acessar o ViraBot IA",
+            "viewPlans": "Ver Planos",
+            "features": {
+                "analysis": {
+                    "title": "Análise Inteligente",
+                    "desc": "Obtenha insights sobre padrões de agendamento e comportamento de clientes"
+                },
+                "instant": {
+                    "title": "Respostas Instantâneas",
+                    "desc": "Tire dúvidas sobre gestão da empresa e obtenha sugestões em tempo real"
+                },
+                "automation": {
+                    "title": "Automação Inteligente",
+                    "desc": "Automatize tarefas repetitivas e foque no que realmente importa"
+                }
+            },
+            "prompts": {
+                "title": "Experimente perguntar:",
+                "p1": "Quantos agendamentos tenho hoje?",
+                "p2": "Mostre os clientes mais recentes",
+                "p3": "Qual a taxa de ocupação da empresa?",
+                "p4": "Como posso melhorar o atendimento?"
+            },
+            "chat": {
+                "welcome": "Olá! Sou o ViraBot, seu assistente IA do ViraWeb. Como posso ajudá-lo hoje?",
+                "placeholder": "Digite sua pergunta...",
+                "online": "Online",
+                "premiumTitle": "ViraBot Premium",
+                "premiumMessage": "O ViraBot está disponível apenas para planos Premium e Master.",
+                "upgrade": "Fazer Upgrade"
+            }
+        },
+        "checklist": {
+            "title": "Checklist",
+            "placeholder": "Título do item",
+            "add": "Adicionar",
+            "empty": "Nenhum item na checklist",
+            "noDate": "Sem data",
+            "toast": {
+                "loadError": "Erro ao carregar checklist",
+                "added": "Item adicionado",
+                "addError": "Erro ao adicionar",
+                "updateError": "Erro ao atualizar",
+                "removed": "Item removido",
+                "removeError": "Erro ao remover"
+            }
+        },
+        "notes": {
+            "title": "Minhas Notas",
+            "subtitle": "Organize suas anotações e lembretes",
+            "newNote": "Nova Nota",
+            "editNote": "Editar Nota",
+            "placeholderTitle": "Título da nota",
+            "placeholderContent": "Conteúdo da nota...",
+            "save": "Salvar",
+            "saving": "Salvando...",
+            "update": "Atualizar",
+            "updating": "Atualizando...",
+            "cancel": "Cancelar",
+            "empty": "Nenhuma nota criada",
+            "createFirst": "Criar Primeira Nota",
+            "updatedAt": "Atualizado em",
+            "fieldsRequired": {
+                "title": "Campos obrigatórios",
+                "desc": "Por favor, preencha o título e o conteúdo"
+            },
+            "toast": {
+                "loadError": "Erro ao carregar notas",
+                "updated": "Nota atualizada",
+                "updatedDesc": "Sua nota foi atualizada com sucesso",
+                "created": "Nota criada",
+                "createdDesc": "Nova nota adicionada com sucesso",
+                "saveError": "Erro ao salvar nota",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Nota excluída",
+                "deletedDesc": "Nota removida com sucesso",
+                "deleteError": "Erro ao excluir nota"
+            }
+        },
+        "goals": {
+            "title": "Minhas Metas",
+            "subtitle": "Defina e acompanhe seus objetivos",
+            "newGoal": "Nova Meta",
+            "editGoal": "Editar Meta",
+            "createGoal": "Criar Meta",
+            "activeGoals": "Metas Ativas",
+            "completedGoals": "Metas Concluídas",
+            "successRate": "Taxa de Sucesso",
+            "inProgress": "Em progresso",
+            "achieved": "Alcançadas",
+            "ofAllGoals": "De todas as metas",
+            "empty": "Nenhuma meta criada",
+            "emptyDesc": "Comece definindo suas primeiras metas para acompanhar seu progresso",
+            "createFirst": "Criar Primeira Meta",
+            "form": {
+                "title": "Título da Meta *",
+                "titlePlaceholder": "Ex: Atender 100 clientes este mês",
+                "description": "Descrição",
+                "descriptionPlaceholder": "Descreva sua meta em detalhes...",
+                "category": "Categoria",
+                "categoryPlaceholder": "Selecione...",
+                "categories": {
+                    "financial": "Financeiro",
+                    "clients": "Clientes",
+                    "appointments": "Agendamentos",
+                    "professionals": "Profissionais"
+                },
+                "deadline": "Prazo",
+                "targetValue": "Valor Alvo",
+                "currentValue": "Valor Atual",
+                "unit": "Unidade",
+                "unitPlaceholder": "clientes",
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar",
+                "updating": "Atualizando..."
+            },
+            "toast": {
+                "loadError": "Erro ao carregar metas",
+                "created": "Meta criada!",
+                "createdDesc": "Sua meta foi criada com sucesso.",
+                "updated": "Meta atualizada!",
+                "updatedDesc": "Sua meta foi atualizada com sucesso.",
+                "savedError": "Erro ao salvar meta",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Meta excluída",
+                "deletedDesc": "A meta foi removida com sucesso.",
+                "deleteError": "Erro ao excluir meta",
+                "completed": "Parabéns! 🎉",
+                "completedDesc": "Meta concluída com sucesso!",
+                "updateError": "Erro ao atualizar a meta",
+                "autoCreated": "Meta criada",
+                "autoCreatedDesc": "Meta de agendamentos criada com sucesso.",
+                "autoCreateError": "Erro ao criar meta automática"
+            }
+        },
+        "appointments": {
+            "title": "Agendamentos",
+            "subtitle": "Visualize e gerencie agendamentos por calendário",
+            "newAppointment": "Novo Agendamento",
+            "editAppointment": "Editar Agendamento",
+            "filter": {
+                "all": "Geral (todos profissionais)",
+                "select": "Selecione um profissional"
+            },
+            "calendar": {
+                "selectDay": "Selecione um dia para ver agendamentos",
+                "appointmentsOf": "Agendamentos de"
+            },
+            "tabs": {
+                "weekly": "Visualização Semanal"
+            },
+            "weeklyView": {
+                "placeholder": "Selecionar profissional",
+                "allProfessionals": "Todos os profissionais",
+                "prevWeek": "Semana anterior",
+                "prev": "Anterior",
+                "today": "Hoje",
+                "nextWeek": "Próxima semana",
+                "next": "Próxima",
+                "hour": "Hora",
+                "client": "Cliente",
+                "noDescription": "Sem descrição"
+            },
+            "emptyDay": "Nenhum agendamento para este dia",
+            "form": {
+                "patient": "Selecione um cliente",
+                "professional": "Selecione um profissional",
+                "duration": "Duração (minutos)",
+                "notes": "Notas (opcional)",
+                "recurrence": {
+                    "label": "Recorrência",
+                    "none": "Nenhuma",
+                    "daily": "Diária",
+                    "weekly": "Semanal (dias da semana)",
+                    "monthly": "Mensal (dia do mês)",
+                    "days": "Dias da semana",
+                    "count": "Repetir (quantas vezes)"
+                },
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar"
+            },
+            "status": {
+                "scheduled": "Agendado",
+                "completed": "Concluído",
+                "cancelled": "Cancelado",
+                "complete": "Concluir"
+            },
+            "toast": {
+                "loadError": "Erro ao carregar dados",
+                "updated": "Agendamento atualizado",
+                "updatedDesc": "O agendamento foi atualizado com sucesso",
+                "created": "Agendamento criado",
+                "createdDesc": "O agendamento foi criado com sucesso",
+                "saveError": "Erro ao salvar agendamento",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Agendamento excluído",
+                "deletedDesc": "O agendamento foi excluído com sucesso",
+                "deleteError": "Erro ao excluir agendamento",
+                "statusUpdated": "Status atualizado",
+                "statusUpdatedDesc": "O status do agendamento foi atualizado",
+                "statusError": "Erro ao atualizar status"
+            }
+        },
+        "patients": {
+            "title": "Clientes",
+            "subtitle": "Gerencie o cadastro de clientes da empresa",
+            "newPatient": "Novo Cliente",
+            "editPatient": "Editar Cliente",
+            "searchPlaceholder": "Buscar por nome, email ou CPF...",
+            "filter": {
+                "all": "Todos",
+                "active": "Ativos",
+                "inactive": "Inativos"
+            },
+            "viewProfile": "Ver Perfil",
+            "empty": "Nenhum cliente encontrado",
+            "createFirst": "Adicionar Primeiro Cliente",
+            "status": {
+                "active": "Ativo",
+                "inactive": "Inativo"
+            },
+            "form": {
+                "name": "Nome Completo *",
+                "email": "Email",
+                "phone": "Telefone",
+                "cpf": "CPF (opcional)",
+                "birthDate": "Data de Nascimento",
+                "address": "Endereço",
+                "birthday": "Data de Nascimento",
+                "notes": "Notas (opcional)",
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar",
+                "updating": "Atualizando..."
+            },
+            "toast": {
+                "loadError": "Erro ao carregar clientes",
+                "nameRequired": "Nome obrigatório",
+                "nameRequiredDesc": "Por favor, preencha o nome do cliente",
+                "updated": "Cliente atualizado",
+                "updatedDesc": "As informações foram atualizadas com sucesso",
+                "created": "Cliente criado",
+                "createdDesc": "Novo cliente adicionado com sucesso",
+                "saveError": "Erro ao salvar cliente",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Cliente excluído",
+                "deletedDesc": "Cliente removido com sucesso",
+                "deleteError": "Erro ao excluir cliente",
+                "statusUpdated": "Status atualizado",
+                "statusActive": "Cliente ativado com sucesso",
+                "statusInactive": "Cliente desativado com sucesso",
+                "statusError": "Erro ao atualizar status"
+            }
+        },
+        "financial": {
+            "title": "Financeiro",
+            "tabs": {
+                "finance": "Financeiro",
+                "attendance": "Presenças"
+            },
+            "cards": {
+                "received": "Recebidos (mês)",
+                "pending": "Pendentes",
+                "discounts": "Descontos (mês)"
+            },
+            "summary": "Resumo",
+            "summaryStats": {
+                "received": "Recebido (mês)",
+                "pending": "Pendente",
+                "discounts": "Descontos (mês)"
+            },
+            "recentPayments": "Pagamentos Recentes",
+            "registerPayment": "Registrar Pagamento",
+            "managePending": "Gerenciar Pendentes",
+            "noPayments": "Nenhum pagamento encontrado.",
+            "emptyPayments": "Nenhum pagamento encontrado.",
+            "report": "Relatório Financeiro",
+            "resume": "Resumo",
+            "chartTitle": "Recebimentos (últimos {days} dias)",
+            "chartLabel": "Recebido (R$)",
+            "chartValue": "Recebido",
+            "status": {
+                "paid": "Pago",
+                "pending": "Pendente",
+                "overdue": "Atrasado",
+                "refunded": "Reembolsado"
+            },
+            "chart": {
+                "loading": "Carregando gráfico..."
+            },
+            "paymentModal": {
+                "title": "Registrar Pagamento",
+                "patient": "Cliente (opcional)",
+                "selectPatient": "Selecione um cliente",
+                "noPatient": "Sem cliente",
+                "selectedPatient": "Cliente selecionado: {name}",
+                "amount": "Valor (R$)",
+                "discount": "Desconto",
+                "percentHint": "Se selecionar %, o desconto será calculado em reais a partir do valor informado.",
+                "status": "Status",
+                "date": "Data do Pagamento",
+                "recurrence": "Recorrência",
+                "recurring": "Recorrente",
+                "recurringHint": "A cobrança será gerada mensalmente no dia selecionado.",
+                "recurrenceDay": "Dia do pagamento",
+                "cancel": "Cancelar",
+                "save": "Salvar Pagamento",
+                "saving": "Salvando...",
+                "toast": {
+                    "invalidAmount": "Valor inválido",
+                    "invalidAmountDesc": "Informe um valor maior que zero.",
+                    "invalidDiscount": "Desconto inválido",
+                    "invalidDiscountPercent": "Informe uma porcentagem válida.",
+                    "invalidDiscountRange": "O desconto deve ser entre 0 e o valor do pagamento.",
+                    "success": "Pagamento registrado",
+                    "successDesc": "Pagamento salvo com sucesso.",
+                    "settleError": "Pagamento salvo, mas falhou ao quitar o pendente selecionado.",
+                    "error": "Erro ao salvar"
+                }
+            },
+            "patientFinancialTab": {
+                "title": "Histórico",
+                "columns": {
+                    "date": "Data",
+                    "amount": "Valor",
+                    "discount": "Desconto",
+                    "status": "Status",
+                    "dueDate": "Vencimento",
+                    "actions": "Ações"
+                },
+                "actions": {
+                    "settle": "Registrar pagamento"
+                },
+                "empty": "Nenhum pagamento encontrado"
+            }
+        },
+        "professionals": {
+            "title": "Profissionais",
+            "subtitle": "Gerencie os profissionais do seu negócio",
+            "newProfessional": "Novo Profissional",
+            "editProfessional": "Editar Profissional",
+            "searchPlaceholder": "Buscar por nome ou especialidade...",
+            "filter": {
+                "all": "Todos",
+                "active": "Ativos",
+                "inactive": "Inativos"
+            },
+            "empty": "Nenhum profissional encontrado",
+            "createFirst": "Adicionar Primeiro Profissional",
+            "status": {
+                "active": "Ativo",
+                "inactive": "Inativo"
+            },
+            "form": {
+                "name": "Nome Completo *",
+                "specialty": "Especialidade",
+                "email": "Email",
+                "phone": "Telefone",
+                "workDays": "Dias de Trabalho",
+                "notes": "Notas (opcional)",
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar",
+                "updating": "Atualizando..."
+            },
+            "toast": {
+                "loadError": "Erro ao carregar profissionais",
+                "nameRequired": "Nome obrigatório",
+                "nameRequiredDesc": "Por favor, preencha o nome do profissional",
+                "updated": "Profissional atualizado",
+                "updatedDesc": "As informações foram atualizadas com sucesso",
+                "created": "Profissional criado",
+                "createdDesc": "Novo profissional adicionado com sucesso",
+                "saveError": "Erro ao salvar profissional",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Profissional excluído",
+                "deletedDesc": "Profissional removido com sucesso",
+                "deleteError": "Erro ao excluir profissional"
+            }
+        },
+        "reports": {
+            "title": "Relatórios",
+            "subtitle": "Visão geral de agendamentos e clientes.",
+            "stats": {
+                "totalAppointments": "Total de Agendamentos",
+                "totalAppointmentsDesc": "Todos os registros",
+                "activePatients": "Clientes Ativos",
+                "activePatientsDesc": "Atualmente cadastrados",
+                "completionRate": "Taxa de Conclusão",
+                "performanceExcellent": "Excelente desempenho",
+                "performanceGood": "Bom desempenho"
+            },
+            "appointmentsChart": "Agendamentos por Mês",
+            "patientsChart": "Crescimento de Clientes",
+            "completed": "Concluídos",
+            "cancelled": "Cancelados",
+            "total": "Total",
+            "new": "Novos",
+            "noData": "Nenhum dado disponível"
+        },
+        "subscriptions": {
+            "title": "Assinatura",
+            "subtitle": "Gerencie sua assinatura e método de pagamento",
+            "noSubscription": "Nenhuma assinatura encontrada",
+            "noSubscriptionDesc": "Você ainda não possui uma assinatura ativa.",
+            "choosePlan": "Escolher Plano",
+            "invalidPlan": "Plano inválido",
+            "invalidPlanDesc": "O tipo de plano informado não é reconhecido:",
+            "validPlans": "Planos válidos: basic, premium, master",
+            "active": "Ativo",
+            "canceled": "Cancelado",
+            "expired": "Expirado",
+            "month": "mês",
+            "startDate": "Data de Início",
+            "nextBilling": "Próxima Cobrança",
+            "paymentMethod": "Método de Pagamento",
+            "creditCard": "Cartão de Crédito",
+            "notConfigured": "Não configurado",
+            "cancelSubscription": "Cancelar Assinatura",
+            "cancelConfirm": "Cancelar Assinatura",
+            "cancelConfirmDesc": "Tem certeza que deseja cancelar sua assinatura? Você perderá acesso a todos os recursos do seu plano.",
+            "yesCancel": "Sim, Cancelar",
+            "noKeep": "Não, Manter",
+            "canceling": "Cancelando...",
+            "benefits": "Benefícios do seu plano",
+            "viewCurrent": "Veja seu plano atual.",
+            "unlimited": "Ilimitado",
+            "perMonth": "por mês",
+            "support247": "24 horas, 7 dias por semana",
+            "upgrade": "Fazer Upgrade",
+            "processing": "Processando...",
+            "toast": {
+                "updated": "Assinatura atualizada!",
+                "updatedDesc": "Seu plano foi atualizado para {plan}. Aproveite os novos recursos!",
+                "canceled": "Assinatura cancelada",
+                "canceledDesc": "Sua assinatura foi cancelada com sucesso",
+                "cancelError": "Erro ao cancelar assinatura"
+            }
+        },
+        "theme": {
+            "button": "Tema",
+            "title": "Personalizar Dashboard",
+            "mode": "Modo",
+            "light": "Claro",
+            "dark": "Escuro",
+            "system": "Sistema",
+            "accent": "Paleta (Accent)",
+            "accentBlue": "Primário Azul / Secundário Amarelo",
+            "accentYellow": "Primário Amarelo / Secundário Azul",
+            "density": "Densidade",
+            "comfortable": "Confortável",
+            "compact": "Compacto",
+            "radius": "Raio dos cards",
+            "restore": "Restaurar",
+            "close": "Fechar"
+        },
+        "usage": {
+            "title": "Uso do Plano",
+            "upgrade": "Fazer Upgrade",
+            "patients": "Clientes",
+            "professionals": "Profissionais",
+            "appointments": "Agendamentos (mês)",
+            "unlimited": "Ilimitado",
+            "remaining": "{count} restante",
+            "renewOn": "Renova em: {date}",
+            "recommendationUnlimited": "Faça upgrade para o plano {plan} para ter {limit} ilimitados!",
+            "recommendationIncrease": "Faça upgrade para o plano {plan} para aumentar seu limite para {count} {limit}."
+        },
+        "upgradeModal": {
+            "title": "Limite Atingido",
+            "description": "Você atingiu o limite de {limit} {type} do seu plano {plan}.",
+            "currentUsage": "Uso Atual",
+            "upgradeToContinue": "Faça upgrade para continuar adicionando {type}.",
+            "choosePlan": "Escolha um plano para fazer upgrade:",
+            "perMonth": "/mês",
+            "unlimited": "Ilimitado",
+            "upTo": "Até {count}",
+            "processing": "Processando...",
+            "upgrade": "Fazer Upgrade",
+            "alreadyMaster": "Você já está no plano Master!",
+            "alreadyMasterDesc": "Você tem acesso a todos os recursos ilimitados. Se precisar de mais, entre em contato com o suporte.",
+            "close": "Fechar",
+            "limitNear": "Próximo do Limite",
+            "limitReached": "Limite Atingido!",
+            "usingCount": "Você está usando {current} de {limit} {type} disponíveis no seu plano."
+        },
+        "support": {
+            "title": "Suporte",
+            "subtitle": "Central de ajuda e atendimento",
+            "newTicket": "Novo Ticket (Em breve)",
+            "hours": "Horário de Atendimento",
+            "channels": "Canais Disponíveis",
+            "channelsList": "Email, WhatsApp",
+            "viraBotTitle": "ViraBot IA - Assistente 24/7",
+            "viraBotDesc": "Converse com nosso assistente inteligente para obter ajuda instantânea sobre o sistema, tirar dúvidas e receber orientações em tempo real.",
+            "openAIChat": "Abrir Chat com ViraBot",
+            "backToSupport": "← Voltar para Suporte",
+            "email": "Email",
+            "whatsapp": "WhatsApp",
+            "sendEmail": "Enviar Email",
+            "openWhatsapp": "Abrir WhatsApp",
+            "viraBotAI": "ViraBot IA",
+            "plans": {
+                "basic": {
+                    "title": "Suporte Básico",
+                    "desc": "Suporte via Email em horário comercial",
+                    "hours": "Horário comercial",
+                    "features": [
+                        "Gestão básica de clientes",
+                        "Agendamentos limitados",
+                        "Relatórios básicos",
+                        "Suporte via email"
+                    ]
+                },
+                "premium": {
+                    "title": "Suporte Premium + ViraBot IA",
+                    "desc": "Suporte prioritário via Email e WhatsApp + AI Chat 24/7",
+                    "hours": "8:00 às 18:00 (5 dias por semana)",
+                    "features": [
+                        "500 clientes",
+                        "50 profissionais",
+                        "500 agendamentos/mês",
+                        "ViraBot AI 24/7",
+                        "Suporte prioritário",
+                        "Email e WhatsApp",
+                        "Suporte 8:00-18:00 (5 dias por semana)"
+                    ]
+                },
+                "master": {
+                    "title": "Suporte Master 24/7 + ViraBot IA",
+                    "desc": "Resposta imediata via Email e WhatsApp + AI Chat 24/7",
+                    "hours": "24 horas, 7 dias por semana",
+                    "features": [
+                        "Clientes ilimitados",
+                        "Profissionais ilimitados",
+                        "Agendamentos ilimitados",
+                        "ViraBot AI 24/7",
+                        "Suporte prioritário 24/7",
+                        "Email e WhatsApp",
+                        "Suporte 24 horas"
+                    ]
+                }
+            },
+            "resources": "Recursos de Ajuda",
+            "helpCenter": "Central de Ajuda",
+            "helpCenterDesc": "Acesse nossa documentação completa e tutoriais em vídeo",
+            "faq": "Perguntas Frequentes",
+            "faqDesc": "Encontre respostas rápidas para dúvidas comuns",
+            "videoTutorials": "Tutoriais em Vídeo",
+            "videoTutorialsDesc": "Aprenda a usar todos os recursos do sistema",
+            "ticketSystem": "Sistema de Tickets",
+            "comingSoon": "Em breve disponível",
+            "comingSoonDesc": "Estamos desenvolvendo um sistema de tickets avançado para você.",
+            "featuresTitle": "Em breve você poderá:",
+            "features": {
+                "0": "Abrir tickets de suporte",
+                "1": "Acompanhar status em tempo real",
+                "2": "Histórico de atendimentos",
+                "3": "Comunicação integrada"
+            },
+            "inDevelopment": "Em desenvolvimento",
+            "toast": {
+                "loadError": "Erro ao carregar dados",
+                "fieldsRequired": "Campos obrigatórios",
+                "fieldsRequiredDesc": "Por favor, preencha o assunto e a mensagem",
+                "ticketCreated": "Ticket criado",
+                "ticketCreatedDesc": "Seu ticket de suporte foi criado e enviado para nossa equipe",
+                "createError": "Erro ao criar ticket",
+                "loadMessagesError": "Erro ao carregar mensagens",
+                "messageSent": "Mensagem enviada",
+                "messageSentDesc": "Sua mensagem foi enviada para nossa equipe",
+                "sendError": "Erro ao enviar mensagem"
+            },
+            "status": {
+                "open": "Aberto",
+                "in_progress": "Em Progresso",
+                "resolved": "Resolvido",
+                "closed": "Fechado"
+            },
+            "priority": {
+                "low": "Baixa",
+                "medium": "Média",
+                "high": "Alta",
+                "urgent": "Urgente"
+            }
+        },
+        "tutorial": {
+            "title": "Tutorial do ViraWeb",
+            "subtitle": "Aprenda a usar todas as funcionalidades da plataforma para aproveitar ao máximo suas ferramentas.",
+            "videoUrl": "https://youtu.be/5yNiXZ-LbGo",
+            "concluded": "Tutorial Concluído",
+            "markWatched": "Marcar como Visto",
+            "videoSoon": "Vídeo em breve!",
+            "topics": "Tópicos do Tutorial",
+            "step1": "Primeiros Passos",
+            "step1Desc": "Configuração inicial e navegação básica",
+            "step2": "Gerenciamento de clientes",
+            "step2Desc": "Como adicionar e gerenciar seus clientes",
+            "step3": "Agendamentos",
+            "step3Desc": "Sistema de agendamento e calendário",
+            "step4": "Relatórios e Análises",
+            "step4Desc": "Como acessar e interpretar seus dados",
+            "toast": {
+                "success": "Tutorial concluído!",
+                "successDesc": "Obrigado por assistir ao tutorial.",
+                "error": "Erro ao marcar tutorial como visto"
+            }
+        },
+        "settings": {
+            "title": "Configurações",
+            "profile": {
+                "title": "Perfil",
+                "desc": "Atualize suas informações pessoais.",
+                "name": "Nome Completo",
+                "phone": "Telefone"
+            },
+            "clinic": {
+                "title": "Clínica",
+                "desc": "Atualize informações da sua clínica.",
+                "name": "Nome da Clínica"
+            },
+            "email": {
+                "title": "Email",
+                "desc": "Atualize seu endereço de email.",
+                "new": "Novo Email"
+            },
+            "password": {
+                "title": "Senha",
+                "desc": "Atualize sua senha.",
+                "new": "Nova Senha",
+                "confirm": "Confirmar Senha",
+                "invalid": "Senha inválida",
+                "length": "A senha deve ter pelo menos 6 caracteres",
+                "mismatch": "Senhas não coincidem",
+                "confirmCorrect": "Por favor, confirme sua senha corretamente"
+            },
+            "plan": {
+                "title": "Plano",
+                "desc": "Veja o seu plano atual.",
+                "viraBotActive": "ViraBot IA Ativo",
+                "perMonth": "R$ {price}/mês",
+                "patients": "Clientes:",
+                "professionals": "Profissionais:",
+                "appointments": "Agendamentos/mês:",
+                "support": "Suporte:",
+                "unlimited": "Ilimitados"
+            },
+            "save": "Salvar",
+            "saving": "Salvando...",
+            "toast": {
+                "loadError": "Erro ao carregar configurações",
+                "updatedAuto": "Suas configurações foram atualizadas automaticamente.",
+                "settingsUpdated": "Configurações atualizadas",
+                "profileUpdated": "Perfil atualizado",
+                "profileUpdatedDesc": "Suas informações foram atualizadas com sucesso",
+                "profileError": "Erro ao atualizar perfil",
+                "clinicUpdated": "Clínica atualizada",
+                "clinicUpdatedDesc": "Informações da clínica atualizadas com sucesso",
+                "clinicError": "Erro ao atualizar clínica",
+                "emailUpdated": "Email atualizado",
+                "emailError": "Erro ao atualizar email",
+                "passwordUpdated": "Senha atualizada",
+                "passwordError": "Erro ao atualizar senha",
+                "emailInvalid": "Email inválido",
+                "emailInvalidDesc": "Por favor, insira um novo email"
+            }
+        },
+        "patientProfile": {
+            "title": "Perfil do Cliente",
+            "active": "Ativo",
+            "inactive": "Inativo",
+            "tabs": {
+                "info": "Informações",
+                "financial": "Financeiro"
+            },
+            "info": {
+                "title": "Informações do Cliente",
+                "email": "Email",
+                "phone": "Telefone",
+                "cpf": "CPF",
+                "birthday": "Data de Nascimento",
+                "address": "Endereço"
+            },
+            "notes": {
+                "title": "Notas do Cliente",
+                "placeholder": "Adicione notas sobre o cliente, histórico, observações, etc...",
+                "save": "Salvar Notas"
+            },
+            "financial": {
+                "title": "Resumo Financeiro",
+                "register": "Registrar Pagamento",
+                "totalPaid": "Total Pago",
+                "totalDue": "Total Devido",
+                "discounts": "Descontos",
+                "loading": "Carregando resumo financeiro..."
+            },
+            "photo": {
+                "invalid": "Arquivo inválido",
+                "invalidDesc": "Por favor, selecione uma imagem"
+            },
+            "toast": {
+                "loadError": "Erro ao carregar cliente",
+                "notesSaved": "Notas salvas",
+                "notesSavedDesc": "As notas do cliente foram atualizadas com sucesso",
+                "notesError": "Erro ao salvar notas",
+                "photoUpdated": "Foto atualizada",
+                "photoUpdatedDesc": "A foto do perfil foi atualizada com sucesso",
+                "uploadError": "Erro ao fazer upload"
+            }
+        },
+        "attendance": {
+            "title": "Controle de Presença",
+            "selectPatient": "Selecione um cliente",
+            "attendanceRate": "Taxa de Presença",
+            "totalSessions": "Total de Sessões",
+            "paidSessions": "Sessões Pagas",
+            "absences": "Faltas",
+            "calendarTitle": "Calendário de Presenças",
+            "recentRecords": "Registros Recentes",
+            "edit": "Editar",
+            "dialogTitle": "Registro de Presença - {date}",
+            "status": "Status",
+            "present": "Presente",
+            "absent": "Ausente",
+            "late": "Atrasado",
+            "cancelled": "Cancelado",
+            "payment": "Pagamento",
+            "amount": "Valor",
+            "method": "Método",
+            "paymentStatus": "Status do Pagamento",
+            "cash": "Dinheiro",
+            "credit": "Cartão de Crédito",
+            "debit": "Cartão de Débito",
+            "pix": "PIX",
+            "transfer": "Transferência",
+            "paid": "Pago",
+            "pending": "Pendente",
+            "notes": "Observações",
+            "notesPlaceholder": "Adicione observações sobre a sessão...",
+            "cancel": "Cancelar",
+            "save": "Salvar",
+            "saving": "Salvando...",
+            "toast": {
+                "loadPatientsError": "Erro ao carregar clientes",
+                "loadAttendanceError": "Erro ao carregar presenças",
+                "invalidDate": "Data inválida",
+                "invalidDateDesc": "Só é possível registrar presença em dias com agendamento",
+                "success": "Presença registrada",
+                "successDesc": "O registro de presença foi atualizado com sucesso",
+                "saveError": "Erro ao salvar presença"
+            }
         },
         "overview": {
             "welcome": "Bem-vindo,",

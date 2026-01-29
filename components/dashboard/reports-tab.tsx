@@ -10,6 +10,7 @@ import {
   CardDescription, // Importado para uso futuro, embora não usado nos stats
 } from "@/components/ui/card"
 import { Loader2, BarChart3, Users, CheckCircle2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import {
   BarChart,
   Bar,
@@ -56,6 +57,7 @@ export default function ReportsTab() {
   })
   const [appointmentData, setAppointmentData] = useState<AppointmentData[]>([])
   const [patientData, setPatientData] = useState<PatientData[]>([])
+  const t = useTranslations("dashboard.reports")
 
   useEffect(() => {
     async function loadData() {
@@ -93,10 +95,10 @@ export default function ReportsTab() {
       {/* Título da Página */}
       <div className="mb-6">
         <h2 className="text-3xl font-bold tracking-tight text-foreground">
-          Relatórios
+          {t("title")}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Visão geral de agendamentos e clientes.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -105,7 +107,7 @@ export default function ReportsTab() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total de Agendamentos
+              {t("stats.totalAppointments")}
             </CardTitle>
             <BarChart3 className="h-5 w-5 text-blue-500" />
           </CardHeader>
@@ -114,7 +116,7 @@ export default function ReportsTab() {
               {stats.totalAppointments}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Todos os registros
+              {t("stats.totalAppointmentsDesc")}
             </p>
           </CardContent>
         </Card>
@@ -122,14 +124,14 @@ export default function ReportsTab() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              clientes Ativos
+              {t("stats.activePatients")}
             </CardTitle>
             <Users className="h-5 w-5 text-emerald-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl text-emerald-500 font-bold">{stats.activePatients}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              Atualmente cadastrados
+              {t("stats.activePatientsDesc")}
             </p>
           </CardContent>
         </Card>
@@ -137,7 +139,7 @@ export default function ReportsTab() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Taxa de Conclusão
+              {t("stats.completionRate")}
             </CardTitle>
             <CheckCircle2 className="h-5 w-5 text-amber-500" />
           </CardHeader>
@@ -147,8 +149,8 @@ export default function ReportsTab() {
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               {stats.completionRate >= 90
-                ? "Excelente desempenho"
-                : "Bom desempenho"}
+                ? t("stats.performanceExcellent")
+                : t("stats.performanceGood")}
             </p>
           </CardContent>
         </Card>
@@ -158,7 +160,7 @@ export default function ReportsTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Agendamentos por Mês</CardTitle>
+            <CardTitle>{t("appointmentsChart")}</CardTitle>
           </CardHeader>
           <CardContent className="pl-2"> {/* Padding ajustado para o gráfico */}
             {appointmentData.length > 0 ? (
@@ -177,13 +179,13 @@ export default function ReportsTab() {
                   <Bar
                     dataKey="completed"
                     fill="#10b981"
-                    name="Concluídos"
+                    name={t("completed")}
                     radius={[4, 4, 0, 0]} // Cantos arredondados
                   />
                   <Bar
                     dataKey="cancelled"
                     fill="#ef4444"
-                    name="Cancelados"
+                    name={t("cancelled")}
                     radius={[4, 4, 0, 0]} // Cantos arredondados
                   />
                 </BarChart>
@@ -198,7 +200,7 @@ export default function ReportsTab() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Crescimento de clientes</CardTitle>
+            <CardTitle>{t("patientsChart")}</CardTitle>
           </CardHeader>
           <CardContent className="pl-2"> {/* Padding ajustado para o gráfico */}
             {patientData.length > 0 ? (
@@ -219,14 +221,14 @@ export default function ReportsTab() {
                     dataKey="totalPatients"
                     stroke="#2563eb"
                     strokeWidth={2}
-                    name="Total"
+                    name={t("total")}
                   />
                   <Line
                     type="monotone"
                     dataKey="newPatients"
                     stroke="#facc15"
                     strokeWidth={2}
-                    name="Novos"
+                    name={t("new")}
                   />
                 </LineChart>
               </ResponsiveContainer>

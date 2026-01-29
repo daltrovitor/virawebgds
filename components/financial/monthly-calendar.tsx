@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface MonthlyCalendarProps {
   initialDate?: Date
@@ -12,6 +13,7 @@ interface MonthlyCalendarProps {
 }
 
 export default function MonthlyCalendar({ initialDate = new Date(), selected, onSelect, scheduledDates = [] }: MonthlyCalendarProps) {
+  const t = useTranslations("common")
   const [currentDate, setCurrentDate] = useState(() => new Date(initialDate.getFullYear(), initialDate.getMonth(), 1))
 
   const getDaysInMonth = (date: Date) => {
@@ -27,21 +29,29 @@ export default function MonthlyCalendar({ initialDate = new Date(), selected, on
   }
 
   const monthNames = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
+    t("months.0"),
+    t("months.1"),
+    t("months.2"),
+    t("months.3"),
+    t("months.4"),
+    t("months.5"),
+    t("months.6"),
+    t("months.7"),
+    t("months.8"),
+    t("months.9"),
+    t("months.10"),
+    t("months.11"),
   ]
 
-  const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+  const dayNames = [
+    t("days.0"),
+    t("days.1"),
+    t("days.2"),
+    t("days.3"),
+    t("days.4"),
+    t("days.5"),
+    t("days.6"),
+  ]
 
   const daysInMonth = getDaysInMonth(currentDate)
   const firstDay = getFirstDayOfMonth(currentDate)
@@ -126,11 +136,10 @@ export default function MonthlyCalendar({ initialDate = new Date(), selected, on
             <button
               key={index}
               onClick={() => handleDayClick(day)}
-              className={`w-9 h-9 flex items-center justify-center text-sm font-medium transition-colors relative ${
-                isSel
+              className={`w-9 h-9 flex items-center justify-center text-sm font-medium transition-colors relative ${isSel
                   ? "bg-blue-500 text-white rounded-full shadow-sm ring-1 ring-blue-300"
                   : "bg-transparent text-muted-foreground rounded-md hover:bg-white/5"
-              }`}
+                }`}
             >
               <span className="leading-none">{day}</span>
 

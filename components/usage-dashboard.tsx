@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Users, Briefcase, Calendar, TrendingUp, AlertTriangle } from "lucide-react"
 import { getUserUsageStats, type UsageStats } from "@/lib/usage-stats"
 import { getWarningLevel, getUpgradeRecommendation } from "@/lib/usage-stats-utils"
-import type { PlanType } from "@/lib/plan-limits"
+import { PLAN_LIMITS, type PlanType } from "@/lib/plan-limits"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 interface UsageDashboardProps {
   planType: PlanType
@@ -18,6 +19,8 @@ export default function UsageDashboard({ planType }: UsageDashboardProps) {
   const [stats, setStats] = useState<UsageStats | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const t = useTranslations("dashboard.usage")
+  const tCommon = useTranslations("common")
 
   useEffect(() => {
     const loadStats = async () => {
@@ -48,21 +51,21 @@ export default function UsageDashboard({ planType }: UsageDashboardProps) {
     {
       key: "patients" as const,
       icon: Users,
-      label: "Clientes",
+      label: t("patients"),
       color: "text-blue-600",
       bgColor: "bg-blue-50",
     },
     {
       key: "professionals" as const,
       icon: Briefcase,
-      label: "Profissionais",
+      label: t("professionals"),
       color: "text-purple-600",
       bgColor: "bg-purple-50",
     },
     {
       key: "appointments" as const,
       icon: Calendar,
-      label: "Agendamentos (mês)",
+      label: t("appointments"),
       color: "text-green-600",
       bgColor: "bg-green-50",
     },
@@ -75,11 +78,11 @@ export default function UsageDashboard({ planType }: UsageDashboardProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold text-foreground">Uso do Plano</h3>
+        <h3 className="text-lg font-bold text-foreground">{t("title")}</h3>
         {planType !== "master" && (
           <Button onClick={handleUpgrade} size="sm" variant="outline" className="gap-2 bg-transparent">
             <TrendingUp className="w-4 h-4" />
-            Fazer Upgrade
+            {t("upgrade")}
           </Button>
         )}
       </div>
@@ -109,30 +112,50 @@ export default function UsageDashboard({ planType }: UsageDashboardProps) {
                   <Progress
                     value={data.percentage}
                     className={`mb-2 ${warningLevel === "critical"
-                        ? "[&>div]:bg-red-600"
-                        : warningLevel === "danger"
-                          ? "[&>div]:bg-orange-600"
-                          : warningLevel === "warning"
-                            ? "[&>div]:bg-yellow-600"
-                            : "[&>div]:bg-green-600"
+                      ? "[&>div]:bg-red-600"
+                      : warningLevel === "danger"
+                        ? "[&>div]:bg-orange-600"
+                        : warningLevel === "warning"
+                          ? "[&>div]:bg-yellow-600"
+                          : "[&>div]:bg-green-600"
                       }`}
                   />
                   <p className="text-sm text-muted-foreground">
-                    {data.remaining} restante{typeof data.remaining === "number" && data.remaining !== 1 ? "s" : ""}
+                    {t("remaining", { count: data.remaining })}
                   </p>
                 </>
               )}
 
-              {data.limit === "unlimited" && <p className="text-sm text-green-600 font-semibold">✓ Ilimitado</p>}
+              {data.limit === "unlimited" && <p className="text-sm text-green-600 font-semibold">✓ {t("unlimited")}</p>}
 
               {resource.key === "appointments" && data.limit !== "unlimited" && "resetDate" in data && (
                 <p className="text-xs text-muted-foreground mt-2">
-                  Renova em: {new Date(data.resetDate).toLocaleDateString("pt-BR")}
+                  {t("renewOn", { date: new Date(data.resetDate).toLocaleDateString() })}
                 </p>
               )}
 
               {warningLevel !== "safe" && data.limit !== "unlimited" && planType !== "master" && (
-                <p className="text-xs text-yellow-700 mt-2">{getUpgradeRecommendation(planType, resource.key)}</p>
+                <p className="text-xs text-yellow-700 mt-2">
+                  {(() => {
+                    const nextPlan = planType === "basic" ? "premium" : "master"
+                    const nextPlanLimits = PLAN_LIMITS[nextPlan]
+                    const limitKey = resource.key === "appointments" ? "appointmentsPerMonth" : resource.key
+                    const nextLimit = nextPlanLimits[limitKey]
+
+                    if (nextLimit === "unlimited") {
+                      return t("recommendationUnlimited", {
+                        plan: tCommon(`plans.${nextPlan}`),
+                        limit: t(resource.key).toLowerCase(),
+                      })
+                    } else {
+                      return t("recommendationIncrease", {
+                        plan: tCommon(`plans.${nextPlan}`),
+                        count: nextLimit,
+                        limit: t(resource.key).toLowerCase(),
+                      })
+                    }
+                  })()}
+                </p>
               )}
             </Card>
           )

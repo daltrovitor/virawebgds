@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import AIAssistant from "@/components/ai-assistant"
+import { useTranslations } from "next-intl"
 
 export default function SupportTab() {
   const [tickets, setTickets] = useState<SupportTicket[]>([])
@@ -33,6 +34,8 @@ export default function SupportTab() {
   const [hasAIAccess, setHasAIAccess] = useState(false)
   const { toast } = useToast()
   const supabase = createClient()
+  const t = useTranslations("dashboard.support")
+  const tCommon = useTranslations("common")
 
   useEffect(() => {
     loadData()
@@ -42,7 +45,8 @@ export default function SupportTab() {
     try {
       // Fetch current user and then tickets & subscription using browser client
       const { data: { user }, error: userErr } = await supabase.auth.getUser()
-      if (userErr || !user) throw new Error("Usuário não autenticado")
+      if (userErr || !user) throw new Error(tCommon("errors.unauthorized"))
+
 
       const [{ data: ticketsData, error: ticketsErr }, { data: subscriptionData, error: subErr }] = await Promise.all([
         supabase.from("support_tickets").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
@@ -64,8 +68,8 @@ export default function SupportTab() {
       setHasAIAccess(hasViraBotAccess(plan))
     } catch (error) {
       toast({
-        title: "Erro ao carregar dados",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.loadError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     } finally {
@@ -76,8 +80,8 @@ export default function SupportTab() {
   const handleCreateTicket = async () => {
     if (!formData.subject || !formData.message) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Por favor, preencha o assunto e a mensagem",
+        title: t("toast.fieldsRequired"),
+        description: t("toast.fieldsRequiredDesc"),
         variant: "destructive",
       })
       return
@@ -102,16 +106,16 @@ export default function SupportTab() {
 
       if (error) throw error
       toast({
-        title: "Ticket criado",
-        description: "Seu ticket de suporte foi criado e enviado para nossa equipe",
+        title: t("toast.ticketCreated"),
+        description: t("toast.ticketCreatedDesc"),
       })
       setFormData({ subject: "", message: "", priority: "medium" })
       setShowNewTicket(false)
       await loadData()
     } catch (error) {
       toast({
-        title: "Erro ao criar ticket",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.createError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     }
@@ -130,8 +134,8 @@ export default function SupportTab() {
       setMessages(data || [])
     } catch (error) {
       toast({
-        title: "Erro ao carregar mensagens",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.loadMessagesError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     }
@@ -167,13 +171,13 @@ export default function SupportTab() {
       setMessages(messagesData || [])
       setNewMessage("")
       toast({
-        title: "Mensagem enviada",
-        description: "Sua mensagem foi enviada para nossa equipe",
+        title: t("toast.messageSent"),
+        description: t("toast.messageSentDesc"),
       })
     } catch (error) {
       toast({
-        title: "Erro ao enviar mensagem",
-        description: error instanceof Error ? error.message : "Tente novamente",
+        title: t("toast.sendError"),
+        description: error instanceof Error ? error.message : tCommon("error"),
         variant: "destructive",
       })
     }
@@ -187,7 +191,7 @@ export default function SupportTab() {
       closed: { label: "Fechado", className: "bg-gray-100 text-gray-700" },
     }
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.open
-    return <Badge className={config.className}>{config.label}</Badge>
+    return <Badge className={config.className}>{t(`status.${status as any}`)}</Badge>
   }
 
   const getPriorityBadge = (priority: string) => {
@@ -198,40 +202,23 @@ export default function SupportTab() {
       urgent: { label: "Urgente", className: "bg-red-100 text-red-700" },
     }
     const config = priorityConfig[priority as keyof typeof priorityConfig] || priorityConfig.medium
-    return <Badge className={config.className}>{config.label}</Badge>
+    return <Badge className={config.className}>{t(`priority.${priority as any}`)}</Badge>
   }
 
   const getSupportInfo = () => {
-    const planInfo = PLAN_LIMITS[planType]
-
-    if (planType === "basic") {
-      return {
-        title: "Suporte via Email",
-        description: "Resposta em até 48 horas úteis",
-        hours: planInfo.supportHours,
-        features: planInfo.features,
-      }
-    } else if (planType === "premium") {
-      return {
-        title: "Suporte Prioritário + ViraBot IA",
-        description: "Email e WhatsApp - Resposta em até 4 horas + Chat IA 24/7",
-        hours: planInfo.supportHours,
-        features: planInfo.features,
-      }
-    } else if (planType === "master") {
-      return {
-        title: "Suporte Premium 24/7 + ViraBot IA",
-        description: "Email e WhatsApp - Resposta imediata + Chat IA 24/7",
-        hours: planInfo.supportHours,
-        features: planInfo.features,
-      }
-    }
-
     return {
-      title: "Suporte",
-      description: "Entre em contato conosco",
-      hours: "Horário comercial",
-      features: [],
+      title: t(`plans.${planType}.title`),
+      description: t(`plans.${planType}.desc`),
+      hours: t(`plans.${planType}.hours`),
+      features: [
+        t(`plans.${planType}.features.0`),
+        t(`plans.${planType}.features.1`),
+        t(`plans.${planType}.features.2`),
+        t(`plans.${planType}.features.3`),
+        t(`plans.${planType}.features.4`),
+        t(`plans.${planType}.features.5`),
+        t(`plans.${planType}.features.6`),
+      ].filter(f => f && !f.includes(`plans.${planType}.features.`))
     }
   }
 
@@ -249,7 +236,7 @@ export default function SupportTab() {
     return (
       <div className="space-y-4">
         <Button variant="outline" onClick={() => setShowAIChat(false)} className="mb-4">
-          ← Voltar para Suporte
+          {t("backToSupport")}
         </Button>
         <AIAssistant hasAccess={hasAIAccess} />
       </div>
@@ -259,19 +246,19 @@ export default function SupportTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Suporte</h2>
-          <p className="text-muted-foreground mt-1">Central de ajuda e atendimento</p>
+          <h2 className="text-3xl font-bold text-foreground">{t("title")}</h2>
+          <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
         </div>
         <Button
-          onClick={() => {}}
+          onClick={() => { }}
           disabled
-          title="Sistema de tickets disponível em breve"
+          title={t("ticketSystem") + " - " + t("comingSoon")}
           className="bg-primary/60 cursor-not-allowed text-primary-foreground flex items-center gap-2 shadow-lg"
         >
           <Plus className="w-4 h-4" />
-          Novo Ticket (Em breve)
+          {t("newTicket")}
         </Button>
       </div>
 
@@ -289,7 +276,7 @@ export default function SupportTab() {
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm font-semibold text-foreground">Horário de Atendimento</p>
+                  <p className="text-sm font-semibold text-foreground">{t("hours")}</p>
                   <p className="text-sm text-muted-foreground">{supportInfo.hours}</p>
                 </div>
               </div>
@@ -297,8 +284,8 @@ export default function SupportTab() {
               <div className="flex items-center gap-2">
                 <ExternalLink className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm font-semibold text-foreground">Canais Disponíveis</p>
-                  <p className="text-sm text-muted-foreground">Email, WhatsApp{hasAIAccess && ", ViraBot IA"}</p>
+                  <p className="text-sm font-semibold text-foreground">{t("channels")}</p>
+                  <p className="text-sm text-muted-foreground">{t("channelsList")}{hasAIAccess && ", ViraBot IA"}</p>
                 </div>
               </div>
             </div>
@@ -324,17 +311,16 @@ export default function SupportTab() {
               <Sparkles className="w-6 h-6" />
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-foreground mb-2">ViraBot IA - Assistente 24/7</h3>
+              <h3 className="text-xl font-bold text-foreground mb-2">{t("viraBotTitle")}</h3>
               <p className="text-muted-foreground mb-4">
-                Converse com nosso assistente inteligente para obter ajuda instantânea sobre o sistema, tirar dúvidas e
-                receber orientações em tempo real.
+                {t("viraBotDesc")}
               </p>
               <Button
                 onClick={() => setShowAIChat(true)}
                 className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
-                Abrir Chat com ViraBot
+                {t("openAIChat")}
               </Button>
             </div>
           </div>
@@ -346,7 +332,7 @@ export default function SupportTab() {
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Mail className="w-6 h-6 text-blue-600" />
           </div>
-          <h4 className="font-bold text-foreground mb-2">Email</h4>
+          <h4 className="font-bold text-foreground mb-2">{t("email")}</h4>
           <p className="text-sm text-muted-foreground mb-3">suporte@viraweb.online</p>
           <Button
             variant="outline"
@@ -355,7 +341,7 @@ export default function SupportTab() {
             onClick={() => window.open("mailto:suporte@viraweb.online", "_blank")}
           >
             <ExternalLink className="w-4 h-4 mr-2" />
-            Enviar Email
+            {t("sendEmail")}
           </Button>
         </Card>
 
@@ -363,7 +349,7 @@ export default function SupportTab() {
           <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <ExternalLink className="w-6 h-6 text-green-600" />
           </div>
-          <h4 className="font-bold text-foreground mb-2">WhatsApp</h4>
+          <h4 className="font-bold text-foreground mb-2">{t("whatsapp")}</h4>
           <p className="text-sm text-muted-foreground mb-3">(62) 9 9246-6109</p>
           <Button
             variant="outline"
@@ -372,58 +358,58 @@ export default function SupportTab() {
             onClick={() => window.open("https://wa.me/5562992466109", "_blank")}
           >
             <ExternalLink className="w-4 h-4 mr-2" />
-            Abrir WhatsApp
+            {t("openWhatsapp")}
           </Button>
         </Card>
       </div>
 
       {/* Help Resources */}
       <Card className="p-6">
-        <h3 className="text-lg font-bold text-foreground mb-4">Recursos de Ajuda</h3>
+        <h3 className="text-lg font-bold text-foreground mb-4">{t("resources")}</h3>
         <div className="space-y-3">
           <div className="p-4 bg-muted rounded-lg">
-            <h4 className="font-semibold text-foreground mb-1">📚 Central de Ajuda</h4>
-            <p className="text-sm text-muted-foreground">Acesse nossa documentação completa e tutoriais em vídeo</p>
+            <h4 className="font-semibold text-foreground mb-1">📚 {t("helpCenter")}</h4>
+            <p className="text-sm text-muted-foreground">{t("helpCenterDesc")}</p>
           </div>
           <div className="p-4 bg-muted rounded-lg">
-            <h4 className="font-semibold text-foreground mb-1">💡 Perguntas Frequentes</h4>
-            <p className="text-sm text-muted-foreground">Encontre respostas rápidas para dúvidas comuns</p>
+            <h4 className="font-semibold text-foreground mb-1">💡 {t("faq")}</h4>
+            <p className="text-sm text-muted-foreground">{t("faqDesc")}</p>
           </div>
           <div className="p-4 bg-muted rounded-lg">
-            <h4 className="font-semibold text-foreground mb-1">🎥 Tutoriais em Vídeo</h4>
-            <p className="text-sm text-muted-foreground">Aprenda a usar todos os recursos do sistema</p>
+            <h4 className="font-semibold text-foreground mb-1">🎥 {t("videoTutorials")}</h4>
+            <p className="text-sm text-muted-foreground">{t("videoTutorialsDesc")}</p>
           </div>
         </div>
       </Card>
 
       {/* Tickets (Em breve) */}
-  <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 border-2 border-primary/20 dark:border-primary/30">
-        <h3 className="text-lg font-bold text-foreground mb-4">Sistema de Tickets</h3>
+      <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 border-2 border-primary/20 dark:border-primary/30">
+        <h3 className="text-lg font-bold text-foreground mb-4">{t("ticketSystem")}</h3>
         <div className="py-12">
           <Sparkles className="w-16 h-16 text-primary mx-auto mb-6 animate-pulse" />
-          <h4 className="text-lg font-semibold text-foreground mb-3">Em breve disponível</h4>
-          <p className="text-muted-foreground mb-2">Estamos desenvolvendo um sistema de tickets avançado para você.</p>
-          <p className="text-muted-foreground mb-6">Em breve você poderá:</p>
+          <h4 className="text-lg font-semibold text-foreground mb-3">{t("comingSoon")}</h4>
+          <p className="text-muted-foreground mb-2">{t("comingSoonDesc")}</p>
+          <p className="text-muted-foreground mb-6">{t("featuresTitle")}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-8">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-primary" />
-              <span>Abrir tickets de suporte</span>
+              <span>{t("features.0")}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-primary" />
-              <span>Acompanhar status em tempo real</span>
+              <span>{t("features.1")}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-primary" />
-              <span>Histórico de atendimentos</span>
+              <span>{t("features.2")}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-primary" />
-              <span>Comunicação integrada</span>
+              <span>{t("features.3")}</span>
             </div>
           </div>
           <Button disabled variant="outline" className="bg-white/50">
-            Em desenvolvimento
+            {t("inDevelopment")}
           </Button>
         </div>
       </Card>
