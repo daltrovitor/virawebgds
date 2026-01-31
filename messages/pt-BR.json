@@ -608,6 +608,7 @@
         "professionals": {
             "title": "Profissionais",
             "subtitle": "Gerencie os profissionais do seu negócio",
+            "workDays": "Dias de Trabalho",
             "newProfessional": "Novo Profissional",
             "editProfessional": "Editar Profissional",
             "searchPlaceholder": "Buscar por nome ou especialidade...",
