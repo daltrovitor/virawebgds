@@ -10,7 +10,7 @@ export function useUpgradePlan() {
   const [isUpgrading, setIsUpgrading] = useState(false)
   const { toast } = useToast()
 
-  const upgradePlan = async (newPlan: PlanType) => {
+  const upgradePlan = async (newPlan: PlanType, couponCode?: string) => {
     setIsUpgrading(true)
 
     toast({
@@ -22,7 +22,7 @@ export function useUpgradePlan() {
       const data = await fetchJson("/api/subscription/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetPlan: newPlan }),
+        body: JSON.stringify({ targetPlan: newPlan, couponCode }),
       })
 
       if (data?.url) {

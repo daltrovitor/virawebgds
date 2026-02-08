@@ -758,7 +758,10 @@
             "close": "Fechar",
             "limitNear": "Próximo do Limite",
             "limitReached": "Limite Atingido!",
-            "usingCount": "Você está usando {current} de {limit} {type} disponíveis no seu plano."
+            "usingCount": "Você está usando {current} de {limit} {type} disponíveis no seu plano.",
+            "couponCode": "Código de cupom",
+            "couponPlaceholder": "Digite seu código de desconto",
+            "couponHint": "Se você tem um cupom de desconto, insira-o aqui antes de escolher o plano."
         },
         "support": {
             "title": "Suporte",

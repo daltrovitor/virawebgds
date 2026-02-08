@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { targetPlan } = body
+    const { targetPlan, couponCode } = body
 
     if (!targetPlan || !["basic", "premium", "master"].includes(targetPlan)) {
       return NextResponse.json({ error: "Invalid plan type" }, { status: 400 })
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     if (subscription?.stripe_customer_id) {
       customerId = subscription.stripe_customer_id
     } else {
-  const customer = await getStripe().customers.create({
+      const customer = await getStripe().customers.create({
         email: user.email,
         metadata: {
           supabase_user_id: user.id,
@@ -62,32 +62,61 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User has no email" }, { status: 400 })
     }
 
+    // Prepare discount options
+    let discounts: { coupon?: string; promotion_code?: string }[] | undefined
+
+    if (couponCode) {
+      // First, try to find if it's a promotion code
+      try {
+        const promotionCodes = await getStripe().promotionCodes.list({
+          code: couponCode,
+          active: true,
+          limit: 1,
+        })
+
+        if (promotionCodes.data.length > 0) {
+          discounts = [{ promotion_code: promotionCodes.data[0].id }]
+        } else {
+          // Try as a direct coupon ID
+          discounts = [{ coupon: couponCode }]
+        }
+      } catch (err) {
+        console.error("Error looking up coupon/promotion code:", err)
+        // Try as a direct coupon ID as fallback
+        discounts = [{ coupon: couponCode }]
+      }
+    }
+
     let session
     try {
       session = await getStripe().checkout.sessions.create({
-      customer: customerId,
-      line_items: [
-        {
-          price_data: {
-            currency: "brl",
-            product_data: {
-              name: product.name,
-              description: product.description,
+        customer: customerId,
+        line_items: [
+          {
+            price_data: {
+              currency: "brl",
+              product_data: {
+                name: product.name,
+                description: product.description,
+              },
+              unit_amount: product.priceInCents,
+              recurring: { interval: "month" },
             },
-            unit_amount: product.priceInCents,
-            recurring: { interval: "month" },
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        mode: "subscription",
+        // Allow users to enter promotion codes if no specific coupon was provided
+        allow_promotion_codes: !discounts,
+        // Apply specific discount if provided
+        ...(discounts && { discounts }),
+        success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/?upgrade=cancelled`,
+        metadata: {
+          user_id: user.id,
+          plan_type: targetPlan,
         },
-      ],
-      mode: "subscription",
-      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/?upgrade=cancelled`,
-      metadata: {
-        user_id: user.id,
-        plan_type: targetPlan,
-      },
-    })
+      })
 
     } catch (err) {
       console.error("Failed to create Stripe checkout session:", err)

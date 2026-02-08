@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { plan_type } = await request.json()
+    const { plan_type, coupon_code } = await request.json()
 
     if (!plan_type || !(plan_type in PLANS)) {
       return NextResponse.json({ error: "Invalid plan type" }, { status: 400 })
@@ -36,10 +36,39 @@ export async function POST(request: NextRequest) {
     const origin =
       request.headers.get("origin") || "https://gds.viraweb.online"
 
+    // Prepare discount options
+    let discounts: { coupon?: string; promotion_code?: string }[] | undefined
+
+    if (coupon_code) {
+      // First, try to find if it's a promotion code
+      try {
+        const promotionCodes = await stripe.promotionCodes.list({
+          code: coupon_code,
+          active: true,
+          limit: 1,
+        })
+
+        if (promotionCodes.data.length > 0) {
+          discounts = [{ promotion_code: promotionCodes.data[0].id }]
+        } else {
+          // Try as a direct coupon ID
+          discounts = [{ coupon: coupon_code }]
+        }
+      } catch (err) {
+        console.error("Error looking up coupon/promotion code:", err)
+        // Try as a direct coupon ID as fallback
+        discounts = [{ coupon: coupon_code }]
+      }
+    }
+
     const session = await stripe.checkout.sessions.create({
       customer_email: user.email,
       mode: "subscription",
       payment_method_types: ["card"],
+      // Allow users to enter promotion codes if no specific coupon was provided
+      allow_promotion_codes: !discounts,
+      // Apply specific discount if provided
+      ...(discounts && { discounts }),
       line_items: [
         {
           price_data: {

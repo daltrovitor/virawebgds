@@ -5,7 +5,7 @@ import { getStripe } from "@/lib/stripe"
 import { getProductByPlanType } from "@/lib/products"
 import { createClient } from "@/lib/supabase/server"
 
-export async function startCheckoutSession(planType: "basic" | "premium" | "master") {
+export async function startCheckoutSession(planType: "basic" | "premium" | "master", couponCode?: string) {
   const supabase = await createClient()
 
   // Get authenticated user
@@ -49,6 +49,31 @@ export async function startCheckoutSession(planType: "basic" | "premium" | "mast
   const headersList = await headers()
   const origin = headersList.get("origin") || "https://gds.viraweb.online/"
 
+  // Prepare discount options
+  let discounts: { coupon?: string; promotion_code?: string }[] | undefined
+
+  if (couponCode) {
+    // First, try to find if it's a promotion code
+    try {
+      const promotionCodes = await getStripe().promotionCodes.list({
+        code: couponCode,
+        active: true,
+        limit: 1,
+      })
+
+      if (promotionCodes.data.length > 0) {
+        discounts = [{ promotion_code: promotionCodes.data[0].id }]
+      } else {
+        // Try as a direct coupon ID
+        discounts = [{ coupon: couponCode }]
+      }
+    } catch (err) {
+      console.error("Error looking up coupon/promotion code:", err)
+      // Try as a direct coupon ID as fallback
+      discounts = [{ coupon: couponCode }]
+    }
+  }
+
   // Create Checkout Session
   const session = await getStripe().checkout.sessions.create({
     customer: customerId,
@@ -67,6 +92,10 @@ export async function startCheckoutSession(planType: "basic" | "premium" | "mast
       },
     ],
     mode: product.billingCycle === "monthly" ? "subscription" : "payment",
+    // Allow users to enter promotion codes if no specific coupon was provided
+    allow_promotion_codes: !discounts,
+    // Apply specific discount if provided
+    ...(discounts && { discounts }),
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancelled`,
     metadata: {

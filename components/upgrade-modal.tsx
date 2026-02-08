@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -9,7 +10,9 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { CheckCircle2, Zap, X, Loader2 } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { CheckCircle2, Zap, X, Loader2, Tag } from "lucide-react"
 import { PLAN_LIMITS, type PlanType } from "@/lib/plan-limits"
 import { useUpgradePlan } from "@/hooks/use-upgrade-plan"
 import { useTranslations } from "next-intl"
@@ -24,6 +27,7 @@ interface UpgradeModalProps {
 
 export default function UpgradeModal({ isOpen, onClose, currentPlan, limitType, currentCount }: UpgradeModalProps) {
   const { upgradePlan, isUpgrading } = useUpgradePlan()
+  const [couponCode, setCouponCode] = useState("")
   const t = useTranslations("upgradeModal")
   const tUsage = useTranslations("dashboard.usage")
   const tCommon = useTranslations("common")
@@ -41,7 +45,7 @@ export default function UpgradeModal({ isOpen, onClose, currentPlan, limitType, 
 
   const handleUpgrade = async (planType: PlanType) => {
     try {
-      await upgradePlan(planType)
+      await upgradePlan(planType, couponCode.trim() || undefined)
       onClose()
     } catch (error) {
       console.error(" Upgrade failed:", error)
@@ -73,6 +77,26 @@ export default function UpgradeModal({ isOpen, onClose, currentPlan, limitType, 
             </p>
             <p className="text-sm text-muted-foreground mt-1">
               {t("upgradeToContinue", { type: limitNames[limitType].toLowerCase() })}
+            </p>
+          </div>
+
+          {/* Coupon Code Field */}
+          <div className="bg-gradient-to-r from-primary/5 to-primary/10 p-4 rounded-lg mb-6 border border-primary/20">
+            <Label htmlFor="coupon" className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
+              <Tag className="w-4 h-4 text-primary" />
+              {t("couponCode") || "Código de cupom"}
+            </Label>
+            <Input
+              id="coupon"
+              type="text"
+              placeholder={t("couponPlaceholder") || "Digite seu código de desconto"}
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              className="bg-background"
+              disabled={isUpgrading}
+            />
+            <p className="text-xs text-muted-foreground mt-2">
+              {t("couponHint") || "Se você tem um cupom de desconto, insira-o aqui antes de escolher o plano."}
             </p>
           </div>
 
