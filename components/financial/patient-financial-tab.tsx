@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DataTable } from "@/components/ui/data-table"
 import { format } from "date-fns"
 import { ptBR, enUS } from "date-fns/locale"
 import { useTranslations, useLocale } from "next-intl"
-import { AlertTriangle, Check, Clock } from "lucide-react"
+import { AlertTriangle, Check, Clock, CreditCard } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import type { ColumnDef } from "@tanstack/react-table"
 import type { Payment } from "@/app/actions/financial-actions"
 import { AttendanceTab } from "@/components/financial/attendance-tab"
@@ -21,7 +21,7 @@ interface PatientFinancialTabProps {
 
 export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }: PatientFinancialTabProps) {
   const [loading] = useState(false)
-  const t = useTranslations("dashboard.patientFinancialTab")
+  const t = useTranslations("dashboard.financial.patientFinancialTab")
   const tCommon = useTranslations("dashboard.financial")
   const locale = useLocale()
   const dateLocale = locale === "en" ? enUS : ptBR
@@ -29,7 +29,7 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
   const columns: ColumnDef<Payment>[] = [
     {
       accessorKey: "payment_date",
-      header: t("columns.date"),
+      header: () => <div className="min-w-[100px]">{t("columns.date")}</div>,
       cell: ({ row }) => {
         const date = row.getValue("payment_date") as string
         return date ? format(new Date(date), "dd/MM/yyyy", { locale: dateLocale }) : "-"
@@ -37,7 +37,7 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
     },
     {
       accessorKey: "amount",
-      header: t("columns.amount"),
+      header: () => <div className="min-w-[80px]">{t("columns.amount")}</div>,
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue("amount"))
         const discount = parseFloat(row.getValue("discount") || "0")
@@ -46,7 +46,7 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
     },
     {
       accessorKey: "discount",
-      header: t("columns.discount"),
+      header: () => <div className="min-w-[80px]">{t("columns.discount")}</div>,
       cell: ({ row }) => {
         const discount = parseFloat(row.getValue("discount") || "0")
         return discount > 0 ? `R$ ${discount.toFixed(2)}` : "-"
@@ -54,7 +54,7 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
     },
     {
       accessorKey: "status",
-      header: t("columns.status"),
+      header: () => <div className="min-w-[100px]">{t("columns.status")}</div>,
       cell: ({ row }) => {
         const status = row.getValue("status") as string
         return (
@@ -91,41 +91,45 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
     },
     {
       id: 'actions',
-      header: t("columns.actions"),
+      header: () => <div className="text-right pr-4">{t("columns.actions")}</div>,
       cell: ({ row }) => {
         const status = row.getValue('status') as string
         return (
-          <div>
+          <div className="flex justify-end pr-4 py-1 w-[160px] ml-auto">
             {(status === 'pending' || status === 'overdue') && (
-              <button
-                className="text-sm text-primary underline"
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 text-xs h-8 px-3 border-primary/20 hover:border-primary hover:bg-primary/5 text-primary whitespace-nowrap"
                 onClick={() => onOpenPaymentModal && onOpenPaymentModal(row.original.id)}
               >
-                {t("actions.settle")}
-              </button>
+                <CreditCard className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{t("actions.settle")}</span>
+                <span className="sm:hidden">{t("actions.settle").split(' ')[0]}</span>
+              </Button>
             )}
           </div>
         )
-      }
+      },
+      size: 180,
+      minSize: 160,
     }
   ]
 
   return (
-    <Tabs defaultValue="history" className="w-full">
-      <TabsList>
-        <TabsTrigger value="history">{t("title")}</TabsTrigger>
-      </TabsList>
+    <div className="space-y-4 min-w-0">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-bold text-foreground">{t("title")}</h3>
+      </div>
 
-      <TabsContent value="history" className="space-y-4">
+      <div className="w-full">
         <DataTable
           columns={columns}
           data={payments}
           loading={loading}
           noResults={t("empty")}
         />
-      </TabsContent>
-
-
-    </Tabs>
+      </div>
+    </div>
   )
 }

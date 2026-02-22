@@ -28,7 +28,7 @@ import { ptBR } from "date-fns/locale"
 
 import { useTranslations } from 'next-intl'
 
-export default function PatientsTab() {
+export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
   const [patients, setPatients] = useState<Patient[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -56,6 +56,17 @@ export default function PatientsTab() {
   const router = useRouter()
 
   useEffect(() => {
+    if (isDemo) {
+      setPatients([
+        { id: "1", name: "Maria Silva", email: "maria@email.com", phone: "(11) 99999-1111", status: "active", created_at: new Date().toISOString() } as any,
+        { id: "2", name: "Carlos Mendes", email: "carlos@email.com", phone: "(11) 99999-2222", status: "active", created_at: new Date().toISOString() } as any,
+        { id: "3", name: "Beatriz Lima", email: "beatriz@email.com", phone: "(11) 99999-3333", status: "active", created_at: new Date().toISOString() } as any,
+        { id: "4", name: "Rafael Costa", email: "rafael@email.com", phone: "(11) 99999-4444", status: "inactive", created_at: new Date().toISOString() } as any,
+      ])
+      setCurrentPlan("premium")
+      setLoading(false)
+      return
+    }
     loadPatients()
     loadPlan()
   }, [])
@@ -499,6 +510,7 @@ export default function PatientsTab() {
           setSelectedPatientId(null)
         }}
         onUpdate={loadPatients}
+        isDemo={isDemo}
       />
     </div>
   )

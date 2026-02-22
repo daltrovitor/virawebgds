@@ -97,6 +97,11 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
     const t = useTranslations('landing')
     const tPricing = useTranslations('landing.pricing')
     const tProducts = useTranslations('products')
+    const tTitles = useTranslations('titles')
+
+    useEffect(() => {
+        document.title = tTitles('landing')
+    }, [tTitles])
 
     const plans = PRODUCTS.map((product) => {
         const featuresObject = tProducts.raw(`${product.planType}.features`) as Record<string, string>;

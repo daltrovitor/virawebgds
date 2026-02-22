@@ -28,7 +28,7 @@ interface UpgradeModalProps {
 export default function UpgradeModal({ isOpen, onClose, currentPlan, limitType, currentCount }: UpgradeModalProps) {
   const { upgradePlan, isUpgrading } = useUpgradePlan()
   const [couponCode, setCouponCode] = useState("")
-  const t = useTranslations("upgradeModal")
+  const t = useTranslations("dashboard.upgradeModal")
   const tUsage = useTranslations("dashboard.usage")
   const tCommon = useTranslations("common")
 

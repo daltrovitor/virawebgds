@@ -48,7 +48,7 @@ interface PatientData {
   newPatients: number
 }
 
-export default function ReportsTab() {
+export default function ReportsTab({ isDemo = false }: { isDemo?: boolean }) {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<Stats>({
     totalAppointments: 0,
@@ -61,6 +61,26 @@ export default function ReportsTab() {
 
   useEffect(() => {
     async function loadData() {
+      if (isDemo) {
+        setStats({
+          totalAppointments: 156,
+          activePatients: 28,
+          completionRate: 92,
+        })
+        setAppointmentData([
+          { month: "Jan", completed: 30, cancelled: 5 },
+          { month: "Fev", completed: 25, cancelled: 3 },
+          { month: "Mar", completed: 40, cancelled: 8 },
+        ])
+        setPatientData([
+          { month: "Jan", totalPatients: 20, newPatients: 5 },
+          { month: "Fev", totalPatients: 24, newPatients: 4 },
+          { month: "Mar", totalPatients: 28, newPatients: 4 },
+        ])
+        setLoading(false)
+        return
+      }
+
       try {
         const [statsData, appointmentsData, patientsData] = await Promise.all([
           getDashboardStats(),

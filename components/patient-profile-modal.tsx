@@ -24,9 +24,10 @@ interface PatientProfileModalProps {
   isOpen: boolean
   onClose: () => void
   onUpdate?: () => void
+  isDemo?: boolean
 }
 
-export default function PatientProfileModal({ patientId, isOpen, onClose, onUpdate }: PatientProfileModalProps) {
+export default function PatientProfileModal({ patientId, isOpen, onClose, onUpdate, isDemo = false }: PatientProfileModalProps) {
   const [patient, setPatient] = useState<Patient | null>(null)
   const [financialSummary, setFinancialSummary] = useState<{ paid: number; due: number; discounts: number } | null>(null)
   const [payments, setPayments] = useState<any[]>([])
@@ -51,6 +52,27 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     if (!patientId) return
 
     setLoading(true)
+    if (isDemo) {
+      setPatient({
+        id: "1",
+        name: "Maria Silva",
+        email: "maria@email.com",
+        phone: "(11) 99999-1111",
+        cpf: "123.456.789-00",
+        status: "active",
+        notes: "Paciente em acompanhamento regular.",
+        created_at: new Date().toISOString()
+      } as any)
+      setNotes("Paciente em acompanhamento regular.")
+      setFinancialSummary({ paid: 450, due: 150, discounts: 0 })
+      setPayments([
+        { id: "1", patient_id: "1", amount: 150, status: "paid", date: new Date().toISOString() },
+        { id: "2", patient_id: "1", amount: 150, status: "paid", date: new Date().toISOString() },
+        { id: "3", patient_id: "1", amount: 150, status: "pending", date: new Date().toISOString() },
+      ])
+      setLoading(false)
+      return
+    }
     try {
       const [data, fin, recentPayments] = await Promise.all([
         getPatientById(patientId),
@@ -139,7 +161,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle className="text-2xl">{t("title")}</DialogTitle>
         </DialogHeader>
@@ -149,9 +171,9 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : patient ? (
-          <div className="mt-4 space-y-6">
+          <div className="mt-4 space-y-6 min-w-0">
             {/* Profile Header - Always visible */}
-            <Card className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5">
+            <Card className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-secondary/5">
               <div className="flex flex-col sm:flex-row items-center gap-6">
                 <div className="relative">
                   <Avatar className="w-24 h-24">
@@ -206,10 +228,10 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="info" className="mt-4">
+              <TabsContent value="info" className="mt-4 focus-visible:outline-none">
                 <div className="space-y-6">
                   {/* Patient Information */}
-                  <Card className="p-6">
+                  <Card className="p-4 sm:p-6">
                     <h4 className="text-lg font-bold text-foreground mb-4">{t("info.title")}</h4>
                     <div className="grid sm:grid-cols-2 gap-4 min-w-0">
                       {patient.email && (
@@ -284,7 +306,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                   </Card>
 
                   {/* Notes Section */}
-                  <Card className="p-6">
+                  <Card className="p-4 sm:p-6">
                     <h4 className="text-lg font-bold text-foreground mb-4">{t("notes.title")}</h4>
                     <Textarea
                       placeholder={t("notes.placeholder")}
@@ -300,10 +322,10 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 </div>
               </TabsContent>
 
-              <TabsContent value="financial" className="mt-4">
+              <TabsContent value="financial" className="mt-4 focus-visible:outline-none">
                 <div className="space-y-6">
                   {/* Financial Summary Card */}
-                  <Card className="p-6">
+                  <Card className="p-4 sm:p-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                       <h4 className="text-lg font-bold text-foreground">{t("financial.title")}</h4>
                       <Button onClick={() => setShowPaymentModal(true)} className="mt-2 sm:mt-0">

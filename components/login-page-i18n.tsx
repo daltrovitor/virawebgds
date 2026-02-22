@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { GoogleButton } from "@/components/ui/google-button"
 import { Card } from "@/components/ui/card"
@@ -27,6 +27,11 @@ export default function LoginPage({ onLogin, onSignupClick, onBackClick, onForgo
     const [isLoading, setIsLoading] = useState(false)
     const { toast } = useToast()
     const t = useTranslations('auth.login')
+    const tTitles = useTranslations('titles')
+
+    useEffect(() => {
+        document.title = tTitles('login')
+    }, [tTitles])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

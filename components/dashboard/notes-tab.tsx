@@ -11,7 +11,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/hooks/use-toast"
 import { useTranslations } from "next-intl"
 
-export default function NotesTab() {
+export default function NotesTab({ isDemo = false }: { isDemo?: boolean }) {
   const [notes, setNotes] = useState<UserNote[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -29,6 +29,14 @@ export default function NotesTab() {
   }, [])
 
   const loadNotes = async () => {
+    if (isDemo) {
+      setNotes([
+        { id: "1", title: "Nota sobre paciente Maria", content: "Progresso positivo na última sessão.", created_at: new Date().toISOString() } as any,
+        { id: "2", title: "Lembrete de follow-up", content: "Ligar para Carlos na sexta.", created_at: new Date().toISOString() } as any,
+      ])
+      setLoading(false)
+      return
+    }
     try {
       const data = await getUserNotes()
       setNotes(data)

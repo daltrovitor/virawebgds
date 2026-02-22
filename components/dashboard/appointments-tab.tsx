@@ -11,8 +11,8 @@ interface Appointment {
   notes?: string
 }
 
-export default function AppointmentsTab() {
-  return <CalendarAppointments />
+export default function AppointmentsTab({ isDemo = false }: { isDemo?: boolean }) {
+  return <CalendarAppointments isDemo={isDemo} />
 }
 
 // The rest of the code for managing appointments is replaced by the CalendarAppointments component

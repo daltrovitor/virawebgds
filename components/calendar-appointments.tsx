@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2, Clock, CheckCircle2, XCircle, Loader2, CalendarDays, Calendar as CalendarIcon } from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2, Clock, CheckCircle2, XCircle, Loader2, CalendarDays, Calendar as CalendarIcon, Eye } from "lucide-react"
 import WeeklyCalendar from "@/components/weekly-calendar"
 import { WeeklyView } from "@/components/appointments/weekly-view"
+import PatientProfileModal from "@/components/patient-profile-modal"
 import {
   getAppointments,
   createAppointment,
@@ -35,7 +36,7 @@ interface Appointment {
   updated_at: string
 }
 
-export default function CalendarAppointments() {
+export default function CalendarAppointments({ isDemo = false }: { isDemo?: boolean }) {
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [patients, setPatients] = useState<Array<{ id: string; name: string }>>([])
   const [professionals, setProfessionals] = useState<Array<{ id: string; name: string }>>([])
@@ -44,6 +45,7 @@ export default function CalendarAppointments() {
   const [isSaving, setIsSaving] = useState(false)
   const { toast } = useToast()
   const t = useTranslations('dashboard.appointments')
+  const tCommon = useTranslations('common')
   const locale = useLocale()
 
   const [currentDate, setCurrentDate] = useState(() => {
@@ -67,12 +69,24 @@ export default function CalendarAppointments() {
     recurrence_weekdays: [] as number[],
     recurrence_count: 1,
   })
+  const [showProfileModal, setShowProfileModal] = useState(false)
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null)
 
   useEffect(() => {
     loadData()
   }, [])
 
   const loadData = async () => {
+    if (isDemo) {
+      setAppointments([
+        { id: "1", user_id: "demo-user", patient_id: "1", professional_id: "1", appointment_date: new Date().toISOString().split('T')[0], appointment_time: "09:00", duration_minutes: 60, status: "scheduled", notes: "" } as any,
+        { id: "2", user_id: "demo-user", patient_id: "2", professional_id: "2", appointment_date: new Date().toISOString().split('T')[0], appointment_time: "10:30", duration_minutes: 60, status: "scheduled", notes: "" } as any,
+      ])
+      setPatients([{ id: "1", name: "Maria Silva" }, { id: "2", name: "Carlos Mendes" }])
+      setProfessionals([{ id: "1", name: "Dr. João Pereira" }, { id: "2", name: "Dra. Ana Souza" }])
+      setIsLoading(false)
+      return
+    }
     try {
       setIsLoading(true)
       const [appointmentsData, patientsData, professionalsData] = await Promise.all([
@@ -657,6 +671,19 @@ export default function CalendarAppointments() {
                             <Trash2 className="w-4 h-4" />
                           </Button>
 
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedPatientId(appointment.patient_id)
+                              setShowProfileModal(true)
+                            }}
+                            className="flex-1 sm:flex-none"
+                            title={tCommon('viewProfile')}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+
                           {appointment.status === "scheduled" && (
                             <Button
                               size="sm"
@@ -686,19 +713,29 @@ export default function CalendarAppointments() {
         <WeeklyView
           appointments={appointments.map(apt => ({
             ...apt,
-            id: apt.id.toString(),
-            user_id: apt.user_id.toString(),
-            patient_id: apt.patient_id.toString(),
-            professional_id: apt.professional_id.toString()
+            id: apt.id?.toString() || "",
+            user_id: apt.user_id?.toString() || "",
+            patient_id: apt.patient_id?.toString() || "",
+            professional_id: apt.professional_id?.toString() || ""
           }))}
           professionals={professionals.map(prof => ({
-            id: prof.id.toString(),
+            id: prof.id?.toString() || "",
             name: prof.name
           }))}
           selectedProfessional={selectedProfessional}
           onSelectProfessional={setSelectedProfessional}
         />
       </div>
+
+      <PatientProfileModal
+        isOpen={showProfileModal}
+        onClose={() => {
+          setShowProfileModal(false)
+          setSelectedPatientId(null)
+        }}
+        patientId={selectedPatientId}
+        isDemo={isDemo}
+      />
     </div>
   )
 }

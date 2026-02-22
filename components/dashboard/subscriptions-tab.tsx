@@ -33,9 +33,10 @@ interface Subscription {
 interface SubscriptionsTabProps {
   subscription?: Subscription
   userId?: string
+  isDemo?: boolean
 }
 
-export default function SubscriptionsTab({ subscription: initialSubscription, userId }: SubscriptionsTabProps) {
+export default function SubscriptionsTab({ subscription: initialSubscription, userId, isDemo = false }: SubscriptionsTabProps) {
   const [showCancelForm, setShowCancelForm] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [subscription, setSubscription] = useState<Subscription | undefined>(initialSubscription)
@@ -46,7 +47,7 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
   const tCommon = useTranslations("common")
 
   useEffect(() => {
-    if (!userId) return
+    if (isDemo || !userId) return
 
     const channel = supabase
       .channel("subscription-updates")
@@ -96,7 +97,7 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
   console.log(" Subscription status:", subscription?.status)
   console.log(" ViraBot enabled:", subscription?.virabot_enabled)
 
-  if (!subscription) {
+  if (!subscription && !isDemo) {
     console.log(" No subscription found")
     return (
       <Card className="p-8 text-center border border-border">
@@ -108,7 +109,26 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
     )
   }
 
-  const normalizedPlanType = (subscription.plan_name || subscription.plan_type)?.toLowerCase() as
+  const demoSubscription: Subscription = {
+    id: "demo-id",
+    plan_name: "premium",
+    plan_type: "premium",
+    status: "active",
+    stripe_subscription_id: "demo_stripe",
+    stripe_customer_id: "demo_customer",
+    current_period_start: new Date().toISOString(),
+    current_period_end: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+    cancel_at_period_end: false,
+    max_patients: 100,
+    max_professionals: 5,
+    max_appointments_per_month: 200,
+    virabot_enabled: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }
+
+  const activeSubscription = isDemo ? demoSubscription : subscription!
+  const normalizedPlanType = (activeSubscription.plan_name || activeSubscription.plan_type)?.toLowerCase() as
     | "basic"
     | "premium"
     | "master"
@@ -128,7 +148,7 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
         <h3 className="text-lg font-bold text-destructive mb-2">{t("invalidPlan")}</h3>
         <p className="text-muted-foreground mb-2">
           {t("invalidPlanDesc")}{" "}
-          <strong>{subscription.plan_name || subscription.plan_type}</strong>
+          <strong>{activeSubscription.plan_name || activeSubscription.plan_type}</strong>
         </p>
         <p className="text-xs text-muted-foreground">{t("validPlans")}</p>
       </Card>
@@ -136,9 +156,13 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
   }
 
   const handleCancelSubscription = async () => {
+    if (isDemo) {
+      toast({ title: t("toast.canceled"), description: t("toast.canceledDesc") })
+      return
+    }
     setIsLoading(true)
     try {
-      await updateSubscriptionStatus(subscription.id, "canceled")
+      await updateSubscriptionStatus(activeSubscription.id, "canceled")
 
       toast({
         title: t("toast.canceled"),
@@ -219,14 +243,14 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
             <h3 className="text-2xl font-bold text-foreground mb-2">{getPlanName(normalizedPlanType)}</h3>
             <div className="flex items-center gap-2">
               <span
-                className={`px-3 py-1 rounded-full text-sm font-semibold border flex items-center gap-2 ${getStatusColor(subscription.status)}`}
+                className={`px-3 py-1 rounded-full text-sm font-semibold border flex items-center gap-2 ${getStatusColor(activeSubscription.status)}`}
               >
-                {getStatusIcon(subscription.status)}
-                {subscription.status === "active" && t("active")}
-                {subscription.status === "canceled" && t("canceled")}
-                {subscription.status === "expired" && t("expired")}
+                {getStatusIcon(activeSubscription.status)}
+                {activeSubscription.status === "active" && t("active")}
+                {activeSubscription.status === "canceled" && t("canceled")}
+                {activeSubscription.status === "expired" && t("expired")}
               </span>
-              {subscription.virabot_enabled && (
+              {activeSubscription.virabot_enabled && (
                 <span className="px-3 py-1 rounded-full text-sm font-semibold border bg-purple-100 text-purple-700 border-purple-200 flex items-center gap-1">
                   <Zap className="w-3 h-3" />
                   ViraBot AI
@@ -246,8 +270,8 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
             <p className="text-sm text-muted-foreground mb-1">{t("startDate")}</p>
             <p className="font-semibold text-foreground flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              {subscription.current_period_start
-                ? new Date(subscription.current_period_start).toLocaleDateString()
+              {activeSubscription.current_period_start
+                ? new Date(activeSubscription.current_period_start).toLocaleDateString()
                 : t("notConfigured")}
             </p>
           </div>
@@ -255,8 +279,8 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
             <p className="text-sm text-muted-foreground mb-1">{t("nextBilling")}</p>
             <p className="font-semibold text-foreground flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              {subscription.current_period_end
-                ? new Date(subscription.current_period_end).toLocaleDateString()
+              {activeSubscription.current_period_end
+                ? new Date(activeSubscription.current_period_end).toLocaleDateString()
                 : "N/A"}
             </p>
           </div>
@@ -264,13 +288,13 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
             <p className="text-sm text-muted-foreground mb-1">{t("paymentMethod")}</p>
             <p className="font-semibold text-foreground flex items-center gap-2">
               <CreditCard className="w-4 h-4" />
-              {subscription.stripe_customer_id ? t("creditCard") : t("notConfigured")}
+              {activeSubscription.stripe_customer_id ? t("creditCard") : t("notConfigured")}
             </p>
           </div>
         </div>
 
         {/* Action Buttons */}
-        {subscription.status === "active" && (
+        {activeSubscription.status === "active" && (
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
               onClick={() => setShowCancelForm(!showCancelForm)}
@@ -313,7 +337,7 @@ export default function SubscriptionsTab({ subscription: initialSubscription, us
       )}
 
       {/* Usage Dashboard */}
-      {subscription && <UsageDashboard planType={normalizedPlanType} />}
+      {activeSubscription && <UsageDashboard planType={normalizedPlanType} />}
 
       {/* Benefits Section */}
       <Card className="p-6 border border-border bg-gradient-to-br from-primary/5 to-secondary/5 cursor-pointer hover:shadow-lg transition-shadow">

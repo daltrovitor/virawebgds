@@ -56,7 +56,11 @@
             "renewOn": "Renews on: {date}",
             "recommendationUnlimited": "Upgrade to {plan} plan for unlimited {limit}!",
             "recommendationIncrease": "Upgrade to {plan} plan to increase your limit to {count} {limit}."
-        }
+        },
+        "viewProfile": "View Profile",
+        "visitor": "Visitor",
+        "noResults": "No results found",
+        "records": "records"
     },
     "landing": {
         "header": {
@@ -243,7 +247,8 @@
             "subscriptions": "Subscription",
             "support": "Support",
             "tutorial": "Tutorial",
-            "settings": "Settings"
+            "settings": "Settings",
+            "exitDemo": "Exit Demo"
         },
         "overview": {
             "welcome": "Welcome,",
@@ -626,6 +631,17 @@
                     "error": "Error saving"
                 }
             },
+            "grid": {
+                "search": "Search client...",
+                "period": "Select period",
+                "periods": {
+                    "week": "Last week",
+                    "month": "Last month",
+                    "quarter": "Last quarter",
+                    "year": "Last year"
+                },
+                "export": "Export"
+            },
             "patientFinancialTab": {
                 "title": "History",
                 "columns": {
@@ -634,7 +650,8 @@
                     "discount": "Discount",
                     "status": "Status",
                     "dueDate": "Due Date",
-                    "actions": "Actions"
+                    "actions": "Actions",
+                    "patient": "Client"
                 },
                 "actions": {
                     "settle": "Register payment"
@@ -1065,6 +1082,26 @@
                 "high": "High",
                 "urgent": "Urgent"
             }
+        },
+        "preview": {
+            "title": "Smart Dashboard",
+            "subtitle": "Visualize all important information in one place",
+            "welcome": "Welcome to ViraWeb",
+            "today": "Today, {date}",
+            "appointmentsToday": "Appointments Today",
+            "activeClients": "Active Clients",
+            "avgTime": "Avg Time",
+            "completionRate": "Completion Rate",
+            "nextAppointments": "Upcoming Appointments",
+            "new": "New",
+            "confirmed": "Confirmed",
+            "pending": "Pending",
+            "quickActions": {
+                "newAppointment": "New Appointment",
+                "newClient": "New Client",
+                "reports": "Reports",
+                "settings": "Settings"
+            }
         }
     },
     "onboarding": {
@@ -1128,5 +1165,123 @@
                 "7": "Dedicated account manager"
             }
         }
+    },
+    "demoPage": {
+        "back": "Back",
+        "title": "Complete Plan Comparison",
+        "subtitle": "See all the differences between our plans and choose the best for your business",
+        "tabs": {
+            "comparison": "Comparison",
+            "features": "Features",
+            "demo": "Interactive Demo"
+        },
+        "popular": "Most Popular",
+        "selected": "Selected",
+        "select": "Select",
+        "feature": "Feature",
+        "basic": "Basic",
+        "premium": "Premium",
+        "master": "Master",
+        "featuresList": [
+            {
+                "category": "Management",
+                "items": [
+                    {
+                        "name": "Clients",
+                        "basic": "Up to 75",
+                        "premium": "Up to 500",
+                        "master": "Unlimited"
+                    },
+                    {
+                        "name": "Professionals",
+                        "basic": "Up to 7",
+                        "premium": "Up to 50",
+                        "master": "Unlimited"
+                    },
+                    {
+                        "name": "Appointments",
+                        "basic": "50/month",
+                        "premium": "500/month",
+                        "master": "Unlimited"
+                    }
+                ]
+            },
+            {
+                "category": "Control & Tools",
+                "items": [
+                    {
+                        "name": "Financial Management",
+                        "basic": "Basic",
+                        "premium": "Complete",
+                        "master": "Complete"
+                    },
+                    {
+                        "name": "Reports and Analytics",
+                        "basic": "Basic",
+                        "premium": "Advanced",
+                        "master": "Advanced"
+                    },
+                    {
+                        "name": "Theme Customization",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            },
+            {
+                "category": "Productivity",
+                "items": [
+                    {
+                        "name": "Goal Tracking",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "Checklists and Notes",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "ViraBot AI Assistant",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            },
+            {
+                "category": "Support",
+                "items": [
+                    {
+                        "name": "Email Support",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "WhatsApp Support",
+                        "basic": false,
+                        "premium": "8am-6pm (5 days)",
+                        "master": "24/7"
+                    },
+                    {
+                        "name": "Priority Support",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            }
+        ]
+    },
+    "titles": {
+        "landing": "ViraWeb — Client & Appointment Manager",
+        "login": "Login — ViraWeb",
+        "signup": "Sign Up — ViraWeb",
+        "demo": "Interactive Demo — ViraWeb",
+        "dashboard": "{section} — ViraWeb Dashboard"
     }
 }

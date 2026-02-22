@@ -26,13 +26,14 @@ import { ToastAction } from "@/components/ui/toast"
 import { formatDateString } from "@/lib/utils"
 import { useTranslations } from 'next-intl'
 
-export function GoalsSection() {
+export function GoalsSection({ isDemo = false }: { isDemo?: boolean }) {
   const [goals, setGoals] = useState<Goal[]>([])
   const [loading, setLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null)
   const { toast } = useToast()
   const t = useTranslations('dashboard.goals')
+  const tCommon = useTranslations('common')
 
   const [formData, setFormData] = useState({
     title: "",
@@ -49,12 +50,20 @@ export function GoalsSection() {
   }, [])
 
   async function loadGoals() {
+    if (isDemo) {
+      setGoals([
+        { id: "1", title: "Atender 50 pacientes no mês", current_value: 28, target_value: 50, category: "patients", deadline: new Date().toISOString() } as any,
+        { id: "2", title: "Completar 40 sessões", current_value: 30, target_value: 40, category: "appointments", deadline: new Date().toISOString() } as any,
+      ])
+      setLoading(false)
+      return
+    }
     try {
       const data = await getGoals()
       setGoals(data)
     } catch (error) {
       toast({
-        title: t('common.error'),
+        title: tCommon('error'),
         description: t('toast.loadError'),
         variant: "destructive",
       })
@@ -124,7 +133,7 @@ export function GoalsSection() {
       resetForm()
     } catch (error) {
       toast({
-        title: t('common.error'),
+        title: tCommon('error'),
         description: t('toast.savedError'),
         variant: "destructive",
       })
@@ -148,7 +157,7 @@ export function GoalsSection() {
               await loadGoals()
             } catch (error) {
               toast({
-                title: t('common.error'),
+                title: tCommon('error'),
                 description: t('toast.deleteError'),
                 variant: "destructive",
               })
@@ -171,7 +180,7 @@ export function GoalsSection() {
       await loadGoals()
     } catch (error) {
       toast({
-        title: t('common.error'),
+        title: tCommon('error'),
         description: t('toast.updateError'),
         variant: "destructive",
       })
@@ -412,7 +421,7 @@ export function GoalsSection() {
       {/* Goals List */}
       {loading && goals.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">{t('common.loading')}</p>
+          <p className="text-muted-foreground">{tCommon('loading')}</p>
         </div>
       ) : goals.length === 0 ? (
         <Card className="border-dashed">

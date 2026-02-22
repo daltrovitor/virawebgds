@@ -23,7 +23,7 @@ import { useTranslations } from 'next-intl'
 
 type Professional = ProfessionalType
 
-export default function ProfessionalsTab() {
+export default function ProfessionalsTab({ isDemo = false }: { isDemo?: boolean }) {
   const [professionals, setProfessionals] = useState<Professional[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -47,6 +47,15 @@ export default function ProfessionalsTab() {
   const tCommon = useTranslations('common')
 
   useEffect(() => {
+    if (isDemo) {
+      setProfessionals([
+        { id: "1", name: "Dr. João Pereira", specialty: "Psicologia", email: "joao@clinic.com", phone: "(11) 98888-1111", status: "active", created_at: new Date().toISOString() } as any,
+        { id: "2", name: "Dra. Ana Souza", specialty: "Fisioterapia", email: "ana@clinic.com", phone: "(11) 98888-2222", status: "active", created_at: new Date().toISOString() } as any,
+      ])
+      setCurrentPlan("premium")
+      setLoading(false)
+      return
+    }
     loadProfessionals()
     loadPlan()
   }, [])
@@ -328,8 +337,8 @@ export default function ProfessionalsTab() {
                         )}
                         <span
                           className={`text-xs font-semibold px-2 py-1 rounded-full ${professional.status === "active"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-700"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-700"
                             }`}
                         >
                           {professional.status === "active" ? t('status.active') : t('status.inactive')}

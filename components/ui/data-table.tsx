@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useTranslations } from "next-intl"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -25,8 +26,9 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   loading = false,
-  noResults = "Nenhum resultado encontrado.",
+  noResults,
 }: DataTableProps<TData, TValue>) {
+  const t = useTranslations("common")
   const table = useReactTable({
     data,
     columns,
@@ -35,22 +37,28 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
   })
 
+  // Defaults
+  const emptyMessage = noResults || t("noResults") || "No results found."
+
   return (
     <div className="space-y-4">
-      <ScrollArea className="rounded-md border">
-        <Table>
+      <ScrollArea className="rounded-md border w-full">
+        <Table className="w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: header.column.getSize() }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
@@ -61,7 +69,7 @@ export function DataTable<TData, TValue>({
             {loading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Carregando...
+                  {t("loading")}
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -71,7 +79,10 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      style={{ width: cell.column.getSize() }}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -80,7 +91,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  {noResults}
+                  {emptyMessage}
                 </TableCell>
               </TableRow>
             )}
@@ -90,7 +101,7 @@ export function DataTable<TData, TValue>({
 
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredRowModel().rows.length} registro(s)
+          {table.getFilteredRowModel().rows.length} {t("records") || "registro(s)"}
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -99,7 +110,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t("previous")}
           </Button>
           <Button
             variant="outline"
@@ -107,7 +118,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Próximo
+            {t("next")}
           </Button>
         </div>
       </div>

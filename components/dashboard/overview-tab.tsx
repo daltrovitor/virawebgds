@@ -28,9 +28,10 @@ import { createClient } from "@/lib/supabase-client"
 interface OverviewTabProps {
   user: { email: string; name: string }
   onNavigate: (tab: string) => void
+  isDemo?: boolean
 }
 
-export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
+export default function OverviewTab({ user, onNavigate, isDemo = false }: OverviewTabProps) {
   const [stats, setStats] = useState({
     appointmentsToday: 0,
     activePatients: 0,
@@ -47,6 +48,24 @@ export default function OverviewTab({ user, onNavigate }: OverviewTabProps) {
 
   useEffect(() => {
     const loadData = async () => {
+      if (isDemo) {
+        setStats({ appointmentsToday: 5, activePatients: 28, completionRate: 92, growthRate: 15 })
+        setUpcomingAppointments([
+          { id: "1", patient: "Maria Silva", professional: "Dr. João", time: "09:00", status: "scheduled" },
+          { id: "2", patient: "Carlos Mendes", professional: "Dra. Ana", time: "10:30", status: "scheduled" },
+          { id: "3", patient: "Beatriz Lima", professional: "Dr. João", time: "14:00", status: "scheduled" },
+        ])
+        setRecentPatients([
+          { id: "1", name: "Maria Silva", lastVisit: "Hoje", status: "active" },
+          { id: "2", name: "Carlos Mendes", lastVisit: "Ontem", status: "active" },
+          { id: "3", name: "Beatriz Lima", lastVisit: "2 dias atrás", status: "active" },
+        ])
+        setBirthdays([{ id: "1", name: "Ana Oliveira", type: "client", phone: "(11) 99999-0000" }])
+        setHasWatchedTutorial(true)
+        setIsLoading(false)
+        return
+      }
+
       try {
         const [statsData, appointmentsData, patientsData, birthdaysData] = await Promise.all([
           getDashboardStats(),

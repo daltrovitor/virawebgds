@@ -14,7 +14,7 @@ import FinancialChart from "./financial-chart"
 import PendingPaymentsModal from "@/components/financial/pending-payments-modal"
 import { useTranslations } from 'next-intl'
 
-export default function FinancialTab() {
+export default function FinancialTab({ isDemo = false }: { isDemo?: boolean }) {
   const [activeTab, setActiveTab] = useState("payments")
   const [summary, setSummary] = useState({ totalReceived: 0, totalDiscounts: 0, totalPending: 0 })
   const [recentPayments, setRecentPayments] = useState<any[]>([])
@@ -23,6 +23,15 @@ export default function FinancialTab() {
   const t = useTranslations('dashboard.financial')
 
   const loadSummary = async () => {
+    if (isDemo) {
+      setSummary({ totalReceived: 12450.00, totalDiscounts: 450.00, totalPending: 2350.00 })
+      setRecentPayments([
+        { id: "1", patient_name: "Maria Silva", amount: 250.00, status: "paid", payment_date: new Date().toISOString() },
+        { id: "2", patient_name: "Carlos Mendes", amount: 180.00, status: "pending", payment_date: new Date().toISOString() },
+        { id: "3", patient_name: "Beatriz Lima", amount: 300.00, status: "paid", payment_date: new Date().toISOString() },
+      ])
+      return
+    }
     try {
       const s = await getFinancialSummary("monthly")
       const recent = await getRecentPayments(10)

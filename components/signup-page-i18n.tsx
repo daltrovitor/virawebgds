@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { GoogleButton } from "@/components/ui/google-button"
 import { Card } from "@/components/ui/card"
@@ -29,6 +29,11 @@ export default function SignupPage({ onSignup, onLoginClick, onBackClick, onGoog
     const { toast } = useToast()
     const t = useTranslations('auth.signup')
     const tCommon = useTranslations('common')
+    const tTitles = useTranslations('titles')
+
+    useEffect(() => {
+        document.title = tTitles('signup')
+    }, [tTitles])
 
     const getPasswordStrength = (pwd: string) => {
         if (!pwd) return { strength: 0, label: "" }

@@ -89,6 +89,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     const [hasWatchedTutorial, setHasWatchedTutorial] = useState(false)
     const supabase = createClient()
     const t = useTranslations('dashboard')
+    const tTitles = useTranslations('titles')
 
     useEffect(() => {
         loadTutorialStatus()
@@ -145,6 +146,11 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         },
         { id: "settings", label: t('sidebar.settings'), icon: <Settings className="w-5 h-5" /> },
     ]
+
+    useEffect(() => {
+        const sectionName = navItems.find(item => item.id === activeTab)?.label || t('sidebar.overview')
+        document.title = tTitles('dashboard', { section: sectionName })
+    }, [activeTab, tTitles, navItems])
 
     return (
         <div className="min-h-screen bg-background">

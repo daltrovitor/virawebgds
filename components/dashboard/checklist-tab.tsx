@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import { formatDateString } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 
-export default function ChecklistTab() {
+export default function ChecklistTab({ isDemo = false }: { isDemo?: boolean }) {
   const [todos, setTodos] = useState<Todo[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -20,6 +20,14 @@ export default function ChecklistTab() {
   const t = useTranslations('dashboard.checklist')
 
   const load = async () => {
+    if (isDemo) {
+      setTodos([
+        { id: "1", title: "Verificar novos cadastros", completed: false, created_at: new Date().toISOString() } as any,
+        { id: "2", title: "Organizar sala de espera", completed: true, created_at: new Date().toISOString() } as any,
+      ])
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const data = await getTodos()

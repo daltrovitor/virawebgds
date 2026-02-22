@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import AIAssistant from "@/components/ai-assistant"
 import { useTranslations } from "next-intl"
 
-export default function SupportTab() {
+export default function SupportTab({ isDemo = false }: { isDemo?: boolean }) {
   const [tickets, setTickets] = useState<SupportTicket[]>([])
   const [loading, setLoading] = useState(true)
   const [showNewTicket, setShowNewTicket] = useState(false)
@@ -42,6 +42,13 @@ export default function SupportTab() {
   }, [])
 
   const loadData = async () => {
+    if (isDemo) {
+      setPlanType("premium")
+      setHasAIAccess(true)
+      setSupportChannels(["Email", "WhatsApp"])
+      setLoading(false)
+      return
+    }
     try {
       // Fetch current user and then tickets & subscription using browser client
       const { data: { user }, error: userErr } = await supabase.auth.getUser()

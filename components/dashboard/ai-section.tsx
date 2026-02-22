@@ -11,9 +11,10 @@ import { useTranslations } from "next-intl"
 
 interface AISectionProps {
   planType: "basic" | "premium" | "master"
+  isDemo?: boolean
 }
 
-export default function AISection({ planType }: AISectionProps) {
+export default function AISection({ planType, isDemo = false }: AISectionProps) {
   const [showAssistant, setShowAssistant] = useState(false)
   const [hasAccess, setHasAccess] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -21,6 +22,11 @@ export default function AISection({ planType }: AISectionProps) {
 
   useEffect(() => {
     const checkAccess = async () => {
+      if (isDemo) {
+        setHasAccess(true)
+        setLoading(false)
+        return
+      }
       try {
         const plan = await getCurrentPlan()
         setHasAccess(hasViraBotAccess(plan))

@@ -25,7 +25,7 @@ function getEmbedUrl(url: string) {
   return url
 }
 
-export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => void }) {
+export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkWatched?: () => void; isDemo?: boolean }) {
   const [hasWatchedTutorial, setHasWatchedTutorial] = useState(false)
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
@@ -38,6 +38,11 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
   }, [])
 
   const loadTutorialStatus = async () => {
+    if (isDemo) {
+      setHasWatchedTutorial(false)
+      setLoading(false)
+      return
+    }
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -61,6 +66,12 @@ export default function TutorialTab({ onMarkWatched }: { onMarkWatched?: () => v
   }
 
   const markTutorialAsWatched = async () => {
+    if (isDemo) {
+      setHasWatchedTutorial(true)
+      if (onMarkWatched) onMarkWatched()
+      toast({ title: t("toast.success"), description: t("toast.successDesc") })
+      return
+    }
     try {
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       if (userError) {

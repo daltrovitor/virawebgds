@@ -21,7 +21,7 @@ import UsageDashboard from "@/components/usage-dashboard"
 import { createClient } from "@/lib/supabase-client"
 import { useTranslations } from "next-intl"
 
-export default function SettingsTab() {
+export default function SettingsTab({ isDemo = false }: { isDemo?: boolean }) {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [fullName, setFullName] = useState("")
@@ -43,6 +43,8 @@ export default function SettingsTab() {
   }, [])
 
   useEffect(() => {
+    if (isDemo) return
+
     const channel = supabase
       .channel("settings-subscription-updates")
       .on(
@@ -66,9 +68,19 @@ export default function SettingsTab() {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [supabase, toast])
+  }, [supabase, toast, isDemo])
 
   const loadSettings = async () => {
+    if (isDemo) {
+      setFullName("Usuário Demo")
+      setPhone("(11) 99999-9999")
+      setClinicName("Minha Clínica Demo")
+      setEmail("demo@viraweb.com")
+      setCurrentPlan("premium")
+      setViraBotEnabled(true)
+      setLoading(false)
+      return
+    }
     try {
       const [settings, plan, subscription] = await Promise.all([
         getUserSettings(),

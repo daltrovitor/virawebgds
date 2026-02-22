@@ -56,7 +56,11 @@
             "renewOn": "Renova em: {date}",
             "recommendationUnlimited": "Faça upgrade para o plano {plan} para ter {limit} ilimitados!",
             "recommendationIncrease": "Faça upgrade para o plano {plan} para aumentar seu limite para {count} {limit}."
-        }
+        },
+        "viewProfile": "Ver Perfil",
+        "visitor": "Visitante",
+        "noResults": "Nenhum resultado encontrado",
+        "records": "registro(s)"
     },
     "landing": {
         "header": {
@@ -243,7 +247,45 @@
             "subscriptions": "Assinatura",
             "support": "Suporte",
             "tutorial": "Tutorial",
-            "settings": "Configurações"
+            "settings": "Configurações",
+            "exitDemo": "Sair da Demo"
+        },
+        "overview": {
+            "welcome": "Bem-vindo(a),",
+            "summary": "Aqui está um resumo do seu dia na clínica/empresa",
+            "newHere": "Novo por aqui?",
+            "watchTutorial": "Assista ao nosso tutorial para aprender a usar todos os recursos da plataforma.",
+            "buttonTutorial": "Ver Tutorial",
+            "birthdays": "Aniversariantes do Dia! 🎉",
+            "noBirthdays": "Nenhum aniversariante hoje",
+            "client": "Cliente",
+            "professional": "Profissional",
+            "stats": {
+                "appointmentsToday": "Agendamentos Hoje",
+                "activePatients": "Clientes Ativos",
+                "completionRate": "Taxa de Conclusão",
+                "growthMonth": "Crescimento Mensal"
+            },
+            "upcoming": {
+                "title": "Próximos Agendamentos",
+                "scheduled": "Agendado",
+                "completed": "Concluído",
+                "canceled": "Cancelado",
+                "empty": "Nenhum agendamento registrado",
+                "createBtn": "Criar Primeiro Agendamento"
+            },
+            "recentClients": {
+                "title": "Clientes Recentes",
+                "empty": "Nenhum cliente registrado",
+                "addBtn": "Adicionar Cliente"
+            },
+            "quickActions": {
+                "title": "Ações Rápidas",
+                "newAppointment": "Novo Agendamento",
+                "newClient": "Novo Cliente",
+                "reports": "Relatórios",
+                "settings": "Configurações"
+            }
         },
         "ai": {
             "title": "ViraBot IA",
@@ -589,6 +631,17 @@
                     "error": "Erro ao salvar"
                 }
             },
+            "grid": {
+                "search": "Pesquisar cliente...",
+                "period": "Selecionar período",
+                "periods": {
+                    "week": "Última semana",
+                    "month": "Último mês",
+                    "quarter": "Último trimestre",
+                    "year": "Último ano"
+                },
+                "export": "Exportar"
+            },
             "patientFinancialTab": {
                 "title": "Histórico",
                 "columns": {
@@ -597,7 +650,8 @@
                     "discount": "Desconto",
                     "status": "Status",
                     "dueDate": "Vencimento",
-                    "actions": "Ações"
+                    "actions": "Ações",
+                    "patient": "Cliente"
                 },
                 "actions": {
                     "settle": "Registrar pagamento"
@@ -1029,41 +1083,24 @@
                 "saveError": "Erro ao salvar presença"
             }
         },
-        "overview": {
-            "welcome": "Bem-vindo,",
-            "summary": "Aqui está um resumo do seu dia na clínica/empresa",
-            "newHere": "Novo por aqui?",
-            "watchTutorial": "Assista ao nosso tutorial para aprender a usar todas as funcionalidades da plataforma.",
-            "buttonTutorial": "Assistir Tutorial",
-            "birthdays": "Aniversariantes do Dia! 🎉",
-            "noBirthdays": "Nenhum aniversariante hoje",
-            "client": "Cliente",
-            "professional": "Profissional",
-            "stats": {
-                "appointmentsToday": "Agendamentos Hoje",
-                "activePatients": "Clientes Ativos",
-                "completionRate": "Taxa de Conclusão",
-                "growthMonth": "Crescimento Mês"
-            },
-            "upcoming": {
-                "title": "Próximos Agendamentos",
-                "scheduled": "Agendado",
-                "completed": "Concluído",
-                "canceled": "Cancelado",
-                "empty": "Nenhum agendamento cadastrado",
-                "createBtn": "Criar Primeiro Agendamento"
-            },
-            "recentClients": {
-                "title": "Clientes Recentes",
-                "empty": "Nenhum cliente cadastrado",
-                "addBtn": "Adicionar Cliente"
-            },
+        "preview": {
+            "title": "Dashboard Inteligente",
+            "subtitle": "Visualize todas as informações importantes em um único lugar",
+            "welcome": "Bem-vindo ao ViraWeb",
+            "today": "Hoje, {date}",
+            "appointmentsToday": "Agendamentos Hoje",
+            "activeClients": "Clientes Ativos",
+            "avgTime": "Tempo Médio",
+            "completionRate": "Taxa Conclusão",
+            "nextAppointments": "Próximos Agendamentos",
+            "new": "Novo",
+            "confirmed": "Confirmado",
+            "pending": "Pendente",
             "quickActions": {
-                "title": "Ações Rápidas",
                 "newAppointment": "Novo Agendamento",
                 "newClient": "Novo Cliente",
-                "settings": "Configurações",
-                "metrics": "Ver Métricas"
+                "reports": "Relatórios",
+                "settings": "Configurações"
             }
         }
     },
@@ -1128,5 +1165,123 @@
                 "7": "Gerente de conta dedicado"
             }
         }
+    },
+    "demoPage": {
+        "back": "Voltar",
+        "title": "Comparação Completa de Planos",
+        "subtitle": "Veja todas as diferenças entre nossos planos e escolha o melhor para seu negócio",
+        "tabs": {
+            "comparison": "Comparação",
+            "features": "Funcionalidades",
+            "demo": "Demo Interativa"
+        },
+        "popular": "Mais Popular",
+        "selected": "Selecionado",
+        "select": "Selecionar",
+        "feature": "Funcionalidade",
+        "basic": "Básico",
+        "premium": "Premium",
+        "master": "Master",
+        "featuresList": [
+            {
+                "category": "Gerenciamento",
+                "items": [
+                    {
+                        "name": "Clientes",
+                        "basic": "Até 75",
+                        "premium": "Até 500",
+                        "master": "Ilimitado"
+                    },
+                    {
+                        "name": "Profissionais",
+                        "basic": "Até 7",
+                        "premium": "Até 50",
+                        "master": "Ilimitado"
+                    },
+                    {
+                        "name": "Agendamentos",
+                        "basic": "50/mês",
+                        "premium": "500/mês",
+                        "master": "Ilimitado"
+                    }
+                ]
+            },
+            {
+                "category": "Controle e Ferramentas",
+                "items": [
+                    {
+                        "name": "Gestão Financeira",
+                        "basic": "Básica",
+                        "premium": "Completa",
+                        "master": "Completa"
+                    },
+                    {
+                        "name": "Relatórios e Análises",
+                        "basic": "Básicos",
+                        "premium": "Avançados",
+                        "master": "Avançados"
+                    },
+                    {
+                        "name": "Personalização de Temas",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            },
+            {
+                "category": "Produtividade",
+                "items": [
+                    {
+                        "name": "Metas Acompanhadas",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "Checklists e Notas",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "ViraBot IA Assistant",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            },
+            {
+                "category": "Suporte",
+                "items": [
+                    {
+                        "name": "Suporte por Email",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "Suporte WhatsApp",
+                        "basic": false,
+                        "premium": "8h-18h (5 dias)",
+                        "master": "24/7"
+                    },
+                    {
+                        "name": "Suporte Prioritário",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            }
+        ]
+    },
+    "titles": {
+        "landing": "ViraWeb — Gestor de Clientes e Agendamentos",
+        "login": "Login — ViraWeb",
+        "signup": "Cadastre-se — ViraWeb",
+        "demo": "Demo Interativa — ViraWeb",
+        "dashboard": "{section} — Dashboard ViraWeb"
     }
 }

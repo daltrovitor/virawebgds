@@ -9,7 +9,7 @@ import { getTodos, createTodo, updateTodo, toggleTodoComplete, deleteTodo, Todo 
 import { useToast } from "@/hooks/use-toast"
 import { formatDateString } from "@/lib/utils"
 
-export default function TodosTab() {
+export default function TodosTab({ isDemo = false }: { isDemo?: boolean }) {
   const [todos, setTodos] = useState<Todo[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -18,6 +18,15 @@ export default function TodosTab() {
   const { toast } = useToast()
 
   const load = async () => {
+    if (isDemo) {
+      setTodos([
+        { id: "1", title: "Confirmar consultas de amanhã", completed: true, created_at: new Date().toISOString() } as any,
+        { id: "2", title: "Enviar relatório mensal", completed: false, created_at: new Date().toISOString() } as any,
+        { id: "3", title: "Atualizar prontuário Maria", completed: false, created_at: new Date().toISOString() } as any,
+      ])
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const data = await getTodos()

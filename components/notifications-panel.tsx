@@ -14,7 +14,7 @@ import {
   type Notification,
 } from "@/app/actions/notifications"
 
-export default function NotificationsPanel() {
+export default function NotificationsPanel({ isDemo = false }: { isDemo?: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
@@ -24,6 +24,14 @@ export default function NotificationsPanel() {
   const [panelTop, setPanelTop] = useState<number | null>(null)
 
   const loadNotifications = async () => {
+    if (isDemo) {
+      setNotifications([
+        { id: "1", title: "Novo Agendamento", message: "Maria Silva agendou para amanhã.", type: "info", read: false, created_at: new Date().toISOString() } as any,
+        { id: "2", title: "Pagamento Recebido", message: "Recebido R$ 250,00 de João Santos.", type: "success", read: true, created_at: new Date().toISOString() } as any,
+      ])
+      setUnreadCount(1)
+      return
+    }
     try {
       const [notifs, count] = await Promise.all([getNotifications(), getUnreadCount()])
       setNotifications(notifs)
@@ -35,10 +43,11 @@ export default function NotificationsPanel() {
 
   useEffect(() => {
     loadNotifications()
+    if (isDemo) return
     // Poll for new notifications every 30 seconds
     const interval = setInterval(loadNotifications, 30000)
     return () => clearInterval(interval)
-  }, [])
+  }, [isDemo])
 
   useEffect(() => {
     if (isOpen && buttonRef.current) {
