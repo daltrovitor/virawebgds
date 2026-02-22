@@ -10,13 +10,18 @@ import LanguageToggle from "@/components/language-toggle"
 
 interface OnboardingPlansProps {
     onSelectPlan?: (plan: "basic" | "premium" | "master") => void
+    onLogout?: () => void
     isLoading?: boolean
 }
 
-export default function OnboardingPlans({ onSelectPlan, isLoading }: OnboardingPlansProps) {
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react"
+
+export default function OnboardingPlans({ onSelectPlan, onLogout, isLoading }: OnboardingPlansProps) {
     const [selectedPlan, setSelectedPlan] = useState<"basic" | "premium" | "master" | null>(null)
     const t = useTranslations('onboarding')
     const tPricing = useTranslations('landing.pricing')
+    const tCommon = useTranslations('dashboard')
 
     const tProducts = useTranslations('products')
 
@@ -39,8 +44,18 @@ export default function OnboardingPlans({ onSelectPlan, isLoading }: OnboardingP
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background flex items-center justify-center p-4">
             <div className="w-full max-w-6xl">
-                {/* Language Toggle */}
-                <div className="flex justify-end mb-4">
+                {/* Header Actions */}
+                <div className="flex justify-end items-center gap-4 mb-8">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onLogout}
+                        className="text-foreground/70 hover:text-destructive flex items-center gap-2 px-3 hover:bg-destructive/10 transition-colors"
+                    >
+                        <LogOut className="w-4 h-4" />
+                        <span className="font-medium uppercase text-xs tracking-wider">{tCommon('header.logout')}</span>
+                    </Button>
+                    <div className="h-6 w-px bg-border" /> {/* Separator */}
                     <LanguageToggle variant="compact" />
                 </div>
 
@@ -94,7 +109,7 @@ export default function OnboardingPlans({ onSelectPlan, isLoading }: OnboardingP
                                     : "bg-primary text-primary-foreground hover:bg-primary/90"
                                     }`}
                             >
-                                {t('selectPlan')} {plan.name}
+                                {plan.name}
                             </CheckoutButton>
 
                             <div className="space-y-4">

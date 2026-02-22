@@ -338,7 +338,7 @@ export default function Home() {
                 />
             )}
             {currentPage === "onboarding" && user && (
-                <OnboardingPlans onSelectPlan={handleSelectPlan} isLoading={isProcessing} />
+                <OnboardingPlans onSelectPlan={handleSelectPlan} onLogout={handleLogout} isLoading={isProcessing} />
             )}
             {currentPage === "dashboard" && user && subscription && (
                 <Dashboard
