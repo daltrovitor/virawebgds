@@ -83,7 +83,7 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
     },
     {
       accessorKey: "due_date",
-      header: t("columns.dueDate"),
+      header: () => <div className="min-w-[100px]">{t("columns.dueDate")}</div>,
       cell: ({ row }) => {
         const date = row.getValue("due_date") as string
         return date ? format(new Date(date), "dd/MM/yyyy", { locale: dateLocale }) : "-"
@@ -91,7 +91,7 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
     },
     {
       id: 'actions',
-      header: () => <div className="text-right pr-4">{t("columns.actions")}</div>,
+      header: () => <div className="text-right pr-4 min-w-[160px]">{t("columns.actions")}</div>,
       cell: ({ row }) => {
         const status = row.getValue('status') as string
         return (
@@ -111,8 +111,9 @@ export function PatientFinancialTab({ patientId, payments, onOpenPaymentModal }:
           </div>
         )
       },
-      size: 180,
+      size: 160,
       minSize: 160,
+      maxSize: 160,
     }
   ]
 

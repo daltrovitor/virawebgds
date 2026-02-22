@@ -10,8 +10,8 @@ import { recordPayment, getPendingPaymentsForPatient, markPendingPaymentAsPaid }
 import { useToast } from "@/hooks/use-toast"
 import { mapDbErrorToUserMessage } from "@/lib/error-messages"
 import { useTranslations } from "next-intl"
-
-
+import { LogOut } from "lucide-react"
+import { useAuth } from "@/hooks/use-auth"
 interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -37,8 +37,15 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
   // recurrence simplified: only allow monthly recurrence on a given day
   const [recurrenceDay, setRecurrenceDay] = useState<number>(Number(new Date().toISOString().slice(8, 10)) || 1)
   const { toast } = useToast()
+  const { signOut } = useAuth()
   const t = useTranslations("dashboard.financial.paymentModal")
   const tCommon = useTranslations("dashboard.financial")
+
+  const handleLogout = async () => {
+    await signOut()
+    onOpenChange(false)
+    window.location.href = "/" // Force redirect to landing
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -260,13 +267,19 @@ export default function PaymentModal({ open, onOpenChange, onSaved, defaultPatie
             )}
           </div>
 
-          <div className="flex gap-2 justify-end mt-4">
-            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
-              {t("cancel")}
+          <div className="flex gap-2 justify-between mt-4">
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-destructive gap-2">
+              <LogOut className="w-4 h-4" />
+              {tCommon("header.logout") || "Sair da conta"}
             </Button>
-            <Button onClick={handleSubmit} disabled={loading}>
-              {loading ? t("saving") : t("save")}
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
+                {t("cancel")}
+              </Button>
+              <Button onClick={handleSubmit} disabled={loading}>
+                {loading ? t("saving") : t("save")}
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
