@@ -284,7 +284,8 @@
                 "newAppointment": "Novo Agendamento",
                 "newClient": "Novo Cliente",
                 "reports": "Relatórios",
-                "settings": "Configurações"
+                "settings": "Configurações",
+                "metrics": "Ver Métricas"
             }
         },
         "ai": {
@@ -320,6 +321,7 @@
             "chat": {
                 "welcome": "Olá! Sou o ViraBot, seu assistente IA do ViraWeb. Como posso ajudá-lo hoje?",
                 "placeholder": "Digite sua pergunta...",
+                "title": "ViraBot IA",
                 "online": "Online",
                 "premiumTitle": "ViraBot Premium",
                 "premiumMessage": "O ViraBot está disponível apenas para planos Premium e Master.",
@@ -567,6 +569,9 @@
         },
         "financial": {
             "title": "Financeiro",
+            "header": {
+                "logout": "Sair da conta"
+            },
             "tabs": {
                 "finance": "Financeiro",
                 "attendance": "Presenças"
@@ -842,7 +847,10 @@
                         "Gestão básica de clientes",
                         "Agendamentos limitados",
                         "Relatórios básicos",
-                        "Suporte via email"
+                        "Suporte via email",
+                        "",
+                        "",
+                        ""
                     ]
                 },
                 "premium": {

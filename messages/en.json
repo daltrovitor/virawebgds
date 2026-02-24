@@ -320,6 +320,7 @@
             "chat": {
                 "welcome": "Hello! I am ViraBot, your ViraWeb AI assistant. How can I help you today?",
                 "placeholder": "Type your question...",
+                "title": "ViraBot AI",
                 "online": "Online",
                 "premiumTitle": "ViraBot Premium",
                 "premiumMessage": "ViraBot is available only for Premium and Master plans.",
@@ -567,6 +568,9 @@
         },
         "financial": {
             "title": "Financial",
+            "header": {
+                "logout": "Logout"
+            },
             "tabs": {
                 "finance": "Financial",
                 "attendance": "Attendance"
@@ -1008,7 +1012,10 @@
                         "Basic client management",
                         "Limited appointments",
                         "Basic reports",
-                        "Email support"
+                        "Email support",
+                        "",
+                        "",
+                        ""
                     ]
                 },
                 "premium": {
