@@ -25,18 +25,29 @@ export default function NotesTab({ isDemo = false }: { isDemo?: boolean }) {
   const t = useTranslations('dashboard.notes')
 
   useEffect(() => {
+    if (isDemo) {
+      const loadDemoData = () => {
+        const stored = sessionStorage.getItem('demo_notes')
+        if (stored) {
+          setNotes(JSON.parse(stored))
+        } else {
+          setNotes([
+            { id: "1", title: "Nota sobre paciente Maria", content: "Progresso positivo na última sessão.", created_at: new Date().toISOString() } as any,
+            { id: "2", title: "Lembrete de follow-up", content: "Ligar para Carlos na sexta.", created_at: new Date().toISOString() } as any,
+          ])
+        }
+        setLoading(false)
+      }
+
+      loadDemoData()
+      window.addEventListener('demoDataUpdated', loadDemoData)
+      return () => window.removeEventListener('demoDataUpdated', loadDemoData)
+    }
     loadNotes()
   }, [])
 
   const loadNotes = async () => {
-    if (isDemo) {
-      setNotes([
-        { id: "1", title: "Nota sobre paciente Maria", content: "Progresso positivo na última sessão.", created_at: new Date().toISOString() } as any,
-        { id: "2", title: "Lembrete de follow-up", content: "Ligar para Carlos na sexta.", created_at: new Date().toISOString() } as any,
-      ])
-      setLoading(false)
-      return
-    }
+    if (isDemo) return
     try {
       const data = await getUserNotes()
       setNotes(data)

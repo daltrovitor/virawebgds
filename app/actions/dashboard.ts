@@ -203,19 +203,18 @@ export async function getTodayBirthdays() {
       .eq("user_id", user.id)
       .not("birthday", "is", null);
 
-    // Busca profissionais
+    // Busca profissionais (tabela NÃO tem coluna birthday)
     const { data: professionals, error: professionalsError } = await supabase
       .from("professionals")
-      .select("id, name, phone, birthday")
-      .eq("user_id", user.id)
-      .not("birthday", "is", null);
+      .select("id, name, phone")
+      .eq("user_id", user.id);
 
     if (patientsError) console.error("Erro buscando clientes:", patientsError);
     if (professionalsError) console.error("Erro buscando profissionais:", professionalsError);
 
     const allPeople = [
       ...(patients || []).map((p) => ({ ...p, type: "client" as const })),
-      ...(professionals || []).map((p) => ({ ...p, type: "professional" as const })),
+      ...(professionals || []).map((p) => ({ ...p, birthday: null as string | null, type: "professional" as const })),
     ];
 
     // Corrige a leitura da data para evitar erro de UTC → local

@@ -46,7 +46,6 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
     cpf: "",
     date_of_birth: "",
     birthday: "",
-    address: "",
     notes: "",
   })
   const { toast } = useToast()
@@ -57,15 +56,25 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
 
   useEffect(() => {
     if (isDemo) {
-      setPatients([
-        { id: "1", name: "Maria Silva", email: "maria@email.com", phone: "(11) 99999-1111", status: "active", created_at: new Date().toISOString() } as any,
-        { id: "2", name: "Carlos Mendes", email: "carlos@email.com", phone: "(11) 99999-2222", status: "active", created_at: new Date().toISOString() } as any,
-        { id: "3", name: "Beatriz Lima", email: "beatriz@email.com", phone: "(11) 99999-3333", status: "active", created_at: new Date().toISOString() } as any,
-        { id: "4", name: "Rafael Costa", email: "rafael@email.com", phone: "(11) 99999-4444", status: "inactive", created_at: new Date().toISOString() } as any,
-      ])
-      setCurrentPlan("premium")
-      setLoading(false)
-      return
+      const loadDemoData = () => {
+        const stored = sessionStorage.getItem('demo_patients')
+        if (stored) {
+          setPatients(JSON.parse(stored))
+        } else {
+          setPatients([
+            { id: "1", name: "Maria Silva", email: "maria@email.com", phone: "(11) 99999-1111", status: "active", created_at: new Date().toISOString() } as any,
+            { id: "2", name: "Carlos Mendes", email: "carlos@email.com", phone: "(11) 99999-2222", status: "active", created_at: new Date().toISOString() } as any,
+            { id: "3", name: "Beatriz Lima", email: "beatriz@email.com", phone: "(11) 99999-3333", status: "active", created_at: new Date().toISOString() } as any,
+            { id: "4", name: "Rafael Costa", email: "rafael@email.com", phone: "(11) 99999-4444", status: "inactive", created_at: new Date().toISOString() } as any,
+          ])
+        }
+        setCurrentPlan("premium")
+        setLoading(false)
+      }
+
+      loadDemoData()
+      window.addEventListener('demoDataUpdated', loadDemoData)
+      return () => window.removeEventListener('demoDataUpdated', loadDemoData)
     }
     loadPatients()
     loadPlan()
@@ -152,7 +161,7 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
       }
 
       await loadPatients()
-      setFormData({ name: "", email: "", phone: "", cpf: "", date_of_birth: "", birthday: "", address: "", notes: "" })
+      setFormData({ name: "", email: "", phone: "", cpf: "", date_of_birth: "", birthday: "", notes: "" })
       setShowForm(false)
       setEditingId(null)
     } catch (error) {
@@ -182,7 +191,6 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
       cpf: patient.cpf || "",
       date_of_birth: patient.date_of_birth || "",
       birthday: patient.birthday || "",
-      address: patient.address || "",
       notes: patient.notes || "",
     })
     setEditingId(patient.id)
@@ -273,7 +281,6 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
               cpf: "",
               date_of_birth: "",
               birthday: "",
-              address: "",
               notes: "",
             })
             setShowForm(!showForm)
@@ -327,17 +334,12 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
               onChange={(e) => setFormData({ ...formData, birthday: e.target.value, date_of_birth: e.target.value })}
               className="bg-background"
             />
-            <Input
-              placeholder={t('form.address')}
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              className="bg-background"
-            />
-            <Input
+            <textarea
               placeholder={t('form.notes')}
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="sm:col-span-2 bg-background"
+              className="sm:col-span-2 bg-background border border-input rounded-md px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              rows={4}
             />
           </div>
           <div className="flex gap-2 mt-4">
@@ -449,7 +451,6 @@ export default function PatientsTab({ isDemo = false }: { isDemo?: boolean }) {
                     )}
                   </div>
 
-                  {patient.address && <p className="text-sm text-muted-foreground mb-2">{t('form.address')}: {patient.address}</p>}
                   {patient.notes && <p className="text-sm text-muted-foreground italic">{t('form.notes')}: {patient.notes}</p>}
                 </div>
 

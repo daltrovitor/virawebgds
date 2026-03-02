@@ -247,8 +247,161 @@
             "subscriptions": "Assinatura",
             "support": "Suporte",
             "tutorial": "Tutorial",
+            "import": "Importar dados",
+            "new": "Novo",
             "settings": "Configurações",
             "exitDemo": "Sair da Demo"
+        },
+        "importTab": {
+            "title": "Importar dados",
+            "subtitle": "Escaneie imagens, PDFs ou planilhas para adicionar clientes automaticamente ao banco de dados.",
+            "infoBanner": "Esta é uma funcionalidade nova e <strong>não está incluída no tutorial em vídeo</strong> atual.",
+            "entitySelect": "Tipo de dados a importar",
+            "entities": {
+                "clients": "Clientes",
+                "professionals": "Profissionais",
+                "invoices": "Financeiro (Faturas)",
+                "notes": "Notas",
+                "checklist": "Checklist",
+                "goals": "Metas",
+                "appointments": "Agendamentos"
+            },
+            "dragUpload": {
+                "drag": "Solte o arquivo aqui",
+                "drop": "Arraste e solte um arquivo",
+                "orClick": "ou clique para selecionar do seu computador",
+                "images": "Imagens",
+                "pdf": "PDF",
+                "csv": "CSV",
+                "xlsx": "XLSX",
+                "maxSize": "Tamanho máximo: 10MB"
+            },
+            "pastingTitle": "Colar Texto Manualmente",
+            "pastingPlaceholder": "Cole aqui o conteúdo CSV, registros em texto ou qualquer dado...",
+            "processText": "Processar Texto",
+            "orPasteText": "Ou cole texto manualmente",
+            "processing": "Processando dados...",
+            "uploading": "Enviando arquivo...",
+            "status": {
+                "processing": "Processando dados...",
+                "uploading": "Enviando arquivo...",
+                "ocr": "Lendo imagem (OCR)...",
+                "pdf": "Extraindo conteúdo do PDF...",
+                "generic": "Processando arquivo...",
+                "wait": "Isso pode levar alguns segundos..."
+            },
+            "errorTitle": "Erro ao importar",
+            "tryAgain": "Tentar novamente",
+            "entityMessages": {
+                "clients": {
+                    "selected": "{selected} de {total} clientes selecionados",
+                    "saving": "Salvando clientes...",
+                    "success": "{inserted} de {total} clientes importados com sucesso.",
+                    "error": "{count} clientes não puderam ser importados.",
+                    "noSelection": "Nenhum cliente selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um cliente para importar."
+                },
+                "invoices": {
+                    "selected": "{selected} de {total} faturas selecionadas",
+                    "saving": "Salvando faturas...",
+                    "success": "{inserted} de {total} faturas importadas com sucesso.",
+                    "error": "{count} faturas não puderam ser importadas.",
+                    "noSelection": "Nenhuma fatura selecionada",
+                    "selectAtLeastOne": "Selecione pelo menos uma fatura para importar."
+                },
+                "professionals": {
+                    "selected": "{selected} de {total} profissionais selecionados",
+                    "saving": "Salvando profissionais...",
+                    "success": "{inserted} de {total} profissionais importados com sucesso.",
+                    "error": "{count} profissionais não puderam ser importados.",
+                    "noSelection": "Nenhum profissional selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um profissional para importar."
+                },
+                "notes": {
+                    "selected": "{selected} de {total} notas selecionadas",
+                    "saving": "Salvando notas...",
+                    "success": "{inserted} de {total} notas importadas com sucesso.",
+                    "error": "{count} notas não puderam ser importadas.",
+                    "noSelection": "Nenhuma nota selecionada",
+                    "selectAtLeastOne": "Selecione pelo menos uma nota para importar."
+                },
+                "checklist": {
+                    "selected": "{selected} de {total} itens selecionados",
+                    "saving": "Salvando itens...",
+                    "success": "{inserted} de {total} itens importados com sucesso.",
+                    "error": "{count} itens não puderam ser importados.",
+                    "noSelection": "Nenhum item selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um item para importar."
+                },
+                "goals": {
+                    "selected": "{selected} de {total} metas selecionadas",
+                    "saving": "Salvando metas...",
+                    "success": "{inserted} de {total} metas importadas com sucesso.",
+                    "error": "{count} metas não puderam ser importadas.",
+                    "noSelection": "Nenhuma meta selecionada",
+                    "selectAtLeastOne": "Selecione pelo menos uma meta para importar."
+                },
+                "appointments": {
+                    "selected": "{selected} de {total} agendamentos selecionados",
+                    "saving": "Salvando agendamentos...",
+                    "success": "{inserted} de {total} agendamentos importados com sucesso.",
+                    "error": "{count} agendamentos não puderam ser importados.",
+                    "noSelection": "Nenhum agendamento selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um agendamento para importar."
+                }
+            },
+            "preview": {
+                "title": "Pré-visualização",
+                "selectAll": "Selecionar todos",
+                "deselectAll": "Desmarcar todos",
+                "cancel": "Cancelar",
+                "columns": {
+                    "name": "Nome",
+                    "email": "Email",
+                    "phone": "Telefone",
+                    "company": "Empresa",
+                    "cpf": "CPF",
+                    "birthDate": "Data de Nascimento",
+                    "specialty": "Especialidade",
+                    "patient": "Cliente",
+                    "professional": "Profissional",
+                    "date": "Data",
+                    "hour": "Hora",
+                    "duration": "Duração (min)",
+                    "title": "Título",
+                    "content": "Conteúdo",
+                    "description": "Descrição",
+                    "category": "Categoria",
+                    "deadline": "Prazo",
+                    "targetValue": "Valor Alvo",
+                    "currentValue": "Valor Atual"
+                }
+            },
+            "confirmBtn": "Confirmar importação ({count})",
+            "savingDesc": "Por favor, aguarde enquanto os dados são importados.",
+            "successTitle": "Importação concluída!",
+            "errors": "Erros ({count}):",
+            "errorMsgs": {
+                "invalidFormat": "Formato inválido. Use JPG/PNG, PDF, CSV ou XLSX.",
+                "fileTooLarge": "Arquivo muito grande. Máx: 10MB.",
+                "noItems": "Nenhum item detectado (Verifique o formato do texto).",
+                "generic": "Erro ao processar.",
+                "unauthorized": "Usuário não autenticado",
+                "notImplemented": "Importação para '{entity}' não implementada no frontend."
+            },
+            "importMore": "Importar mais dados",
+            "defaults": {
+                "noName": "Sem nome",
+                "noTitle": "Sem título",
+                "importedNote": "Importado do arquivo.",
+                "general": "Geral",
+                "unit": "unidade",
+                "unknown": "Desconhecido"
+            },
+            "toast": {
+                "success": "Importação concluída!",
+                "errorTitle": "Alguns erros ocorreram"
+            }
         },
         "overview": {
             "welcome": "Bem-vindo(a),",

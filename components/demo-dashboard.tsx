@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Menu, X, Calendar, Users, BarChart3, Home,
-    CreditCard, List, Sparkles, Target, Settings, HeadphonesIcon, StickyNote, PlayCircle, LogOut
+    CreditCard, List, Sparkles, Target, Settings, HeadphonesIcon, StickyNote, PlayCircle, LogOut, Upload
 } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import Image from "next/image"
@@ -23,24 +23,36 @@ import NotesTab from "./dashboard/notes-tab"
 import ChecklistTab from "./dashboard/checklist-tab"
 import SupportTab from "./dashboard/support-tab"
 import TutorialTab from "./dashboard/tutorial-tab"
+import ImportTab from "./dashboard/import-tab"
 import SettingsTab from "./dashboard/settings-tab"
 import ThemeSettings from "./dashboard/theme-settings"
 import SubscriptionsTab from "./dashboard/subscriptions-tab"
 import NotificationsPanel from "./notifications-panel"
 
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Badge } from "@/components/ui/badge"
+
 export default function DemoDashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(true)
     const [activeTab, setActiveTab] = useState("overview")
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false)
     const tSidebar = useTranslations('dashboard.sidebar')
     const tCommon = useTranslations('common')
+    const tImport = useTranslations('dashboard.importTab')
 
     const menuItems = [
         { id: "overview", label: tSidebar('overview'), icon: <Home className="w-5 h-5" /> },
+        { id: "import", label: tSidebar('import'), icon: <Upload className="w-5 h-5" /> },
         { id: "notes", label: tSidebar('notes'), icon: <StickyNote className="w-5 h-5" /> },
         { id: "checklist", label: tSidebar('checklist'), icon: <List className="w-5 h-5" /> },
         { id: "ai", label: tSidebar('ai'), icon: <Sparkles className="w-5 h-5 text-purple-500" /> },
         { id: "goals", label: tSidebar('goals'), icon: <Target className="w-5 h-5" /> },
-        { id: "appointments", label: tSidebar('appointments'), icon: <Calendar className="w-5 h-5" /> },
         { id: "patients", label: tSidebar('patients'), icon: <Users className="w-5 h-5" /> },
         { id: "financial", label: tSidebar('financial'), icon: <CreditCard className="w-5 h-5" /> },
         { id: "professionals", label: tSidebar('professionals'), icon: <Users className="w-5 h-5" /> },
@@ -51,11 +63,41 @@ export default function DemoDashboard() {
         { id: "settings", label: tSidebar('settings'), icon: <Settings className="w-5 h-5" /> },
     ]
 
+    const handleImportDemoSuccess = (entity: string, items: any[]) => {
+        // Map entity to storage key
+        const storageKeys: Record<string, string> = {
+            'clients': 'demo_patients',
+            'professionals': 'demo_professionals',
+            'notes': 'demo_notes',
+            'checklist': 'demo_todos',
+            'goals': 'demo_goals'
+        }
+
+        const key = storageKeys[entity]
+        if (key) {
+            const existing = JSON.parse(sessionStorage.getItem(key) || '[]')
+            const newItems = items.map(it => ({
+                ...it,
+                id: Math.random().toString(36).substr(2, 9),
+                created_at: new Date().toISOString(),
+                // Map some fields if necessary (clients use 'name' instead of 'nome' in DB but 'nome' in extraction)
+                name: it.nome || it.name,
+                status: it.status || 'active'
+            }))
+            sessionStorage.setItem(key, JSON.stringify([...newItems, ...existing]))
+
+            // Trigger update event for tabs
+            window.dispatchEvent(new Event('demoDataUpdated'))
+        }
+
+        setTimeout(() => setIsImportModalOpen(false), 2000)
+    }
+
     const renderTab = () => {
         const props = { isDemo: true }
         switch (activeTab) {
             case "overview": return <OverviewTab user={{ name: tCommon('visitor'), email: "demo@viraweb.com" }} onNavigate={setActiveTab} {...props} />
-            case "appointments": return <AppointmentsTab {...props} />
+            case "import": return <ImportTab isDemo={true} onImportSuccess={handleImportDemoSuccess} />
             case "patients": return <PatientsTab {...props} />
             case "professionals": return <ProfessionalsTab {...props} />
             case "financial": return <FinancialTab {...props} />
@@ -116,11 +158,17 @@ export default function DemoDashboard() {
                         <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)} className="sm:hidden">
                             <Menu className="w-5 h-5" />
                         </Button>
-                        <h2 className="text-xl font-bold text-foreground">
-                            {menuItems.find(i => i.id === activeTab)?.label}
-                        </h2>
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-xl font-bold text-foreground">
+                                {menuItems.find(i => i.id === activeTab)?.label}
+                            </h2>
+                            <Badge variant="outline" className="hidden sm:flex bg-primary/10 text-primary border-primary/20 animate-pulse">
+                                Modo Demonstração
+                            </Badge>
+                        </div>
                     </div>
                     <div className="flex items-center gap-2 sm:gap-4">
+
                         <NotificationsPanel isDemo={true} />
                         <LanguageToggle />
                         <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">

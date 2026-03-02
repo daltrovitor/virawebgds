@@ -247,8 +247,157 @@
             "subscriptions": "Subscription",
             "support": "Support",
             "tutorial": "Tutorial",
+            "import": "Import data",
+            "new": "New",
             "settings": "Settings",
             "exitDemo": "Exit Demo"
+        },
+        "importTab": {
+            "title": "Import data",
+            "subtitle": "Scan images, PDFs, or spreadsheets to automatically add clients to the database.",
+            "infoBanner": "This is a new feature and <strong>is not included in the current video tutorial</strong>.",
+            "entitySelect": "Type of data to import",
+            "entities": {
+                "clients": "Clients",
+                "professionals": "Professionals",
+                "invoices": "Financial (Invoices)",
+                "notes": "Notes",
+                "checklist": "Checklist",
+                "goals": "Goals",
+                "appointments": "Appointments"
+            },
+            "dragUpload": {
+                "drag": "Drop the file here",
+                "drop": "Drag and drop a file",
+                "orClick": "or click to select from your computer",
+                "images": "Images",
+                "pdf": "PDF",
+                "csv": "CSV",
+                "xlsx": "XLSX",
+                "maxSize": "Max size: 10MB"
+            },
+            "processing": "Processing data...",
+            "uploading": "Uploading file...",
+            "status": {
+                "processing": "Processing data...",
+                "uploading": "Uploading file...",
+                "ocr": "Reading image (OCR)...",
+                "pdf": "Extracting contents from PDF...",
+                "generic": "Processing file...",
+                "wait": "This may take a few seconds..."
+            },
+            "errorTitle": "Import error",
+            "tryAgain": "Try again",
+            "entityMessages": {
+                "clients": {
+                    "selected": "{selected} of {total} clients selected",
+                    "saving": "Saving clients...",
+                    "success": "{inserted} of {total} clients successfully imported.",
+                    "error": "{count} clients could not be imported.",
+                    "noSelection": "No client selected",
+                    "selectAtLeastOne": "Select at least one client to import."
+                },
+                "invoices": {
+                    "selected": "{selected} of {total} invoices selected",
+                    "saving": "Saving invoices...",
+                    "success": "{inserted} of {total} invoices successfully imported.",
+                    "error": "{count} invoices could not be imported.",
+                    "noSelection": "No invoice selected",
+                    "selectAtLeastOne": "Select at least one invoice to import."
+                },
+                "professionals": {
+                    "selected": "{selected} of {total} professionals selected",
+                    "saving": "Saving professionals...",
+                    "success": "{inserted} of {total} professionals successfully imported.",
+                    "error": "{count} professionals could not be imported.",
+                    "noSelection": "No professional selected",
+                    "selectAtLeastOne": "Select at least one professional to import."
+                },
+                "notes": {
+                    "selected": "{selected} of {total} notes selected",
+                    "saving": "Saving notes...",
+                    "success": "{inserted} of {total} notes successfully imported.",
+                    "error": "{count} notes could not be imported.",
+                    "noSelection": "No note selected",
+                    "selectAtLeastOne": "Select at least one note to import."
+                },
+                "checklist": {
+                    "selected": "{selected} of {total} items selected",
+                    "saving": "Saving items...",
+                    "success": "{inserted} of {total} items successfully imported.",
+                    "error": "{count} items could not be imported.",
+                    "noSelection": "No item selected",
+                    "selectAtLeastOne": "Select at least one item to import."
+                },
+                "goals": {
+                    "selected": "{selected} of {total} goals selected",
+                    "saving": "Saving goals...",
+                    "success": "{inserted} of {total} goals successfully imported.",
+                    "error": "{count} goals could not be imported.",
+                    "noSelection": "No goal selected",
+                    "selectAtLeastOne": "Select at least one goal to import."
+                },
+                "appointments": {
+                    "selected": "{selected} of {total} appointments selected",
+                    "saving": "Saving appointments...",
+                    "success": "{inserted} of {total} appointments successfully imported.",
+                    "error": "{count} appointments could not be imported.",
+                    "noSelection": "No appointment selected",
+                    "selectAtLeastOne": "Select at least one appointment to import."
+                }
+            },
+            "preview": {
+                "title": "Preview",
+                "selectAll": "Select all",
+                "deselectAll": "Deselect all",
+                "cancel": "Cancel",
+                "columns": {
+                    "name": "Name",
+                    "email": "Email",
+                    "phone": "Phone",
+                    "company": "Company",
+                    "cpf": "CPF/ID",
+                    "birthDate": "Date of Birth",
+                    "specialty": "Specialty",
+                    "patient": "Client",
+                    "professional": "Professional",
+                    "date": "Date",
+                    "hour": "Hour",
+                    "duration": "Duration (min)",
+                    "title": "Title",
+                    "content": "Content",
+                    "description": "Description",
+                    "category": "Category",
+                    "deadline": "Deadline",
+                    "targetValue": "Target Value",
+                    "currentValue": "Current Value"
+                }
+            },
+            "confirmBtn": "Confirm import ({count})",
+            "savingDesc": "Please wait while the data is imported.",
+            "successTitle": "Import Complete!",
+            "errors": "Errors ({count}):",
+            "errorMsgs": {
+                "invalidFormat": "Invalid format. Use JPG/PNG, PDF, CSV or XLSX.",
+                "fileTooLarge": "File too large. Max: 10MB.",
+                "noItems": "No items detected (Check text format).",
+                "generic": "Error processing.",
+                "unauthorized": "User not authenticated",
+                "notImplemented": "Import for '{entity}' not implemented in frontend."
+            },
+            "importMore": "Import more data",
+            "defaults": {
+                "noName": "No name",
+                "noTitle": "No title",
+                "importedNote": "Imported from file.",
+                "general": "General",
+                "unit": "unit",
+                "unknown": "Unknown"
+            },
+            "toast": {
+                "success": "Import Complete!",
+                "errorTitle": "Some errors occurred"
+            }
         },
         "overview": {
             "welcome": "Welcome,",
@@ -283,6 +432,7 @@
                 "title": "Quick Actions",
                 "newAppointment": "New Appointment",
                 "newClient": "New Client",
+                "reports": "Reports",
                 "settings": "Settings",
                 "metrics": "View Metrics"
             }

@@ -21,7 +21,8 @@ import {
     StickyNote,
     PlayCircle,
     AlertCircle,
-    Loader2
+    Loader2,
+    Upload,
 } from "lucide-react"
 
 import dynamic from 'next/dynamic'
@@ -45,8 +46,10 @@ const SettingsTab = dynamic(() => import("./dashboard/settings-tab"), { loading:
 const SupportTab = dynamic(() => import("./dashboard/support-tab"), { loading: () => <TabLoading /> })
 const NotesTab = dynamic(() => import("./dashboard/notes-tab"), { loading: () => <TabLoading /> })
 const TutorialTab = dynamic(() => import("./dashboard/tutorial-tab"), { loading: () => <TabLoading /> })
+const ImportTab = dynamic(() => import("./dashboard/import-tab"), { loading: () => <TabLoading /> })
 const NotificationsPanel = dynamic(() => import("./notifications-panel"), { ssr: false })
 const TutorialModal = dynamic(() => import("./tutorial-modal"), { ssr: false })
+const ImportOnboardingModal = dynamic(() => import("./import-onboarding-modal"), { ssr: false })
 const ThemeSettings = dynamic(() => import("./dashboard/theme-settings"), { ssr: false })
 
 function TabLoading() {
@@ -87,12 +90,16 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     const [activeTab, setActiveTab] = useState("overview")
     const [showTutorial, setShowTutorial] = useState(isNewUser)
     const [hasWatchedTutorial, setHasWatchedTutorial] = useState(false)
+    const [showImportOnboarding, setShowImportOnboarding] = useState(false)
+    const [hasSeenImportFeature, setHasSeenImportFeature] = useState(true)
+    const [hasClickedImport, setHasClickedImport] = useState(false)
     const supabase = createClient()
     const t = useTranslations('dashboard')
     const tTitles = useTranslations('titles')
 
     useEffect(() => {
         loadTutorialStatus()
+        loadImportFeatureStatus()
     }, [])
 
     const loadTutorialStatus = async () => {
@@ -112,6 +119,49 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         }
     }
 
+    const loadImportFeatureStatus = async () => {
+        try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser()
+            if (!currentUser) return
+
+            const { data } = await supabase
+                .from('user_settings')
+                .select('has_seen_import_feature')
+                .eq('user_id', currentUser.id)
+                .maybeSingle()
+
+            const seen = data?.has_seen_import_feature ?? false
+            setHasSeenImportFeature(seen)
+            setHasClickedImport(seen)
+
+            if (!seen) {
+                setTimeout(() => {
+                    setShowImportOnboarding(true)
+                }, 1500)
+            }
+        } catch (error) {
+            console.error('Error loading import feature status:', error)
+        }
+    }
+
+    const dismissImportOnboarding = async () => {
+        setHasSeenImportFeature(true)
+        try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser()
+            if (!currentUser) return
+
+            await supabase
+                .from('user_settings')
+                .upsert({
+                    user_id: currentUser.id,
+                    has_seen_import_feature: true,
+                    updated_at: new Date().toISOString(),
+                }, { onConflict: 'user_id' })
+        } catch (error) {
+            console.error('Error updating import feature status:', error)
+        }
+    }
+
     const navItems = [
         {
             id: "overview",
@@ -122,6 +172,13 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                     <AlertCircle className="w-4 h-4 text-primary animate-pulse" />
                 </div>
             ) : null
+        },
+        {
+            id: "import",
+            label: t('sidebar.import'),
+            icon: <Upload className="w-5 h-5" />,
+            badge: t('sidebar.new'),
+            pulsing: !hasClickedImport,
         },
         { id: "notes", label: t('sidebar.notes'), icon: <StickyNote className="w-5 h-5" /> },
         { id: "checklist", label: t('sidebar.checklist'), icon: <List className="w-5 h-5" /> },
@@ -155,6 +212,15 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     return (
         <div className="min-h-screen bg-background">
             <TutorialModal open={showTutorial} onOpenChange={setShowTutorial} />
+            <ImportOnboardingModal
+                open={showImportOnboarding}
+                onOpenChange={setShowImportOnboarding}
+                onNavigateToImport={() => {
+                    setActiveTab("import")
+                    setHasClickedImport(true)
+                }}
+                onDismiss={dismissImportOnboarding}
+            />
             {/* Header */}
             <header className="border-b border-border bg-card sticky top-0 z-40 shadow-sm">
                 <div className="flex items-center justify-between px-4 sm:px-6 py-4">
@@ -203,12 +269,17 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                                     icon={item.icon}
                                     label={item.label}
                                     active={activeTab === item.id}
+                                    badge={(item as { badge?: string }).badge}
+                                    pulsing={(item as { pulsing?: boolean }).pulsing}
                                     onClick={() => {
                                         setActiveTab(item.id)
                                         setSidebarOpen(false)
+                                        if (item.id === "import") {
+                                            setHasClickedImport(true)
+                                        }
                                     }}
                                 />
-                                {item.notification}
+                                {(item as { notification?: React.ReactNode }).notification}
                             </div>
                         ))}
                     </nav>
@@ -219,6 +290,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                     <div className="p-4 sm:p-6 lg:p-8">
                         <div className="max-w-7xl mx-auto">
                             {activeTab === "overview" && <OverviewTab user={user} onNavigate={(tab) => setActiveTab(tab)} />}
+                            {activeTab === "import" && <ImportTab />}
                             {activeTab === "notes" && <NotesTab />}
                             {activeTab === "checklist" && <ChecklistTab />}
                             {activeTab === "ai" && <AISection planType={subscription?.plan_type || "basic"} />}
@@ -249,11 +321,15 @@ function NavItem({
     label,
     active,
     onClick,
+    badge,
+    pulsing,
 }: {
     icon: React.ReactNode
     label: string
     active: boolean
     onClick: () => void
+    badge?: string
+    pulsing?: boolean
 }) {
     return (
         <button
@@ -261,10 +337,15 @@ function NavItem({
             className={`w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${active
                 ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-md"
                 : "text-foreground hover:bg-muted"
-                }`}
+                } ${pulsing ? "ring-2 ring-primary/40 ring-offset-1 ring-offset-card animate-pulse" : ""}`}
         >
             {icon}
             <span className="font-medium text-sm">{label}</span>
+            {badge && (
+                <span className="ml-auto text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-primary text-primary-foreground">
+                    {badge}
+                </span>
+            )}
         </button>
     )
 }

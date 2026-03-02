@@ -20,7 +20,9 @@ import {
   MessageSquare,
   TrendingUp,
   ArrowLeft,
+  Upload,
 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import DashboardPreview from "@/components/dashboard-preview"
 import DemoPage from "@/components/demo-page"
 import { PRODUCTS } from "@/lib/products"
@@ -65,7 +67,7 @@ const StaggeredCards = ({ children, columns = 3 }: { children: React.ReactNode[]
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5 },
     },
   }
 
@@ -345,6 +347,205 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
         </div>
       </section>
 
+      {/* Intelligent Import Section - NEW ULTRA SELLABLE SECTION */}
+      <section className="py-24 sm:py-32 relative overflow-hidden bg-background">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-4"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  Importação Instantânea
+                </motion.div>
+                <h3 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-[1.1] mb-6">
+                  Diga adeus à <span className="text-primary italic">digitação manual</span>
+                </h3>
+                <p className="text-xl text-muted-foreground leading-relaxed">
+                  Traga seus dados de planilhas, PDFs ou até fotos de agendas de papel. Nossa IA organiza tudo em segundos para você.
+                </p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-6">
+                {[
+                  { title: "Zero Erros", desc: "A IA valida CPFs, emails e telefones automaticamente.", icon: Shield },
+                  { title: "Economia de Tempo", desc: "Reduza 5 horas de trabalho manual para 15 segundos.", icon: Clock },
+                  { title: "Versatilidade Total", desc: "Aceitamos CSV, PDF, Imagens e até texto colado.", icon: Upload },
+                  { title: "Setup em 1 Clique", desc: "Seu dashboard populado e pronto para o uso imediato.", icon: Zap },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="p-4 rounded-xl border border-border bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-colors group"
+                  >
+                    <item.icon className="w-6 h-6 text-primary mb-3 group-hover:scale-110 transition-transform" />
+                    <h4 className="font-bold text-foreground mb-1">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <Button
+                  size="lg"
+                  onClick={() => setShowDemo(true)}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl shadow-primary/20 px-8 h-14 text-lg font-bold rounded-xl"
+                >
+                  Testar Importação Agora
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={onSignupClick}
+                  className="h-14 px-8 text-lg font-bold rounded-xl border-2"
+                >
+                  Ver como funciona
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Right: Visual Simulation */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, x: 30 }}
+              whileInView={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              {/* Decorative background elements */}
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-secondary/20 rounded-full blur-3xl" />
+              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl" />
+
+              <div className="relative rounded-3xl border border-secondary/30 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-slate-900 aspect-video lg:aspect-square flex flex-col">
+                {/* Header Mockup */}
+                <div className="p-4 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                  </div>
+                  <div className="h-4 w-32 bg-slate-800 rounded-full" />
+                  <div className="w-4 h-4 rounded bg-slate-800" />
+                </div>
+
+                <div className="flex-1 p-6 flex flex-col gap-6 relative overflow-hidden">
+                  {/* Step 1: Upload box */}
+                  <motion.div
+                    animate={{
+                      y: [0, -100],
+                      opacity: [1, 0]
+                    }}
+                    transition={{ duration: 0.8, delay: 3, repeat: Infinity, repeatDelay: 5 }}
+                    className="border-2 border-dashed border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 bg-slate-800/30"
+                  >
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Upload className="w-8 h-8 text-primary" />
+                    </div>
+                    <div className="space-y-1 text-center">
+                      <p className="text-white font-bold">lista_clientes.pdf</p>
+                      <p className="text-slate-500 text-xs text-balance">Solte seus arquivos aqui</p>
+                    </div>
+                  </motion.div>
+
+                  {/* Step 2: Processing visual */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 50 }}
+                    animate={{
+                      opacity: [0, 1, 1, 0],
+                      scale: [0.9, 1, 1, 0.9],
+                      y: [50, 0, 0, -50]
+                    }}
+                    transition={{ duration: 1.5, delay: 3.5, repeat: Infinity, repeatDelay: 4.3 }}
+                    className="absolute inset-x-6 top-6 bottom-6 bg-slate-900/90 backdrop-blur rounded-2xl border border-primary/50 flex flex-col items-center justify-center p-8 z-20"
+                  >
+                    <div className="relative mb-6">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                        className="w-24 h-24 rounded-full border-t-2 border-primary"
+                      />
+                      <Sparkles className="w-8 h-8 text-secondary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                    </div>
+                    <p className="text-white font-bold text-lg mb-2">IA Extraindo Dados...</p>
+                    <div className="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ x: "-100%" }}
+                        animate={{ x: "100%" }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="w-full h-full bg-gradient-to-r from-primary to-secondary"
+                      />
+                    </div>
+                  </motion.div>
+
+                  {/* Step 3: Success preview grid */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{
+                      opacity: [0, 0, 1, 1],
+                      x: [100, 100, 0, 0],
+                      y: [0, 0, 0, -100]
+                    }}
+                    transition={{ duration: 1, delay: 5, repeat: Infinity, repeatDelay: 4.8 }}
+                    className="space-y-4"
+                  >
+                    <div className="flex items-center justify-between text-white">
+                      <p className="font-bold">Clientes Identificados (3)</p>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">98% Confiança</Badge>
+                    </div>
+                    <div className="space-y-2">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="bg-slate-800/50 p-3 rounded-lg flex items-center gap-3 border border-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <div className="flex-1 space-y-1">
+                            <div className="h-2 w-24 bg-slate-600 rounded" />
+                            <div className="h-1.5 w-32 bg-slate-700 rounded" />
+                          </div>
+                          <div className="h-2 w-12 bg-slate-700 rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Floating Micro-data Cards */}
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0],
+                    x: [0, 5, 0]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  className="absolute -right-6 top-1/4 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-2xl border border-border z-30 hidden sm:block"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <TrendingUp className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">Tempo Salvo</p>
+                      <p className="text-xl font-black text-foreground">4.8h</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
       <section className="py-20 sm:py-32 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -398,11 +599,10 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
             {PRODUCTS.map((product) => (
               <motion.div key={product.id} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}>
                 <Card
-                  className={`relative p-8 border-2 transition-all duration-300 hover:shadow-2xl ${
-                    product.planType === "premium"
-                      ? "border-secondary bg-gradient-to-br from-secondary/10 via-background to-primary/5 md:scale-105 shadow-xl"
-                      : "border-border hover:border-primary bg-card"
-                  }`}
+                  className={`relative p-8 border-2 transition-all duration-300 hover:shadow-2xl ${product.planType === "premium"
+                    ? "border-secondary bg-gradient-to-br from-secondary/10 via-background to-primary/5 md:scale-105 shadow-xl"
+                    : "border-border hover:border-primary bg-card"
+                    }`}
                 >
                   {product.planType === "premium" && (
                     <motion.div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-secondary-foreground px-6 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-lg" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }}>
@@ -431,11 +631,10 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
 
                   <Button
                     onClick={onSignupClick}
-                    className={`w-full mb-8 h-12 text-base font-semibold transition-all ${
-                      product.planType === "premium"
-                        ? "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-lg hover:shadow-xl hover:scale-105"
-                        : "bg-primary text-primary-foreground hover:bg-primary/90"
-                    }`}
+                    className={`w-full mb-8 h-12 text-base font-semibold transition-all ${product.planType === "premium"
+                      ? "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-lg hover:shadow-xl hover:scale-105"
+                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                      }`}
                   >
                     Escolher {product.name}
                   </Button>

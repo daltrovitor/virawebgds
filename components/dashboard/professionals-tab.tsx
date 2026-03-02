@@ -48,13 +48,23 @@ export default function ProfessionalsTab({ isDemo = false }: { isDemo?: boolean 
 
   useEffect(() => {
     if (isDemo) {
-      setProfessionals([
-        { id: "1", name: "Dr. João Pereira", specialty: "Psicologia", email: "joao@clinic.com", phone: "(11) 98888-1111", status: "active", created_at: new Date().toISOString() } as any,
-        { id: "2", name: "Dra. Ana Souza", specialty: "Fisioterapia", email: "ana@clinic.com", phone: "(11) 98888-2222", status: "active", created_at: new Date().toISOString() } as any,
-      ])
-      setCurrentPlan("premium")
-      setLoading(false)
-      return
+      const loadDemoData = () => {
+        const stored = sessionStorage.getItem('demo_professionals')
+        if (stored) {
+          setProfessionals(JSON.parse(stored))
+        } else {
+          setProfessionals([
+            { id: "1", name: "Dr. João Pereira", specialty: "Psicologia", email: "joao@clinic.com", phone: "(11) 98888-1111", status: "active", created_at: new Date().toISOString() } as any,
+            { id: "2", name: "Dra. Ana Souza", specialty: "Fisioterapia", email: "ana@clinic.com", phone: "(11) 98888-2222", status: "active", created_at: new Date().toISOString() } as any,
+          ])
+        }
+        setCurrentPlan("premium")
+        setLoading(false)
+      }
+
+      loadDemoData()
+      window.addEventListener('demoDataUpdated', loadDemoData)
+      return () => window.removeEventListener('demoDataUpdated', loadDemoData)
     }
     loadProfessionals()
     loadPlan()

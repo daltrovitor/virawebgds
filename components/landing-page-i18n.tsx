@@ -19,6 +19,11 @@ import {
     Brain,
     MessageSquare,
     TrendingUp,
+    Upload,
+    FileJson,
+    MousePointer2,
+    Database,
+    ZapOff,
 } from "lucide-react"
 import DashboardPreview from "@/components/dashboard-preview"
 import DemoPage from "@/components/demo-page"
@@ -347,6 +352,219 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                             </Button>
                         </div>
                     </motion.div>
+                </div>
+            </section>
+
+            {/* Smart Import Section - Ultra Sellable */}
+            <section className="py-24 sm:py-32 relative overflow-hidden bg-background">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center max-w-3xl mx-auto mb-20">
+                        <ScrollAnimatedSection>
+                            <motion.div
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-bold mb-6"
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                            >
+                                <Zap className="w-4 h-4 fill-current" />
+                                Inteligência Artificial de Elite
+                            </motion.div>
+                            <h2 className="text-4xl sm:text-6xl font-bold text-foreground mb-6 tracking-tight leading-tight text-balance">
+                                Pare de perder horas <br />
+                                <span className="text-primary italic">copiando planilhas.</span>
+                            </h2>
+                            <p className="text-xl text-muted-foreground leading-relaxed">
+                                Transforme qualquer arquivo em dados organizados em segundos. Nossa IA identifica clientes, valores e datas automaticamente.
+                            </p>
+                        </ScrollAnimatedSection>
+                    </div>
+
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <motion.div
+                            className="space-y-8"
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <div className="grid sm:grid-cols-2 gap-6">
+                                {[
+                                    {
+                                        icon: Clock,
+                                        title: "Economia de Tempo",
+                                        desc: "Reduza o trabalho de horas para meros segundos."
+                                    },
+                                    {
+                                        icon: Sparkles,
+                                        title: "Automação Inteligente",
+                                        desc: "IA que entende o contexto de cada linha do seu arquivo."
+                                    },
+                                    {
+                                        icon: ZapOff,
+                                        title: "Redução de Erros",
+                                        desc: "Elimine falhas humanas de digitação e transferência."
+                                    },
+                                    {
+                                        icon: Zap,
+                                        title: "Setup em Segundos",
+                                        desc: "Arraste, solte e pronto. Nada de configurações técnicas."
+                                    }
+                                ].map((benefit, i) => (
+                                    <div key={i} className="p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all group">
+                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                            <benefit.icon className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <h4 className="font-bold text-lg mb-2">{benefit.title}</h4>
+                                        <p className="text-sm text-muted-foreground leading-relaxed">{benefit.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="p-8 rounded-3xl bg-slate-900 text-white relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl" />
+                                <div className="text-lg font-medium relative z-10 flex flex-col gap-4">
+                                    <span className="flex items-center gap-2 text-primary font-bold">
+                                        <CheckCircle2 className="w-5 h-5" />
+                                        Prova de Eficiência
+                                    </span>
+                                    <p className="italic opacity-90">
+                                        "Empresas economizam até 15h por semana com nossa importação automatizada. Funciona com seus arquivos atuais, sem configuração técnica."
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                <Button size="lg" onClick={onSignupClick} className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-7 px-10 rounded-2xl shadow-xl shadow-primary/20 group h-auto">
+                                    Testar Importação Agora
+                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                </Button>
+                                <Button size="lg" variant="outline" onClick={() => setShowDemo(true)} className="text-lg py-7 px-10 rounded-2xl border-2 hover:bg-muted h-auto">
+                                    Ver como funciona
+                                </Button>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            className="relative"
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                        >
+                            <div className="relative z-10 rounded-3xl overflow-hidden border-8 border-slate-900 shadow-2xl bg-slate-100">
+                                <div className="bg-slate-900 p-4 flex items-center justify-between">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-3 h-3 rounded-full bg-red-500" />
+                                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                                        <div className="w-3 h-3 rounded-full bg-green-500" />
+                                    </div>
+                                    <div className="px-3 py-1 bg-slate-800 rounded-md text-[10px] text-slate-400">
+                                        vira.web/dashboard/import
+                                    </div>
+                                    <div className="w-6" />
+                                </div>
+                                <div className="p-2 sm:p-6 space-y-4 bg-white/50 backdrop-blur-sm">
+                                    <div className="flex items-center gap-4 p-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5">
+                                        <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
+                                            <Upload className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-sm text-slate-900">relatorio_março.pdf</p>
+                                            <p className="text-xs text-muted-foreground">Extraindo 42 registros encontrados...</p>
+                                        </div>
+                                        <div className="ml-auto flex items-center gap-2">
+                                            <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+                                                <motion.div
+                                                    className="h-full bg-primary"
+                                                    initial={{ width: "0%" }}
+                                                    whileInView={{ width: "100%" }}
+                                                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        {[
+                                            { n: "Ana Oliveira", e: "ana@email.com", v: "R$ 450,00" },
+                                            { n: "Bruno Silva", e: "bruno@email.com", v: "R$ 1.200,00" },
+                                            { n: "Carla Souza", e: "carla@email.com", v: "R$ 890,00" }
+                                        ].map((item, i) => (
+                                            <motion.div
+                                                key={i}
+                                                className="flex items-center gap-4 p-3 rounded-lg bg-white shadow-sm border border-slate-200"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.5 + (i * 0.2) }}
+                                            >
+                                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[11px] font-bold text-slate-900 truncate">{item.n}</p>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[10px] text-muted-foreground truncate">{item.e}</p>
+                                                </div>
+                                                <div className="text-[10px] font-mono font-bold text-primary">
+                                                    {item.v}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex gap-2 justify-end pt-2">
+                                        <div className="h-8 w-24 rounded-lg bg-slate-200" />
+                                        <div className="h-8 w-32 rounded-lg bg-primary/20 border border-primary/50 flex items-center justify-center text-[10px] font-bold text-primary shadow-sm shadow-primary/10">
+                                            Importar Agora
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Floating decorative elements */}
+                            <motion.div
+                                className="absolute -top-6 -right-6 p-4 rounded-2xl bg-white shadow-2xl border border-slate-100 z-20 hidden sm:flex items-center gap-3"
+                                animate={{ y: [0, -10, 0] }}
+                                transition={{ duration: 4, repeat: Infinity }}
+                            >
+                                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                    <Database className="w-5 h-5 text-green-600" />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-xs text-slate-900">Dados Sincronizados</p>
+                                    <p className="text-[10px] text-muted-foreground">3 tabelas atualizadas</p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                className="absolute -bottom-10 -left-6 p-4 rounded-2xl bg-slate-900 text-white shadow-2xl z-20 hidden sm:flex items-center gap-3"
+                                animate={{ y: [0, 10, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+                            >
+                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                                    <Sparkles className="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-xs italic">Escaneamento por IA</p>
+                                    <p className="text-[10px] text-primary">99.2% Precisão</p>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    </div>
+
+                    <div className="mt-24 grid sm:grid-cols-3 gap-8 text-center border-t border-border pt-12">
+                        {[
+                            { label: "Formatos Suportados", value: "PDF, CSV, XLSX, JPG" },
+                            { label: "Tempo de Processamento", value: "< 2 segundos" },
+                            { label: "Privacidade de Dados", value: "Criptografia Ponta-a-Ponta" }
+                        ].map((stat, i) => (
+                            <div key={i}>
+                                <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                                <p className="text-xl font-bold text-foreground">{stat.value}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

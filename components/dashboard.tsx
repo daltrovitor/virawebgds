@@ -8,7 +8,6 @@ import {
   LogOut,
   Menu,
   X,
-  Calendar,
   Users,
   BarChart3,
   Home,
@@ -21,10 +20,10 @@ import {
   StickyNote,
   PlayCircle,
   AlertCircle,
+  Upload,
 } from "lucide-react"
 import ChecklistTab from "./dashboard/checklist-tab"
 import OverviewTab from "./dashboard/overview-tab"
-import AppointmentsTab from "./dashboard/appointments-tab"
 import PatientsTab from "./dashboard/patients-tab"
 import ProfessionalsTab from "./dashboard/professionals-tab"
 import ReportsTab from "./dashboard/reports-tab"
@@ -36,8 +35,10 @@ import SettingsTab from "./dashboard/settings-tab"
 import SupportTab from "./dashboard/support-tab"
 import NotesTab from "./dashboard/notes-tab"
 import TutorialTab from "./dashboard/tutorial-tab"
+import ImportTab from "./dashboard/import-tab"
 import NotificationsPanel from "./notifications-panel"
 import TutorialModal from "./tutorial-modal"
+import ImportOnboardingModal from "./import-onboarding-modal"
 import ThemeSettings from "./dashboard/theme-settings"
 import Image from "next/image"
 import { createClient } from "@/lib/supabase-client"
@@ -72,10 +73,14 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
   const [activeTab, setActiveTab] = useState("overview")
   const [showTutorial, setShowTutorial] = useState(isNewUser)
   const [hasWatchedTutorial, setHasWatchedTutorial] = useState(false)
+  const [showImportOnboarding, setShowImportOnboarding] = useState(false)
+  const [hasSeenImportFeature, setHasSeenImportFeature] = useState(true)
+  const [hasClickedImport, setHasClickedImport] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
     loadTutorialStatus()
+    loadImportFeatureStatus()
   }, [])
 
   const loadTutorialStatus = async () => {
@@ -95,10 +100,54 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     }
   }
 
+  const loadImportFeatureStatus = async () => {
+    try {
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      if (!currentUser) return
+
+      const { data } = await supabase
+        .from('user_settings')
+        .select('has_seen_import_feature')
+        .eq('user_id', currentUser.id)
+        .maybeSingle()
+
+      const seen = data?.has_seen_import_feature ?? false
+      setHasSeenImportFeature(seen)
+      setHasClickedImport(seen)
+
+      if (!seen) {
+        // Small delay to not compete with tutorial modal
+        setTimeout(() => {
+          setShowImportOnboarding(true)
+        }, 1500)
+      }
+    } catch (error) {
+      console.error('Error loading import feature status:', error)
+    }
+  }
+
+  const dismissImportOnboarding = async () => {
+    setHasSeenImportFeature(true)
+    try {
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      if (!currentUser) return
+
+      await supabase
+        .from('user_settings')
+        .upsert({
+          user_id: currentUser.id,
+          has_seen_import_feature: true,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' })
+    } catch (error) {
+      console.error('Error updating import feature status:', error)
+    }
+  }
+
   const navItems = [
-    { 
-      id: "overview", 
-      label: "Visão Geral", 
+    {
+      id: "overview",
+      label: "Visão Geral",
       icon: <Home className="w-5 h-5" />,
       notification: !hasWatchedTutorial ? (
         <div className="absolute -right-1 -top-1">
@@ -106,20 +155,26 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         </div>
       ) : null
     },
+    {
+      id: "import",
+      label: "Importar dados",
+      icon: <Upload className="w-5 h-5" />,
+      badge: "Novo",
+      pulsing: !hasClickedImport,
+    },
     { id: "notes", label: "Notas", icon: <StickyNote className="w-5 h-5" /> },
     { id: "checklist", label: "Checklist", icon: <List className="w-5 h-5" /> },
     { id: "ai", label: "ViraBot IA", icon: <Sparkles className="w-5 h-5" /> },
     { id: "goals", label: "Metas", icon: <Target className="w-5 h-5" /> },
-    { id: "appointments", label: "Agendamentos", icon: <Calendar className="w-5 h-5" /> },
     { id: "patients", label: "Clientes", icon: <Users className="w-5 h-5" /> },
     { id: "financial", label: "Financeiro", icon: <CreditCard className="w-5 h-5" /> },
     { id: "professionals", label: "Profissionais", icon: <Users className="w-5 h-5" /> },
     { id: "reports", label: "Relatórios", icon: <BarChart3 className="w-5 h-5" /> },
     { id: "subscriptions", label: "Assinatura", icon: <CreditCard className="w-5 h-5" /> },
     { id: "support", label: "Suporte", icon: <HeadphonesIcon className="w-5 h-5" /> },
-    { 
-      id: "tutorial", 
-      label: "Tutorial", 
+    {
+      id: "tutorial",
+      label: "Tutorial",
       icon: <PlayCircle className="w-5 h-5" />,
       notification: !hasWatchedTutorial ? (
         <div className="absolute -right-1 -top-1">
@@ -133,6 +188,15 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
   return (
     <div className="min-h-screen bg-background">
       <TutorialModal open={showTutorial} onOpenChange={setShowTutorial} />
+      <ImportOnboardingModal
+        open={showImportOnboarding}
+        onOpenChange={setShowImportOnboarding}
+        onNavigateToImport={() => {
+          setActiveTab("import")
+          setHasClickedImport(true)
+        }}
+        onDismiss={dismissImportOnboarding}
+      />
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-40 shadow-sm">
         <div className="flex items-center justify-between px-4 sm:px-6 py-4">
@@ -144,7 +208,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
               {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             <div className="flex items-center gap-3">
-                  <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-40" />
+              <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-40" />
             </div>
           </div>
 
@@ -170,9 +234,8 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
       <div className="flex">
         {/* Sidebar */}
         <aside
-          className={`${
-            sidebarOpen ? "w-64" : "w-0"
-          } border-r border-border bg-card transition-all duration-300 overflow-hidden lg:w-64`}
+          className={`${sidebarOpen ? "w-64" : "w-0"
+            } border-r border-border bg-card transition-all duration-300 overflow-hidden lg:w-64`}
         >
           <nav className="p-4 space-y-2  h-[calc(100vh-73px)] overflow-y-auto">
             {navItems.map((item) => (
@@ -181,12 +244,17 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                   icon={item.icon}
                   label={item.label}
                   active={activeTab === item.id}
+                  badge={(item as { badge?: string }).badge}
+                  pulsing={(item as { pulsing?: boolean }).pulsing}
                   onClick={() => {
                     setActiveTab(item.id)
                     setSidebarOpen(false)
+                    if (item.id === "import") {
+                      setHasClickedImport(true)
+                    }
                   }}
                 />
-                {item.notification}
+                {(item as { notification?: React.ReactNode }).notification}
               </div>
             ))}
           </nav>
@@ -197,6 +265,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
           <div className="p-4 sm:p-6 lg:p-8">
             <div className="max-w-7xl mx-auto">
               {activeTab === "overview" && <OverviewTab user={user} onNavigate={(tab) => setActiveTab(tab)} />}
+              {activeTab === "import" && <ImportTab />}
               {activeTab === "notes" && <NotesTab />}
               {activeTab === "checklist" && <ChecklistTab />}
               {activeTab === "ai" && <AISection planType={subscription?.plan_type || "basic"} />}
@@ -204,7 +273,6 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
               {activeTab === "tutorial" && (
                 <TutorialTab onMarkWatched={() => setHasWatchedTutorial(true)} />
               )}
-              {activeTab === "appointments" && <AppointmentsTab />}
               {activeTab === "patients" && <PatientsTab />}
               {activeTab === "financial" && <FinancialTab />}
               {activeTab === "professionals" && <ProfessionalsTab />}
@@ -227,23 +295,31 @@ function NavItem({
   label,
   active,
   onClick,
+  badge,
+  pulsing,
 }: {
   icon: React.ReactNode
   label: string
   active: boolean
   onClick: () => void
+  badge?: string
+  pulsing?: boolean
 }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-        active
-          ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-md"
-          : "text-foreground hover:bg-muted"
-      }`}
+      className={`w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${active
+        ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-md"
+        : "text-foreground hover:bg-muted"
+        } ${pulsing ? "ring-2 ring-primary/40 ring-offset-1 ring-offset-card animate-pulse" : ""}`}
     >
       {icon}
       <span className="font-medium text-sm">{label}</span>
+      {badge && (
+        <span className="ml-auto text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-primary text-primary-foreground">
+          {badge}
+        </span>
+      )}
     </button>
   )
 }

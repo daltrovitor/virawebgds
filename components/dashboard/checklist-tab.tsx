@@ -44,6 +44,24 @@ export default function ChecklistTab({ isDemo = false }: { isDemo?: boolean }) {
   }
 
   useEffect(() => {
+    if (isDemo) {
+      const loadDemoData = () => {
+        const stored = sessionStorage.getItem('demo_todos')
+        if (stored) {
+          setTodos(JSON.parse(stored))
+        } else {
+          setTodos([
+            { id: "1", title: "Verificar novos cadastros", completed: false, created_at: new Date().toISOString() } as any,
+            { id: "2", title: "Organizar sala de espera", completed: true, created_at: new Date().toISOString() } as any,
+          ])
+        }
+        setLoading(false)
+      }
+
+      loadDemoData()
+      window.addEventListener('demoDataUpdated', loadDemoData)
+      return () => window.removeEventListener('demoDataUpdated', loadDemoData)
+    }
     load()
   }, [])
 
