@@ -220,6 +220,8 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                             className="w-24 object-contain" 
                             priority 
                             fetchPriority="high"
+                            loading="eager"
+                            decoding="sync"
                             sizes="(max-width: 768px) 96px, 120px"
                         />
                     </a>
@@ -258,12 +260,12 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                 >
                     <Image 
                         src="/viraweb6.png" 
-                        alt="ViraWeb BG" 
+                        alt="ViraWeb Background Pattern" 
                         width={400} 
                         height={400} 
                         className="w-[300px] md:w-[600px] h-auto grayscale saturate-0" 
-                        priority
-                        fetchPriority="high"
+                        priority={false}
+                        loading="lazy"
                         sizes="(max-width: 768px) 300px, 600px"
                     />
                 </motion.div>
@@ -301,7 +303,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
 
                     {/* Subtitle */}
                     <p
-                        className="text-[15px] sm:text-[16px] text-slate-600 mb-8 max-w-xl text-left leading-relaxed font-normal"
+                        className="text-[15px] sm:text-[16px] text-slate-700 mb-8 max-w-xl text-left leading-relaxed font-normal"
                     >
                         {t('hero.description')}
                     </p>
@@ -364,13 +366,13 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         <div className="inline-block mb-4 px-3 py-1 bg-white border border-slate-300 text-[11px] font-bold uppercase tracking-wider text-slate-700">
                             {t('virabot.badge')}
                         </div>
-                        <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
                             {t('virabot.title')}{" "}
                             <span className="text-primary">
                                 {t('virabot.titleHighlight')}
                             </span>
-                        </h3>
-                        <p className="text-[15px] text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        </h2>
+                        <p className="text-[15px] text-slate-700 max-w-2xl mx-auto leading-relaxed">
                             {t('virabot.description')}
                         </p>
                     </ScrollAnimatedSection>
@@ -455,7 +457,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                 {t('import.title')} <br />
                                 <span className="text-primary italic font-bold">{t('import.titleHighlight')}</span>
                             </h2>
-                            <p className="text-[15px] text-slate-600 leading-relaxed">
+                            <p className="text-[15px] text-slate-700 leading-relaxed">
                                 {t('import.description')}
                             </p>
                         </ScrollAnimatedSection>
@@ -592,8 +594,8 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
             <section id="features" className="py-12 sm:py-16 bg-slate-50 border-t border-slate-300">
                 <div className="max-w-7xl mx-auto px-4">
                     <ScrollAnimatedSection className="text-center mb-12">
-                        <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight uppercase">{t('motor.title')}</h3>
-                        <p className="text-[15px] text-slate-600 max-w-4xl mx-auto leading-relaxed">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight uppercase">{t('motor.title')}</h2>
+                        <p className="text-[15px] text-slate-700 max-w-4xl mx-auto leading-relaxed">
                             {t('motor.description')} <strong className="text-primary">{t('motor.description2')}</strong>
                         </p>
                     </ScrollAnimatedSection>
@@ -632,8 +634,8 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         <div className="inline-block mb-4 px-3 py-1 bg-slate-100 border border-slate-300 text-[11px] font-bold tracking-wider text-slate-700 uppercase">
                             {tPricing('badge')}
                         </div>
-                        <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight uppercase">{tPricing('title')}</h3>
-                        <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight uppercase">{tPricing('title')}</h2>
+                        <p className="text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
                             {tPricing('description')}
                         </p>
                     </ScrollAnimatedSection>
@@ -769,10 +771,10 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         <div className="inline-block mb-4 px-3 py-1 bg-slate-100 border border-slate-300 text-[11px] font-bold uppercase tracking-wider text-slate-700">
                             {t('footer.contact')}
                         </div>
-                        <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight uppercase">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight uppercase">
                             {t('contactTalk.title')} <span className="text-primary">{t('contactTalk.titleHighlight')}</span>
-                        </h3>
-                        <p className="text-[15px] text-slate-600 mb-8 max-w-2xl mx-auto">
+                        </h2>
+                        <p className="text-[15px] text-slate-700 mb-8 max-w-2xl mx-auto">
                             {t('contactTalk.description')}
                         </p>
                     </ScrollAnimatedSection>

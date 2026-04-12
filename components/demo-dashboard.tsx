@@ -142,11 +142,19 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
                         </div>
                     )}
                     {!sidebarOpen && <Image src="/viraweb6.png" alt="ViraWeb" width={24} height={24} className="mx-auto" priority />}
-                    <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden sm:flex text-slate-400 hover:text-slate-900 transition-colors">
+                    <button 
+                        onClick={() => setSidebarOpen(!sidebarOpen)} 
+                        className="hidden sm:flex text-slate-400 hover:text-slate-900 transition-colors"
+                        aria-label={sidebarOpen ? tCommon('closeMenu') : tCommon('openMenu')}
+                    >
                         {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
                     {/* Mobile close button */}
-                    <button onClick={() => setSidebarOpen(false)} className="sm:hidden text-slate-900">
+                    <button 
+                        onClick={() => setSidebarOpen(false)} 
+                        className="sm:hidden text-slate-900"
+                        aria-label={tCommon('closeMenu')}
+                    >
                         <X className="w-5 h-5" />
                     </button>
                 </div>
@@ -159,7 +167,8 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
                                 setActiveTab(item.id)
                                 if (window.innerWidth < 1024) setSidebarOpen(false)
                             }}
-                            className={`w-full flex items-center gap-3 px-4 py-3 border-b border-slate-100 transition-all border-l-4 ${activeTab === item.id ? "bg-slate-50 border-primary text-slate-900" : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}
+                             aria-label={item.label}
+                             className={`w-full flex items-center gap-3 px-4 py-3 border-b border-slate-100 transition-all border-l-4 ${activeTab === item.id ? "bg-slate-50 border-primary text-slate-900" : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}
                         >
                             <span className={`${activeTab === item.id ? "text-primary" : ""}`}>{item.icon}</span>
                             {(sidebarOpen || (window.innerWidth < 640)) && <span className="font-black text-[11px] uppercase tracking-tighter">{item.label}</span>}
@@ -179,7 +188,11 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
             <main className="flex-1 flex flex-col min-w-0 bg-slate-100 overflow-hidden">
                 <header className="h-16 border-b border-slate-300 bg-white flex items-center justify-between px-4 sm:px-8 shrink-0">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => setSidebarOpen(true)} className="sm:hidden text-slate-500 p-2 hover:bg-slate-100">
+                        <button 
+                            onClick={() => setSidebarOpen(true)} 
+                            className="sm:hidden text-slate-500 p-2 hover:bg-slate-100"
+                            aria-label={tCommon('openMenu')}
+                        >
                             <Menu className="w-6 h-6" />
                         </button>
                         <div className="flex items-center gap-3">

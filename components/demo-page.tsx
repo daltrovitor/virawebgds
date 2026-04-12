@@ -81,7 +81,7 @@ export default function DemoPage() {
                       {t('popular')}
                     </div>
                   )}
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h3>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h2>
                   <p className="text-muted-foreground text-sm mb-4">{plan.description}</p>
                   <div className="mb-4">
                     <span className="text-3xl font-bold text-foreground">{plan.price}</span>
@@ -105,7 +105,7 @@ export default function DemoPage() {
               <div className="overflow-x-auto">
                 {features.map((category, catIdx) => (
                   <div key={catIdx} className="mb-8 last:mb-0">
-                    <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                       {category.category === "Gerenciamento" && <Users className="w-5 h-5 text-primary" />}
                       {category.category === "Relatórios e Análises" && <BarChart3 className="w-5 h-5 text-primary" />}
                       {category.category === "Recursos Avançados" && <Sparkles className="w-5 h-5 text-primary" />}
