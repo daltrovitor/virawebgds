@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { motion, useInView, LazyMotion, domMax } from "framer-motion"
 import { Button } from "@/components/ui/button"

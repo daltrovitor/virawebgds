@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
@@ -23,7 +23,6 @@ export const metadata: Metadata = {
   description: "Sistema de gestão definitivo para negócios de agendamento. Otimize sua clínica com agendamento online, controle financeiro e inteligência artificial.",
   keywords: ["gestão de clínicas", "agendamento online", "software médico", "ViraWeb", "GDC"],
   authors: [{ name: "Equipe ViraWeb" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   openGraph: {
     title: "ViraWeb | Gestão Inteligente para Clínicas",
@@ -33,6 +32,12 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     type: "website",
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#0ea5a4",
+  width: "device-width",
+  initialScale: 1,
 }
 
 export default async function RootLayout({
@@ -50,7 +55,6 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="shortcut icon" href="/viraweb6.png" type="image/x-icon" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content={process.env.NEXT_PUBLIC_THEME_COLOR || "#0ea5a4"} />
         <link rel="apple-touch-icon" href={process.env.NEXT_PUBLIC_APPLE_TOUCH_ICON || "/viraweb6.png"} />
       </head>
       <body className={`${outfit.variable} font-sans antialiased selection:bg-primary selection:text-white`}>
