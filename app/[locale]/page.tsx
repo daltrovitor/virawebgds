@@ -10,6 +10,7 @@ import LoginPage from "@/components/login-page-i18n"
 import SignupPage from "@/components/signup-page-i18n"
 import Dashboard from "@/components/dashboard-i18n"
 import OnboardingPlans from "@/components/onboarding-plans-i18n"
+import LandingPage from "@/components/landing-page"
 import type { User, Session, AuthError } from "@supabase/supabase-js"
 import Image from "next/image"
 import { useTranslations } from 'next-intl'
@@ -207,11 +208,9 @@ export default function Home() {
         // 2. Not Logged In path
         if (!user) {
             // Keep user on auth pages if that's where they are
-            if (currentPage === "signup" || currentPage === "login") return
+            if (currentPage === "signup" || currentPage === "login" || currentPage === "landing") return
 
-            if (currentPage === "landing") {
-                setCurrentPage("login")
-            }
+            setCurrentPage("landing")
             return
         }
 
@@ -438,12 +437,10 @@ export default function Home() {
     return (
         <main className="min-h-screen bg-background">
             {currentPage === "landing" && (
-                <div className="min-h-screen flex items-center justify-center bg-white">
-                    <div className="flex items-center gap-3">
-                        <Image src="/viraweb6.png" width={40} height={40} alt="ViraWeb" className="w-10 grayscale opacity-50 animate-pulse" />
-                        <span className="text-slate-400 font-medium">Redirecionando...</span>
-                    </div>
-                </div>
+                <LandingPage 
+                    onLoginClick={() => setCurrentPage("login")}
+                    onSignupClick={() => setCurrentPage("signup")}
+                />
             )}
             {currentPage === "login" && (
                 <LoginPage
