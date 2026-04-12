@@ -209,9 +209,8 @@ export default function Home() {
             // Keep user on auth pages if that's where they are
             if (currentPage === "signup" || currentPage === "login") return
 
-            // The old landing page was deleted, redirect to the new free-trial page
             if (currentPage === "landing") {
-                router.push(`/${locale}/free-trial`)
+                setCurrentPage("login")
             }
             return
         }
