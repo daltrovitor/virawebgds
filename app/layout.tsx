@@ -116,7 +116,7 @@ export default async function RootLayout({
             } else {
               const suppress = (args, original) => {
                 const msg = args && args[0] ? String(args[0]) : '';
-                const tokens = ['React DevTools', 'Pippit', 'Vercel Web Analytics', 'Largest Contentful Paint', 'aspect ratio', 'Download the React DevTools', 'Fast Refresh', 'zustand'];
+                const tokens = ['React DevTools', 'Pippit', 'Vercel Web Analytics', 'Largest Contentful Paint', 'aspect ratio', 'Download the React DevTools', 'Fast Refresh', 'zustand', 'DEPRECATED', 'Default export is deprecated'];
                 if (tokens.some(t => msg.includes(t))) return;
                 original.apply(console, args);
               };
