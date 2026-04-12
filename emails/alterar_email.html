@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0"
+                    style="background-color: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <tr>
+                        <td
+                            style="background: linear-gradient(135deg, #3396D3 0%, #2880b8 100%); padding: 40px 30px; text-align: center;">
+                            <div
+                                style="background-color: #FFFFFF; display: inline-block; padding: 15px 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <img src="https://viraweb.online/viraweb3.png" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 50px 40px;">
+                            <h2 style="color: #333333; font-size: 24px; margin: 0 0 20px 0; text-align: center;">
+                                Confirme a alteração de email</h2>
+                            <p
+                                style="color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 10px 0; text-align: center;">
+                                Você solicitou a alteração do seu email:
+                            </p>
+                            <div
+                                style="background-color: #f9f9f9; border-left: 4px solid #FFD400; padding: 15px 20px; margin: 20px 0 30px 0; border-radius: 4px;">
+                                <p style="margin: 0; color: #666666; font-size: 14px;">
+                                    <strong>De:</strong> <span style="color: #999999;">usuario@exemplo.com</span><br>
+                                    <strong>Para:</strong> <span
+                                        style="color: #3396D3; font-weight: bold;">novoemail@exemplo.com</span>
+                                </p>
+                            </div>
+                            <p
+                                style="color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0; text-align: center;">
+                                Clique no botão abaixo para confirmar esta alteração.
+                            </p>
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{ .ConfirmationURL }}"
+                                            style="display: inline-block; background: linear-gradient(135deg, #FFD400 0%, #ffc400 100%); color: #333333; text-decoration: none; padding: 16px 50px; border-radius: 8px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 12px rgba(255, 212, 0, 0.3);">
+                                            Alterar email
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p
+                                style="color: #999999; font-size: 14px; line-height: 1.5; margin: 30px 0 0 0; text-align: center;">
+                                Se você não solicitou esta alteração, ignore este email e seu endereço permanecerá o
+                                mesmo.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="background-color: #f9f9f9; padding: 30px 40px; text-align: center; border-top: 3px solid #FFD400;">
+                            <p style="color: #999999; font-size: 13px; margin: 0; line-height: 1.5;">
+                                © 2024 ViraWeb. Todos os direitos reservados.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+# robots.txt for ViraWeb
+# Atualize o sitemap para o domínio de produção
+Sitemap: https://viraweb.online/sitemap.xml
+
+User-agent: *
+Disallow:
+
+# Crawl-delay pode ser adicionado se necessário
+# Crawl-delay: 10

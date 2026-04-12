@@ -1,0 +1,1673 @@
+{
+    "common": {
+        "loading": "Carregando...",
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "close": "Fechar",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "add": "Adicionar",
+        "search": "Buscar",
+        "confirm": "Confirmar",
+        "back": "Voltar",
+        "next": "Próximo",
+        "previous": "Anterior",
+        "yes": "Sim",
+        "no": "Não",
+        "error": "Erro",
+        "success": "Sucesso",
+        "loading_data": "Carregando dados...",
+        "months": {
+            "0": "Janeiro",
+            "1": "Fevereiro",
+            "2": "Março",
+            "3": "Abril",
+            "4": "Maio",
+            "5": "Junho",
+            "6": "Julho",
+            "7": "Agosto",
+            "8": "Setembro",
+            "9": "Outubro",
+            "10": "Novembro",
+            "11": "Dezembro"
+        },
+        "days": {
+            "0": "Dom",
+            "1": "Seg",
+            "2": "Ter",
+            "3": "Qua",
+            "4": "Qui",
+            "5": "Sex",
+            "6": "Sáb"
+        },
+        "plans": {
+            "basic": "Básico",
+            "premium": "Premium",
+            "master": "Master"
+        },
+        "usage": {
+            "title": "Uso do Plano",
+            "upgrade": "Fazer Upgrade",
+            "patients": "Clientes",
+            "professionals": "Profissionais",
+            "appointments": "Agendamentos (mês)",
+            "unlimited": "Ilimitado",
+            "remaining": "{count} restante",
+            "renewOn": "Renova em: {date}",
+            "recommendationUnlimited": "Faça upgrade para o plano {plan} para ter {limit} ilimitados!",
+            "recommendationIncrease": "Faça upgrade para o plano {plan} para aumentar seu limite para {count} {limit}."
+        },
+        "viewProfile": "Ver Perfil",
+        "visitor": "Visitante",
+        "noResults": "Nenhum resultado encontrado",
+        "records": "registro(s)",
+        "demoMode": "Modo Demonstração"
+    },
+    "landing": {
+        "header": {
+            "login": "Entrar",
+            "start": "Começar"
+        },
+        "hero": {
+            "badge": "Transforme seu negócio hoje",
+            "title": "Gerenciamento Completo de",
+            "titleHighlight": "Clientes",
+            "description": "Organize agendamentos, clientes, profissionais, financeiro, notas, checklist, metas e relatórios em uma única plataforma.",
+            "startNow": "Começar Agora",
+            "viewDemo": "Ver Demo"
+        },
+        "virabot": {
+            "badge": "Powered by AI",
+            "title": "Conheça o",
+            "titleHighlight": "ViraBot IA",
+            "description": "Seu assistente inteligente que revoluciona a gestão do seu negócio com inteligência artificial de última geração",
+            "question1": "Quantos agendamentos tenho hoje?",
+            "answer1": "Você tem {count} agendamentos hoje:",
+            "confirmed": "{count} consultas confirmadas",
+            "pending": "{count} aguardando confirmação",
+            "cancelled": "{count} cancelamento",
+            "question2": "Como posso melhorar a taxa de ocupação?",
+            "answer2": "Baseado nos seus dados, sugiro...",
+            "feature1Title": "Conversas Naturais",
+            "feature1Desc": "Converse naturalmente com o ViraBot como se fosse um assistente humano. Faça perguntas sobre seu negócio e receba respostas instantâneas.",
+            "feature2Title": "Análise Inteligente",
+            "feature2Desc": "O ViraBot analisa seus dados e identifica padrões, tendências e oportunidades de melhoria para seu negócio.",
+            "feature3Title": "Insights Acionáveis",
+            "feature3Desc": "Receba sugestões práticas e personalizadas para otimizar processos, aumentar eficiência e melhorar resultados.",
+            "feature4Title": "Automação Inteligente",
+            "feature4Desc": "Automatize tarefas repetitivas e deixe o ViraBot cuidar do trabalho pesado enquanto você foca no atendimento.",
+            "availability": "ViraBot IA está disponível nos planos",
+            "premium": "Premium",
+            "and": "e",
+            "lifetime": "Master",
+            "startWith": "Começar Agora"
+        },
+        "features": {
+            "title": "Tudo que você precisa",
+            "description": "Recursos poderosos projetados para negócios de agendamento modernos",
+            "appointments": "Agendamentos",
+            "appointmentsDesc": "Gerencie agendamentos com facilidade, evite conflitos e otimize o tempo dos profissionais.",
+            "clients": "Gestão de Clientes",
+            "clientsDesc": "Mantenha histórico completo de clientes, agendamentos e serviços em um só lugar.",
+            "reports": "Relatórios",
+            "reportsDesc": "Analise dados, acompanhe desempenho e tome decisões baseadas em informações reais.",
+            "financial": "Financeiro Inteligente",
+            "financialDesc": "Controle pagamentos, descontos e presença automaticamente. Relatórios diários, semanais e mensais com gráficos e visão completa do fluxo de caixa.",
+            "efficiency": "Eficiência",
+            "efficiencyDesc": "Economize tempo com automação e processos otimizados para seu negócio.",
+            "security": "Segurança",
+            "securityDesc": "Dados protegidos com criptografia e conformidade com regulamentações de saúde.",
+            "fast": "Rápido",
+            "fastDesc": "Interface responsiva e rápida que funciona perfeitamente em qualquer dispositivo."
+        },
+        "pricing": {
+            "badge": "💎 Planos Premium",
+            "title": "Escolha o Plano Ideal",
+            "description": "Transparência total. Sem taxas ocultas. Cancele quando quiser.",
+            "popular": "Mais Popular",
+            "perMonth": "/mês",
+            "oneTime": "único",
+            "currencySymbol": "R$",
+            "choose": "Escolher",
+            "includedFeatures": "Recursos Inclusos",
+            "compareDetails": "Comparar Planos em Detalhes"
+        },
+        "benefits": {
+            "title": "Por que escolher ViraWeb?",
+            "benefit1": "Reduz tempo administrativo em até 70%",
+            "benefit2": "Aumenta satisfação dos clientes",
+            "benefit3": "Melhora organização do negócio",
+            "benefit4": "Suporte técnico dedicado",
+            "benefit5": "Integração com sistemas existentes",
+            "benefit6": "Backup automático de dados"
+        },
+        "cta": {
+            "title": "Pronto para transformar seu negócio?",
+            "description": "Escolha seu plano e comece a usar ViraWeb hoje. Veja como podemos melhorar significativamente a gestão do seu negócio.",
+            "startNow": "Começar Agora",
+            "haveAccount": "Já tenho conta"
+        },
+        "footer": {
+            "description": "Gerenciamento completo para negócios de agendamento modernos.",
+            "product": "Produto",
+            "features": "Recursos",
+            "prices": "Preços",
+            "security": "Segurança",
+            "company": "Empresa",
+            "about": "Sobre",
+            "blog": "Blog",
+            "contact": "Contato",
+            "legal": "Legal",
+            "privacy": "Privacidade",
+            "terms": "Termos",
+            "lgpd": "LGPD",
+            "copyright": "© 2026 ViraWeb. Todos os direitos reservados."
+        },
+        "import": {
+            "badge": "Inteligência Artificial de Elite",
+            "title": "Pare de perder horas",
+            "titleHighlight": "copiando planilhas.",
+            "description": "Transforme qualquer arquivo em dados organizados em segundos. Nossa IA identifica clientes, valores e datas automaticamente.",
+            "benefit1": "Economia de Tempo",
+            "benefit1Desc": "Reduza o trabalho de horas para meros segundos.",
+            "benefit2": "Automação",
+            "benefit2Desc": "IA que entende o contexto de cada linha do seu arquivo.",
+            "benefit3": "Redução de Erros",
+            "benefit3Desc": "Elimine falhas humanas de digitação e transferência.",
+            "benefit4": "Setup Fácil",
+            "benefit4Desc": "Arraste, solte e pronto. Nada de configurações técnicas.",
+            "efficiencyTitle": "Prova de Eficiência",
+            "efficiencyDesc": "Empresas economizam até 15h por semana com nossa importação automatizada. Funciona com seus arquivos atuais, sem configuração técnica.",
+            "fileName": "relatorio_março.pdf",
+            "extracting": "Extraindo 42 registros encontrados...",
+            "cta": "Importar Agora",
+            "sync": "Dados Sincronizados",
+            "syncDesc": "3 tabelas atualizadas",
+            "scan": "Escaneamento por IA",
+            "precision": "99.2% Precisão",
+            "formats": "Formatos Suportados",
+            "formatsVal": "PDF, CSV, XLSX, JPG",
+            "time": "Tempo de Processamento",
+            "timeVal": "< 2 segundos",
+            "privacy": "Privacidade de Dados",
+            "privacyVal": "Criptografia Ponta-a-Ponta"
+        },
+        "motor": {
+            "title": "O Motor do seu Negócio",
+            "description": "Nosso Gestor de Clientes (GDC) é muito mais do que um simples painel de controle. Ele é o verdadeiro motor central, criado com todas as 9 funcionalidades que você precisa para controlar processos manuais hoje.",
+            "description2": "O GDC abraça todo o seu ecossistema: desde o tratamento e agendamento contínuo, o braço financeiro que garante tudo no fim do mês, até as métricas diárias essenciais, e integra tudo isso em uma Inteligência Artificial avançada. Incrivelmente fácil de mexer.",
+            "feature1": "Gestão de Clientes",
+            "feature1Desc": "Mantenha o histórico completo, prontuários precisos e o controle de todos os agendamentos amarrados individualmente na ficha de cada cliente do seu negócio.",
+            "feature2": "Financeiro Integrado",
+            "feature2Desc": "Controle as suas entradas a receber, pagamentos parcelados, descontos e acesse um fluxo de caixa detalhado gerado automaticamente com imensa precisão num piscar de olhos.",
+            "feature3": "Relatórios e Visão",
+            "feature3Desc": "Dashboards analíticos absurdamente elegantes que te dizem a verdade sobre a saúde da sua empresa: acompanhe faturamento real, ticket médio mensal e taxas de retenção.",
+            "feature4": "Importação Mágica",
+            "feature4Desc": "Esqueça perder dias passando dados antigos. Nossa IA lê PDFs massivos e planilhas esquecidas para preencher todo o seu sistema online num processo de menos de 2 segundos.",
+            "feature5": "ViraBot IA",
+            "feature5Desc": "Sua operação ganha uma Inteligência Artificial exclusiva que funciona 24h para extrair informações que passaram despercebidas, organizar registros complexos e te mostrar insights.",
+            "feature6": "Módulo Profissionais",
+            "feature6Desc": "Alinhe diretamente as agendas da sua operação, configure permissões rigorosas de acessos por tela, e programe fluxos de pagamentos ou comissões individuais para sua equipe.",
+            "feature7": "Sistema de Metas",
+            "feature7Desc": "Defina onde quer chegar e bata metas semanais, trimestrais e anuais com sua equipe toda. Acompanhe a sua barra de crescimento ser preenchida contra as metas todos os dias.",
+            "feature8": "Notas e Mural",
+            "feature8Desc": "O fim de perder aqueles lembretes urgentes soltos no papel. Adicione anotações em velocidade relâmpago, fixe blocos cruciais na tela principal onde todo o time lerá.",
+            "feature9": "Checklist Dinâmico",
+            "feature9Desc": "Transforme processos incertos em fluxos invencíveis. Liste rotinas contínuas dos seus atendentes e monitore o status do cumprimento de todos os check-lists vitais na raiz do painel."
+        },
+        "discord": {
+            "badge": "Comunidade Exclusiva",
+            "title": "Conecte-se com outros",
+            "titleHighlight": "Empreendedores.",
+            "description": "Faça parte do nosso Discord oficial de Networking. Troque experiências, estratégias e cresça junto com uma comunidade focada em business e escala.",
+            "cta": "Entrar no Networking"
+        },
+        "contactTalk": {
+            "title": "Vamos bater um",
+            "titleHighlight": "papo?",
+            "description": "Nossa equipe de especialistas está a postos para entender a sua necessidade e mostrar como o ViraWeb pode transformar o seu negócio.",
+            "whatsappTitle": "Atendimento Rápido",
+            "whatsappDesc": "Fale diretamente com nosso especialista pelo WhatsApp para respostas imediatas.",
+            "emailTitle": "Suporte via E-mail",
+            "emailDesc": "Prefere formalizar? Envie um e-mail com os detalhes e retornaremos em até 2hrs."
+        }
+    },
+    "auth": {
+        "terms": "Termos de Serviço",
+        "privacy": "Política de Privacidade",
+        "lgpd": "LGPD",
+        "termsAgree": "Li e concordo com os",
+        "and": "e",
+        "attention": "Atenção",
+        "mustAcceptTerms": "Você precisa aceitar os Termos de Serviço, Política de Privacidade e LGPD para continuar.",
+        "acceptToContinue": "Aceite os termos para continuar.",
+        "orContinueWith": "Ou entre com",
+        "login": {
+            "back": "Voltar",
+            "title": "Bem-vindo",
+            "subtitle": "Faça login na sua conta ViraWeb",
+            "email": "Email",
+            "emailPlaceholder": "seu@email.com",
+            "password": "Senha",
+            "passwordPlaceholder": "••••••••",
+            "submit": "Entrar",
+            "loading": "Entrando...",
+            "forgotPassword": "Esqueceu a senha?",
+            "noAccount": "Não tem conta?",
+            "signup": "Cadastre-se",
+            "demoCredentials": "Demo Credentials",
+            "securityNote": "Seus dados estão seguros e protegidos com criptografia de ponta a ponta.",
+            "requiredFields": "Campos obrigatórios",
+            "fillAllFields": "Por favor, preencha todos os campos",
+            "error": "Erro ao fazer login",
+            "checkCredentials": "Verifique suas credenciais e tente novamente",
+            "incorrectCredentials": "Email ou senha incorretos",
+            "welcomeBack": "Bem-vindo de volta",
+            "successMessage": "Login realizado!",
+            "googleUnavailable": "Login com Google indisponível",
+            "googleError": "Erro no login com Google",
+            "tryAgain": "Tente novamente"
+        },
+        "signup": {
+            "title": "Criar conta",
+            "subtitle": "Comece sua jornada com ViraWeb",
+            "name": "Nome",
+            "namePlaceholder": "Seu nome",
+            "email": "Email",
+            "emailPlaceholder": "seu@email.com",
+            "password": "Senha",
+            "passwordPlaceholder": "••••••••",
+            "confirmPassword": "Confirmar Senha",
+            "submit": "Criar Conta",
+            "loading": "Criando...",
+            "haveAccount": "Já tem conta?",
+            "login": "Entrar",
+            "success": "Conta criada com sucesso!",
+            "checkEmail": "Verifique seu e-mail para confirmar sua conta",
+            "error": "Erro ao criar conta",
+            "unexpectedError": "Ocorreu um erro inesperado. Tente novamente.",
+            "passStrength": {
+                "0": "Muito Fraca",
+                "1": "Fraca",
+                "2": "Média",
+                "3": "Forte",
+                "4": "Muito Forte"
+            },
+            "passMatch": "As senhas correspondem",
+            "passMismatch": "As senhas não correspondem",
+            "allFieldsRequired": "Por favor, preencha todos os campos",
+            "passwordMinLength": "A senha deve ter pelo menos 6 caracteres"
+        },
+        "forgotPassword": {
+            "title": "Redefinir Senha",
+            "description": "Digite seu email para receber o link de redefinição de senha",
+            "email": "Email",
+            "submit": "Enviar Link",
+            "back": "Voltar para o login",
+            "success": "Email enviado",
+            "successMessage": "Verifique sua caixa de entrada para o link de reset",
+            "error": "Erro",
+            "errorMessage": "Não foi possível enviar o email"
+        },
+        "resetPassword": {
+            "title": "Nova Senha",
+            "description": "Digite sua nova senha",
+            "password": "Nova Senha",
+            "confirmPassword": "Confirmar Nova Senha",
+            "submit": "Redefinir Senha",
+            "success": "Senha redefinida com sucesso",
+            "error": "Erro ao redefinir senha"
+        }
+    },
+    "dashboard": {
+        "header": {
+            "logout": "Sair",
+            "freeTrial": "TESTE GRÁTIS"
+        },
+        "sidebar": {
+            "overview": "Visão Geral",
+            "notes": "Notas",
+            "checklist": "Checklist",
+            "reminders": "Lembretes",
+            "ai": "ViraBot IA",
+            "goals": "Metas",
+            "appointments": "Agendamentos",
+            "patients": "Clientes",
+            "financial": "Financeiro",
+            "professionals": "Profissionais",
+            "reports": "Relatórios",
+            "subscriptions": "Assinatura",
+            "support": "Suporte",
+            "tutorial": "Tutorial",
+            "import": "Importar dados",
+            "new": "Novo",
+            "settings": "Configurações",
+            "exitDemo": "Sair da Demo"
+        },
+        "importTab": {
+            "title": "Importar dados",
+            "subtitle": "Escaneie imagens, PDFs ou planilhas para adicionar clientes automaticamente ao banco de dados.",
+            "infoBanner": "Esta é uma funcionalidade nova e <strong>não está incluída no tutorial em vídeo</strong> atual.",
+            "entitySelect": "Tipo de dados a importar",
+            "entities": {
+                "clients": "Clientes",
+                "professionals": "Profissionais",
+                "invoices": "Financeiro (Faturas)",
+                "notes": "Notas",
+                "checklist": "Checklist",
+                "goals": "Metas",
+                "appointments": "Agendamentos"
+            },
+            "dragUpload": {
+                "drag": "Solte o arquivo aqui",
+                "drop": "Arraste e solte um arquivo",
+                "orClick": "ou clique para selecionar do seu computador",
+                "images": "Imagens",
+                "pdf": "PDF",
+                "csv": "CSV",
+                "xlsx": "XLSX",
+                "maxSize": "Tamanho máximo: 10MB"
+            },
+            "pastingTitle": "Colar Texto Manualmente",
+            "pastingPlaceholder": "Cole aqui o conteúdo CSV, registros em texto ou qualquer dado...",
+            "processText": "Processar Texto",
+            "orPasteText": "Ou cole texto manualmente",
+            "processing": "Processando dados...",
+            "uploading": "Enviando arquivo...",
+            "status": {
+                "processing": "Processando dados...",
+                "uploading": "Enviando arquivo...",
+                "ocr": "Lendo imagem (OCR)...",
+                "pdf": "Extraindo conteúdo do PDF...",
+                "generic": "Processando arquivo...",
+                "wait": "Isso pode levar alguns segundos..."
+            },
+            "errorTitle": "Erro ao importar",
+            "tryAgain": "Tentar novamente",
+            "entityMessages": {
+                "clients": {
+                    "selected": "{selected} de {total} clientes selecionados",
+                    "saving": "Salvando clientes...",
+                    "success": "{inserted} de {total} clientes importados com sucesso.",
+                    "error": "{count} clientes não puderam ser importados.",
+                    "noSelection": "Nenhum cliente selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um cliente para importar."
+                },
+                "invoices": {
+                    "selected": "{selected} de {total} faturas selecionadas",
+                    "saving": "Salvando faturas...",
+                    "success": "{inserted} de {total} faturas importadas com sucesso.",
+                    "error": "{count} faturas não puderam ser importadas.",
+                    "noSelection": "Nenhuma fatura selecionada",
+                    "selectAtLeastOne": "Selecione pelo menos uma fatura para importar."
+                },
+                "professionals": {
+                    "selected": "{selected} de {total} profissionais selecionados",
+                    "saving": "Salvando profissionais...",
+                    "success": "{inserted} de {total} profissionais importados com sucesso.",
+                    "error": "{count} profissionais não puderam ser importados.",
+                    "noSelection": "Nenhum profissional selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um profissional para importar."
+                },
+                "notes": {
+                    "selected": "{selected} de {total} notas selecionadas",
+                    "saving": "Salvando notas...",
+                    "success": "{inserted} de {total} notas importadas com sucesso.",
+                    "error": "{count} notas não puderam ser importadas.",
+                    "noSelection": "Nenhuma nota selecionada",
+                    "selectAtLeastOne": "Selecione pelo menos uma nota para importar."
+                },
+                "checklist": {
+                    "selected": "{selected} de {total} itens selecionados",
+                    "saving": "Salvando itens...",
+                    "success": "{inserted} de {total} itens importados com sucesso.",
+                    "error": "{count} itens não puderam ser importados.",
+                    "noSelection": "Nenhum item selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um item para importar."
+                },
+                "goals": {
+                    "selected": "{selected} de {total} metas selecionadas",
+                    "saving": "Salvando metas...",
+                    "success": "{inserted} de {total} metas importadas com sucesso.",
+                    "error": "{count} metas não puderam ser importadas.",
+                    "noSelection": "Nenhuma meta selecionada",
+                    "selectAtLeastOne": "Selecione pelo menos uma meta para importar."
+                },
+                "appointments": {
+                    "selected": "{selected} de {total} agendamentos selecionados",
+                    "saving": "Salvando agendamentos...",
+                    "success": "{inserted} de {total} agendamentos importados com sucesso.",
+                    "error": "{count} agendamentos não puderam ser importados.",
+                    "noSelection": "Nenhum agendamento selecionado",
+                    "selectAtLeastOne": "Selecione pelo menos um agendamento para importar."
+                }
+            },
+            "preview": {
+                "title": "Pré-visualização",
+                "selectAll": "Selecionar todos",
+                "deselectAll": "Desmarcar todos",
+                "cancel": "Cancelar",
+                "columns": {
+                    "name": "Nome",
+                    "email": "Email",
+                    "phone": "Telefone",
+                    "company": "Empresa",
+                    "cpf": "CPF",
+                    "birthDate": "Data de Nascimento",
+                    "specialty": "Especialidade",
+                    "patient": "Cliente",
+                    "professional": "Profissional",
+                    "date": "Data",
+                    "hour": "Hora",
+                    "duration": "Duração (min)",
+                    "title": "Título",
+                    "content": "Conteúdo",
+                    "description": "Descrição",
+                    "category": "Categoria",
+                    "deadline": "Prazo",
+                    "targetValue": "Valor Alvo",
+                    "currentValue": "Valor Atual"
+                }
+            },
+            "confirmBtn": "Confirmar importação ({count})",
+            "savingDesc": "Por favor, aguarde enquanto os dados são importados.",
+            "successTitle": "Importação concluída!",
+            "errors": "Erros ({count}):",
+            "errorMsgs": {
+                "invalidFormat": "Formato inválido. Use JPG/PNG, PDF, CSV ou XLSX.",
+                "fileTooLarge": "Arquivo muito grande. Máx: 10MB.",
+                "noItems": "Nenhum item detectado (Verifique o formato do texto).",
+                "generic": "Erro ao processar.",
+                "unauthorized": "Usuário não autenticado",
+                "notImplemented": "Importação para '{entity}' não implementada no frontend."
+            },
+            "importMore": "Importar mais dados",
+            "defaults": {
+                "noName": "Sem nome",
+                "noTitle": "Sem título",
+                "importedNote": "Importado do arquivo.",
+                "general": "Geral",
+                "unit": "unidade",
+                "unknown": "Desconhecido"
+            },
+            "toast": {
+                "success": "Importação concluída!",
+                "errorTitle": "Alguns erros ocorreram"
+            }
+        },
+        "reminders": {
+            "title": "Lembretes",
+            "badgeNew": "Novo",
+            "subtitle": "Programe notificações para ser alertado no horário exato.",
+            "activatePushTitle": "Ative as Notificações no Celular",
+            "activatePushDesc": "Para garantir que você vai receber os lembretes do sistema, ative o envio de notificações push neste dispositivo.",
+            "activatePushBtn": "Ativar Lembretes",
+            "formTitle": "Novo Lembrete",
+            "formSubject": "Título (assunto)",
+            "formSubjectPlaceholder": "Reunião com Paciente X",
+            "formDetails": "Detalhes (opcional)",
+            "formDetailsPlaceholder": "Lembrar de faturar o mês e assinar doc",
+            "formDate": "Data",
+            "formTime": "Hora",
+            "formSubmit": "Agendar Alerta",
+            "formSubmitting": "Agendando...",
+            "listTitle": "Próximos Lembretes",
+            "listEmpty": "Nenhum lembrete na fila",
+            "badgeSent": "Enviado",
+            "toast": {
+                "fillFields": "Preencha todos os campos obrigatórios",
+                "futureDate": "A data e hora devem ser no futuro",
+                "created": "Lembrete programado!",
+                "createError": "Erro ao criar lembrete",
+                "deleted": "Lembrete excluído",
+                "deleteError": "Erro ao excluir"
+            }
+        },
+        "overview": {
+            "welcome": "Bem-vindo(a),",
+            "summary": "Aqui está um resumo do seu dia na clínica/empresa",
+            "newHere": "Novo por aqui?",
+            "watchTutorial": "Assista ao nosso tutorial para aprender a usar todos os recursos da plataforma.",
+            "buttonTutorial": "Ver Tutorial",
+            "birthdays": "Aniversariantes do Dia! 🎉",
+            "noBirthdays": "Nenhum aniversariante hoje",
+            "client": "Cliente",
+            "professional": "Profissional",
+            "stats": {
+                "appointmentsToday": "Agendamentos Hoje",
+                "activePatients": "Clientes Ativos",
+                "completionRate": "Taxa de Conclusão",
+                "growthMonth": "Crescimento Mensal"
+            },
+            "upcoming": {
+                "title": "Próximos Agendamentos",
+                "scheduled": "Agendado",
+                "completed": "Concluído",
+                "canceled": "Cancelado",
+                "empty": "Nenhum agendamento registrado",
+                "createBtn": "Criar Primeiro Agendamento"
+            },
+            "recentClients": {
+                "title": "Clientes Recentes",
+                "empty": "Nenhum cliente registrado",
+                "addBtn": "Adicionar Cliente"
+            },
+            "quickActions": {
+                "title": "Ações Rápidas",
+                "newAppointment": "Novo Agendamento",
+                "newClient": "Novo Cliente",
+                "reports": "Relatórios",
+                "settings": "Configurações",
+                "metrics": "Ver Métricas"
+            }
+        },
+        "ai": {
+            "title": "ViraBot IA",
+            "subtitle": "Seu assistente inteligente",
+            "description": "Potencialize sua empresa com inteligência artificial. O ViraBot ajuda você a gerenciar clientes, agendar consultas e obter insights valiosos instantaneamente.",
+            "startChat": "Conversar com ViraBot",
+            "back": "Voltar",
+            "premiumFeature": "Recurso Premium",
+            "premiumDesc": "Faça upgrade para Premium ou Master para acessar o ViraBot IA",
+            "viewPlans": "Ver Planos",
+            "features": {
+                "analysis": {
+                    "title": "Análise Inteligente",
+                    "desc": "Obtenha insights sobre padrões de agendamento e comportamento de clientes"
+                },
+                "instant": {
+                    "title": "Respostas Instantâneas",
+                    "desc": "Tire dúvidas sobre gestão da empresa e obtenha sugestões em tempo real"
+                },
+                "automation": {
+                    "title": "Automação Inteligente",
+                    "desc": "Automatize tarefas repetitivas e foque no que realmente importa"
+                }
+            },
+            "prompts": {
+                "title": "Experimente perguntar:",
+                "p1": "Quantos agendamentos tenho hoje?",
+                "p2": "Mostre os clientes mais recentes",
+                "p3": "Qual a taxa de ocupação da empresa?",
+                "p4": "Como posso melhorar o atendimento?"
+            },
+            "chat": {
+                "welcome": "Olá! Sou o ViraBot, seu assistente IA do ViraWeb. Como posso ajudá-lo hoje?",
+                "placeholder": "Digite sua pergunta...",
+                "title": "ViraBot IA",
+                "online": "Online",
+                "premiumTitle": "ViraBot Premium",
+                "premiumMessage": "O ViraBot está disponível apenas para planos Premium e Master.",
+                "upgrade": "Fazer Upgrade"
+            }
+        },
+        "checklist": {
+            "title": "Checklist",
+            "placeholder": "Título do item",
+            "add": "Adicionar",
+            "empty": "Nenhum item na checklist",
+            "noDate": "Sem data",
+            "toast": {
+                "loadError": "Erro ao carregar checklist",
+                "added": "Item adicionado",
+                "addError": "Erro ao adicionar",
+                "updateError": "Erro ao atualizar",
+                "removed": "Item removido",
+                "removeError": "Erro ao remover"
+            }
+        },
+        "notes": {
+            "title": "Minhas Notas",
+            "subtitle": "Organize suas anotações e lembretes",
+            "newNote": "Nova Nota",
+            "editNote": "Editar Nota",
+            "placeholderTitle": "Título da nota",
+            "placeholderContent": "Conteúdo da nota...",
+            "save": "Salvar",
+            "saving": "Salvando...",
+            "update": "Atualizar",
+            "updating": "Atualizando...",
+            "cancel": "Cancelar",
+            "empty": "Nenhuma nota criada",
+            "createFirst": "Criar Primeira Nota",
+            "updatedAt": "Atualizado em",
+            "fieldsRequired": {
+                "title": "Campos obrigatórios",
+                "desc": "Por favor, preencha o título e o conteúdo"
+            },
+            "toast": {
+                "loadError": "Erro ao carregar notas",
+                "updated": "Nota atualizada",
+                "updatedDesc": "Sua nota foi atualizada com sucesso",
+                "created": "Nota criada",
+                "createdDesc": "Nova nota adicionada com sucesso",
+                "saveError": "Erro ao salvar nota",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Nota excluída",
+                "deletedDesc": "Nota removida com sucesso",
+                "deleteError": "Erro ao excluir nota"
+            }
+        },
+        "goals": {
+            "title": "Minhas Metas",
+            "subtitle": "Defina e acompanhe seus objetivos",
+            "newGoal": "Nova Meta",
+            "editGoal": "Editar Meta",
+            "createGoal": "Criar Meta",
+            "activeGoals": "Metas Ativas",
+            "completedGoals": "Metas Concluídas",
+            "successRate": "Taxa de Sucesso",
+            "inProgress": "Em progresso",
+            "achieved": "Alcançadas",
+            "ofAllGoals": "De todas as metas",
+            "empty": "Nenhuma meta criada",
+            "emptyDesc": "Comece definindo suas primeiras metas para acompanhar seu progresso",
+            "createFirst": "Criar Primeira Meta",
+            "form": {
+                "title": "Título da Meta *",
+                "titlePlaceholder": "Ex: Atender 100 clientes este mês",
+                "description": "Descrição",
+                "descriptionPlaceholder": "Descreva sua meta em detalhes...",
+                "category": "Categoria",
+                "categoryPlaceholder": "Selecione...",
+                "categories": {
+                    "financial": "Financeiro",
+                    "clients": "Clientes",
+                    "appointments": "Agendamentos",
+                    "professionals": "Profissionais"
+                },
+                "deadline": "Prazo",
+                "targetValue": "Valor Alvo",
+                "currentValue": "Valor Atual",
+                "unit": "Unidade",
+                "unitPlaceholder": "clientes",
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar",
+                "updating": "Atualizando..."
+            },
+            "toast": {
+                "loadError": "Erro ao carregar metas",
+                "created": "Meta criada!",
+                "createdDesc": "Sua meta foi criada com sucesso.",
+                "updated": "Meta atualizada!",
+                "updatedDesc": "Sua meta foi atualizada com sucesso.",
+                "savedError": "Erro ao salvar meta",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Meta excluída",
+                "deletedDesc": "A meta foi removida com sucesso.",
+                "deleteError": "Erro ao excluir meta",
+                "completed": "Parabéns! 🎉",
+                "completedDesc": "Meta concluída com sucesso!",
+                "updateError": "Erro ao atualizar a meta",
+                "autoCreated": "Meta criada",
+                "autoCreatedDesc": "Meta de agendamentos criada com sucesso.",
+                "autoCreateError": "Erro ao criar meta automática"
+            }
+        },
+        "appointments": {
+            "title": "Agendamentos",
+            "subtitle": "Visualize e gerencie agendamentos por calendário",
+            "newAppointment": "Novo Agendamento",
+            "editAppointment": "Editar Agendamento",
+            "filter": {
+                "all": "Geral (todos profissionais)",
+                "select": "Selecione um profissional"
+            },
+            "calendar": {
+                "selectDay": "Selecione um dia para ver agendamentos",
+                "appointmentsOf": "Agendamentos de"
+            },
+            "tabs": {
+                "weekly": "Visualização Semanal"
+            },
+            "weeklyView": {
+                "placeholder": "Selecionar profissional",
+                "allProfessionals": "Todos os profissionais",
+                "prevWeek": "Semana anterior",
+                "prev": "Anterior",
+                "today": "Hoje",
+                "nextWeek": "Próxima semana",
+                "next": "Próxima",
+                "hour": "Hora",
+                "client": "Cliente",
+                "noDescription": "Sem descrição"
+            },
+            "emptyDay": "Nenhum agendamento para este dia",
+            "form": {
+                "patient": "Selecione um cliente",
+                "professional": "Selecione um profissional",
+                "duration": "Duração (minutos)",
+                "notes": "Notas (opcional)",
+                "recurrence": {
+                    "label": "Recorrência",
+                    "none": "Nenhuma",
+                    "daily": "Diária",
+                    "weekly": "Semanal (dias da semana)",
+                    "monthly": "Mensal (dia do mês)",
+                    "days": "Dias da semana",
+                    "count": "Repetir (quantas vezes)"
+                },
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar"
+            },
+            "status": {
+                "scheduled": "Agendado",
+                "completed": "Concluído",
+                "cancelled": "Cancelado",
+                "complete": "Concluir"
+            },
+            "toast": {
+                "loadError": "Erro ao carregar dados",
+                "updated": "Agendamento atualizado",
+                "updatedDesc": "O agendamento foi atualizado com sucesso",
+                "created": "Agendamento criado",
+                "createdDesc": "O agendamento foi criado com sucesso",
+                "saveError": "Erro ao salvar agendamento",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Agendamento excluído",
+                "deletedDesc": "O agendamento foi excluído com sucesso",
+                "deleteError": "Erro ao excluir agendamento",
+                "statusUpdated": "Status atualizado",
+                "statusUpdatedDesc": "O status do agendamento foi atualizado",
+                "statusError": "Erro ao atualizar status"
+            }
+        },
+        "patients": {
+            "title": "Clientes",
+            "subtitle": "Gerencie o cadastro de clientes da empresa",
+            "newPatient": "Novo Cliente",
+            "editPatient": "Editar Cliente",
+            "searchPlaceholder": "Buscar por nome, email ou CPF...",
+            "filter": {
+                "all": "Todos",
+                "active": "Ativos",
+                "inactive": "Inativos"
+            },
+            "viewProfile": "Ver Perfil",
+            "empty": "Nenhum cliente encontrado",
+            "createFirst": "Adicionar Primeiro Cliente",
+            "status": {
+                "active": "Ativo",
+                "inactive": "Inativo"
+            },
+            "form": {
+                "name": "Nome Completo *",
+                "email": "Email",
+                "phone": "Telefone",
+                "cpf": "CPF (opcional)",
+                "birthDate": "Data de Nascimento",
+                "address": "Endereço",
+                "birthday": "Data de Nascimento",
+                "notes": "Notas (opcional)",
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar",
+                "updating": "Atualizando..."
+            },
+            "toast": {
+                "loadError": "Erro ao carregar clientes",
+                "nameRequired": "Nome obrigatório",
+                "nameRequiredDesc": "Por favor, preencha o nome do cliente",
+                "updated": "Cliente atualizado",
+                "updatedDesc": "As informações foram atualizadas com sucesso",
+                "created": "Cliente criado",
+                "createdDesc": "Novo cliente adicionado com sucesso",
+                "saveError": "Erro ao salvar cliente",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Cliente excluído",
+                "deletedDesc": "Cliente removido com sucesso",
+                "deleteError": "Erro ao excluir cliente",
+                "statusUpdated": "Status atualizado",
+                "statusActive": "Cliente ativado com sucesso",
+                "statusInactive": "Cliente desativado com sucesso",
+                "statusError": "Erro ao atualizar status"
+            }
+        },
+        "financial": {
+            "title": "Financeiro",
+            "header": {
+                "logout": "Sair da conta"
+            },
+            "tabs": {
+                "finance": "Financeiro",
+                "attendance": "Presenças"
+            },
+            "cards": {
+                "received": "Recebidos (mês)",
+                "pending": "Pendentes",
+                "discounts": "Descontos (mês)"
+            },
+            "summary": "Resumo",
+            "summaryStats": {
+                "received": "Recebido (mês)",
+                "pending": "Pendente",
+                "discounts": "Descontos (mês)"
+            },
+            "recentPayments": "Pagamentos Recentes",
+            "registerPayment": "Registrar Pagamento",
+            "managePending": "Gerenciar Pendentes",
+            "noPayments": "Nenhum pagamento encontrado.",
+            "emptyPayments": "Nenhum pagamento encontrado.",
+            "report": "Relatório Financeiro",
+            "resume": "Resumo",
+            "chartTitle": "Recebimentos (últimos {days} dias)",
+            "chartLabel": "Recebido (R$)",
+            "chartValue": "Recebido",
+            "status": {
+                "paid": "Pago",
+                "pending": "Pendente",
+                "overdue": "Atrasado",
+                "refunded": "Reembolsado"
+            },
+            "chart": {
+                "loading": "Carregando gráfico..."
+            },
+            "paymentModal": {
+                "title": "Registrar Pagamento",
+                "patient": "Cliente (opcional)",
+                "selectPatient": "Selecione um cliente",
+                "noPatient": "Sem cliente",
+                "selectedPatient": "Cliente selecionado: {name}",
+                "amount": "Valor (R$)",
+                "discount": "Desconto",
+                "percentHint": "Se selecionar %, o desconto será calculado em reais a partir do valor informado.",
+                "status": "Status",
+                "date": "Data do Pagamento",
+                "recurrence": "Recorrência",
+                "recurring": "Recorrente",
+                "recurringHint": "A cobrança será gerada mensalmente no dia selecionado.",
+                "recurrenceDay": "Dia do pagamento",
+                "cancel": "Cancelar",
+                "save": "Salvar Pagamento",
+                "saving": "Salvando...",
+                "toast": {
+                    "invalidAmount": "Valor inválido",
+                    "invalidAmountDesc": "Informe um valor maior que zero.",
+                    "invalidDiscount": "Desconto inválido",
+                    "invalidDiscountPercent": "Informe uma porcentagem válida.",
+                    "invalidDiscountRange": "O desconto deve ser entre 0 e o valor do pagamento.",
+                    "success": "Pagamento registrado",
+                    "successDesc": "Pagamento salvo com sucesso.",
+                    "settleError": "Pagamento salvo, mas falhou ao quitar o pendente selecionado.",
+                    "error": "Erro ao salvar"
+                }
+            },
+            "grid": {
+                "search": "Pesquisar cliente...",
+                "period": "Selecionar período",
+                "periods": {
+                    "week": "Última semana",
+                    "month": "Último mês",
+                    "quarter": "Último trimestre",
+                    "year": "Último ano"
+                },
+                "export": "Exportar"
+            },
+            "patientFinancialTab": {
+                "title": "Histórico",
+                "columns": {
+                    "date": "Data",
+                    "amount": "Valor",
+                    "discount": "Desconto",
+                    "status": "Status",
+                    "dueDate": "Vencimento",
+                    "actions": "Ações",
+                    "patient": "Cliente"
+                },
+                "actions": {
+                    "settle": "Registrar pagamento"
+                },
+                "empty": "Nenhum pagamento encontrado"
+            }
+        },
+        "professionals": {
+            "title": "Profissionais",
+            "subtitle": "Gerencie os profissionais do seu negócio",
+            "workDays": "Dias de Trabalho",
+            "newProfessional": "Novo Profissional",
+            "editProfessional": "Editar Profissional",
+            "searchPlaceholder": "Buscar por nome ou especialidade...",
+            "filter": {
+                "all": "Todos",
+                "active": "Ativos",
+                "inactive": "Inativos"
+            },
+            "empty": "Nenhum profissional encontrado",
+            "createFirst": "Adicionar Primeiro Profissional",
+            "status": {
+                "active": "Ativo",
+                "inactive": "Inativo"
+            },
+            "form": {
+                "name": "Nome Completo *",
+                "specialty": "Especialidade",
+                "email": "Email",
+                "phone": "Telefone",
+                "workDays": "Dias de Trabalho",
+                "notes": "Notas (opcional)",
+                "cancel": "Cancelar",
+                "save": "Salvar",
+                "saving": "Salvando...",
+                "update": "Atualizar",
+                "updating": "Atualizando..."
+            },
+            "toast": {
+                "loadError": "Erro ao carregar profissionais",
+                "nameRequired": "Nome obrigatório",
+                "nameRequiredDesc": "Por favor, preencha o nome do profissional",
+                "updated": "Profissional atualizado",
+                "updatedDesc": "As informações foram atualizadas com sucesso",
+                "created": "Profissional criado",
+                "createdDesc": "Novo profissional adicionado com sucesso",
+                "saveError": "Erro ao salvar profissional",
+                "confirmDelete": "Confirmar exclusão?",
+                "confirmDeleteDesc": "Clique em Excluir para confirmar ou feche esta notificação para cancelar.",
+                "delete": "Excluir",
+                "deleting": "Excluindo...",
+                "deleted": "Profissional excluído",
+                "deletedDesc": "Profissional removido com sucesso",
+                "deleteError": "Erro ao excluir profissional"
+            }
+        },
+        "reports": {
+            "title": "Relatórios",
+            "subtitle": "Visão geral de agendamentos e clientes.",
+            "stats": {
+                "totalAppointments": "Total de Agendamentos",
+                "totalAppointmentsDesc": "Todos os registros",
+                "activePatients": "Clientes Ativos",
+                "activePatientsDesc": "Atualmente cadastrados",
+                "completionRate": "Taxa de Conclusão",
+                "performanceExcellent": "Excelente desempenho",
+                "performanceGood": "Bom desempenho"
+            },
+            "appointmentsChart": "Agendamentos por Mês",
+            "patientsChart": "Crescimento de Clientes",
+            "completed": "Concluídos",
+            "cancelled": "Cancelados",
+            "total": "Total",
+            "new": "Novos",
+            "noData": "Nenhum dado disponível"
+        },
+        "subscriptions": {
+            "title": "Assinatura",
+            "subtitle": "Gerencie sua assinatura e método de pagamento",
+            "noSubscription": "Nenhuma assinatura encontrada",
+            "noSubscriptionDesc": "Você ainda não possui uma assinatura ativa.",
+            "choosePlan": "Escolher Plano",
+            "invalidPlan": "Plano inválido",
+            "invalidPlanDesc": "O tipo de plano informado não é reconhecido:",
+            "validPlans": "Planos válidos: basic, premium, master",
+            "active": "Ativo",
+            "canceled": "Cancelado",
+            "expired": "Expirado",
+            "month": "mês",
+            "startDate": "Data de Início",
+            "nextBilling": "Próxima Cobrança",
+            "trialEnd": "Término do Teste",
+            "expiresInDays": "O acesso premium expira em {days} dias",
+            "paymentMethod": "Método de Pagamento",
+            "creditCard": "Cartão de Crédito",
+            "notConfigured": "Não configurado",
+            "cancelSubscription": "Cancelar Assinatura",
+            "cancelConfirm": "Cancelar Assinatura",
+            "cancelConfirmDesc": "Tem certeza que deseja cancelar sua assinatura? Você perderá acesso a todos os recursos do seu plano.",
+            "yesCancel": "Sim, Cancelar",
+            "noKeep": "Não, Manter",
+            "canceling": "Cancelando...",
+            "benefits": "Benefícios do seu plano",
+            "viewCurrent": "Veja seu plano atual.",
+            "unlimited": "Ilimitado",
+            "perMonth": "por mês",
+            "support247": "24 horas, 7 dias por semana",
+            "upgrade": "Fazer Upgrade",
+            "processing": "Processando...",
+            "toast": {
+                "updated": "Assinatura atualizada!",
+                "updatedDesc": "Seu plano foi atualizado para {plan}. Aproveite os novos recursos!",
+                "canceled": "Assinatura cancelada",
+                "canceledDesc": "Sua assinatura foi cancelada com sucesso",
+                "cancelError": "Erro ao cancelar assinatura"
+            }
+        },
+        "theme": {
+            "button": "Tema",
+            "title": "Personalizar Dashboard",
+            "mode": "Modo",
+            "light": "Claro",
+            "dark": "Escuro",
+            "system": "Sistema",
+            "accent": "Paleta (Accent)",
+            "accentBlue": "Primário Azul / Secundário Amarelo",
+            "accentYellow": "Primário Amarelo / Secundário Azul",
+            "density": "Densidade",
+            "comfortable": "Confortável",
+            "compact": "Compacto",
+            "radius": "Raio dos cards",
+            "restore": "Restaurar",
+            "close": "Fechar"
+        },
+        "usage": {
+            "title": "Uso do Plano",
+            "upgrade": "Fazer Upgrade",
+            "patients": "Clientes",
+            "professionals": "Profissionais",
+            "appointments": "Agendamentos (mês)",
+            "unlimited": "Ilimitado",
+            "remaining": "{count} restante",
+            "renewOn": "Renova em: {date}",
+            "recommendationUnlimited": "Faça upgrade para o plano {plan} para ter {limit} ilimitados!",
+            "recommendationIncrease": "Faça upgrade para o plano {plan} para aumentar seu limite para {count} {limit}."
+        },
+        "upgradeModal": {
+            "title": "Limite Atingido",
+            "description": "Você atingiu o limite de {limit} {type} do seu plano {plan}.",
+            "currentUsage": "Uso Atual",
+            "upgradeToContinue": "Faça upgrade para continuar adicionando {type}.",
+            "choosePlan": "Escolha um plano para fazer upgrade:",
+            "perMonth": "/mês",
+            "unlimited": "Ilimitado",
+            "upTo": "Até {count}",
+            "processing": "Processando...",
+            "upgrade": "Fazer Upgrade",
+            "alreadyMaster": "Você já está no plano Master!",
+            "alreadyMasterDesc": "Você tem acesso a todos os recursos ilimitados. Se precisar de mais, entre em contato com o suporte.",
+            "close": "Fechar",
+            "limitNear": "Próximo do Limite",
+            "limitReached": "Limite Atingido!",
+            "usingCount": "Você está usando {current} de {limit} {type} disponíveis no seu plano.",
+            "couponCode": "Código de cupom",
+            "couponPlaceholder": "Digite seu código de desconto",
+            "couponHint": "Se você tem um cupom de desconto, insira-o aqui antes de escolher o plano."
+        },
+        "support": {
+            "title": "Suporte",
+            "subtitle": "Central de ajuda e atendimento",
+            "newTicket": "Novo Ticket ",
+            "hours": "Horário de Atendimento",
+            "channels": "Canais Disponíveis",
+            "channelsList": "Email, WhatsApp",
+            "viraBotTitle": "ViraBot IA - Assistente 24/7",
+            "viraBotDesc": "Converse com nosso assistente inteligente para obter ajuda instantânea sobre o sistema, tirar dúvidas e receber orientações em tempo real.",
+            "openAIChat": "Abrir Chat com ViraBot",
+            "backToSupport": "← Voltar para Suporte",
+            "email": "Email",
+            "whatsapp": "WhatsApp",
+            "sendEmail": "Enviar Email",
+            "openWhatsapp": "Abrir WhatsApp",
+            "viraBotAI": "ViraBot IA",
+            "plans": {
+                "basic": {
+                    "title": "Suporte Básico",
+                    "desc": "Suporte via Email em horário comercial",
+                    "hours": "Horário comercial",
+                    "features": [
+                        "Gestão básica de clientes",
+                        "Agendamentos limitados",
+                        "Relatórios básicos",
+                        "Suporte via email",
+                        "",
+                        "",
+                        ""
+                    ]
+                },
+                "premium": {
+                    "title": "Suporte Premium + ViraBot IA",
+                    "desc": "Suporte prioritário via Email e WhatsApp + AI Chat 24/7",
+                    "hours": "8:00 às 18:00 (5 dias por semana)",
+                    "features": [
+                        "500 clientes",
+                        "50 profissionais",
+                        "500 agendamentos/mês",
+                        "ViraBot AI 24/7",
+                        "Suporte prioritário",
+                        "Email e WhatsApp",
+                        "Suporte 8:00-18:00 (5 dias por semana)"
+                    ]
+                },
+                "master": {
+                    "title": "Suporte Master 24/7 + ViraBot IA",
+                    "desc": "Resposta imediata via Email e WhatsApp + AI Chat 24/7",
+                    "hours": "24 horas, 7 dias por semana",
+                    "features": [
+                        "Clientes ilimitados",
+                        "Profissionais ilimitados",
+                        "Agendamentos ilimitados",
+                        "ViraBot AI 24/7",
+                        "Suporte prioritário 24/7",
+                        "Email e WhatsApp",
+                        "Suporte 24 horas"
+                    ]
+                }
+            },
+            "resources": "Recursos de Ajuda",
+            "helpCenter": "Central de Ajuda",
+            "helpCenterDesc": "Acesse nossa documentação completa e tutoriais em vídeo",
+            "faq": "Perguntas Frequentes",
+            "faqDesc": "Encontre respostas rápidas para dúvidas comuns",
+            "videoTutorials": "Tutoriais em Vídeo",
+            "videoTutorialsDesc": "Aprenda a usar todos os recursos do sistema",
+            "ticketSystem": "Sistema de Tickets",
+            "comingSoon": "Em breve disponível",
+            "comingSoonDesc": "Estamos desenvolvendo um sistema de tickets avançado para você.",
+            "featuresTitle": "Em breve você poderá:",
+            "features": {
+                "0": "Abrir tickets de suporte",
+                "1": "Acompanhar status em tempo real",
+                "2": "Histórico de atendimentos",
+                "3": "Comunicação integrada"
+            },
+            "inDevelopment": "Em desenvolvimento",
+            "toast": {
+                "loadError": "Erro ao carregar dados",
+                "fieldsRequired": "Campos obrigatórios",
+                "fieldsRequiredDesc": "Por favor, preencha o assunto e a mensagem",
+                "ticketCreated": "Ticket criado",
+                "ticketCreatedDesc": "Seu ticket de suporte foi criado e enviado para nossa equipe",
+                "createError": "Erro ao criar ticket",
+                "loadMessagesError": "Erro ao carregar mensagens",
+                "messageSent": "Mensagem enviada",
+                "messageSentDesc": "Sua mensagem foi enviada para nossa equipe",
+                "sendError": "Erro ao enviar mensagem"
+            },
+            "status": {
+                "open": "Aberto",
+                "in_progress": "Em Progresso",
+                "resolved": "Resolvido",
+                "closed": "Fechado"
+            },
+            "priority": {
+                "low": "Baixa",
+                "medium": "Média",
+                "high": "Alta",
+                "urgent": "Urgente"
+            }
+        },
+        "tutorial": {
+            "title": "Tutorial do ViraWeb",
+            "subtitle": "Aprenda a usar todas as funcionalidades da plataforma para aproveitar ao máximo suas ferramentas.",
+            "videoUrl": "https://youtu.be/5yNiXZ-LbGo",
+            "concluded": "Tutorial Concluído",
+            "markWatched": "Marcar como Visto",
+            "videoSoon": "Vídeo em breve!",
+            "topics": "Tópicos do Tutorial",
+            "step1": "Primeiros Passos",
+            "step1Desc": "Configuração inicial e navegação básica",
+            "step2": "Gerenciamento de clientes",
+            "step2Desc": "Como adicionar e gerenciar seus clientes",
+            "step3": "Agendamentos",
+            "step3Desc": "Sistema de agendamento e calendário",
+            "step4": "Relatórios e Análises",
+            "step4Desc": "Como acessar e interpretar seus dados",
+            "toast": {
+                "success": "Tutorial concluído!",
+                "successDesc": "Obrigado por assistir ao tutorial.",
+                "error": "Erro ao marcar tutorial como visto"
+            }
+        },
+        "settings": {
+            "title": "Configurações",
+            "profile": {
+                "title": "Perfil",
+                "desc": "Atualize suas informações pessoais.",
+                "name": "Nome Completo",
+                "phone": "Telefone"
+            },
+            "clinic": {
+                "title": "Clínica",
+                "desc": "Atualize informações da sua clínica.",
+                "name": "Nome da Clínica"
+            },
+            "email": {
+                "title": "Email",
+                "desc": "Atualize seu endereço de email.",
+                "new": "Novo Email"
+            },
+            "password": {
+                "title": "Senha",
+                "desc": "Atualize sua senha.",
+                "new": "Nova Senha",
+                "confirm": "Confirmar Senha",
+                "invalid": "Senha inválida",
+                "length": "A senha deve ter pelo menos 6 caracteres",
+                "mismatch": "Senhas não coincidem",
+                "confirmCorrect": "Por favor, confirme sua senha corretamente"
+            },
+            "plan": {
+                "title": "Plano",
+                "desc": "Veja o seu plano atual.",
+                "viraBotActive": "ViraBot IA Ativo",
+                "perMonth": "R$ {price}/mês",
+                "patients": "Clientes:",
+                "professionals": "Profissionais:",
+                "appointments": "Agendamentos/mês:",
+                "support": "Suporte:",
+                "unlimited": "Ilimitados"
+            },
+            "save": "Salvar",
+            "saving": "Salvando...",
+            "toast": {
+                "loadError": "Erro ao carregar configurações",
+                "updatedAuto": "Suas configurações foram atualizadas automaticamente.",
+                "settingsUpdated": "Configurações atualizadas",
+                "profileUpdated": "Perfil atualizado",
+                "profileUpdatedDesc": "Suas informações foram atualizadas com sucesso",
+                "profileError": "Erro ao atualizar perfil",
+                "clinicUpdated": "Clínica atualizada",
+                "clinicUpdatedDesc": "Informações da clínica atualizadas com sucesso",
+                "clinicError": "Erro ao atualizar clínica",
+                "emailUpdated": "Email atualizado",
+                "emailError": "Erro ao atualizar email",
+                "passwordUpdated": "Senha atualizada",
+                "passwordError": "Erro ao atualizar senha",
+                "emailInvalid": "Email inválido",
+                "emailInvalidDesc": "Por favor, insira um novo email"
+            }
+        },
+        "patientProfile": {
+            "title": "Perfil do Cliente",
+            "active": "Ativo",
+            "inactive": "Inativo",
+            "tabs": {
+                "info": "Informações",
+                "financial": "Financeiro"
+            },
+            "info": {
+                "title": "Informações do Cliente",
+                "email": "Email",
+                "phone": "Telefone",
+                "cpf": "CPF",
+                "birthday": "Data de Nascimento",
+                "address": "Endereço"
+            },
+            "notes": {
+                "title": "Notas do Cliente",
+                "placeholder": "Adicione notas sobre o cliente, histórico, observações, etc...",
+                "save": "Salvar Notas"
+            },
+            "financial": {
+                "title": "Resumo Financeiro",
+                "register": "Registrar Pagamento",
+                "totalPaid": "Total Pago",
+                "totalDue": "Total Devido",
+                "discounts": "Descontos",
+                "loading": "Carregando resumo financeiro..."
+            },
+            "photo": {
+                "invalid": "Arquivo inválido",
+                "invalidDesc": "Por favor, selecione uma imagem"
+            },
+            "toast": {
+                "loadError": "Erro ao carregar cliente",
+                "notesSaved": "Notas salvas",
+                "notesSavedDesc": "As notas do cliente foram atualizadas com sucesso",
+                "notesError": "Erro ao salvar notas",
+                "photoUpdated": "Foto atualizada",
+                "photoUpdatedDesc": "A foto do perfil foi atualizada com sucesso",
+                "uploadError": "Erro ao fazer upload"
+            }
+        },
+        "attendance": {
+            "title": "Controle de Presença",
+            "selectPatient": "Selecione um cliente",
+            "attendanceRate": "Taxa de Presença",
+            "totalSessions": "Total de Sessões",
+            "paidSessions": "Sessões Pagas",
+            "absences": "Faltas",
+            "calendarTitle": "Calendário de Presenças",
+            "recentRecords": "Registros Recentes",
+            "edit": "Editar",
+            "dialogTitle": "Registro de Presença - {date}",
+            "status": "Status",
+            "present": "Presente",
+            "absent": "Ausente",
+            "late": "Atrasado",
+            "cancelled": "Cancelado",
+            "payment": "Pagamento",
+            "amount": "Valor",
+            "method": "Método",
+            "paymentStatus": "Status do Pagamento",
+            "cash": "Dinheiro",
+            "credit": "Cartão de Crédito",
+            "debit": "Cartão de Débito",
+            "pix": "PIX",
+            "transfer": "Transferência",
+            "paid": "Pago",
+            "pending": "Pendente",
+            "notes": "Observações",
+            "notesPlaceholder": "Adicione observações sobre a sessão...",
+            "cancel": "Cancelar",
+            "save": "Salvar",
+            "saving": "Salvando...",
+            "toast": {
+                "loadPatientsError": "Erro ao carregar clientes",
+                "loadAttendanceError": "Erro ao carregar presenças",
+                "invalidDate": "Data inválida",
+                "invalidDateDesc": "Só é possível registrar presença em dias com agendamento",
+                "success": "Presença registrada",
+                "successDesc": "O registro de presença foi atualizado com sucesso",
+                "saveError": "Erro ao salvar presença"
+            }
+        },
+        "preview": {
+            "title": "Dashboard Inteligente",
+            "subtitle": "Visualize todas as informações importantes em um único lugar",
+            "welcome": "Bem-vindo ao ViraWeb",
+            "today": "Hoje, {date}",
+            "appointmentsToday": "Agendamentos Hoje",
+            "activeClients": "Clientes Ativos",
+            "avgTime": "Tempo Médio",
+            "completionRate": "Taxa Conclusão",
+            "nextAppointments": "Próximos Agendamentos",
+            "new": "Novo",
+            "confirmed": "Confirmado",
+            "pending": "Pendente",
+            "quickActions": {
+                "newAppointment": "Novo Agendamento",
+                "newClient": "Novo Cliente",
+                "reports": "Relatórios",
+                "settings": "Configurações"
+            }
+        },
+        "leadForm": {
+            "successTitle": "Perfil configurado!",
+            "successDesc": "Obrigado por nos contar mais sobre seu negócio."
+        }
+    },
+    "onboarding": {
+        "title": "Escolha seu plano",
+        "subtitle": "Comece a usar o ViraWeb hoje",
+        "selectPlan": "Selecionar Plano",
+        "loading": "Processando...",
+        "success": "Plano selecionado!",
+        "successMessage": "Seu plano foi ativado com sucesso",
+        "error": "Erro ao selecionar plano",
+        "tryAgainLater": "Tente novamente mais tarde",
+        "securePayment": "🔒 Pagamento seguro processado pelo Stripe. Cancele quando quiser."
+    },
+    "notifications": {
+        "title": "Notificações",
+        "empty": "Nenhuma notificação",
+        "markAllRead": "Marcar todas como lidas"
+    },
+    "errors": {
+        "generic": "Ocorreu um erro. Tente novamente.",
+        "network": "Erro de conexão. Verifique sua internet.",
+        "unauthorized": "Sessão expirada. Faça login novamente.",
+        "notFound": "Página não encontrada."
+    },
+    "products": {
+        "basic": {
+            "name": "Plano Básico",
+            "description": "Perfeito para começar sua clínica",
+            "features": {
+                "0": "Até 75 clientes",
+                "1": "Até 7 profissionais",
+                "2": "50 agendamentos/mês",
+                "3": "Relatórios básicos",
+                "4": "Suporte via email"
+            }
+        },
+        "premium": {
+            "name": "Plano Premium",
+            "description": "Recursos avançados com IA",
+            "features": {
+                "0": "Até 500 clientes",
+                "1": "Até 50 profissionais",
+                "2": "500 agendamentos/mês",
+                "3": "Relatórios avançados",
+                "4": "ViraBot AI 24/7",
+                "5": "Suporte prioritário",
+                "6": "Suporte via email e WhatsApp",
+                "7": "Horário: 8:00-18:00 (5 dias/semana)"
+            }
+        },
+        "master": {
+            "name": "Plano Master",
+            "description": "Recursos ilimitados e suporte premium",
+            "features": {
+                "0": "Clientes ilimitados",
+                "1": "Profissionais ilimitados",
+                "2": "Agendamentos ilimitados",
+                "3": "Relatórios avançados",
+                "4": "ViraBot AI 24/7",
+                "5": "Suporte prioritário 24/7",
+                "6": "Suporte via email e WhatsApp",
+                "7": "Gerente de conta dedicado"
+            }
+        }
+    },
+    "demoPage": {
+        "back": "Voltar",
+        "title": "Comparação Completa de Planos",
+        "subtitle": "Veja todas as diferenças entre nossos planos e escolha o melhor para seu negócio",
+        "tabs": {
+            "comparison": "Comparação",
+            "features": "Funcionalidades",
+            "demo": "Demo Interativa"
+        },
+        "popular": "Mais Popular",
+        "selected": "Selecionado",
+        "select": "Selecionar",
+        "feature": "Funcionalidade",
+        "basic": "Básico",
+        "premium": "Premium",
+        "master": "Master",
+        "featuresList": [
+            {
+                "category": "Gerenciamento",
+                "items": [
+                    {
+                        "name": "Clientes",
+                        "basic": "Até 75",
+                        "premium": "Até 500",
+                        "master": "Ilimitado"
+                    },
+                    {
+                        "name": "Profissionais",
+                        "basic": "Até 7",
+                        "premium": "Até 50",
+                        "master": "Ilimitado"
+                    },
+                    {
+                        "name": "Agendamentos",
+                        "basic": "50/mês",
+                        "premium": "500/mês",
+                        "master": "Ilimitado"
+                    }
+                ]
+            },
+            {
+                "category": "Controle e Ferramentas",
+                "items": [
+                    {
+                        "name": "Gestão Financeira",
+                        "basic": "Básica",
+                        "premium": "Completa",
+                        "master": "Completa"
+                    },
+                    {
+                        "name": "Relatórios e Análises",
+                        "basic": "Básicos",
+                        "premium": "Avançados",
+                        "master": "Avançados"
+                    },
+                    {
+                        "name": "Personalização de Temas",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            },
+            {
+                "category": "Produtividade",
+                "items": [
+                    {
+                        "name": "Metas Acompanhadas",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "Checklists e Notas",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "ViraBot IA Assistant",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            },
+            {
+                "category": "Suporte",
+                "items": [
+                    {
+                        "name": "Suporte por Email",
+                        "basic": true,
+                        "premium": true,
+                        "master": true
+                    },
+                    {
+                        "name": "Suporte WhatsApp",
+                        "basic": false,
+                        "premium": "8h-18h (5 dias)",
+                        "master": "24/7"
+                    },
+                    {
+                        "name": "Suporte Prioritário",
+                        "basic": false,
+                        "premium": true,
+                        "master": true
+                    }
+                ]
+            }
+        ]
+    },
+    "titles": {
+        "landing": "ViraWeb — Gestor de Clientes e Agendamentos",
+        "login": "Login — ViraWeb",
+        "signup": "Cadastre-se — ViraWeb",
+        "demo": "Demo Interativa — ViraWeb",
+        "dashboard": "{section} — Dashboard ViraWeb"
+    },
+    "legal": {
+        "privacy": {
+            "title": "Política de Privacidade",
+            "content": "Esta política descreve como tratamos seus dados pessoais no ViraWeb."
+        },
+        "terms": {
+            "title": "Termos de Serviço",
+            "content": "Estes termos regem o uso da plataforma ViraWeb."
+        },
+        "lgpd": {
+            "title": "Conformidade LGPD",
+            "content": "O ViraWeb está em conformidade com a Lei Geral de Proteção de Dados."
+        },
+        "layout": {
+            "backToHome": "Voltar ao ViraWeb",
+            "sectionMenu": "Menu de seções",
+            "lastUpdated": "Última atualização",
+            "index": "Índice",
+            "protectedData": "Dados Protegidos",
+            "protectedDataDesc": "Seus dados estão protegidos com criptografia de ponta a ponta e em conformidade com a LGPD.",
+            "contactTitle": "Tem alguma dúvida?",
+            "contactDesc": "Estamos aqui para ajudar. Entre em contato conosco por email ou WhatsApp e teremos prazer em esclarecer suas dúvidas sobre nossos termos e políticas."
+        }
+    },
+    "freeTrial": {
+        "nav": {
+            "login": "Entrar",
+            "start": "Começar Agora"
+        },
+        "hero": {
+            "badge": "Software de Gestão Pro",
+            "title": "Transforme sua {gestao} com Inteligência.",
+            "gestao": "Gestão",
+            "description": "Do agendamento automático via IA à gestão financeira total. Tudo o que sua clínica precisa em uma única tela.",
+            "cta": "Explorar Teste Grátis"
+        },
+        "demo": {
+            "growth": "Crescimento",
+            "efficiency": "Eficiência aumentada em 85%"
+        },
+        "features": {
+            "clients": {
+                "title": "Gestão de Clientes sem esforço manual.",
+                "description": "Nossa IA OCR lê seus prontuários impressos ou PDFs e preenche o cadastro automaticamente. Economize horas de digitação e evite erros humanos.",
+                "item1": "Importação Instantânea de PDFs",
+                "item2": "Histórico de Atendimento Digital",
+                "item3": "Prontuário Personalizável",
+                "item4": "Busca Rápida Inteligente",
+                "ocrDrop": "Arraste seu PDF aqui",
+                "ocrProcess": "Processamento via OCR em 3 segundos"
+            },
+            "ai": {
+                "title": "Sua Agenda trabalha para você.",
+                "description": "O ViraBot não é apenas um bot. Ele entende a linguagem natural dos seus pacientes e gerencia seus horários de forma inteligente 24 horas por dia.",
+                "badge": "ViraBot AI Ativo",
+                "subtitle": "Agendamento Automático",
+                "patientSays": "Paciente diz:",
+                "patientText": "\"Olá, gostaria de marcar uma consulta para terça às 14h.\"",
+                "botSays": "ViraBot responde:",
+                "botText": "\"Claro! Horário reservado. Acabei de adicionar à agenda do Dr. Roberto e enviei o lembrete.\"",
+                "item1": "Lembretes de WhatsApp automáticos",
+                "item2": "Status em tempo real",
+                "item3": "Cancelamento e Reagendamento por IA",
+                "item4": "Sincronização com Google Calendar"
+            },
+            "financial": {
+                "title": "Visão Total do seu faturamento.",
+                "description": "Controle entradas, saídas, receitas recorrentes e comissões de profissionais em um só lugar. Relatórios visuais que ajudam você a tomar decisões.",
+                "item1": "Fluxo de Caixa Detalhado",
+                "item2": "Gestão de Multidomínios",
+                "item3": "Exportação para Contabilidade",
+                "item4": "Gráficos de Performance Mensal",
+                "monthlyRevenue": "Receita Mensal",
+                "growth": "+24% vs mês anterior",
+                "toPay": "A pagar",
+                "toReceive": "A receber"
+            }
+        },
+        "finalCta": {
+            "badge": "Comece sua jornada hoje",
+            "title": "Sua clínica no {nextLevel}.",
+            "nextLevel": "próximo nível",
+            "description": "Junte-se a mais de 500 profissionais e automatize sua gestão agora.",
+            "button": "Ativar Teste de 14 Dias Grátis"
+        },
+        "faq": {
+            "title": "Dúvidas Frequentes",
+            "subtitle": "Tudo o que você precisa saber",
+            "q1": "Preciso cadastrar cartão de crédito agora?",
+            "a1": "Não! O teste gratuito de 14 dias é totalmente livre de dados de pagamento.",
+            "q2": "O que acontece após os 14 dias?",
+            "a2": "Sua conta entra em modo de suspensão. Você poderá escolher assinar um plano ou exportar seus dados.",
+            "q3": "Posso cancelar a qualquer momento?",
+            "a3": "Sim, não há fidelidade. Você pode cancelar sua assinatura em qualquer momento.",
+            "q4": "Tenho suporte durante o teste?",
+            "a4": "Com certeza! Você terá acesso ao nosso suporte VIP via WhatsApp e E-mail."
+        }
+    }
+}

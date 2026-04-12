@@ -1,0 +1,44 @@
+# --- Dependências ---
+node_modules/
+/.pnp
+.pnp.js
+
+# --- Arquivos de Ambiente (Segurança) ---
+# Ignora todos os arquivos .env locais para não vazar chaves de API
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+
+# Exceção: Se você tiver um arquivo de exemplo, descomente a linha abaixo
+# !.env.example
+
+# --- Builds e Produção ---
+build/
+dist/
+.next/
+out/
+
+# --- Logs e Debug ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# --- Testes ---
+coverage/
+
+# --- IDEs e Editores ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
