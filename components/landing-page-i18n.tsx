@@ -211,7 +211,16 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
             >
                 <div className="max-w-7xl mx-auto px-4 h-14 flex justify-between items-center">
                     <a href="#" aria-label="ViraWeb - Início" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <Image width={120} height={30} alt="ViraWeb logo" src="/viraweb3.png" className="w-24 object-contain" priority />
+                        <Image 
+                            width={120} 
+                            height={30} 
+                            alt="ViraWeb logo" 
+                            src="/viraweb3.png" 
+                            className="w-24 object-contain" 
+                            priority 
+                            fetchPriority="high"
+                            sizes="(max-width: 768px) 96px, 120px"
+                        />
                     </a>
 
                     <nav className="hidden md:flex items-center gap-6 text-[13px] font-bold text-slate-700 uppercase tracking-tight">
@@ -246,7 +255,16 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                     animate={{ y: [-20, 20, -20], rotate: [0, 5, 0] }}
                     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <Image src="/viraweb6.png" alt="ViraWeb BG" width={400} height={400} className="w-[300px] md:w-[600px] h-auto grayscale saturate-0" />
+                    <Image 
+                        src="/viraweb6.png" 
+                        alt="ViraWeb BG" 
+                        width={400} 
+                        height={400} 
+                        className="w-[300px] md:w-[600px] h-auto grayscale saturate-0" 
+                        priority
+                        fetchPriority="high"
+                        sizes="(max-width: 768px) 300px, 600px"
+                    />
                 </motion.div>
                 <motion.div
                     className="absolute bottom-40 right-[0%] opacity-[0.03] select-none pointer-events-none"
@@ -271,27 +289,21 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                     </motion.div>
 
                     {/* Title */}
-                    <motion.h1
+                    <h1
                         className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4 text-left leading-tight max-w-3xl"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15, duration: 0.5 }}
                     >
                         {t('hero.title')}{" "}
                         <span className="text-primary">
                             {t('hero.titleHighlight')}
                         </span>
-                    </motion.h1>
+                    </h1>
 
                     {/* Subtitle */}
-                    <motion.p
+                    <p
                         className="text-[15px] sm:text-[16px] text-slate-600 mb-8 max-w-xl text-left leading-relaxed font-normal"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.25 }}
                     >
                         {t('hero.description')}
-                    </motion.p>
+                    </p>
 
                     {/* CTAs */}
                     <motion.div

@@ -19,77 +19,20 @@ const outfit = Outfit({
 import AnalyticsTracker from "@/components/analytics-tracker"
 
 export const metadata: Metadata = {
-  title: {
-    default: "ViraWeb — A Solução Definitiva para Gestão de Clínicas e Consultórios",
-    template: "%s | ViraWeb GDS"
-  },
-  description:
-    "Transforme a gestão da sua clínica com o ViraWeb. Sistema completo com agendamentos online, controle financeiro, prontuário eletrônico e lembretes automáticos via WhatsApp.",
-  keywords: [
-    "gestão de clínicas",
-    "software para clínicas",
-    "agendamento online para médicos",
-    "sistema para dentistas",
-    "sistema para psicólogos",
-    "prontuário eletrônico",
-    "controle financeiro para clínicas",
-    "lembretes de agendamento whatsapp",
-    "ViraWeb GDS",
-    "gestão de pacientes"
-  ],
-  authors: [{ name: "Equipe ViraWeb", url: "https://viraweb.online" }],
-  creator: "ViraWeb",
-  publisher: "ViraWeb Tecnologias",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://viraweb.online"),
-  alternates: { 
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://viraweb.online",
-    languages: {
-      "pt-BR": "https://viraweb.online/",
-    }
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  title: "ViraWeb | Gestão Inteligente para Clínicas e Equipes",
+  description: "Sistema de gestão definitivo para negócios de agendamento. Otimize sua clínica com agendamento online, controle financeiro e inteligência artificial.",
+  keywords: ["gestão de clínicas", "agendamento online", "software médico", "ViraWeb", "GDC"],
+  authors: [{ name: "Equipe ViraWeb" }],
+  viewport: "width=device-width, initial-scale=1",
+  robots: "index, follow",
   openGraph: {
-    title: "ViraWeb — A Solução Definitiva para Gestão de Clínicas e Consultórios",
-    description:
-      "Simplifique seus agendamentos, reduza as faltas dos pacientes com notificações inteligentes e tenha controle financeiro total em um único sistema GDS.",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://viraweb.online",
-    siteName: process.env.NEXT_PUBLIC_COMPANY_NAME || "ViraWeb",
+    title: "ViraWeb | Gestão Inteligente para Clínicas",
+    description: "O sistema definitivo para planejar e escalar negócios de agendamento.",
+    url: "https://viraweb.online",
+    siteName: "ViraWeb",
     locale: "pt_BR",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "ViraWeb — Gestão inteligente para clínicas e profissionais de saúde",
-        type: "image/png",
-      },
-    ],
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "ViraWeb — A Solução Definitiva para Gestão de Clínicas e Consultórios",
-    description:
-      "Agendamentos online, lembretes interativos e financeiro integrados para alavancar seu atendimento clínico.",
-    images: ["/og-image.png"],
-    creator: "@ViraWebGDS",
-  },
-  icons: {
-    icon: "/viraweb6.png",
-    shortcut: "/viraweb6.png",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/manifest.json",
 }
 
 export default async function RootLayout({
@@ -190,7 +133,9 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <AnalyticsTracker />
-            {children}
+            <main id="main-content">
+              {children}
+            </main>
           </Providers>
         </NextIntlClientProvider>
         <Toaster />

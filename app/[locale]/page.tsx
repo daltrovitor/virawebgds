@@ -440,7 +440,7 @@ export default function Home() {
     }
 
     return (
-        <main className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background">
             {currentPage === "landing" && (
                 <LandingPage onLoginClick={() => setCurrentPage("login")} onSignupClick={() => setCurrentPage("signup")} />
             )}
@@ -486,6 +486,6 @@ export default function Home() {
                     <iframe src={`/${routing.defaultLocale}/renewal`} className="w-full h-screen border-none" />
                 </div>
             )}
-        </main>
+        </div>
     )
 }
