@@ -17,7 +17,8 @@ import { createClient } from "@/lib/supabase-client"
 
 export default function FreeTrialAuthPage() {
     const { signIn, signUp, signInWithGoogle } = useAuth() as any
-    const [isLogin, setIsLogin] = useState(false)
+    const searchParams = useSearchParams()
+    const [isLogin, setIsLogin] = useState(searchParams.get('login') === 'true')
     const [isLoading, setIsLoading] = useState(false)
     const [isGoogleLoading, setIsGoogleLoading] = useState(false)
     const supabase = createClient()
@@ -27,7 +28,6 @@ export default function FreeTrialAuthPage() {
     const [acceptedTerms, setAcceptedTerms] = useState(false)
     const { toast } = useToast()
     const router = useRouter()
-    const searchParams = useSearchParams()
     const locale = searchParams.get('locale') || 'pt-BR'
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -187,7 +187,6 @@ export default function FreeTrialAuthPage() {
                                 </div>
                             </div>
 
-                            {!isLogin && (
                                 <div className="flex items-start gap-2 mb-4 pt-2">
                                     <div className="flex items-center h-5">
                                         <input
@@ -207,11 +206,10 @@ export default function FreeTrialAuthPage() {
                                         <Link href={`/${locale}/lgpd`} target="_blank" className="text-primary font-bold hover:underline">LGPD</Link>.
                                     </label>
                                 </div>
-                            )}
 
                             <Button 
                                 type="submit" 
-                                disabled={isLoading || isGoogleLoading || (!isLogin && !acceptedTerms)}
+                                disabled={isLoading || isGoogleLoading || !acceptedTerms}
                                 className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : (isLogin ? "Entrar e Continuar" : "Cadastrar e Iniciar Teste")}
@@ -230,7 +228,7 @@ export default function FreeTrialAuthPage() {
                                 onClick={handleGoogleSignIn}
                                 variant={isLogin ? 'signin' : 'signup'}
                                 isLoading={isGoogleLoading}
-                                className={!isLogin && !acceptedTerms ? "opacity-50 cursor-not-allowed" : ""}
+                                className={!acceptedTerms ? "opacity-50 cursor-not-allowed" : ""}
                             />
                         </form>
                     </CardContent>

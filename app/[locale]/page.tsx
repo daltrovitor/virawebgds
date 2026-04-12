@@ -6,7 +6,6 @@ import { useSubscription } from "@/hooks/use-subscription"
 import { useToast } from "@/hooks/use-toast"
 import { fetchJson } from "@/lib/fetch-client"
 import { useRouter } from "next/navigation"
-import LandingPage from "@/components/landing-page-i18n"
 import LoginPage from "@/components/login-page-i18n"
 import SignupPage from "@/components/signup-page-i18n"
 import Dashboard from "@/components/dashboard-i18n"
@@ -210,9 +209,10 @@ export default function Home() {
             // Keep user on auth pages if that's where they are
             if (currentPage === "signup" || currentPage === "login") return
 
-            // If they have a trial cookie or goto param, maybe we should push them to trial auth?
-            // But usually landing is fine as it has the "Start Trial" CTAs
-            if (currentPage !== "landing") setCurrentPage("landing")
+            // The old landing page was deleted, redirect to the new free-trial page
+            if (currentPage === "landing") {
+                router.push(`/${locale}/free-trial`)
+            }
             return
         }
 
@@ -328,10 +328,10 @@ export default function Home() {
                 setIsNewUser(true)
                 
                 // Se o usuário foi logado automaticamente (comum em algumas configs de Supabase ou auth externa)
-                if (user && subscription && (subscription.status === 'active' || subscription.status === 'trialing')) {
+                if (user && subscription && ((subscription.status as string) === 'active' || (subscription.status as string) === 'trialing')) {
                     // Redireciona para a raiz do domínio atual (resolve localhost e produção)
                     window.location.href = window.location.origin
-                    return null
+                    return
                 } else {
                     toast({
                         title: t('auth.signup.success'),
@@ -378,7 +378,8 @@ export default function Home() {
 
     const handleLogout = async () => {
         await signOut()
-        setCurrentPage("landing")
+        const locale = window.location.pathname.split('/')[1] || 'pt-BR'
+        router.push(`/${locale}/free-trial`)
     }
 
     const handleGoogleSignIn = async (flow: 'login' | 'signup' = 'signup') => {
@@ -438,13 +439,21 @@ export default function Home() {
     return (
         <main className="min-h-screen bg-background">
             {currentPage === "landing" && (
-                <LandingPage onLoginClick={() => setCurrentPage("login")} onSignupClick={() => setCurrentPage("signup")} />
+                <div className="min-h-screen flex items-center justify-center bg-white">
+                    <div className="flex items-center gap-3">
+                        <Image src="/viraweb6.png" width={40} height={40} alt="ViraWeb" className="w-10 grayscale opacity-50 animate-pulse" />
+                        <span className="text-slate-400 font-medium">Redirecionando...</span>
+                    </div>
+                </div>
             )}
             {currentPage === "login" && (
                 <LoginPage
                     onLogin={handleLogin}
                     onSignupClick={() => setCurrentPage("signup")}
-                    onBackClick={() => setCurrentPage("landing")}
+                    onBackClick={() => {
+                        const locale = window.location.pathname.split('/')[1] || 'pt-BR'
+                        router.push(`/${locale}/free-trial`)
+                    }}
                     onForgotPassword={() => handleForgotPassword()}
                     onGoogleSignIn={() => handleGoogleSignIn('login')}
                 />
@@ -453,7 +462,10 @@ export default function Home() {
                 <SignupPage
                     onSignup={handleSignup}
                     onLoginClick={() => setCurrentPage("login")}
-                    onBackClick={() => setCurrentPage("landing")}
+                    onBackClick={() => {
+                        const locale = window.location.pathname.split('/')[1] || 'pt-BR'
+                        router.push(`/${locale}/free-trial`)
+                    }}
                     onGoogleSignIn={() => handleGoogleSignIn('signup')}
                 />
             )}

@@ -8,9 +8,10 @@ interface GoogleButtonProps {
   onError?: () => void
   variant?: "signin" | "signup"
   isLoading?: boolean
+  className?: string
 }
 
-export function GoogleButton({ onSuccess, onError, variant = "signin", isLoading, onClick }: GoogleButtonProps & { onClick?: () => void }) {
+export function GoogleButton({ onSuccess, onError, variant = "signin", isLoading, onClick, className }: GoogleButtonProps & { onClick?: () => void }) {
   // Protect against missing client id: NEXT_PUBLIC_GOOGLE_CLIENT_ID must be configured
   // If it's not present we avoid calling `useGoogleLogin` which would throw.
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
@@ -30,7 +31,7 @@ export function GoogleButton({ onSuccess, onError, variant = "signin", isLoading
     : undefined
 
   return (
-    <div className="w-full flex justify-center">
+    <div className={`w-full flex justify-center ${className || ''}`}>
       <button
         onClick={() => {
           if (onClick) {

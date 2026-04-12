@@ -24,7 +24,6 @@ export async function middleware(request: NextRequest) {
 
   const host = request.headers.get("host") || "";
   const adminDomain = "admin.viraweb.online";
-  const gdcDomain = "gdc.viraweb.online";
 
 
 
@@ -45,33 +44,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Handle free trial subdomain rewrite (internal)
-  if (host.includes(gdcDomain)) {
-    // List of paths that should NOT be rewritten to /free-trial
-    const excludedPaths = [
-      '/pt-BR/free-trial', '/en/free-trial',
-      '/api', '/_next', '/favicon.ico', 
-      '/checkout', '/pt-BR/checkout', '/en/checkout',
-      '/privacidade', '/termos', '/auth',
-      '/pt-BR/privacidade', '/pt-BR/termos', '/pt-BR/auth',
-      '/en/privacidade', '/en/termos', '/en/auth'
-    ];
-    
-    const isCustomer = request.cookies.get("vwd_is_customer")?.value === "true";
-    const shouldRewrite = !isCustomer && !excludedPaths.some(p => pathname.startsWith(p));
-    
-    if (shouldRewrite) {
-      const url = request.nextUrl.clone();
-      // Only prefix with locale if not already present
-      const hasLocale = pathname.startsWith('/pt-BR') || pathname.startsWith('/en');
-      if (hasLocale) {
-        url.pathname = pathname.replace(/^\/(pt-BR|en)/, '/$1/free-trial');
-      } else {
-        url.pathname = `/pt-BR/free-trial${pathname === '/' ? '' : pathname}`;
-      }
-      return NextResponse.rewrite(url);
-    }
-  }
+  // GDC subdomain: no special rewrite needed.
+  // The landing page renders at / and free-trial is available at /free-trial.
+  // Customer detection is handled client-side by the page components.
 
   // Handle manual redirects for common legacy paths
   if (pathname.includes('/auth') && !pathname.includes('/free-trial/auth') && !pathname.includes('/auth/callback')) {
