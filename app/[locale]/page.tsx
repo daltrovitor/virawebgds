@@ -10,7 +10,7 @@ import LoginPage from "@/components/login-page-i18n"
 import SignupPage from "@/components/signup-page-i18n"
 import Dashboard from "@/components/dashboard-i18n"
 import OnboardingPlans from "@/components/onboarding-plans-i18n"
-import LandingPage from "@/components/landing-page"
+import LandingPage from "@/components/landing-page-i18n"
 import type { User, Session, AuthError } from "@supabase/supabase-js"
 import Image from "next/image"
 import { useTranslations } from 'next-intl'
@@ -437,10 +437,7 @@ export default function Home() {
     return (
         <main className="min-h-screen bg-background">
             {currentPage === "landing" && (
-                <LandingPage 
-                    onLoginClick={() => setCurrentPage("login")}
-                    onSignupClick={() => setCurrentPage("signup")}
-                />
+                <LandingPage onLoginClick={() => setCurrentPage("login")} onSignupClick={() => setCurrentPage("signup")} />
             )}
             {currentPage === "login" && (
                 <LoginPage
