@@ -41,7 +41,7 @@ import ImportTab from "./dashboard/import-tab"
 import NotificationsPanel from "./notifications-panel"
 import TutorialModal from "./tutorial-modal"
 import ImportOnboardingModal from "./import-onboarding-modal"
-import ThemeSettings from "./dashboard/theme-settings"
+
 import Image from "next/image"
 import { createClient } from "@/lib/supabase-client"
 
@@ -226,7 +226,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
               {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             <div className="flex items-center gap-1 sm:gap-3 flex-wrap">
-              <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-24 sm:w-32" />
+              <Image width={512} height={160} alt="ViraWeb logo" src="/viraweb3.png" className="w-24 sm:w-32" style={{ height: "auto" }} priority />
               {(() => {
                 const planName = (subscription?.plan_name || "").toLowerCase()
                 const planType = (subscription?.plan_type || "").toLowerCase()
@@ -335,8 +335,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
           </div>
         </main>
       </div>
-      {/* ThemeSettings shown only on the dashboard */}
-      <ThemeSettings />
+
     </div>
   )
 }

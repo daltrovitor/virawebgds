@@ -56,7 +56,7 @@ const ImportTab = dynamic(() => import("./dashboard/import-tab"), { loading: () 
 const NotificationsPanel = dynamic(() => import("./notifications-panel"), { ssr: false })
 const TutorialModal = dynamic(() => import("./tutorial-modal"), { ssr: false })
 const ImportOnboardingModal = dynamic(() => import("./import-onboarding-modal"), { ssr: false })
-const ThemeSettings = dynamic(() => import("./dashboard/theme-settings"), { ssr: false })
+
 
 function TabLoading() {
     return (
@@ -413,8 +413,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                     </div>
                 </main>
             </div>
-            {/* ThemeSettings shown only on the dashboard */}
-            <ThemeSettings />
+
         </div>
     )
 }
