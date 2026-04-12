@@ -11,23 +11,26 @@ import Image from "next/image"
 import LanguageToggle from "@/components/language-toggle"
 
 // Import real components
-import OverviewTab from "./dashboard/overview-tab"
-import AppointmentsTab from "./dashboard/appointments-tab"
-import PatientsTab from "./dashboard/patients-tab"
-import ProfessionalsTab from "./dashboard/professionals-tab"
-import ReportsTab from "./dashboard/reports-tab"
-import FinancialTab from "./dashboard/financial-tab"
-import AISection from "./dashboard/ai-section"
-import { GoalsSection } from "./dashboard/goals-section"
-import NotesTab from "./dashboard/notes-tab"
-import ChecklistTab from "./dashboard/checklist-tab"
-import RemindersTab from "./dashboard/reminders-tab"
-import SupportTab from "./dashboard/support-tab"
-import TutorialTab from "./dashboard/tutorial-tab"
-import ImportTab from "./dashboard/import-tab"
-import SettingsTab from "./dashboard/settings-tab"
-import SubscriptionsTab from "./dashboard/subscriptions-tab"
-import NotificationsPanel from "./notifications-panel"
+import dynamic from "next/dynamic"
+
+// Dynamic imports for dashboard tabs
+const OverviewTab = dynamic(() => import("./dashboard/overview-tab"))
+const AppointmentsTab = dynamic(() => import("./dashboard/appointments-tab"))
+const PatientsTab = dynamic(() => import("./dashboard/patients-tab"))
+const ProfessionalsTab = dynamic(() => import("./dashboard/professionals-tab"))
+const ReportsTab = dynamic(() => import("./dashboard/reports-tab"))
+const FinancialTab = dynamic(() => import("./dashboard/financial-tab"))
+const AISection = dynamic(() => import("./dashboard/ai-section"))
+const GoalsSection = dynamic(() => import("./dashboard/goals-section").then(m => m.GoalsSection))
+const NotesTab = dynamic(() => import("./dashboard/notes-tab"))
+const ChecklistTab = dynamic(() => import("./dashboard/checklist-tab"))
+const RemindersTab = dynamic(() => import("./dashboard/reminders-tab"))
+const SupportTab = dynamic(() => import("./dashboard/support-tab"))
+const TutorialTab = dynamic(() => import("./dashboard/tutorial-tab"))
+const ImportTab = dynamic(() => import("./dashboard/import-tab"))
+const SettingsTab = dynamic(() => import("./dashboard/settings-tab"))
+const SubscriptionsTab = dynamic(() => import("./dashboard/subscriptions-tab"))
+const NotificationsPanel = dynamic(() => import("./notifications-panel"))
 
 import {
     Dialog,

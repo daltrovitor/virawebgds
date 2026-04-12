@@ -1,20 +1,25 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import dynamic from "next/dynamic"
 import { useAuth } from "@/hooks/use-auth"
 import { useSubscription } from "@/hooks/use-subscription"
 import { useToast } from "@/hooks/use-toast"
 import { fetchJson } from "@/lib/fetch-client"
 import { useRouter } from "next/navigation"
-import LoginPage from "@/components/login-page-i18n"
-import SignupPage from "@/components/signup-page-i18n"
-import Dashboard from "@/components/dashboard-i18n"
-import OnboardingPlans from "@/components/onboarding-plans-i18n"
-import LandingPage from "@/components/landing-page-i18n"
 import type { User, Session, AuthError } from "@supabase/supabase-js"
 import Image from "next/image"
 import { useTranslations } from 'next-intl'
 import { routing } from "@/i18n/routing"
+
+// Dynamic components with skeletons/loading states
+const LandingPage = dynamic(() => import("@/components/landing-page-i18n"), {
+    loading: () => <div className="min-h-screen bg-black animate-pulse" />
+})
+const LoginPage = dynamic(() => import("@/components/login-page-i18n"))
+const SignupPage = dynamic(() => import("@/components/signup-page-i18n"))
+const Dashboard = dynamic(() => import("@/components/dashboard-i18n"))
+const OnboardingPlans = dynamic(() => import("@/components/onboarding-plans-i18n"))
 
 interface AuthUser {
     id?: string

@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import dynamic from "next/dynamic"
+import { motion, useInView, LazyMotion, domMax } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -23,10 +24,17 @@ import {
   Upload,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import DashboardPreview from "@/components/dashboard-preview"
-import DemoPage from "@/components/demo-page"
 import { PRODUCTS } from "@/lib/products"
 import Image from "next/image"
+
+// Dynamic imports for heavy components
+const DashboardPreview = dynamic(() => import("@/components/dashboard-preview"), {
+  loading: () => <div className="h-[400px] w-full bg-slate-900/50 animate-pulse rounded-xl" />,
+  ssr: false
+})
+const DemoPage = dynamic(() => import("@/components/demo-page"), {
+  ssr: false
+})
 
 interface LandingPageProps {
   onLoginClick: () => void
@@ -112,24 +120,28 @@ const FadeInText = ({ children, delay = 0 }: { children: React.ReactNode; delay?
 export default function LandingPage({ onLoginClick, onSignupClick }: LandingPageProps) {
   const [showDemo, setShowDemo] = useState(false)
 
+  const navRef = useRef<HTMLElement>(null)
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       let ultimaPosicao = 0
-      window.addEventListener("scroll", () => {
-        const nav: any = document.querySelector("#nav")
+      const handleScroll = () => {
+        const nav = navRef.current
+        if (!nav) return
+        
         const atualPosicao = window.scrollY
 
-        if (atualPosicao > ultimaPosicao && atualPosicao > 0) {
+        if (atualPosicao > ultimaPosicao && atualPosicao > 80) {
           nav.style.transform = "translateY(-100%)"
         } else {
           nav.style.transform = "translateY(0%)"
         }
-        if (atualPosicao < 80) {
-          nav.style.transform = "translateY(0%)"
-          nav.style.transition = "0.5s"
-        }
+        
         ultimaPosicao = atualPosicao
-      })
+      }
+
+      window.addEventListener("scroll", handleScroll, { passive: true })
+      return () => window.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
@@ -142,17 +154,19 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
   }
 
   return (
-    <div className="dark min-h-screen bg-[#000000] text-[#F7F8F8] selection:bg-primary/30 font-sans selection:text-white">
+    <LazyMotion features={domMax} strict>
+      <div className="dark min-h-screen bg-[#000000] text-[#F7F8F8] selection:bg-primary/30 font-sans selection:text-white">
       {/* Header */}
       <header
+        ref={navRef}
         id="nav"
         className="top-0 z-50 sticky bg-[#000000]/80 backdrop-blur-md border-b border-white/5 transition-all duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <a href="#" aria-label="ViraWeb - Início" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Image width={32} height={32} alt="ViraWeb icon" src="/favicon.png" className="w-[22px] h-[22px]" />
-              <Image width={140} height={40} alt="ViraWeb logo" src="/viraweb3.png" className="h-[18px] w-auto object-contain brightness-0 invert" />
+              <Image width={32} height={32} alt="ViraWeb icon" src="/favicon.png" className="w-[22px] h-[22px]" priority />
+              <Image width={140} height={40} alt="ViraWeb logo" src="/viraweb3.png" className="h-[18px] w-auto object-contain brightness-0 invert" priority />
             </a>
           </div>
 
@@ -849,6 +863,6 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
           </div>
         </motion.div>
       </footer>
-    </div>
+    </LazyMotion>
   )
 }

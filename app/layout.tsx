@@ -12,6 +12,8 @@ const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 import AnalyticsTracker from "@/components/analytics-tracker"
@@ -101,32 +103,8 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        {/* Console Silencer: MUST BE THE FIRST SCRIPT */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-          (function() {
-            // Se estiver em produção ou mesmo caso o usuário queira bloquear todos, sobrescrevemos:
-            if (window.location.hostname !== 'localhost') {
-              const noop = () => {};
-              console.log = noop;
-              console.info = noop;
-              console.warn = noop;
-              console.error = noop;
-              console.debug = noop;
-            } else {
-              const suppress = (args, original) => {
-                const msg = args && args[0] ? String(args[0]) : '';
-                const tokens = ['React DevTools', 'Pippit', 'Vercel Web Analytics', 'Largest Contentful Paint', 'aspect ratio', 'Download the React DevTools', 'Fast Refresh', 'zustand', 'DEPRECATED', 'Default export is deprecated'];
-                if (tokens.some(t => msg.includes(t))) return;
-                original.apply(console, args);
-              };
-              const w = console.warn; const l = console.log; const e = console.error;
-              console.warn = (...a) => suppress(a, w);
-              console.log = (...a) => suppress(a, l);
-              console.error = (...a) => suppress(a, e);
-            }
-          })();
-        ` }} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="shortcut icon" href="/viraweb6.png" type="image/x-icon" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content={process.env.NEXT_PUBLIC_THEME_COLOR || "#0ea5a4"} />
@@ -202,24 +180,12 @@ export default async function RootLayout({
         />
 
         
-        {/* Theme initialization script */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-          (function() {
-            try {
-              var theme = localStorage.getItem('theme');
-              if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-                document.documentElement.style.colorScheme = 'dark';
-              } else {
-                document.documentElement.classList.remove('dark');
-                document.documentElement.style.colorScheme = 'light';
-              }
-            } catch (e) {
-              // silent
-            }
-          })();
-        ` }} />
+        {/* Theme initialization script - Optimized and moved */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark"}else{document.documentElement.classList.remove("dark");document.documentElement.style.colorScheme="light"}}catch(e){}})();`
+          }}
+        />
 
         <NextIntlClientProvider messages={messages}>
           <Providers>
