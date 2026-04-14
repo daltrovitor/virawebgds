@@ -31,6 +31,17 @@ export interface Payment {
   patients?: { id: string; name: string } | null
 }
 
+export interface Expense {
+  id: string
+  user_id: string
+  amount: number
+  category: string
+  description: string | null
+  expense_date: string
+  created_at: string
+  updated_at: string
+}
+
 export interface SessionRow {
   id: string
   user_id: string
@@ -62,9 +73,10 @@ export async function getRecentPayments(limit = 10) {
       notes,
       created_at,
       updated_at,
-      patients (id, name)
+      patient:patients (id, name)
     `)
     .eq("user_id", user.id)
+    .order("payment_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false })
     .limit(limit)
 
@@ -74,6 +86,60 @@ export async function getRecentPayments(limit = 10) {
   }
 
   return data as unknown as Payment[]
+}
+
+// ✅ LISTA DE DESPESAS RECENTES (Inclui custos de orçamentos pagos)
+export async function getRecentExpenses(limit = 10) {
+  const supabase = await createClient()
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) return []
+
+  // 1. Fetch manual expenses
+  const { data: expenses, error: exError } = await supabase
+    .from("expenses")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("expense_date", { ascending: false })
+    .limit(limit)
+
+  // 2. Fetch paid budgets with cost
+  const { data: budgets, error: bgError } = await supabase
+    .from("budgets")
+    .select("id, total_cost, updated_at, patient:patients(name)")
+    .eq("user_id", user.id)
+    .eq("status", "paid")
+    .gt("total_cost", 0)
+    .order("updated_at", { ascending: false })
+    .limit(limit)
+
+  if (exError) {
+    console.error("Error fetching expenses:", exError)
+    return []
+  }
+
+  // 3. Merge and format
+  const manualExpenses: Expense[] = (expenses || []).map(e => ({
+    ...e,
+    amount: Number(e.amount)
+  }))
+
+  const budgetExpenses: Expense[] = (budgets || []).map(b => ({
+    id: b.id,
+    user_id: user.id,
+    amount: Number(b.total_cost),
+    category: "Materiais",
+    description: `Custo: Orçamento #${b.id.slice(0, 8)} - ${b.patient?.name || 'Cliente'}`,
+    expense_date: b.updated_at.split("T")[0],
+    created_at: b.updated_at,
+    updated_at: b.updated_at
+  }))
+
+  // Combine, sort by date and limit
+  const combined = [...manualExpenses, ...budgetExpenses]
+    .sort((a, b) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime())
+    .slice(0, limit)
+
+  return combined
 }
 
 // ✅ REGISTRA UM PAGAMENTO
@@ -521,13 +587,16 @@ export async function getFinancialSummary(period: "daily" | "weekly" | "monthly"
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) return { totalReceived: 0, totalDiscounts: 0, totalPending: 0 }
+  if (authError || !user) return { totalReceived: 0, totalDiscounts: 0, totalPending: 0, totalExpenses: 0 }
 
   const now = new Date()
   const startDate = new Date()
 
+  // Ensure we start at the beginning of the day in local time
+  startDate.setHours(0, 0, 0, 0)
+
   if (period === "daily") {
-    startDate.setHours(0, 0, 0, 0)
+    // Current day already set by setHours
   } else if (period === "weekly") {
     startDate.setDate(now.getDate() - 7)
   } else {
@@ -535,6 +604,7 @@ export async function getFinancialSummary(period: "daily" | "weekly" | "monthly"
   }
 
   const startISO = startDate.toISOString()
+  const startDateStr = startISO.split("T")[0] // For date-only columns
 
   const { data, error } = await supabase
     .from("payments")
@@ -544,23 +614,55 @@ export async function getFinancialSummary(period: "daily" | "weekly" | "monthly"
 
   if (error) {
     console.error("Error fetching payments summary:", error)
-    return { totalReceived: 0, totalDiscounts: 0, totalPending: 0 }
+    return { totalReceived: 0, totalDiscounts: 0, totalPending: 0, totalExpenses: 0 }
+  }
+
+  // Fetch expenses for the same period
+  const { data: expensesData, error: expensesError } = await supabase
+    .from("expenses")
+    .select("amount")
+    .eq("user_id", user.id)
+    .gte("expense_date", startDateStr)
+
+  // Fetch budget costs for the same period (based on when they were paid/updated)
+  const { data: budgetsData, error: budgetsError } = await supabase
+    .from("budgets")
+    .select("total_cost")
+    .eq("user_id", user.id)
+    .eq("status", "paid")
+    .gte("updated_at", startISO)
+
+  if (expensesError) {
+    console.error("Error fetching expenses summary:", expensesError)
+  }
+
+  if (budgetsError) {
+    console.error("Error fetching budgets summary:", budgetsError)
   }
 
   let totalReceived = 0
   let totalDiscounts = 0
   let totalPending = 0
+  let totalExpenses = 0
 
   data?.forEach((p: any) => {
     const amt = Number(p.amount || 0)
     const disc = Number(p.discount || 0)
-    // Para recebidos: soma o valor líquido (amount - discount) quando estiver pago
     if (p.status === "paid") totalReceived += Math.max(0, amt - disc)
     if (disc) totalDiscounts += disc
     if (p.status === "pending" || p.status === "overdue") totalPending += Math.max(0, amt - disc)
   })
 
-  return { totalReceived, totalDiscounts, totalPending }
+  expensesData?.forEach((e: any) => {
+    totalExpenses += Number(e.amount || 0)
+  })
+
+  // Add budget costs to summary
+  budgetsData?.forEach((b: any) => {
+    totalExpenses += Number(b.total_cost || 0)
+  })
+
+  return { totalReceived, totalDiscounts, totalPending, totalExpenses }
 }
 
 // ✅ SÉRIE TEMPORAL (GRÁFICO FINANCEIRO)
@@ -611,6 +713,73 @@ export async function getFinancialSeries(days = 30) {
     if (!date) return
     const amt = Number(p.amount || 0) - Number(p.discount || 0)
     map[date] = (map[date] || 0) + amt
+  })
+
+  const series: { date: string; value: number }[] = []
+  for (let i = 0; i < days; i++) {
+    const d = new Date()
+    d.setDate(d.getDate() - (days - 1 - i))
+    const key = d.toISOString().split("T")[0]
+    series.push({ date: key, value: Number((map[key] || 0).toFixed(2)) })
+  }
+
+  return series
+}
+
+// ✅ SÉRIE TEMPORAL DE CUSTOS (GRÁFICO DE DESPESAS) - Inclui orçamentos pagos
+export async function getExpenseSeries(days = 30) {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user) {
+    const zeros: { date: string; value: number }[] = []
+    for (let i = 0; i < days; i++) {
+      const d = new Date()
+      zeros.push({ date: d.toISOString().split("T")[0], value: 0 })
+    }
+    return zeros
+  }
+
+  const start = new Date()
+  start.setDate(start.getDate() - (days - 1))
+  start.setHours(0, 0, 0, 0)
+  const startISO = start.toISOString()
+  const startDateStr = startISO.split("T")[0]
+
+  // 1. Fetch manual expenses
+  const { data: expenses, error: exError } = await supabase
+    .from("expenses")
+    .select("amount, expense_date")
+    .eq("user_id", user.id)
+    .gte("expense_date", startDateStr)
+
+  // 2. Fetch paid budgets costs
+  const { data: budgets, error: bgError } = await supabase
+    .from("budgets")
+    .select("total_cost, updated_at")
+    .eq("user_id", user.id)
+    .eq("status", "paid")
+    .gte("updated_at", startISO)
+
+  if (exError || bgError) {
+    console.error("Error fetching expense series:", exError || bgError)
+  }
+
+  const map: Record<string, number> = {}
+
+  expenses?.forEach((e: any) => {
+    if (!e.expense_date) return
+    map[e.expense_date] = (map[e.expense_date] || 0) + Number(e.amount || 0)
+  })
+
+  budgets?.forEach((b: any) => {
+    if (!b.updated_at) return
+    const date = b.updated_at.split("T")[0]
+    map[date] = (map[date] || 0) + Number(b.total_cost || 0)
   })
 
   const series: { date: string; value: number }[] = []
@@ -896,6 +1065,47 @@ export async function getAllPendingPayments(limit = 100) {
   }
 
   return data || []
+}
+
+// ✅ REGISTRA UMA DESPESA (REEMBOLSO, MATERIAIS, ETC)
+export async function recordExpense(payload: {
+  amount: number
+  category: string
+  description: string
+  expense_date?: string
+}) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user) throw new Error("Não autorizado")
+
+  const { data, error } = await supabase
+    .from("expenses")
+    .insert([
+      {
+        user_id: user.id,
+        amount: payload.amount,
+        category: payload.category,
+        description: payload.description,
+        expense_date: payload.expense_date || new Date().toISOString().split("T")[0],
+      },
+    ])
+    .select()
+    .single()
+
+  if (error) {
+    console.error("Error recording expense:", error)
+    throw error
+  }
+
+  try {
+    revalidatePath("/dashboard")
+  } catch (e) {}
+
+  return data
 }
 
 // ✅ LISTA DE clientes COM DÉBITOS

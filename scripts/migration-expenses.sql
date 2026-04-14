@@ -29,3 +29,8 @@ CREATE POLICY "Usuários podem atualizar suas próprias despesas"
 CREATE POLICY "Usuários podem excluir suas próprias despesas"
     ON public.expenses FOR DELETE
     USING (auth.uid() = user_id);
+
+-- CORREÇÃO: Permitir o status 'paid' na tabela de orçamentos
+ALTER TABLE IF EXISTS public.budgets DROP CONSTRAINT IF EXISTS budgets_status_check;
+ALTER TABLE IF EXISTS public.budgets ADD CONSTRAINT budgets_status_check 
+    CHECK (status IN ('draft', 'sent', 'approved', 'rejected', 'expired', 'paid'));

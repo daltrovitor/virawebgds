@@ -10,7 +10,8 @@ import type {
   BudgetItemDraft,
   InstallmentInterval,
 } from "@/lib/budget-types"
-import { recordPayment } from "./financial-actions"
+import { recordPayment, recordExpense } from "./financial-actions"
+import { addExpense } from "./closing-actions"
 
 // ============================================================
 // BUDGETS (Orçamentos)
@@ -217,15 +218,19 @@ export async function updateBudgetStatus(
   // Automatic Financial Integration
   if (status === 'paid' && budget.status !== 'paid') {
     try {
+      // 1. Record Revenue
       await recordPayment({
          patient_id: budget.patient_id,
          amount: budget.total_amount || 0,
          status: "paid",
-         notes: `Pagamento automático de Orçamento (Aprovado e Pago)`,
+         notes: `Orçamento #${budget.id.slice(0, 8)} - Pagamento Recebido`,
          payment_date: new Date().toISOString()
       });
+
+      // 2. Refresh state
+      revalidatePath("/dashboard");
     } catch (paymentErr) {
-       console.error("Error creating integrated payment for budget:", paymentErr)
+       console.error("Error creating integrated financial records for budget:", paymentErr)
     }
   }
 

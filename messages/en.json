@@ -885,9 +885,13 @@
             "cards": {
                 "received": "Received (month)",
                 "pending": "Pending",
-                "discounts": "Discounts (month)"
+                "discounts": "Discounts (month)",
+                "expenses": "Costs & Expenses"
             },
             "summary": "Summary",
+            "netBalance": "Net Balance",
+            "recentExpenses": "Recent Costs",
+            "consolidated": "consolidated",
             "summaryStats": {
                 "received": "Received (month)",
                 "pending": "Pending",
@@ -1021,23 +1025,50 @@
             }
         },
         "reports": {
-            "title": "Reports",
-            "subtitle": "Overview of appointments and clients.",
+            "title": "Smart Reports",
+            "subtitle": "Complete analysis of all aspects of your business.",
+            "downloadAll": "Download Full Report (PDF)",
+            "downloadSection": "Download PDF",
+            "sections": {
+                "overview": "Overview",
+                "financial": "Financial",
+                "crm": "CRM & Appointments",
+                "budgets": "Budgets",
+                "services": "Services & Price Table"
+            },
             "stats": {
                 "totalAppointments": "Total Appointments",
                 "totalAppointmentsDesc": "All records",
                 "activePatients": "Active Clients",
                 "activePatientsDesc": "Currently registered",
+                "totalProfessionals": "Total Professionals",
                 "completionRate": "Completion Rate",
                 "performanceExcellent": "Excellent performance",
-                "performanceGood": "Good performance"
+                "performanceGood": "Good performance",
+                "totalIncome": "Total Revenue",
+                "totalExpenses": "Total Expenses",
+                "manualExpenses": "Fixed/Variable",
+                "budgetCosts": "Budget Costs",
+                "netProfit": "Net Profit",
+                "netProfitDesc": "Real profit after cost deductions",
+                "totalBudgets": "Total Budgets",
+                "approvedBudgets": "Approved Budgets",
+                "pendingBudgets": "Pending Budgets",
+                "totalServices": "Total Services",
+                "averagePrice": "Average Price"
             },
-            "appointmentsChart": "Appointments by Month",
-            "patientsChart": "Client Growth",
+            "charts": {
+                "appointments": "Appointments by Month",
+                "growth": "Client Growth",
+                "financial": "Cash Flow (Income vs Expenses)",
+                "budgets": "Budget Status"
+            },
             "completed": "Completed",
             "cancelled": "Cancelled",
             "total": "Total",
             "new": "New",
+            "income": "Income",
+            "expenses": "Expenses",
             "noData": "No data available"
         },
         "subscriptions": {
@@ -1558,6 +1589,7 @@
                 "searchProducts": "Search in price table...",
                 "availableProducts": "Available products",
                 "noProducts": "No products. Register in Price Table first.",
+                "uncategorized": "Uncategorized",
                 "itemsInBudget": "Items in budget ({count})",
                 "clickToAdd": "Click a product to add it",
                 "qty": "Qty",
@@ -1595,6 +1627,46 @@
                 "created": "Budget created successfully!",
                 "errorCreate": "Error creating budget",
                 "errorLabel": "Error"
+            },
+            "detail": {
+                "budget": "Budget",
+                "back": "Back",
+                "duplicate": "Duplicate",
+                "sendToClient": "Send to client",
+                "approve": "Approve",
+                "reject": "Reject",
+                "markAsPaid": "Mark as Paid",
+                "itemsTitle": "Budget Items",
+                "financialSummary": "Financial Summary",
+                "paymentPlan": "Payment Plan",
+                "paidRequiredInfo": "Note: Only budgets with 'Paid' status are counted in your actual cash flow.",
+                "downPayment": "Down Payment",
+                "installments": "Installments",
+                "product": "Product"
+            },
+            "net": "Net Revenue",
+            "total": "Total",
+            "changeStatus": "Change Status",
+            "status": {
+                "draft": "Draft",
+                "sent": "Sent",
+                "approved": "Approved",
+                "rejected": "Rejected",
+                "expired": "Expired",
+                "paid": "Paid"
+            },
+            "paymentMethods": {
+                "pix": "Pix",
+                "credit_card": "Credit Card",
+                "debit_card": "Debit Card",
+                "cash": "Cash",
+                "transfer": "Transfer",
+                "boleto": "Boleto"
+            },
+            "intervals": {
+                "weekly": "Weekly",
+                "biweekly": "Biweekly",
+                "monthly": "Monthly"
             }
         }
     },
@@ -1875,6 +1947,142 @@
             "a3": "Yes, there is no commitment. You can cancel your subscription at any time.",
             "q4": "Do I have support during the trial?",
             "a4": "Definitely! You will have access to our VIP support via WhatsApp and Email."
+        }
+    },
+    "freeTrial": {
+        "nav": {
+            "solution": "Solution",
+            "benefits": "Benefits",
+            "features": "Features",
+            "login": "Login",
+            "cta": "Free trial"
+        },
+        "hero": {
+            "badge": "The new standard for elite managers",
+            "title": "Transform your chaotic routine into a",
+            "titleHighlight": "smart system",
+            "titleEnd": "under control",
+            "description": "Centralize your operations, automate manual processes and reduce your administrative time by up to",
+            "descriptionBold": "70%",
+            "ctaPrimary": "Free trial",
+            "ctaSecondary": "View interactive demo"
+        },
+        "problem": {
+            "title": "Is managing your business consuming you?",
+            "subtitle": "Feeling like the day flies by and nothing gets resolved is the symptom of a broken system.",
+            "item1Title": "Time Drain",
+            "item1Desc": "Hours lost managing schedules, filling spreadsheets and answering the same messages over and over.",
+            "item2Title": "Financial Blindness",
+            "item2Desc": "Lack of real control over income and expenses. Money disappearing in invisible losses you don't even notice.",
+            "item3Title": "Service Chaos",
+            "item3Desc": "Frustrated clients with delays, disorganization and a perception of amateurism in your service.",
+            "quote": "\"The problem isn't you, it's the lack of a smart system.\""
+        },
+        "solution": {
+            "badge": "THE DEFINITIVE SOLUTION",
+            "title": "ViraWeb: The Brain of your Business.",
+            "description": "We're not just another software. We are a complete platform that",
+            "descriptionBold": "centralizes, automates and organizes",
+            "descriptionEnd": "every detail of your operation.",
+            "check1": "Dashboards that show the truth of the facts",
+            "check2": "Automation that replaces manual tasks",
+            "check3": "Artificial Intelligence that predicts bottlenecks",
+            "cta": "It's time to move from operational to manager.",
+            "revenue": "REVENUE",
+            "revenueValue": "+24% this month",
+            "automations": "AUTOMATIONS",
+            "automationsValue": "150h saved",
+            "clients": "CLIENTS",
+            "clientsValue": "42 new",
+            "conversion": "CONVERSION",
+            "conversionValue": "12.5%"
+        },
+        "benefits": {
+            "title": "Tangible results for your daily life",
+            "subtitle": "We built ViraWeb on three fundamental pillars for sustainable growth.",
+            "item1Title": "Extreme Time Savings",
+            "item1Desc": "Our AI and flow automations handle repetitive work so you can focus on business strategy.",
+            "item2Title": "Real Financial Control",
+            "item2Desc": "360º view of revenue and costs in real time. Identify where you're losing money instantly.",
+            "item3Title": "Peace of Mind and Security",
+            "item3Desc": "Everything in the cloud, organized and accessible from anywhere. No more insecurity of losing data or forgetting appointments."
+        },
+        "transformation": {
+            "title": "The change is clear. The result is inevitable.",
+            "before": "BEFORE (THE CHAOS)",
+            "after": "AFTER (THE CONTROL)",
+            "before1": "Spreadsheets that never add up at end of month",
+            "before2": "Feeling like you're always putting out fires",
+            "before3": "Forgetting appointments and follow-ups",
+            "before4": "Lack of clarity about expected real profit",
+            "before5": "Manual processes that depend on your memory",
+            "after1": "Centralized and automated system",
+            "after2": "Clear view of your business health on your phone",
+            "after3": "Routines that run on their own without supervision",
+            "after4": "Protected profit margin and predictability",
+            "after5": "Time freedom and operational efficiency"
+        },
+        "features": {
+            "title": "Everything you need in one place",
+            "subtitle": "9 fundamental tools natively integrated.",
+            "scheduling": "Scheduling",
+            "schedulingDesc": "Smart time and professional management.",
+            "clients": "Clients",
+            "clientsDesc": "Complete CRM with history and preferences.",
+            "financial": "Financial",
+            "financialDesc": "Cash flow, P&L and delinquency control.",
+            "reports": "Reports",
+            "reportsDesc": "Detailed performance and revenue metrics.",
+            "virabot": "ViraBot AI",
+            "virabotDesc": "Your smart assistant for quick insights.",
+            "budgets": "Budgets",
+            "budgetsDesc": "Agile and professional proposal creation.",
+            "priceTable": "Price Table",
+            "priceTableDesc": "Dynamic service and product management.",
+            "checklist": "Checklist",
+            "checklistDesc": "Standardization of tasks and internal processes.",
+            "reminders": "Reminders",
+            "remindersDesc": "Smart alerts so you never miss anything."
+        },
+        "demo": {
+            "badge": "Exclusive Differentiator",
+            "title": "Test the system right now.",
+            "subtitle1": "No sign-up. No credit card. No commitment.",
+            "subtitle2": "Feel the power of an interface built for performance.",
+            "overlayText": "Liked what you saw? Your real account will have much more.",
+            "overlayCta": "Activate my free trial"
+        },
+        "authority": {
+            "title": "For those who decided that",
+            "titleHighlight": "stagnating is not an option",
+            "description": "ViraWeb was created for professionals who understood that scale only comes with organization. If you want to grow, you need a solid foundation.",
+            "item1Title": "Time Recovered",
+            "item1Desc": "No more taking work home and filling spreadsheets at night.",
+            "item2Title": "Data-Driven Decisions",
+            "item2Desc": "Know exactly which service is profitable and which is a loss.",
+            "item3Title": "Unbreakable Processes",
+            "item3Desc": "Your business runs perfectly, with or without you present.",
+            "guaranteeTitle": "Risk-Free Guarantee",
+            "guaranteeDesc": "Start your 14-day free trial with full access to all features. If you don't feel the transformation in your first week, you can simply leave.",
+            "guarantee1": "No credit card required",
+            "guarantee2": "One-click cancellation",
+            "guarantee3": "Priority support from day 1"
+        },
+        "finalCta": {
+            "title": "Will you continue in chaos or take control?",
+            "subtitle": "The decision that separates amateurs from successful managers is just one click.",
+            "ctaPrimary": "Start free trial",
+            "ctaSecondary": "View demo",
+            "badge1": "100% Secure",
+            "badge2": "Instant Access",
+            "badge3": "Results Focused"
+        },
+        "footer": {
+            "tagline": "Elevating business management standards with intelligence and simplicity.",
+            "terms": "Terms",
+            "privacy": "Privacy",
+            "lgpd": "LGPD",
+            "copyright": "© 2026 ViraWeb. Built for leaders."
         }
     }
 }

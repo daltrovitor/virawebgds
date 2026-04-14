@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { revalidatePath } from "next/cache"
 
 export async function getClosingData(month: number, year: number) {
   const supabase = await createClient()
@@ -28,13 +29,14 @@ export async function getClosingData(month: number, year: number) {
     .gte("expense_date", startDate)
     .lte("expense_date", endDate)
 
-  // Fetch budgets (Orçamentos) - to show potential revenue
+  // Fetch budgets (Orçamentos)
+  // We include budgets created in this period OR updated to approved/paid in this period
   const { data: budgets } = await supabase
     .from("budgets")
-    .select("total_amount, status")
+    .select("total_amount, total_cost, status, created_at, updated_at")
     .eq("user_id", user.id)
-    .gte("created_at", startDate)
-    .lte("created_at", endDate)
+    .or(`created_at.gte.${startDate},updated_at.gte.${startDate}`)
+    .or(`created_at.lte.${endDate},updated_at.lte.${endDate}`)
 
   // Fetch appointments (Consultas Realizadas)
   const { data: appointments } = await supabase
@@ -54,8 +56,18 @@ export async function getClosingData(month: number, year: number) {
   let totalBudgetsApproved = 0
   let totalBudgetsPending = 0
   budgets?.forEach(b => {
-      if (b.status === 'approved' || b.status === 'paid') totalBudgetsApproved += Number(b.total_amount)
-      else if (b.status === 'sent' || b.status === 'draft') totalBudgetsPending += Number(b.total_amount)
+      // Logic: if it's approved or paid and was updated in this period, count it as part of this month's result
+      // if it was created in this period and is still pending, count it as pending
+      const wasUpdatedInPeriod = b.updated_at >= startDate && b.updated_at <= endDate
+      const wasCreatedInPeriod = b.created_at >= startDate && b.created_at <= endDate
+      
+      if ((b.status === 'approved' || b.status === 'paid') && wasUpdatedInPeriod) {
+          totalBudgetsApproved += Number(b.total_amount)
+          // Sum budget costs to total expenses for accurate accounting profit
+          totalExpenses += Number(b.total_cost || 0)
+      } else if ((b.status === 'sent' || b.status === 'draft') && wasCreatedInPeriod) {
+          totalBudgetsPending += Number(b.total_amount)
+      }
   })
 
   return {
@@ -88,6 +100,10 @@ export async function addExpense(payload: { amount: number, category: string, de
      console.error("Failed to insert expense:", error)
      return { success: false, error: "Failed to record expense" }
   }
+
+  try {
+    revalidatePath("/dashboard")
+  } catch (e) {}
 
   return { success: true }
 }

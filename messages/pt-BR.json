@@ -889,9 +889,13 @@
             "cards": {
                 "received": "Recebidos (mês)",
                 "pending": "Pendentes",
-                "discounts": "Descontos (mês)"
+                "discounts": "Descontos (mês)",
+                "expenses": "Custos e Gastos"
             },
             "summary": "Resumo",
+            "netBalance": "Saldo Líquido",
+            "recentExpenses": "Custos Recentes",
+            "consolidated": "consolidado",
             "summaryStats": {
                 "received": "Recebido (mês)",
                 "pending": "Pendente",
@@ -1025,23 +1029,50 @@
             }
         },
         "reports": {
-            "title": "Relatórios",
-            "subtitle": "Visão geral de agendamentos e clientes.",
+            "title": "Relatórios Inteligentes",
+            "subtitle": "Análise completa de todos os aspectos do seu negócio.",
+            "downloadAll": "Baixar Relatório Completo (PDF)",
+            "downloadSection": "Baixar PDF",
+            "sections": {
+                "overview": "Visão Geral",
+                "financial": "Financeiro",
+                "crm": "CRM & Agendamentos",
+                "budgets": "Orçamentos",
+                "services": "Serviços & Tabela de Preços"
+            },
             "stats": {
                 "totalAppointments": "Total de Agendamentos",
                 "totalAppointmentsDesc": "Todos os registros",
                 "activePatients": "Clientes Ativos",
                 "activePatientsDesc": "Atualmente cadastrados",
+                "totalProfessionals": "Total de Profissionais",
                 "completionRate": "Taxa de Conclusão",
                 "performanceExcellent": "Excelente desempenho",
-                "performanceGood": "Bom desempenho"
+                "performanceGood": "Bom desempenho",
+                "totalIncome": "Receita Total",
+                "totalExpenses": "Despesas Totais",
+                "manualExpenses": "Fixos/Variáveis",
+                "budgetCosts": "Custos de Orçamentos",
+                "netProfit": "Lucro Líquido",
+                "netProfitDesc": "Lucro real após deduções de custos",
+                "totalBudgets": "Total de Orçamentos",
+                "approvedBudgets": "Orçamentos Aprovados",
+                "pendingBudgets": "Orçamentos Pendentes",
+                "totalServices": "Total de Serviços",
+                "averagePrice": "Preço Médio"
             },
-            "appointmentsChart": "Agendamentos por Mês",
-            "patientsChart": "Crescimento de Clientes",
+            "charts": {
+                "appointments": "Agendamentos por Mês",
+                "growth": "Crescimento de Clientes",
+                "financial": "Fluxo de Caixa (Entradas vs Saídas)",
+                "budgets": "Status de Orçamentos"
+            },
             "completed": "Concluídos",
             "cancelled": "Cancelados",
             "total": "Total",
             "new": "Novos",
+            "income": "Entradas",
+            "expenses": "Saídas",
             "noData": "Nenhum dado disponível"
         },
         "subscriptions": {
@@ -1562,6 +1593,7 @@
                 "searchProducts": "Buscar na tabela de preços...",
                 "availableProducts": "Produtos disponíveis",
                 "noProducts": "Nenhum produto. Cadastre na Tabela de Preços primeiro.",
+                "uncategorized": "Sem Categoria",
                 "itemsInBudget": "Itens no orçamento ({count})",
                 "clickToAdd": "Clique em um produto para adicioná-lo",
                 "qty": "Qtd",
@@ -1599,6 +1631,46 @@
                 "created": "Orçamento criado com sucesso!",
                 "errorCreate": "Erro ao criar orçamento",
                 "errorLabel": "Erro"
+            },
+            "detail": {
+                "budget": "Orçamento",
+                "back": "Voltar",
+                "duplicate": "Duplicar",
+                "sendToClient": "Enviar ao cliente",
+                "approve": "Aprovar",
+                "reject": "Rejeitar",
+                "markAsPaid": "Marcar como Pago",
+                "itemsTitle": "Itens do Orçamento",
+                "financialSummary": "Resumo Financeiro",
+                "paymentPlan": "Plano de Pagamento",
+                "paidRequiredInfo": "Nota: Apenas orçamentos com status 'Pago' são contabilizados no seu fluxo de caixa real.",
+                "downPayment": "Entrada",
+                "installments": "Parcelas",
+                "product": "Produto"
+            },
+            "net": "Líquido:",
+            "total": "Total",
+            "changeStatus": "Trocar Status",
+            "status": {
+                "draft": "Rascunho",
+                "sent": "Enviado",
+                "approved": "Aprovado",
+                "rejected": "Rejeitado",
+                "expired": "Expirado",
+                "paid": "Pago"
+            },
+            "paymentMethods": {
+                "pix": "Pix",
+                "credit_card": "Cartão de Crédito",
+                "debit_card": "Cartão de Débito",
+                "cash": "Dinheiro",
+                "transfer": "Transferência",
+                "boleto": "Boleto"
+            },
+            "intervals": {
+                "weekly": "Semanal",
+                "biweekly": "Quinzenal",
+                "monthly": "Mensal"
             }
         }
     },
@@ -1879,6 +1951,142 @@
             "a3": "Sim, não há fidelidade. Você pode cancelar sua assinatura em qualquer momento.",
             "q4": "Tenho suporte durante o teste?",
             "a4": "Com certeza! Você terá acesso ao nosso suporte VIP via WhatsApp e E-mail."
+        }
+    },
+    "freeTrial": {
+        "nav": {
+            "solution": "Solução",
+            "benefits": "Benefícios",
+            "features": "Recursos",
+            "login": "Entrar",
+            "cta": "Teste grátis"
+        },
+        "hero": {
+            "badge": "O novo padrão para gestores de elite",
+            "title": "Transforme sua rotina caótica em um",
+            "titleHighlight": "sistema inteligente",
+            "titleEnd": "e sob controle",
+            "description": "Centralize sua operação, automatize processos manuais e reduza em até",
+            "descriptionBold": "70% seu tempo administrativo",
+            "ctaPrimary": "Teste grátis",
+            "ctaSecondary": "Ver demo interativa"
+        },
+        "problem": {
+            "title": "A gestão do seu negócio está te consumindo?",
+            "subtitle": "Sentir que o dia voa e nada foi resolvido é o sintoma de um sistema quebrado.",
+            "item1Title": "Dreno de Tempo",
+            "item1Desc": "Horas perdidas gerenciando agendas, preenchendo planilhas e respondendo as mesmas mensagens repetidamente.",
+            "item2Title": "Cegueira Financeira",
+            "item2Desc": "Falta de controle real sobre entradas e saídas. Dinheiro que some em perdas invisíveis que você nem percebe.",
+            "item3Title": "Caos no Atendimento",
+            "item3Desc": "Clientes frustrados com demora, falta de organização e percepção de amadorismo no seu serviço.",
+            "quote": "\"O problema não é você, é a falta de um sistema inteligente.\""
+        },
+        "solution": {
+            "badge": "A SOLUÇÃO DEFINITIVA",
+            "title": "ViraWeb: O Cérebro da sua Empresa.",
+            "description": "Não somos apenas mais um software. Somos uma plataforma completa que",
+            "descriptionBold": "centraliza, automatiza e organiza",
+            "descriptionEnd": "cada detalhe da sua operação.",
+            "check1": "Dashboards que mostram a verdade dos fatos",
+            "check2": "Automação que substitui tarefas braçais",
+            "check3": "Inteligência Artificial que prevê gargalos",
+            "cta": "É hora de sair do operacional e virar gestor.",
+            "revenue": "FATURAMENTO",
+            "revenueValue": "+24% este mês",
+            "automations": "AUTOMAÇÕES",
+            "automationsValue": "150h salvas",
+            "clients": "CLIENTES",
+            "clientsValue": "42 novos",
+            "conversion": "CONVERSÃO",
+            "conversionValue": "12.5%"
+        },
+        "benefits": {
+            "title": "Resultados palpáveis para o seu dia a dia",
+            "subtitle": "Construímos o ViraWeb sob três pilares fundamentais para o crescimento sustentável.",
+            "item1Title": "Economia Extrema de Tempo",
+            "item1Desc": "Nossa IA e as automações de fluxo cuidam do trabalho repetitivo para que você foque na estratégia do negócio.",
+            "item2Title": "Controle Financeiro Real",
+            "item2Desc": "Visão 360º de faturamento e custos em tempo real. Identifique onde você está perdendo dinheiro instantaneamente.",
+            "item3Title": "Tranquilidade e Segurança",
+            "item3Desc": "Tudo na nuvem, organizado e acessível de qualquer lugar. Fim da insegurança de perder dados ou esquecer compromissos."
+        },
+        "transformation": {
+            "title": "A mudança é nítida. O resultado é inevitável.",
+            "before": "ANTES (O CAOS)",
+            "after": "DEPOIS (O CONTROLE)",
+            "before1": "Planilhas que nunca batem no fim do mês",
+            "before2": "Sensação de estar sempre apagando incêndios",
+            "before3": "Esquecimento de agendamentos e retornos",
+            "before4": "Falta de clareza sobre o lucro real esperado",
+            "before5": "Processos manuais que dependem da sua memória",
+            "after1": "Sistema centralizado e automatizado",
+            "after2": "Visão clara da saúde do seu negócio no celular",
+            "after3": "Rotinas que rodam sozinhos sem sua supervisão",
+            "after4": "Margem de lucro protegida e previsibilidade",
+            "after5": "Liberdade de tempo e eficiência operacional"
+        },
+        "features": {
+            "title": "Tudo o que você precisa em um só lugar",
+            "subtitle": "9 ferramentas fundamentais integradas nativamente.",
+            "scheduling": "Agendamentos",
+            "schedulingDesc": "Gestão inteligente de horários e profissionais.",
+            "clients": "Clientes",
+            "clientsDesc": "CRM completo com histórico e preferências.",
+            "financial": "Financeiro",
+            "financialDesc": "Fluxo de caixa, DRE e controle de inadimplência.",
+            "reports": "Relatórios",
+            "reportsDesc": "Métricas de performance e faturamento detalhadas.",
+            "virabot": "ViraBot IA",
+            "virabotDesc": "Sua assistente inteligência para insights rápidos.",
+            "budgets": "Orçamentos",
+            "budgetsDesc": "Criação ágil e profissional de propostas.",
+            "priceTable": "Tabela de preços",
+            "priceTableDesc": "Gestão dinâmica de serviços e produtos.",
+            "checklist": "Checklist",
+            "checklistDesc": "Padronização de tarefas e processos internos.",
+            "reminders": "Lembretes",
+            "remindersDesc": "Alertas inteligentes para não perder nada."
+        },
+        "demo": {
+            "badge": "Diferencial Exclusivo",
+            "title": "Teste o sistema agora mesmo.",
+            "subtitle1": "Sem cadastro. Sem cartão. Sem compromisso.",
+            "subtitle2": "Sinta o poder de uma interface feita para performance.",
+            "overlayText": "Gostou do que viu? Sua conta real terá muito mais.",
+            "overlayCta": "Ativar meu teste grátis"
+        },
+        "authority": {
+            "title": "Para quem decidiu que",
+            "titleHighlight": "estagnar não é uma opção",
+            "description": "O ViraWeb foi criado para profissionais que entenderam que a escala só vem com organização. Se você quer crescer, precisa de uma fundação sólida.",
+            "item1Title": "Tempo Recuperado",
+            "item1Desc": "Chega de levar trabalho para casa e preencher planilhas à noite.",
+            "item2Title": "Decisões Baseadas em Dados",
+            "item2Desc": "Saiba exatamente qual serviço dá lucro e qual dá prejuízo.",
+            "item3Title": "Processos Inquebráveis",
+            "item3Desc": "Sua clínica funciona perfeitamente, com ou sem você presente.",
+            "guaranteeTitle": "Garantia sem Risco",
+            "guaranteeDesc": "Inicie seu teste grátis por 14 dias com acesso total a todas as funcionalidades. Se não sentir a transformação na sua primeira semana, você pode simplesmente sair.",
+            "guarantee1": "Sem necessidade de cartão",
+            "guarantee2": "Cancelamento em um clique",
+            "guarantee3": "Suporte prioritário desde o dia 1"
+        },
+        "finalCta": {
+            "title": "Você vai continuar no caos ou assumir o controle?",
+            "subtitle": "A decisão que separa amadores de gestores de sucesso é apenas um clique.",
+            "ctaPrimary": "Começar teste grátis",
+            "ctaSecondary": "Ver demo",
+            "badge1": "100% Seguro",
+            "badge2": "Acesso Imediato",
+            "badge3": "Foco em Resultados"
+        },
+        "footer": {
+            "tagline": "Elevando o padrão da gestão empresarial com inteligência e simplicidade.",
+            "terms": "Termos",
+            "privacy": "Privacidade",
+            "lgpd": "LGPD",
+            "copyright": "© 2026 ViraWeb. Desenvolvido para líderes."
         }
     }
 }

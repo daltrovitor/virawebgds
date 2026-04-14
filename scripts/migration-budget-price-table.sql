@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS budgets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   patient_id UUID NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
-  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'approved', 'rejected', 'expired')),
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'approved', 'rejected', 'expired', 'paid')),
   notes TEXT,
   valid_until DATE,
   -- Payment plan

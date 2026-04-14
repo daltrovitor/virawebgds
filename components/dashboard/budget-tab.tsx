@@ -103,11 +103,34 @@ export default function BudgetTab() {
     }
   }
 
+  const [isStatusLoading, setIsStatusLoading] = useState(false)
   const handleStatusChange = async (id: string, status: BudgetStatus) => {
-    const res = await updateBudgetStatus(id, status)
-    if (res.success) {
-      toast({ title: t("toasts.statusUpdated", { status: BUDGET_STATUS_LABELS[status] }) })
-      await loadData()
+    if (isStatusLoading) return
+    setIsStatusLoading(true)
+    try {
+      const res = await updateBudgetStatus(id, status)
+      if (res.success) {
+        toast({ title: t("toasts.statusUpdated", { status: t(`status.${status}`) }) })
+        await loadData()
+        // ✅ Update detail view if open
+        if (viewingBudget && viewingBudget.id === id) {
+          setViewingBudget({ ...viewingBudget, status })
+        }
+      } else {
+        toast({ 
+          title: t("toasts.errorLabel"), 
+          description: res.error || "Erro ao atualizar status", 
+          variant: "destructive" 
+        })
+      }
+    } catch (err) {
+      toast({ 
+        title: t("toasts.errorLabel"), 
+        description: err instanceof Error ? err.message : "Erro inesperado", 
+        variant: "destructive" 
+      })
+    } finally {
+      setIsStatusLoading(false)
     }
   }
 
@@ -244,7 +267,7 @@ export default function BudgetTab() {
           {filteredBudgets.map((budget) => (
             <Card
               key={budget.id}
-              className="p-4 sm:p-6 border border-border hover:shadow-lg transition-shadow cursor-pointer"
+              className="p-4 sm:p-6 border border-border hover:shadow-lg transition-shadow cursor-pointer flex flex-col gap-4"
               onClick={() => setViewingBudget(budget)}
             >
               <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
@@ -254,7 +277,7 @@ export default function BudgetTab() {
                       {budget.patient?.name || t("noClient")}
                     </h3>
                     <span className={`text-[10px] uppercase font-bold px-2 py-0.5 ${BUDGET_STATUS_COLORS[budget.status]}`}>
-                      {BUDGET_STATUS_LABELS[budget.status]}
+                      {t(`status.${budget.status}`)}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -267,9 +290,14 @@ export default function BudgetTab() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-foreground">R$ {budget.total_amount.toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">
-                      {t("net")} <span className="text-emerald-600 font-medium">R$ {budget.net_revenue.toFixed(2)}</span>
+                      {t("total")}: <span className="font-medium text-foreground">R$ {(budget.total_amount || 0).toFixed(2)}</span>
+                    </p>
+                    <p className="text-xs text-red-500 font-medium">
+                       {t("wizard.costs")}: - R$ {(budget.total_cost || 0).toFixed(2)}
+                    </p>
+                    <p className="text-xs text-muted-foreground whitespace-nowrap">
+                      {t("net")} <span className="text-emerald-600 font-bold">R$ {(budget.net_revenue || 0).toFixed(2)}</span>
                     </p>
                   </div>
                   <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
@@ -277,18 +305,57 @@ export default function BudgetTab() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setViewingBudget(budget)}
-                      className="text-muted-foreground"
+                      className="text-muted-foreground hover:bg-primary/10"
                     >
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDuplicate(budget.id)} className="text-muted-foreground">
+                    <Button variant="ghost" size="sm" onClick={() => handleDuplicate(budget.id)} className="text-muted-foreground hover:bg-primary/10">
                       <Copy className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(budget.id)} className="text-destructive">
+                    <Button variant="ghost" size="sm" onClick={() => handleDelete(budget.id)} className="text-destructive hover:bg-destructive/10">
                       <Trash2 className="w-4 h-4" />
                     </Button>
+                    {budget.status === "approved" && (
+                      <Button 
+                        size="sm" 
+                        onClick={(e) => { e.stopPropagation(); handleStatusChange(budget.id, "paid") }}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white ml-2 shadow-sm font-bold h-8"
+                      >
+                        <Check className="w-4 h-4 mr-1" /> {t("status.paid")}
+                      </Button>
+                    )}
                   </div>
                 </div>
+              </div>
+
+              {/* Quick Status Update Row */}
+              <div 
+                className="pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("changeStatus")}:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {(Object.keys(BUDGET_STATUS_LABELS) as BudgetStatus[]).map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => handleStatusChange(budget.id, s)}
+                        disabled={budget.status === s}
+                        className={`text-[9px] font-bold px-2 py-1 rounded transition-all transform hover:scale-105 ${
+                          budget.status === s 
+                          ? "opacity-30 cursor-not-allowed grayscale" 
+                          : `${BUDGET_STATUS_COLORS[s]} hover:brightness-110 shadow-sm`
+                        }`}
+                      >
+                        {t(`status.${s}`)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                <p className="text-[9px] italic text-muted-foreground text-right mt-1">
+                  {t("detail.paidRequiredInfo")}
+                </p>
               </div>
             </Card>
           ))}
@@ -528,31 +595,51 @@ function BudgetWizard({
             </div>
 
             <div className="grid lg:grid-cols-2 gap-4">
-              {/* Available products */}
+              {/* Available products grouped by category */}
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-2">{t("wizard.availableProducts")}</p>
-                <div className="max-h-[300px] overflow-y-auto space-y-1 border border-border p-2">
-                  {filteredProducts.map((prod) => (
-                    <button
-                      key={prod.id}
-                      onClick={() => addProduct(prod)}
-                      className="w-full text-left p-3 hover:bg-muted/50 transition-colors flex items-center justify-between border-b border-border last:border-0"
-                    >
-                      <div>
-                        <p className="text-sm font-bold text-foreground">{prod.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {prod.category?.name && <span className="mr-2" style={{ color: (prod.category as any)?.color }}>{(prod.category as any).name}</span>}
-                          {prod.duration_minutes && `${prod.duration_minutes} min`}
-                        </p>
+                <div className="max-h-[400px] overflow-y-auto space-y-4 border border-border p-3 bg-slate-50/50 dark:bg-slate-900/50">
+                  {Object.entries(
+                    filteredProducts.reduce((acc, p) => {
+                      const catName = p.category?.name || t("wizard.uncategorized")
+                      if (!acc[catName]) acc[catName] = []
+                      acc[catName].push(p)
+                      return acc
+                    }, {} as Record<string, ServiceProduct[]>)
+                  ).map(([category, items]) => (
+                    <div key={category} className="space-y-1">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-2 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        {category}
+                      </h4>
+                      <div className="grid gap-1">
+                        {items.map((prod) => (
+                          <button
+                            key={prod.id}
+                            onClick={() => addProduct(prod)}
+                            className="w-full text-left p-3 bg-white dark:bg-card hover:border-primary/50 hover:shadow-sm transition-all flex items-center justify-between border border-border rounded-lg group"
+                          >
+                            <div className="flex-1">
+                              <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{prod.name}</p>
+                              {prod.duration_minutes && (
+                                <p className="text-[10px] text-muted-foreground">
+                                  {prod.duration_minutes} min
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-sm font-bold text-foreground">R$ {prod.base_price.toFixed(2)}</span>
+                              <div className="p-1 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                                <Plus className="w-3 h-3" />
+                              </div>
+                            </div>
+                          </button>
+                        ))}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-foreground">R$ {prod.base_price.toFixed(2)}</span>
-                        <Plus className="w-4 h-4 text-primary" />
-                      </div>
-                    </button>
+                    </div>
                   ))}
                   {filteredProducts.length === 0 && (
-                    <p className="text-center text-muted-foreground py-4 text-sm">
+                    <p className="text-center text-muted-foreground py-8 text-sm italic">
                       {t("wizard.noProducts")}
                     </p>
                   )}
@@ -631,9 +718,9 @@ function BudgetWizard({
                         <span className="text-muted-foreground">{t("wizard.totalTax")}</span>
                         <span className="font-medium text-amber-600">R$ {totals.total_tax.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between border-t border-border pt-1">
-                        <span className="font-bold text-foreground">{t("wizard.total")}</span>
-                        <span className="font-bold text-foreground text-lg">R$ {totals.total_amount.toFixed(2)}</span>
+                      <div className="flex justify-between items-end border-t border-border pt-2">
+                        <span className="font-bold text-foreground mb-1">{t("wizard.total")}</span>
+                        <span className="font-bold text-primary text-4xl">R$ {totals.total_amount.toFixed(2)}</span>
                       </div>
                       {totals.total_cost > 0 && (
                         <>
@@ -680,11 +767,19 @@ function BudgetWizard({
                       >
                         <p className="text-sm font-bold text-foreground">{plan.label}</p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {plan.downPayment > 0 && `Entrada: R$ ${plan.downPayment.toFixed(2)} + `}
-                          {plan.installments > 1
-                            ? `${plan.installments}x de R$ ${installmentValue.toFixed(2)}`
-                            : `R$ ${totals.total_amount.toFixed(2)}`
-                          }
+                          {plan.label === 'À vista' || (plan.downPayment >= totals.total_amount && installmentValue <= 0) ? (
+                            `R$ ${totals.total_amount.toFixed(2)}`
+                          ) : (
+                            <>
+                              {plan.downPayment > 0 && `Entrada: R$ ${plan.downPayment.toFixed(2)}`}
+                              {installmentValue > 0 && (
+                                <>
+                                  {plan.downPayment > 0 ? ' + ' : ''}
+                                  {plan.installments}x de R$ {installmentValue.toFixed(2)}
+                                </>
+                              )}
+                            </>
+                          )}
                         </p>
                       </button>
                     )
@@ -730,18 +825,56 @@ function BudgetWizard({
 
             {/* Installment preview */}
             {installmentCount > 0 && (
-              <div className="p-4 bg-primary/5 border border-primary/20">
+              <div className={`p-4 rounded-xl border-2 transition-all ${
+                downPayment >= totals.total_amount && installmentCount > 1 
+                ? "bg-amber-50 border-amber-200 dark:bg-amber-900/10 dark:border-amber-900/30"
+                : "bg-primary/5 border-primary/20"
+              }`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground font-medium">{t("wizard.installmentValue")}</span>
-                  <span className="text-2xl font-bold text-primary">
+                  <div className="flex flex-col">
+                    <span className="text-sm text-foreground font-medium">{t("wizard.installmentValue")}</span>
+                    {downPayment >= totals.total_amount && installmentCount > 1 && (
+                      <span className="text-[10px] text-amber-600 font-bold uppercase tracking-tight">
+                        Atenção: entrada cobre o valor total
+                      </span>
+                    )}
+                  </div>
+                  <span className={`text-2xl font-bold ${
+                    downPayment >= totals.total_amount && installmentCount > 1 ? "text-amber-600" : "text-primary"
+                  }`}>
                     R$ {totals.installment_value.toFixed(2)}
                   </span>
                 </div>
-                {downPayment > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Entrada: R$ {downPayment.toFixed(2)} + {installmentCount}x de R$ {totals.installment_value.toFixed(2)} ({INSTALLMENT_INTERVAL_LABELS[installmentInterval].toLowerCase()})
-                  </p>
-                )}
+                
+                <div className="mt-2 pt-2 border-t border-dashed border-primary/20">
+                  {downPayment >= totals.total_amount ? (
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground font-medium">
+                        {installmentCount > 1 
+                          ? "O valor de entrada atual quita o orçamento integralmente." 
+                          : `Pagamento único de R$ ${downPayment.toFixed(2)}`
+                        }
+                      </p>
+                      {installmentCount > 1 && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-7 text-[10px] border-amber-400 text-amber-700 hover:bg-amber-50"
+                          onClick={() => setDownPayment(0)}
+                        >
+                          Remover entrada e parcelar total
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Entrada: R$ {downPayment.toFixed(2)}
+                      {totals.installment_value > 0 && (
+                        <> + {installmentCount}x de R$ {totals.installment_value.toFixed(2)} ({INSTALLMENT_INTERVAL_LABELS[installmentInterval].toLowerCase()})</>
+                      )}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
 
@@ -873,7 +1006,7 @@ function BudgetWizard({
                   <span className="text-destructive">R$ {totals.total_cost.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="font-bold text-emerald-600">Receita Líquida</span>
+                  <span className="font-bold text-emerald-600">{t("detail.net")}</span>
                   <span className="font-bold text-emerald-600">R$ {totals.net_revenue.toFixed(2)}</span>
                 </div>
               </div>
@@ -882,12 +1015,12 @@ function BudgetWizard({
                 <h4 className="font-bold text-foreground mb-2">{t("wizard.paymentInfo")}</h4>
                 {downPayment > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Entrada</span>
+                    <span className="text-muted-foreground">{t("detail.downPayment")}</span>
                     <span className="font-medium text-foreground">R$ {downPayment.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Parcelas</span>
+                  <span className="text-muted-foreground">{t("detail.installments")}</span>
                   <span className="font-medium text-foreground">
                     {installmentCount}x de R$ {totals.installment_value.toFixed(2)}
                   </span>
@@ -895,7 +1028,7 @@ function BudgetWizard({
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{t("wizard.interval")}</span>
                   <span className="font-medium text-foreground">
-                    {INSTALLMENT_INTERVAL_LABELS[installmentInterval]}
+                    {t(`intervals.${installmentInterval}`)}
                   </span>
                 </div>
                 {paymentMethods.length > 0 && (
@@ -903,7 +1036,7 @@ function BudgetWizard({
                     <p className="text-xs text-muted-foreground mb-1">{t("wizard.paymentMethods")}</p>
                     {paymentMethods.map((pm, i) => (
                       <div key={i} className="flex justify-between text-sm">
-                        <span className="text-foreground">{PAYMENT_METHOD_LABELS[pm.method]}</span>
+                        <span className="text-foreground">{t(`paymentMethods.${pm.method}`)}</span>
                         <span className="font-medium text-foreground">R$ {pm.amount.toFixed(2)}</span>
                       </div>
                     ))}
@@ -930,7 +1063,7 @@ function BudgetWizard({
           disabled={step === 1}
           className="gap-2"
         >
-          <ChevronLeft className="w-4 h-4" /> Anterior
+          <ChevronLeft className="w-4 h-4" /> {t("common.previous")}
         </Button>
         {step < 4 ? (
           <Button
@@ -938,7 +1071,7 @@ function BudgetWizard({
             disabled={!canProceed()}
             className="gap-2"
           >
-            Próximo <ChevronRight className="w-4 h-4" />
+            {t("common.next")} <ChevronRight className="w-4 h-4" />
           </Button>
         ) : (
           <Button onClick={handleSubmit} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-lg">
@@ -972,30 +1105,30 @@ function BudgetDetail({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={onBack} className="gap-2">
-          <ChevronLeft className="w-4 h-4" /> Voltar
+          <ChevronLeft className="w-4 h-4" /> {t("detail.back")}
         </Button>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <Button variant="outline" size="sm" onClick={() => onDuplicate(budget.id)} className="gap-1">
-            <Copy className="w-4 h-4" /> Duplicar
+            <Copy className="w-4 h-4" /> {t("detail.duplicate")}
           </Button>
           {budget.status === "draft" && (
             <Button size="sm" onClick={() => onStatusChange(budget.id, "sent")} className="gap-1">
-              Enviar ao cliente
+              {t("detail.sendToClient")}
             </Button>
           )}
           {budget.status === "sent" && (
             <>
               <Button size="sm" onClick={() => onStatusChange(budget.id, "approved")} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1">
-                <Check className="w-4 h-4" /> Aprovar
+                <Check className="w-4 h-4" /> {t("detail.approve")}
               </Button>
               <Button size="sm" variant="outline" onClick={() => onStatusChange(budget.id, "rejected")} className="text-destructive gap-1">
-                <X className="w-4 h-4" /> Rejeitar
+                <X className="w-4 h-4" /> {t("detail.reject")}
               </Button>
             </>
           )}
           {budget.status === "approved" && (
-              <Button size="sm" onClick={() => onStatusChange(budget.id, "paid")} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1">
-                <Check className="w-4 h-4" /> Marcar como Pago (Financeiro)
+              <Button size="sm" onClick={() => onStatusChange(budget.id, "paid")} className="bg-emerald-600 hover:bg-emerald-700 shadow text-white gap-1 font-bold">
+                <Check className="w-4 h-4" /> {t("detail.markAsPaid")} 
               </Button>
           )}
         </div>
@@ -1005,13 +1138,13 @@ function BudgetDetail({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h2 className="text-3xl font-bold text-foreground">Orçamento</h2>
+            <h2 className="text-3xl font-bold text-foreground">{t("detail.budget")}</h2>
             <span className={`text-xs uppercase font-bold px-2 py-1 ${BUDGET_STATUS_COLORS[budget.status]}`}>
-              {BUDGET_STATUS_LABELS[budget.status]}
+              {t(`status.${budget.status}`)}
             </span>
           </div>
-          <p className="text-muted-foreground mt-1">
-            Cliente: <strong>{budget.patient?.name || "—"}</strong> • {t("createdAt")} {new Date(budget.created_at).toLocaleDateString("pt-BR")}
+          <p className="text-muted-foreground mt-1 text-sm">
+            {t("wizard.client")}: <strong>{budget.patient?.name || "—"}</strong> • {t("createdAt")} {new Date(budget.created_at).toLocaleDateString("pt-BR")}
           </p>
         </div>
         <div className="text-right">
@@ -1023,13 +1156,13 @@ function BudgetDetail({
       {/* Items */}
       <Card className="border border-border overflow-hidden">
         <div className="p-4 bg-muted border-b border-border">
-          <h3 className="font-bold text-foreground">Itens do Orçamento</h3>
+          <h3 className="font-bold text-foreground">{t("detail.itemsTitle")}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/50">
-                <th className="text-left p-3 font-medium text-foreground">Produto</th>
+                <th className="text-left p-3 font-medium text-foreground">{t("detail.product")}</th>
                 <th className="text-center p-3 font-medium text-foreground">{t("wizard.qty")}</th>
                 <th className="text-right p-3 font-medium text-foreground">{t("wizard.unitPrice")}</th>
                 <th className="text-right p-3 font-medium text-foreground">{t("wizard.subtotal")}</th>
@@ -1055,15 +1188,15 @@ function BudgetDetail({
 
       {/* Summary */}
       <div className="grid sm:grid-cols-2 gap-4">
-        <Card className="p-6 border border-border">
-          <h4 className="font-bold text-foreground mb-4">Resumo Financeiro</h4>
+        <Card className="p-6 border border-border bg-white dark:bg-card">
+          <h4 className="font-bold text-foreground mb-4">{t("detail.financialSummary")}</h4>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">{t("wizard.subtotal")}</span>
               <span className="text-foreground">R$ {budget.subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("wizard.tax")}s</span>
+              <span className="text-muted-foreground">{t("wizard.totalTax")}</span>
               <span className="text-amber-600">R$ {budget.total_tax.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm font-bold border-t border-border pt-2">
@@ -1075,37 +1208,46 @@ function BudgetDetail({
               <span className="text-destructive">- R$ {budget.total_cost.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm font-bold">
-              <span className="text-emerald-600">Receita Líquida</span>
-              <span className="text-emerald-600">R$ {budget.net_revenue.toFixed(2)}</span>
+              <span className="text-emerald-600">{t("net")}</span>
+              <span className="text-emerald-600">R$ {(budget.net_revenue || 0).toFixed(2)}</span>
             </div>
+            
+            {budget.status !== "paid" && (
+              <div className="mt-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/50">
+                <p className="text-[10px] text-amber-700 dark:text-amber-400 leading-tight">
+                  <span className="font-bold">💡 {t("total")}: </span>
+                  {t("detail.paidRequiredInfo")}
+                </p>
+              </div>
+            )}
           </div>
         </Card>
 
-        <Card className="p-6 border border-border">
-          <h4 className="font-bold text-foreground mb-4">Plano de Pagamento</h4>
+        <Card className="p-6 border border-border bg-white dark:bg-card">
+          <h4 className="font-bold text-foreground mb-4">{t("detail.paymentPlan")}</h4>
           <div className="space-y-2">
             {budget.down_payment > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Entrada</span>
+                <span className="text-muted-foreground">{t("detail.downPayment")}</span>
                 <span className="text-foreground font-medium">R$ {budget.down_payment.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Parcelas</span>
+              <span className="text-muted-foreground">{t("detail.installments")}</span>
               <span className="text-foreground font-medium">
                 {budget.installment_count}x de R$ {budget.installment_value.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">{t("wizard.interval")}</span>
-              <span className="text-foreground">{INSTALLMENT_INTERVAL_LABELS[budget.installment_interval]}</span>
+              <span className="text-foreground">{t(`intervals.${budget.installment_interval}`)}</span>
             </div>
             {(budget.payment_methods || []).length > 0 && (
               <div className="border-t border-border pt-2 mt-2 space-y-1">
                 <p className="text-xs text-muted-foreground font-medium">{t("wizard.paymentMethods")}</p>
                 {(budget.payment_methods || []).map((pm) => (
                   <div key={pm.id} className="flex justify-between text-sm">
-                    <span className="text-foreground">{PAYMENT_METHOD_LABELS[pm.method]}</span>
+                    <span className="text-foreground">{t(`paymentMethods.${pm.method}`)}</span>
                     <span className="font-medium text-foreground">R$ {pm.amount.toFixed(2)}</span>
                   </div>
                 ))}
