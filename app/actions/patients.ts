@@ -36,7 +36,7 @@ export async function getPatients() {
     } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      throw new Error("Usuário não autenticado.")
+      return []
     }
 
     const { data, error } = await supabase

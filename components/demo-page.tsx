@@ -111,7 +111,7 @@ export default function DemoPage() {
                       {category.category === "Recursos Avançados" && <Sparkles className="w-5 h-5 text-primary" />}
                       {category.category === "Suporte" && <Bell className="w-5 h-5 text-primary" />}
                       {category.category}
-                    </h3>
+                    </h2>
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-border">

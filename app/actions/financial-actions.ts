@@ -47,7 +47,7 @@ export interface SessionRow {
 export async function getRecentPayments(limit = 10) {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from("payments")
@@ -521,7 +521,7 @@ export async function getFinancialSummary(period: "daily" | "weekly" | "monthly"
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return { totalReceived: 0, totalDiscounts: 0, totalPending: 0 }
 
   const now = new Date()
   const startDate = new Date()
@@ -572,7 +572,15 @@ export async function getFinancialSeries(days = 30) {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) {
+    const zeros: { date: string; value: number }[] = []
+    for (let i = 0; i < days; i++) {
+      const d = new Date()
+      d.setDate(d.getDate() - (days - 1 - i))
+      zeros.push({ date: d.toISOString().split("T")[0], value: 0 })
+    }
+    return zeros
+  }
 
   const start = new Date()
   start.setDate(start.getDate() - (days - 1))
@@ -625,7 +633,7 @@ export async function getFinancialReport(period: "daily" | "weekly" | "monthly")
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   if (period === "daily") {
     // last 7 days, grouped by date
@@ -783,7 +791,7 @@ export async function getPatientFinancialSummary(patientId: string) {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return { paid: 0, due: 0, discounts: 0 }
 
   const [{ data: payments }, { data: sessions }] = await Promise.all([
     supabase.from("payments").select("amount,discount,status,payment_date").eq("user_id", user.id).eq("patient_id", patientId),
@@ -819,7 +827,7 @@ export async function getPendingPaymentsForPatient(patientId: string) {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error('User not authenticated')
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from('payments')
@@ -845,7 +853,7 @@ export async function markPendingPaymentAsPaid(pendingPaymentId: string, paidAt?
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error('User not authenticated')
+  if (authError || !user) return { success: false, error: 'User not authenticated' }
 
   const paymentDate = paidAt || getBrazilDateTime()
   const updatedAt = new Date().toISOString()
@@ -872,7 +880,7 @@ export async function getAllPendingPayments(limit = 100) {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error('User not authenticated')
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from('payments')
@@ -899,7 +907,7 @@ export async function getOutstandingPatients() {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from("financial_sessions")

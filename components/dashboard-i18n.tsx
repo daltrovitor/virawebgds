@@ -24,6 +24,9 @@ import {
     Loader2,
     Upload,
     BellRing,
+    Receipt,
+    Tag,
+    TrendingUp,
 } from "lucide-react"
 
 import dynamic from 'next/dynamic'
@@ -56,6 +59,9 @@ const ImportTab = dynamic(() => import("./dashboard/import-tab"), { loading: () 
 const NotificationsPanel = dynamic(() => import("./notifications-panel"), { ssr: false })
 const TutorialModal = dynamic(() => import("./tutorial-modal"), { ssr: false })
 const ImportOnboardingModal = dynamic(() => import("./import-onboarding-modal"), { ssr: false })
+const PriceTableTab = dynamic(() => import("./dashboard/price-table-tab"), { loading: () => <TabLoading /> })
+const BudgetTab = dynamic(() => import("./dashboard/budget-tab"), { loading: () => <TabLoading /> })
+const ClosingTab = dynamic(() => import("./dashboard/closing-tab"), { loading: () => <TabLoading /> })
 
 
 function TabLoading() {
@@ -238,6 +244,9 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         { id: "appointments", label: t('sidebar.appointments'), icon: <Calendar className="w-5 h-5" /> },
         { id: "patients", label: t('sidebar.patients'), icon: <Users className="w-5 h-5" /> },
         { id: "financial", label: t('sidebar.financial'), icon: <CreditCard className="w-5 h-5" /> },
+        { id: "price-table", label: t('sidebar.priceTable'), icon: <Tag className="w-5 h-5" /> },
+        { id: "budgets", label: t('sidebar.budgets'), icon: <Receipt className="w-5 h-5" /> },
+        { id: "closing", label: t('sidebar.closing'), icon: <TrendingUp className="w-5 h-5" /> },
         { id: "professionals", label: t('sidebar.professionals'), icon: <Users className="w-5 h-5" /> },
         { id: "reports", label: t('sidebar.reports'), icon: <BarChart3 className="w-5 h-5" /> },
         { id: "subscriptions", label: t('sidebar.subscriptions'), icon: <CreditCard className="w-5 h-5" /> },
@@ -404,6 +413,9 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                             {activeTab === "appointments" && <AppointmentsTab />}
                             {activeTab === "patients" && <PatientsTab />}
                             {activeTab === "financial" && <FinancialTab />}
+                            {activeTab === "price-table" && <PriceTableTab />}
+                            {activeTab === "budgets" && <BudgetTab />}
+                            {activeTab === "closing" && <ClosingTab />}
                             {activeTab === "professionals" && <ProfessionalsTab />}
                             {activeTab === "reports" && <ReportsTab />}
                             {activeTab === "subscriptions" && <SubscriptionsTab subscription={subscription} />}

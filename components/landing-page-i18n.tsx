@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
-import { motion, useInView, LazyMotion, domMax } from "framer-motion"
+import { m, useInView, LazyMotion, domMax } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -60,7 +60,7 @@ const ScrollAnimatedSection = ({ children, className = "" }: { children: React.R
     const isInView = useInView(ref, { once: true, amount: 0.2 })
 
     return (
-        <motion.section
+        <m.section
             ref={ref}
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -68,7 +68,7 @@ const ScrollAnimatedSection = ({ children, className = "" }: { children: React.R
             className={className}
         >
             {children}
-        </motion.section>
+        </m.section>
     )
 }
 
@@ -99,7 +99,7 @@ const StaggeredCards = ({ children, columns = 3 }: { children: React.ReactNode[]
     const gridClassName = columns === 3 ? "md:grid-cols-3" : columns === 2 ? "md:grid-cols-2" : "md:grid-cols-1"
 
     return (
-        <motion.div
+        <m.div
             ref={ref}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -107,16 +107,18 @@ const StaggeredCards = ({ children, columns = 3 }: { children: React.ReactNode[]
             className={`grid gap-8 ${gridClassName}`}
         >
             {children.map((child, idx) => (
-                <motion.div key={idx} variants={itemVariants}>
+                <m.div key={idx} variants={itemVariants}>
                     {child}
-                </motion.div>
+                </m.div>
             ))}
-        </motion.div>
+        </m.div>
     )
 }
 
 export default function LandingPage({ onLoginClick, onSignupClick }: LandingPageProps) {
     const [showDemo, setShowDemo] = useState(false)
+    const demoRef = useRef<HTMLDivElement>(null)
+
     const t = useTranslations('landing')
     const tPricing = useTranslations('landing.pricing')
     const tProducts = useTranslations('products')
@@ -248,12 +250,12 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
             </header>
 
             {/* Hero Section - Image 2 Design */}
-            <section className="relative pt-20 sm:pt-28 pb-20 overflow-hidden flex flex-col">
+            <section className="relative pt-20 sm:pt-28 pb-20 overflow-x-clip flex flex-col">
                 {/* Background Grid Pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
                 {/* Floating V Logos Background - Image 3 & 4 style */}
-                <motion.div
+                <m.div
                     className="absolute top-10 left-[5%] opacity-[0.03] select-none pointer-events-none"
                     animate={{ y: [-20, 20, -20], rotate: [0, 5, 0] }}
                     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -264,22 +266,21 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         width={400} 
                         height={400} 
                         className="w-[300px] md:w-[600px] h-auto grayscale saturate-0" 
-                        priority={false}
-                        loading="lazy"
+                        priority
                         sizes="(max-width: 768px) 300px, 600px"
                     />
-                </motion.div>
-                <motion.div
+                </m.div>
+                <m.div
                     className="absolute bottom-40 right-[0%] opacity-[0.03] select-none pointer-events-none"
                     animate={{ y: [20, -20, 20], rotate: [0, -5, 0] }}
                     transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <Image src="/viraweb6.png" alt="ViraWeb BG" width={500} height={500} className="w-[400px] md:w-[800px] h-auto grayscale saturate-0" />
-                </motion.div>
+                    <Image src="/viraweb6.png" alt="ViraWeb BG" width={500} height={500} className="w-[400px] md:w-[800px] h-auto grayscale saturate-0" priority />
+                </m.div>
 
                 <div className="max-w-[1200px] mx-auto w-full px-4 relative z-10 flex flex-col items-start mb-8">
                     {/* Badge / Top Line */}
-                    <motion.div
+                    <m.div
                         className="inline-flex items-center gap-3 mb-4"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -289,7 +290,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
                             {t('hero.badge')}
                         </span>
-                    </motion.div>
+                    </m.div>
 
                     {/* Title */}
                     <h1
@@ -309,7 +310,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                     </p>
 
                     {/* CTAs */}
-                    <motion.div
+                    <m.div
                         className="flex flex-col sm:flex-row items-center gap-3"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -321,17 +322,17 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         >
                             {t('hero.startNow')} <ArrowRight className="w-4 h-4" />
                         </button>
-                    </motion.div>
+                    </m.div>
 
                 </div>
 
-                {/* Interactive Demo in macOS window (Full DemoPage) */}
-                <motion.div
-                    className="relative mx-auto w-full max-w-[1200px] px-4 mt-6"
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                >
+                {/* Interactive Demo Container */}
+                <div className="h-[200vh] w-full relative">
+                    <m.div
+                        ref={demoRef}
+                        className="relative mx-auto w-full max-w-[1200px] px-4 mt-6 sticky top-24 z-30"
+                        initial={{ opacity: 1, y: 0 }}
+                    >
                     <div className="rounded-none border border-slate-300 bg-white shadow-sm overflow-hidden relative z-20">
                         {/* Title bar */}
                         <div className="flex px-3 py-2 items-center border-b border-slate-200 bg-slate-100">
@@ -348,11 +349,12 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         </div>
 
                         {/* Full Interactive Demo Content */}
-                        <div className="relative text-left bg-white h-[600px] overflow-hidden flex flex-col">
+                        <div className="relative text-left bg-white h-[600px] overflow-hidden flex flex-col group">
                             <DemoDashboard />
                         </div>
                     </div>
-                </motion.div>
+                </m.div>
+            </div>
 
                     {/* Bottom fade for depth effect */}
                     <div className="absolute -inset-x-20 top-2/3 -bottom-40 bg-gradient-to-t from-slate-50 via-slate-50/80 to-transparent z-30 pointer-events-none" />
@@ -378,7 +380,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                     </ScrollAnimatedSection>
 
                     <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
-                        <motion.div className="relative" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
+                        <m.div className="relative" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
                             <div className="relative rounded-none border border-slate-300 bg-white p-6 shadow-sm">
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-4 mb-6">
@@ -391,11 +393,11 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                         </div>
                                     </div>
 
-                                    <motion.div className="space-y-3" initial="hidden" whileInView="visible" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }} viewport={{ once: true }}>
-                                        <motion.div className="bg-slate-50 rounded-none p-3 border border-slate-200" variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
+                                    <m.div className="space-y-3" initial="hidden" whileInView="visible" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }} viewport={{ once: true }}>
+                                        <m.div className="bg-slate-50 rounded-none p-3 border border-slate-200" variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
                                             <p className="text-[13px] font-bold text-slate-700">{t('virabot.question1')}</p>
-                                        </motion.div>
-                                        <motion.div className="bg-white rounded-none p-3 border border-slate-300 shadow-sm ml-6" variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
+                                        </m.div>
+                                        <m.div className="bg-white rounded-none p-3 border border-slate-300 shadow-sm ml-6" variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
                                             <p className="text-[13px] font-medium text-slate-700 mb-3">
                                                 {t('virabot.answer1', { count: 12 })}
                                             </p>
@@ -404,17 +406,17 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                                 <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-none bg-yellow-500" /> {t('virabot.pending', { count: 3 })}</li>
                                                 <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-none bg-red-500" /> {t('virabot.cancelled', { count: 1 })}</li>
                                             </ul>
-                                        </motion.div>
-                                    </motion.div>
+                                        </m.div>
+                                    </m.div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
 
-                        <motion.div className="space-y-6" initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
+                        <m.div className="space-y-6" initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
                             {virabotFeatures.map((feature, idx) => {
                                 const Icon = feature.icon
                                 return (
-                                    <motion.div key={idx} className="flex gap-4 items-start" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: idx * 0.1 }} viewport={{ once: true }}>
+                                    <m.div key={idx} className="flex gap-4 items-start" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: idx * 0.1 }} viewport={{ once: true }}>
                                         <div className="w-12 h-12 rounded-none bg-white flex items-center justify-center flex-shrink-0 border border-slate-300 shadow-sm">
                                             <Icon className="w-5 h-5 text-primary" strokeWidth={2} />
                                         </div>
@@ -422,13 +424,13 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                             <h4 className="text-lg font-bold text-slate-900 mb-1 uppercase tracking-tight">{feature.title}</h4>
                                             <p className="text-[13px] text-slate-600 leading-relaxed max-w-md">{feature.desc}</p>
                                         </div>
-                                    </motion.div>
+                                    </m.div>
                                 )
                             })}
-                        </motion.div>
+                        </m.div>
                     </div>
 
-                    <motion.div className="text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
+                    <m.div className="text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
                         <div className="inline-block p-6 rounded-none bg-white shadow-sm border border-slate-300 max-w-2xl mx-auto w-full">
                             <p className="text-slate-700 mb-4 text-[14px] font-bold uppercase tracking-tight">
                                 {t('virabot.availability')} <span className="text-primary font-black">{t('virabot.premium')}</span> {t('virabot.and')}{" "}
@@ -442,7 +444,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                 <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>
-                    </motion.div>
+                    </m.div>
                 </div>
             </section>
             {/* Smart Import Section - Cleaned Up */}
@@ -464,7 +466,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center mb-12">
-                        <motion.div
+                        <m.div
                             className="space-y-8"
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -505,9 +507,9 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     </div>
                                 ))}
                             </div>
-                        </motion.div>
+                        </m.div>
 
-                        <motion.div
+                        <m.div
                             className="relative"
                             initial={{ opacity: 0, x: 30 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -543,7 +545,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                             { n: "Bruno Silva", v: "R$ 1.200,00" },
                                             { n: "Carla Souza", v: "R$ 890,00" }
                                         ].map((item, i) => (
-                                            <motion.div
+                                            <m.div
                                                 key={i}
                                                 className="flex items-center justify-between gap-3 p-2 bg-white border border-slate-200"
                                                 initial={{ opacity: 0, y: 5 }}
@@ -559,7 +561,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                                 <div className="text-[11px] font-black text-primary px-2 py-0.5 bg-slate-50 border border-slate-100">
                                                     {item.v}
                                                 </div>
-                                            </motion.div>
+                                            </m.div>
                                         ))}
                                     </div>
 
@@ -571,7 +573,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     </div>
 
 
@@ -640,9 +642,9 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                         </p>
                     </ScrollAnimatedSection>
 
-                    <motion.div className="grid md:grid-cols-3 gap-6 mb-12" initial="hidden" whileInView="visible" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }} viewport={{ once: true }}>
+                    <m.div className="grid md:grid-cols-3 gap-6 mb-12" initial="hidden" whileInView="visible" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }} viewport={{ once: true }}>
                         {plans.map((plan) => (
-                            <motion.div key={plan.id} variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}>
+                            <m.div key={plan.id} variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}>
                                 <div
                                     className={`relative p-8 border bg-white ${plan.id === "premium"
                                         ? "border-primary shadow-md border-2"
@@ -693,18 +695,18 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                         ))}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </m.div>
                         ))}
-                    </motion.div>
+                    </m.div>
 
-                    <motion.div className="text-center" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
+                    <m.div className="text-center" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
                         <button
                             onClick={() => setShowDemo(true)}
                             className="border border-slate-300 text-slate-700 font-bold hover:bg-slate-50 h-12 px-8 rounded-none shadow-sm bg-white uppercase text-[12px] tracking-widest transition-all"
                         >
                             {tPricing('compareDetails')}
                         </button>
-                    </motion.div>
+                    </m.div>
                 </div>
             </section>
 
@@ -780,7 +782,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                     </ScrollAnimatedSection>
 
                     <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                        <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} viewport={{ once: true }}>
+                        <m.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} viewport={{ once: true }}>
                             <div className="flex flex-col items-center text-center gap-4 bg-slate-50 p-8 border border-slate-300 shadow-sm rounded-none">
                                 <div className="mt-2 flex flex-col items-center flex-1 w-full">
                                     <h4 className="font-bold text-slate-900 text-lg mb-2 uppercase tracking-tight">{t('contactTalk.whatsappTitle')}</h4>
@@ -792,9 +794,9 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
 
-                        <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} viewport={{ once: true }}>
+                        <m.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} viewport={{ once: true }}>
                             <div className="flex flex-col items-center text-center gap-4 bg-slate-50 p-8 border border-slate-300 shadow-sm rounded-none">
                                 <div className="mt-2 flex flex-col items-center flex-1 w-full">
                                     <h4 className="font-bold text-slate-900 text-lg mb-2 uppercase tracking-tight">{t('contactTalk.emailTitle')}</h4>
@@ -806,14 +808,14 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     </div>
                 </div>
             </section>
 
             {/* CTA Section */}
             <section className="py-20 bg-slate-900 text-white relative border-t border-slate-800">
-                <motion.div className="max-w-4xl mx-auto px-4 text-center relative z-10" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
+                <m.div className="max-w-4xl mx-auto px-4 text-center relative z-10" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
                     <h2 className="text-3xl sm:text-4xl font-bold mb-4 tracking-tight uppercase">{t('cta.title')}</h2>
                     <p className="text-[15px] mb-8 max-w-2xl mx-auto opacity-70 leading-relaxed font-bold">
                         {t('cta.description')}
@@ -832,7 +834,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                             {t('cta.haveAccount')}
                         </button>
                     </div>
-                </motion.div>
+                </m.div>
             </section>
 
             {/* Footer */}

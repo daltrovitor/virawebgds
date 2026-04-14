@@ -33,7 +33,7 @@ export async function getSupportTickets(): Promise<SupportTicket[]> {
   } = await supabase.auth.getUser()
 
   if (authError || !user) {
-    throw new Error("User not authenticated")
+    return []
   }
 
   const { data, error } = await supabase

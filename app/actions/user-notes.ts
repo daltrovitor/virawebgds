@@ -20,8 +20,7 @@ export async function getUserNotes(): Promise<UserNote[]> {
   } = await supabase.auth.getUser()
 
   if (authError || !user) {
-    const msg = authError?.message || "User not authenticated"
-    throw new Error(msg)
+    return []
   }
 
   const { data, error } = await supabase

@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server"
 
 // ─────────────── Types ───────────────
 
-type EntityType = "clients" | "professionals" | "notes" | "checklist" | "goals"
+type EntityType = "clients" | "professionals" | "notes" | "checklist" | "goals" | "price_table" | "budgets" | "expenses"
 
 interface ExtractedItem extends Record<string, string | boolean | number> {
     selected: boolean
@@ -154,13 +154,35 @@ function scoreItem(item: Record<string, any>, entity: EntityType): number {
         if (text.length > 5) return 0.4
         return 0.1
     }
+    if (entity === "price_table") {
+        const nome = (item.nome || "").toString()
+        const preco = parseFloat(String(item.base_price || 0))
+        if (nome && preco > 0) return 0.8
+        if (nome) return 0.4
+        return 0.1
+    }
+    if (entity === "expenses") {
+        const desc = (item.description || item.categoria || "").toString()
+        const valor = parseFloat(String(item.amount || 0))
+        if (desc && valor > 0) return 0.8
+        if (valor > 0) return 0.4
+        return 0.1
+    }
+    if (entity === "budgets") {
+        const patient = (item.patient_name || "").toString()
+        const total = parseFloat(String(item.total_amount || 0))
+        if (patient && total > 0) return 0.8
+        if (total > 0) return 0.4
+        return 0.1
+    }
     return 0.5
 }
 
 function getThreshold(entity: EntityType): number {
     const thresholds: Record<string, number> = {
         clients: 0.4, professionals: 0.4,
-        notes: 0.1, checklist: 0.1, goals: 0.1
+        notes: 0.1, checklist: 0.1, goals: 0.1,
+        price_table: 0.3, budgets: 0.3, expenses: 0.3
     }
     return thresholds[entity] || 0.3
 }
@@ -591,6 +613,94 @@ function extractTextItems(lines: string[], entity: EntityType): ExtractedItem[] 
     return []
 }
 
+function extractPriceTable(lines: string[]): ExtractedItem[] {
+    let items: ExtractedItem[] = []
+    let currentCategory = "Geral"
+
+    for (const line of lines) {
+        if (isLabelLine(line)) continue
+        if (isHeaderLike(line)) continue
+
+        // Check if line is a category (usually short, capitalized, no numbers at start)
+        const isPotentialCategory = line.length < 40 && /^[A-ZÀ-Ÿ]/.test(line) && !/^\d+/.test(line) && !line.includes("R$") && !/\d+,\d{2}/.test(line)
+        
+        // Check if line is a service (numbered 1. 2. or starts with name)
+        const serviceMatch = line.match(/^(\d+)[\.\-\s]+(.+)/)
+        
+        if (isPotentialCategory && !serviceMatch) {
+            currentCategory = line.trim().replace(/[:\-]$/, "").trim()
+            continue
+        }
+
+        let nome = line
+        let preco = ""
+        let custo = ""
+        
+        if (serviceMatch) {
+            nome = serviceMatch[2].trim()
+        }
+
+        const priceMatch = nome.match(/(?:R\$?\s?)?(\d+[.,]\d{2})/)
+        if (priceMatch) {
+            preco = priceMatch[1]
+            nome = nome.replace(priceMatch[0], "").trim().replace(/[,\-–]$/, "").trim()
+        }
+
+        if (!nome || nome.length < 3) continue
+
+        const item = { nome, base_price: preco, custo, categoria: currentCategory, _source: line }
+        const confidence = scoreItem(item, "price_table")
+        items.push({ ...item, _confidence: confidence, selected: confidence >= 0.4 })
+    }
+    return items
+}
+
+function extractExpenses(lines: string[]): ExtractedItem[] {
+    let items: ExtractedItem[] = []
+    for (const line of lines) {
+        if (isLabelLine(line)) continue
+        if (isHeaderLike(line)) continue
+
+        const amountMatch = line.match(/(?:R\$?\s?)?(\d+[.,]\d{2})/)
+        const dateMatch = line.match(/\b\d{2}[\/\-]\d{2}[\/\-]\d{2,4}\b/)
+        
+        if (!amountMatch) continue
+
+        const amount = amountMatch[1]
+        let description = line.replace(amountMatch[0], "")
+        if (dateMatch) description = description.replace(dateMatch[0], "")
+        
+        description = description.trim().replace(/[,\-–]$/, "").trim().replace(/^[,\-–]/, "").trim()
+
+        const item = { description: description || "Despesa", amount, expense_date: dateMatch ? dateMatch[0] : "", category: "Outros", _source: line }
+        const confidence = scoreItem(item, "expenses")
+        items.push({ ...item, _confidence: confidence, selected: confidence >= 0.4 })
+    }
+    return items
+}
+
+function extractBudgets(lines: string[]): ExtractedItem[] {
+    let items: ExtractedItem[] = []
+    for (const line of lines) {
+        if (isLabelLine(line)) continue
+        if (isHeaderLike(line)) continue
+
+        const amountMatch = line.match(/(?:R\$?\s?)?(\d+[.,]\d{2})/)
+        if (!amountMatch) continue
+
+        const amount = amountMatch[1]
+        const namePart = line.replace(amountMatch[0], "").trim()
+        const nome = extractName(namePart, [amount])
+
+        if (!nome) continue
+
+        const item = { patient_name: nome, total_amount: amount, status: "draft", _source: line }
+        const confidence = scoreItem(item, "budgets")
+        items.push({ ...item, _confidence: confidence, selected: confidence >= 0.4 })
+    }
+    return items
+}
+
 function extractEntitiesFromText(text: string, entity: EntityType): ExtractedItem[] {
     const cleanedText = text
         .replace(/([a-zA-ZÀ-Ÿ])\s+([ãõçêéáíóú])(\s+|$)/g, '$1$2$3')
@@ -603,6 +713,9 @@ function extractEntitiesFromText(text: string, entity: EntityType): ExtractedIte
         case "clients": return extractClients(rawLines)
         case "professionals": return extractProfessionals(rawLines)
         case "notes": case "checklist": case "goals": return extractTextItems(rawLines, entity)
+        case "price_table": return extractPriceTable(rawLines)
+        case "expenses": return extractExpenses(rawLines)
+        case "budgets": return extractBudgets(rawLines)
         default: return []
     }
 }
@@ -801,6 +914,9 @@ function mapRowToEntity(row: Record<string, string>, entity: EntityType): Record
     if (entity === "notes") return { titulo: findField(["titulo", "title", "assunto"]), conteudo: findField(["conteudo", "texto", "nota", "content", "descrição"]) || Object.values(row).join(" ") }
     if (entity === "checklist") return { titulo: findField(["titulo", "title", "item", "tarefa"]), data: findField(["data", "date", "prazo"]) }
     if (entity === "goals") return { titulo: findField(["titulo", "title", "meta"]), descricao: findField(["descricao", "description"]), categoria: findField(["categoria", "category"]), valor_alvo: findField(["alvo", "target"]), valor_atual: findField(["atual", "current"]) }
+    if (entity === "price_table") return { nome: findField(["nome", "name", "produto", "serviço", "item"]), descricao: findField(["descricao", "description"]), base_price: findField(["preço", "valor", "price", "base"]), custo: findField(["custo", "cost"]), categoria: findField(["categoria", "category"]) }
+    if (entity === "expenses") return { description: findField(["descricao", "description", "item"]), amount: findField(["valor", "preço", "amount", "total"]), category: findField(["categoria", "category"]), expense_date: findField(["data", "date", "vencimento"]) }
+    if (entity === "budgets") return { patient_name: findField(["cliente", "paciente", "patient", "nome"]), total_amount: findField(["total", "valor", "amount"]), status: findField(["status"]), valid_until: findField(["validade", "prazo", "expire"]) }
     return { nome: findField(["nome", "name"]), email: findField(["email"]), telefone: findField(["telefone", "phone", "tel", "cel", "celular", "whatsapp", "contato", "fone"]), cpf: findField(["cpf", "documento"]), data_nascimento: findField(["nascimento", "nasc", "birth", "data_nasc", "data de nasc"]) }
 }
 

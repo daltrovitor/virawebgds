@@ -34,7 +34,7 @@ interface ExtractedItem {
     _score?: number
 }
 
-type EntityTypeLocal = 'clients' | 'professionals' | 'notes' | 'checklist' | 'goals'
+type EntityTypeLocal = 'clients' | 'professionals' | 'notes' | 'checklist' | 'goals' | 'price_table' | 'budgets' | 'expenses'
 
 interface ImportResult {
     total: number
@@ -77,6 +77,28 @@ function getEntityColumns(entity: EntityTypeLocal): { key: string; label: string
                 { key: 'prazo', label: 'preview.columns.deadline' },
                 { key: 'valor_alvo', label: 'preview.columns.targetValue' },
                 { key: 'valor_atual', label: 'preview.columns.currentValue' },
+            ]
+        case 'price_table':
+            return [
+                { key: 'nome', label: 'preview.columns.name' },
+                { key: 'descricao', label: 'preview.columns.description' },
+                { key: 'base_price', label: 'preview.columns.basePrice' },
+                { key: 'custo', label: 'preview.columns.cost' },
+                { key: 'categoria', label: 'preview.columns.category' },
+            ]
+        case 'expenses':
+            return [
+                { key: 'description', label: 'preview.columns.description' },
+                { key: 'amount', label: 'preview.columns.amount' },
+                { key: 'category', label: 'preview.columns.category' },
+                { key: 'expense_date', label: 'preview.columns.date' },
+            ]
+        case 'budgets':
+            return [
+                { key: 'patient_name', label: 'preview.columns.patient' },
+                { key: 'total_amount', label: 'preview.columns.total' },
+                { key: 'status', label: 'preview.columns.status' },
+                { key: 'valid_until', label: 'preview.columns.deadline' },
             ]
         default:
             return []
@@ -369,6 +391,78 @@ export default function ImportTab({ isDemo = false, onImportSuccess }: { isDemo?
                     if (error) results.errors.push(`${item.titulo}: ${error.message}`)
                     else results.inserted++
                 }
+            } else if (currentEntity === 'price_table') {
+                for (const item of selectedItems) {
+                    // Try to find category or use default
+                    let categoryId = null
+                    if (item.categoria) {
+                        const { data: cat } = await supabase.from("service_categories").select("id").eq("user_id", user.id).eq("name", item.categoria).single()
+                        if (cat) categoryId = cat.id
+                        else {
+                            const { data: newCat } = await supabase.from("service_categories").insert({ user_id: user.id, name: item.categoria }).select("id").single()
+                            if (newCat) categoryId = newCat.id
+                        }
+                    }
+
+                    if (!categoryId) {
+                        const { data: defaultCat } = await supabase.from("service_categories").select("id").eq("user_id", user.id).limit(1).single()
+                        if (defaultCat) categoryId = defaultCat.id
+                        else {
+                            const { data: newCat } = await supabase.from("service_categories").insert({ user_id: user.id, name: "Geral" }).select("id").single()
+                            if (newCat) categoryId = newCat.id
+                        }
+                    }
+
+                    const { error } = await supabase.from("service_products").insert({
+                        user_id: user.id,
+                        category_id: categoryId,
+                        name: item.nome || t("defaults.noName"),
+                        description: item.descricao || null,
+                        base_price: parseFloat(String(item.base_price || 0)) || 0,
+                        cost: parseFloat(String(item.custo || 0)) || 0,
+                    })
+
+                    if (error) results.errors.push(`${item.nome}: ${error.message}`)
+                    else results.inserted++
+                }
+            } else if (currentEntity === 'expenses') {
+                for (const item of selectedItems) {
+                    const { error } = await supabase.from("expenses").insert({
+                        user_id: user.id,
+                        amount: parseFloat(String(item.amount || 0)) || 0,
+                        category: item.category || t("defaults.general"),
+                        description: item.description || null,
+                        expense_date: item.expense_date || new Date().toISOString().split('T')[0],
+                    })
+
+                    if (error) results.errors.push(`${item.description || item.category}: ${error.message}`)
+                    else results.inserted++
+                }
+            } else if (currentEntity === 'budgets') {
+                for (const item of selectedItems) {
+                    // Find patient by name
+                    let patientId = null
+                    if (item.patient_name) {
+                        const { data: p } = await supabase.from("patients").select("id").eq("user_id", user.id).ilike("name", `%${item.patient_name}%`).limit(1).single()
+                        if (p) patientId = p.id
+                    }
+
+                    if (!patientId) {
+                        results.errors.push(`${item.patient_name}: Cliente não encontrado.`)
+                        continue
+                    }
+
+                    const { error } = await supabase.from("budgets").insert({
+                        user_id: user.id,
+                        patient_id: patientId,
+                        status: item.status || 'draft',
+                        total_amount: parseFloat(String(item.total_amount || 0)) || 0,
+                        valid_until: item.valid_until || null,
+                    })
+
+                    if (error) results.errors.push(`${item.patient_name}: ${error.message}`)
+                    else results.inserted++
+                }
             } else {
                 results.errors.push(t("errorMsgs.notImplemented", { entity: currentEntity }))
             }
@@ -448,6 +542,9 @@ export default function ImportTab({ isDemo = false, onImportSuccess }: { isDemo?
                         <option value="notes">{t("entities.notes")}</option>
                         <option value="checklist">{t("entities.checklist")}</option>
                         <option value="goals">{t("entities.goals")}</option>
+                        <option value="price_table">{t("entities.priceTable")}</option>
+                        <option value="budgets">{t("entities.budgets")}</option>
+                        <option value="expenses">{t("entities.expenses")}</option>
                     </select>
                 </div>
             </div>

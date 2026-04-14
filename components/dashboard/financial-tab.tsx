@@ -12,6 +12,7 @@ import { AttendanceTab } from "@/components/financial/attendance-tab"
 import PaymentModal from "@/components/financial/payment-modal"
 import FinancialChart from "./financial-chart"
 import PendingPaymentsModal from "@/components/financial/pending-payments-modal"
+import ExpenseModal from "@/components/financial/expense-modal"
 import { useTranslations } from 'next-intl'
 
 export default function FinancialTab({ isDemo = false }: { isDemo?: boolean }) {
@@ -20,6 +21,7 @@ export default function FinancialTab({ isDemo = false }: { isDemo?: boolean }) {
   const [recentPayments, setRecentPayments] = useState<any[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showPendingModal, setShowPendingModal] = useState(false)
+  const [showExpenseModal, setShowExpenseModal] = useState(false)
   const t = useTranslations('dashboard.financial')
 
   const loadSummary = async () => {
@@ -113,6 +115,9 @@ export default function FinancialTab({ isDemo = false }: { isDemo?: boolean }) {
             <div className="flex gap-2">
               <Button onClick={() => setShowModal(true)} className="bg-primary text-primary-foreground shadow">
                 {t('registerPayment')}
+              </Button>
+              <Button onClick={() => setShowExpenseModal(true)} className="bg-red-600 hover:bg-red-700 text-white shadow">
+                {t('addExpense')}
               </Button>
               <Button onClick={() => setShowPendingModal(true)} variant="outline">
                 {t('managePending')}
@@ -218,6 +223,14 @@ export default function FinancialTab({ isDemo = false }: { isDemo?: boolean }) {
         </>
       ) : (
         <AttendanceTab />
+      )}
+      {/* Modal Custos */}
+      {showExpenseModal && (
+        <ExpenseModal
+          open={showExpenseModal}
+          onOpenChange={setShowExpenseModal}
+          onAdd={loadSummary}
+        />
       )}
     </div>
   )

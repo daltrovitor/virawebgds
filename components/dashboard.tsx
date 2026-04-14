@@ -22,6 +22,8 @@ import {
   AlertCircle,
   Upload,
   BellRing,
+  Tag,
+  Receipt,
 } from "lucide-react"
 import ChecklistTab from "./dashboard/checklist-tab"
 import RemindersTab from "./dashboard/reminders-tab"
@@ -38,6 +40,8 @@ import SupportTab from "./dashboard/support-tab"
 import NotesTab from "./dashboard/notes-tab"
 import TutorialTab from "./dashboard/tutorial-tab"
 import ImportTab from "./dashboard/import-tab"
+import PriceTableTab from "./dashboard/price-table-tab"
+import BudgetTab from "./dashboard/budget-tab"
 import NotificationsPanel from "./notifications-panel"
 import TutorialModal from "./tutorial-modal"
 import ImportOnboardingModal from "./import-onboarding-modal"
@@ -183,6 +187,8 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     { id: "goals", label: "Metas", icon: <Target className="w-5 h-5" /> },
     { id: "patients", label: "Clientes", icon: <Users className="w-5 h-5" /> },
     { id: "financial", label: "Financeiro", icon: <CreditCard className="w-5 h-5" /> },
+    { id: "price-table", label: "Tabela de Preços", icon: <Tag className="w-5 h-5" /> },
+    { id: "budgets", label: "Orçamentos", icon: <Receipt className="w-5 h-5" /> },
     { id: "professionals", label: "Profissionais", icon: <Users className="w-5 h-5" /> },
     { id: "reports", label: "Relatórios", icon: <BarChart3 className="w-5 h-5" /> },
     { id: "subscriptions", label: "Assinatura", icon: <CreditCard className="w-5 h-5" /> },
@@ -326,6 +332,8 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
               )}
               {activeTab === "patients" && <PatientsTab />}
               {activeTab === "financial" && <FinancialTab />}
+              {activeTab === "price-table" && <PriceTableTab />}
+              {activeTab === "budgets" && <BudgetTab />}
               {activeTab === "professionals" && <ProfessionalsTab />}
               {activeTab === "reports" && <ReportsTab />}
               {activeTab === "subscriptions" && <SubscriptionsTab subscription={subscription} />}

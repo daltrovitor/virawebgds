@@ -22,7 +22,7 @@ export interface FinancialMetrics {
 export async function getPatientSessions(patientId: string) {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from("financial_sessions")
@@ -68,7 +68,7 @@ export async function updateSession(
 export async function getFinancialMetrics(period: "week" | "month" | "quarter" | "year") {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const now = new Date()
   const startDate = new Date()

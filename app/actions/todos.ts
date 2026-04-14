@@ -49,7 +49,7 @@ export async function createTodo(payload: { title: string; description?: string;
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from("todos")
@@ -73,7 +73,7 @@ export async function updateTodo(id: string, payload: { title?: string; descript
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from("todos")
@@ -99,7 +99,7 @@ export async function toggleTodoComplete(id: string, completed: boolean) {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   const { data, error } = await supabase
     .from("todos")

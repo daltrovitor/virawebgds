@@ -18,7 +18,7 @@ export async function recordVisit(payload: {
 }) {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return { currentPeriod: 0, growth: 0 }
 
   try {
     const { data, error } = await supabase
@@ -45,7 +45,7 @@ export async function recordVisit(payload: {
 export async function getPatientVisits(patient_id: string, startDate?: string, endDate?: string) {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) throw new Error("User not authenticated")
+  if (authError || !user) return []
 
   let query = supabase
     .from('visits')
