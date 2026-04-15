@@ -249,7 +249,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
               <div className="flex-1 flex justify-center">
                 <div className="flex items-center gap-2 bg-[#0A0A0A] px-24 py-1.5 rounded-md border border-white/5 shadow-inner">
                   <Sparkles className="w-3 h-3 text-[#5E6AD2]" />
-                  <span className="text-[11px] text-[#8A8F98] font-medium tracking-wide">app.viraweb.com</span>
+                  <span className="text-[11px] text-[#8A8F98] font-medium tracking-wide">gdc.viraweb.online</span>
                 </div>
               </div>
             </div>

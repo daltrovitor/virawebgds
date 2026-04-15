@@ -127,7 +127,7 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
     }
 
     return (
-        <div className={`flex ${showFullPage ? "h-screen" : "h-[600px]"} bg-slate-50 overflow-hidden border border-slate-300 relative`}>
+        <div className={`flex ${showFullPage ? "h-screen" : "h-[600px]"} bg-slate-50 overflow-hidden border border-slate-300`}>
             {/* Mobile Sidebar Overlay */}
             {sidebarOpen && (
                 <div 
@@ -139,7 +139,7 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
             {/* Sidebar */}
             <aside className={`
                 ${sidebarOpen ? "translate-x-0 w-full lg:w-64" : "-translate-x-full sm:translate-x-0 w-16"} 
-                fixed sm:relative bg-white transition-all duration-300 flex flex-col z-50 h-full border-r border-slate-200
+                absolute sm:relative inset-y-0 left-0 bg-white transition-all duration-300 flex flex-col z-50 border-r border-slate-200
             `}>
                 <div className="p-4 flex items-center justify-between border-b border-slate-200 h-16 shrink-0">
                     {sidebarOpen && (

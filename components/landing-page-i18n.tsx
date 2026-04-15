@@ -343,7 +343,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                             </div>
                             <div className="flex-1 flex justify-center">
                                 <div className="flex items-center gap-2 bg-white px-6 py-1 rounded-none border border-slate-300 text-slate-500 text-[11px] font-bold uppercase tracking-wider">
-                                    app.viraweb.com
+                                    gdc.viraweb.online
                                 </div>
                             </div>
                         </div>
@@ -361,7 +361,8 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
 
             </section>
 
-            {/* ViraBot AI Feature Section */}
+
+            {/* ViraBot AI Feature Section */}
             <section className="py-16 sm:py-20 relative bg-slate-100 border-t border-slate-300">
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <ScrollAnimatedSection className="text-center mb-12">
