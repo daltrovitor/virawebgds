@@ -173,7 +173,7 @@ export default function PlansSelectionPage() {
             {/* Header */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                 <div className="text-center mb-16 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">
                         <Sparkles className="w-3 h-3 fill-current" />
                         Sua conta está ativa
                     </div>
@@ -188,7 +188,7 @@ export default function PlansSelectionPage() {
                     {plans.map((plan) => (
                         <Card
                             key={plan.id}
-                            className={`relative border-2 transition-all duration-300 hover:shadow-2xl rounded-[24px] overflow-hidden ${plan.highlighted
+                            className={`relative border-2 transition-all duration-300 hover:shadow-2xl overflow-hidden ${plan.highlighted
                                 ? "border-primary bg-linear-to-br from-primary/2 to-secondary/2 md:scale-105"
                                 : "border-border hover:border-primary/50"
                                 }`}
@@ -201,7 +201,7 @@ export default function PlansSelectionPage() {
                             )}
                             
                             {!plan.isTrial && plan.highlighted && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 text-xs font-bold uppercase tracking-widest">
                                     Mais Popular
                                 </div>
                             )}
@@ -212,7 +212,7 @@ export default function PlansSelectionPage() {
                                 <p className="text-muted-foreground text-sm mb-8 font-medium leading-relaxed">{plan.description}</p>
 
                                 {/* Price */}
-                                <div className="mb-8 p-4 rounded-2xl bg-secondary/20 border border-secondary/10 flex flex-col items-center justify-center">
+                                <div className="mb-8 p-4 bg-secondary/20 border border-secondary/10 flex flex-col items-center justify-center">
                                     {plan.isTrial && (
                                         <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Início: R$ 0,00</span>
                                     )}
@@ -229,7 +229,7 @@ export default function PlansSelectionPage() {
                                 <Button
                                     disabled={!!isLoading}
                                     onClick={() => handleSelectPlan(plan.id, !!plan.isTrial)}
-                                    className={`w-full mb-8 font-black py-7 rounded-xl text-xs uppercase tracking-[0.2em] transition-all ${plan.highlighted
+                                    className={`w-full mb-8 font-black py-7 text-xs uppercase tracking-[0.2em] transition-all ${plan.highlighted
                                         ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl shadow-primary/20"
                                         : "bg-secondary hover:bg-secondary/90 text-secondary-foreground"
                                         }`}
@@ -248,11 +248,11 @@ export default function PlansSelectionPage() {
                                     {plan.features.map((feature, index) => (
                                         <div key={index} className="flex items-start gap-3 group">
                                             {feature.included ? (
-                                                <div className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                                                <div className="w-5 h-5 bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
                                                     <Check className="w-3 h-3" />
                                                 </div>
                                             ) : (
-                                                <div className="w-5 h-5 rounded-full bg-slate-50 text-slate-300 flex items-center justify-center shrink-0 mt-0.5">
+                                                <div className="w-5 h-5 bg-slate-50 text-slate-300 flex items-center justify-center shrink-0 mt-0.5">
                                                     <X className="w-3 h-3" />
                                                 </div>
                                             )}

@@ -126,7 +126,7 @@ export default function FreeTrialAuthPage() {
             <div className="max-w-md w-full space-y-8">
                 <div className="text-center space-y-4">
                     <Image width={140} height={40} alt="ViraWeb logo" src="/viraweb3.png" className="mx-auto" />
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 text-primary rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 text-primary text-[10px] font-black uppercase tracking-widest">
                         <Sparkles className="w-3 h-3 fill-current" />
                         Teste Grátis de 14 Dias
                     </div>
@@ -138,7 +138,7 @@ export default function FreeTrialAuthPage() {
                     </p>
                 </div>
 
-                <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[24px] overflow-hidden">
+                <Card className="border-none shadow-2xl shadow-slate-200/50 overflow-hidden">
                     <CardContent className="p-8">
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {!isLogin && (
@@ -149,7 +149,7 @@ export default function FreeTrialAuthPage() {
                                         <Input 
                                             required 
                                             placeholder="Seu nome" 
-                                            className="pl-10 h-11 bg-slate-50 border-slate-100 rounded-xl font-medium"
+                                            className="pl-10 h-11 bg-slate-50 border-slate-100 font-medium"
                                             value={fullName}
                                             onChange={(e) => setFullName(e.target.value)}
                                         />
@@ -165,7 +165,7 @@ export default function FreeTrialAuthPage() {
                                         type="email" 
                                         required 
                                         placeholder="exemplo@email.com" 
-                                        className="pl-10 h-11 bg-slate-50 border-slate-100 rounded-xl font-medium"
+                                        className="pl-10 h-11 bg-slate-50 border-slate-100 font-medium"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
@@ -180,7 +180,7 @@ export default function FreeTrialAuthPage() {
                                         type="password" 
                                         required 
                                         placeholder="••••••••" 
-                                        className="pl-10 h-11 bg-slate-50 border-slate-100 rounded-xl font-medium"
+                                        className="pl-10 h-11 bg-slate-50 border-slate-100 font-medium"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
@@ -210,7 +210,7 @@ export default function FreeTrialAuthPage() {
                             <Button 
                                 type="submit" 
                                 disabled={isLoading || isGoogleLoading || !acceptedTerms}
-                                className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : (isLogin ? "Entrar e Continuar" : "Cadastrar e Iniciar Teste")}
                             </Button>

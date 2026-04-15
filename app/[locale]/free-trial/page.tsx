@@ -11,7 +11,7 @@ import {
     PlayCircle, CheckCircle2, RefreshCcw, BarChart3,
     TrendingUp, Shield, Users, Calendar, Wallet,
     Tag, ListChecks, Bell, ArrowRightCircle,
-    Target, LineChart, Lock, Rocket
+    Target, LineChart, Lock, Rocket, FileText, CheckCheck, Upload, BookOpen, Trophy
 } from "lucide-react"
 import Image from "next/image"
 import LanguageToggle from "@/components/language-toggle"
@@ -106,15 +106,18 @@ export default function FreeTrialPage() {
     ]
 
     const featureItems = [
+        { icon: Upload, titleKey: 'features.import', descKey: 'features.importDesc' },
+        { icon: BookOpen, titleKey: 'features.notes', descKey: 'features.notesDesc' },
+        { icon: ListChecks, titleKey: 'features.checklist', descKey: 'features.checklistDesc' },
+        { icon: Bell, titleKey: 'features.reminders', descKey: 'features.remindersDesc' },
+        { icon: Zap, titleKey: 'features.virabot', descKey: 'features.virabotDesc' },
+        { icon: Trophy, titleKey: 'features.goals', descKey: 'features.goalsDesc' },
         { icon: Calendar, titleKey: 'features.scheduling', descKey: 'features.schedulingDesc' },
         { icon: Users, titleKey: 'features.clients', descKey: 'features.clientsDesc' },
         { icon: Wallet, titleKey: 'features.financial', descKey: 'features.financialDesc' },
-        { icon: BarChart3, titleKey: 'features.reports', descKey: 'features.reportsDesc' },
-        { icon: Zap, titleKey: 'features.virabot', descKey: 'features.virabotDesc' },
-        { icon: Target, titleKey: 'features.budgets', descKey: 'features.budgetsDesc' },
         { icon: Tag, titleKey: 'features.priceTable', descKey: 'features.priceTableDesc' },
-        { icon: ListChecks, titleKey: 'features.checklist', descKey: 'features.checklistDesc' },
-        { icon: Bell, titleKey: 'features.reminders', descKey: 'features.remindersDesc' }
+        { icon: Target, titleKey: 'features.budgets', descKey: 'features.budgetsDesc' },
+        { icon: CheckCheck, titleKey: 'features.closure', descKey: 'features.closureDesc' }
     ]
 
     const authorityItems = [
@@ -126,7 +129,7 @@ export default function FreeTrialPage() {
     return (
         <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
             {/* 1. Header Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-md border-b border-slate-100">
+            <nav className="fixed top-0 left-0 right-0 z-[60] bg-white border-b border-slate-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-28" />
@@ -148,7 +151,7 @@ export default function FreeTrialPage() {
                                 {t('nav.login')}
                             </button>
                         )}
-                        <button onClick={handleStartTrial} className="bg-[#3396D3] text-white font-bold rounded-full px-6 py-2.5 text-sm shadow-lg shadow-blue-500/10 hover:bg-[#2a7eb3] hover:scale-[1.02] active:scale-95 transition-all">
+                        <button onClick={handleStartTrial} className="bg-[#3396D3] text-white font-bold px-6 py-2.5 text-sm shadow-lg shadow-blue-500/10 hover:bg-[#2a7eb3] hover:scale-[1.02] active:scale-95 transition-all">
                             {t('nav.cta')}
                         </button>
                     </div>
@@ -167,7 +170,7 @@ export default function FreeTrialPage() {
                             transition={{ duration: 0.6 }}
                             className="space-y-8"
                         >
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full text-sm font-bold text-[#3396D3] border border-blue-100 mb-4">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-sm font-bold text-[#3396D3] border border-blue-100 mb-4">
                                 <Rocket className="w-4 h-4" />
                                 <span>{t('hero.badge')}</span>
                             </div>
@@ -183,13 +186,13 @@ export default function FreeTrialPage() {
                             <div className="flex flex-col sm:flex-row gap-5 justify-center pt-8">
                                 <button 
                                     onClick={handleStartTrial} 
-                                    className="group relative inline-flex items-center justify-center gap-2 h-16 px-10 bg-slate-900 text-white rounded-2xl text-lg font-bold shadow-2xl shadow-slate-900/20 hover:bg-slate-800 transition-all hover:-translate-y-1"
+                                    className="group relative inline-flex items-center justify-center gap-2 h-16 px-10 bg-slate-900 text-white text-lg font-bold shadow-2xl shadow-slate-900/20 hover:bg-slate-800 transition-all hover:-translate-y-1"
                                 >
                                     {t('hero.ctaPrimary')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </button>
                                 <button 
                                     onClick={scrollToDemo} 
-                                    className="inline-flex items-center justify-center gap-2 h-16 px-10 bg-white text-slate-900 rounded-2xl text-lg font-bold border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all"
+                                    className="inline-flex items-center justify-center gap-2 h-16 px-10 bg-white text-slate-900 text-lg font-bold border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all"
                                 >
                                     {t('hero.ctaSecondary')} <PlayCircle className="w-5 h-5 text-[#3396D3]" />
                                 </button>
@@ -212,9 +215,9 @@ export default function FreeTrialPage() {
                                 <motion.div 
                                     key={idx}
                                     {...fadeInUp}
-                                    className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm"
+                                    className="p-8 bg-white/5 border border-white/10"
                                 >
-                                    <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
+                                    <div className="w-14 h-14 bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
                                         <item.icon className="w-7 h-7" />
                                     </div>
                                     <h3 className="text-xl font-bold mb-4">{t(item.titleKey)}</h3>
@@ -236,7 +239,7 @@ export default function FreeTrialPage() {
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                             <motion.div {...fadeInUp} className="space-y-8">
-                                <div className="inline-block px-4 py-1 bg-blue-50 text-blue-700 text-sm font-bold rounded-full">{t('solution.badge')}</div>
+                                <div className="inline-block px-4 py-1 bg-blue-50 text-blue-700 text-sm font-bold">{t('solution.badge')}</div>
                                 <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
                                     {t('solution.title')}
                                 </h2>
@@ -246,7 +249,7 @@ export default function FreeTrialPage() {
                                 <div className="space-y-4">
                                     {['check1', 'check2', 'check3'].map((key, i) => (
                                         <div key={i} className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#3396D3] flex items-center justify-center">
+                                            <div className="flex-shrink-0 w-6 h-6 bg-[#3396D3] flex items-center justify-center">
                                                 <Check className="w-4 h-4 text-white" />
                                             </div>
                                             <span className="font-semibold text-slate-700">{t(`solution.${key}`)}</span>
@@ -267,16 +270,15 @@ export default function FreeTrialPage() {
                                 viewport={{ once: true }}
                                 className="relative"
                             >
-                                <div className="absolute -inset-4 bg-blue-500/5 blur-2xl rounded-full"></div>
-                                <div className="relative bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-xl">
+                                <div className="relative bg-slate-50 border border-slate-200 p-8 shadow-xl">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-4">
-                                            <div className="h-32 bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex flex-col justify-end">
+                                            <div className="h-32 bg-white shadow-sm border border-slate-100 p-4 flex flex-col justify-end">
                                                 <TrendingUp className="w-6 h-6 text-emerald-500 mb-2" />
                                                 <div className="text-xs font-bold text-slate-400">{t('solution.revenue')}</div>
                                                 <div className="text-lg font-bold">{t('solution.revenueValue')}</div>
                                             </div>
-                                            <div className="h-48 bg-[#3396D3] rounded-2xl shadow-sm p-4 text-white flex flex-col justify-between">
+                                            <div className="h-48 bg-[#3396D3] shadow-sm p-4 text-white flex flex-col justify-between">
                                                 <Zap className="w-8 h-8 opacity-50" />
                                                 <div>
                                                     <div className="text-xs font-bold opacity-70">{t('solution.automations')}</div>
@@ -285,14 +287,14 @@ export default function FreeTrialPage() {
                                             </div>
                                         </div>
                                         <div className="space-y-4 pt-8">
-                                            <div className="h-48 bg-slate-900 rounded-2xl shadow-sm p-4 text-white flex flex-col justify-between">
+                                            <div className="h-48 bg-slate-900 shadow-sm p-4 text-white flex flex-col justify-between">
                                                 <Users className="w-8 h-8 opacity-50" />
                                                 <div>
                                                     <div className="text-xs font-bold opacity-70">{t('solution.clients')}</div>
                                                     <div className="text-xl font-bold">{t('solution.clientsValue')}</div>
                                                 </div>
                                             </div>
-                                            <div className="h-32 bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex flex-col justify-end">
+                                            <div className="h-32 bg-white shadow-sm border border-slate-100 p-4 flex flex-col justify-end">
                                                 <BarChart3 className="w-6 h-6 text-blue-500 mb-2" />
                                                 <div className="text-xs font-bold text-slate-400">{t('solution.conversion')}</div>
                                                 <div className="text-lg font-bold">{t('solution.conversionValue')}</div>
@@ -318,9 +320,9 @@ export default function FreeTrialPage() {
                                 <motion.div 
                                     key={i} 
                                     {...fadeInUp}
-                                    className="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                                    className="bg-white p-10 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group"
                                 >
-                                    <div className={`w-14 h-14 rounded-2xl ${benefit.color} flex items-center justify-center ${benefit.textColor} mb-8 group-hover:scale-110 transition-transform`}>
+                                    <div className={`w-14 h-14 ${benefit.color} flex items-center justify-center ${benefit.textColor} mb-8 group-hover:scale-110 transition-transform`}>
                                         <benefit.icon className="w-7 h-7" />
                                     </div>
                                     <h3 className="text-2xl font-bold text-slate-900 mb-4">{t(benefit.titleKey)}</h3>
@@ -338,15 +340,15 @@ export default function FreeTrialPage() {
                             <h2 className="text-4xl font-extrabold text-slate-900 mb-4">{t('transformation.title')}</h2>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-[3rem] overflow-hidden border border-slate-200 shadow-2xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden border border-slate-200 shadow-2xl">
                             <div className="bg-slate-50 p-12 border-b md:border-b-0 md:border-r border-slate-200">
                                 <div className="text-slate-400 font-bold tracking-widest uppercase mb-8 text-sm flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-slate-300"></div> {t('transformation.before')}
+                                    <div className="w-2 h-2 bg-slate-300"></div> {t('transformation.before')}
                                 </div>
                                 <ul className="space-y-6">
                                     {[1, 2, 3, 4, 5].map((i) => (
                                         <li key={i} className="flex items-start gap-4 text-slate-500">
-                                            <div className="flex-shrink-0 w-5 h-5 mt-0.5 border-2 border-slate-200 rounded-full flex items-center justify-center text-[10px] font-bold">X</div>
+                                            <div className="flex-shrink-0 w-5 h-5 mt-0.5 border-2 border-slate-200 flex items-center justify-center text-[10px] font-bold">X</div>
                                             <span className="text-lg">{t(`transformation.before${i}`)}</span>
                                         </li>
                                     ))}
@@ -355,12 +357,12 @@ export default function FreeTrialPage() {
                             
                             <div className="bg-slate-950 p-12 text-white">
                                 <div className="text-[#FFD400] font-bold tracking-widest uppercase mb-8 text-sm flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-[#FFD400] animate-pulse"></div> {t('transformation.after')}
+                                    <div className="w-2 h-2 bg-[#FFD400] animate-pulse"></div> {t('transformation.after')}
                                 </div>
                                 <ul className="space-y-6">
                                     {[1, 2, 3, 4, 5].map((i) => (
                                         <li key={i} className="flex items-start gap-4 text-slate-200">
-                                            <div className="flex-shrink-0 w-5 h-5 mt-0.5 bg-[#3396D3] rounded-full flex items-center justify-center">
+                                            <div className="flex-shrink-0 w-5 h-5 mt-0.5 bg-[#3396D3] flex items-center justify-center">
                                                 <Check className="w-3 h-3 text-white" />
                                             </div>
                                             <span className="text-lg font-medium">{t(`transformation.after${i}`)}</span>
@@ -385,9 +387,9 @@ export default function FreeTrialPage() {
                                 <motion.div 
                                     key={i} 
                                     {...fadeInUp}
-                                    className="p-8 bg-white border border-slate-200 rounded-3xl hover:border-blue-200 hover:shadow-lg transition-all"
+                                    className="p-8 bg-white border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all"
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-700 mb-6">
+                                    <div className="w-12 h-12 bg-slate-50 flex items-center justify-center text-slate-700 mb-6">
                                         <feature.icon className="w-6 h-6" />
                                     </div>
                                     <h4 className="text-xl font-bold text-slate-900 mb-2">{t(feature.titleKey)}</h4>
@@ -402,7 +404,7 @@ export default function FreeTrialPage() {
                 <section id="demo-section" className="py-32 bg-white relative overflow-hidden">
                     <div className="max-w-[1200px] mx-auto px-4">
                         <div className="text-center mb-16 space-y-6">
-                            <div className="inline-block px-4 py-1.5 bg-slate-900 text-[#FFD400] text-xs font-black tracking-widest uppercase rounded-full">{t('demo.badge')}</div>
+                            <div className="inline-block px-4 py-1.5 bg-slate-900 text-[#FFD400] text-xs font-black tracking-widest uppercase">{t('demo.badge')}</div>
                             <h2 className="text-4xl md:text-6xl font-black text-slate-900">{t('demo.title')}</h2>
                             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
                                 {t('demo.subtitle1')} <br />
@@ -411,19 +413,17 @@ export default function FreeTrialPage() {
                         </div>
 
                         <div className="relative group">
-                            {/* Decorative elements */}
-                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700"></div>
-                            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700"></div>
+                            {/* Decorative elements - removed blur */}
                             
                             {/* Browser Mockup */}
-                            <div className="bg-white rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] ring-1 ring-slate-200 overflow-hidden relative">
+                            <div className="bg-white shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] ring-1 ring-slate-200 overflow-hidden relative">
                                 <div className="bg-slate-100/50 border-b border-slate-200 p-4 flex items-center justify-between">
                                     <div className="flex gap-2">
-                                        <div className="w-3 h-3 rounded-full bg-slate-300"></div>
-                                        <div className="w-3 h-3 rounded-full bg-slate-300"></div>
-                                        <div className="w-3 h-3 rounded-full bg-slate-300"></div>
+                                        <div className="w-3 h-3 bg-slate-300"></div>
+                                        <div className="w-3 h-3 bg-slate-300"></div>
+                                        <div className="w-3 h-3 bg-slate-300"></div>
                                     </div>
-                                    <div className="flex-1 max-w-sm mx-auto bg-white rounded-lg text-xs font-semibold text-slate-400 py-2 px-4 flex items-center justify-center gap-2 border border-slate-200">
+                                    <div className="flex-1 max-w-sm mx-auto bg-white text-xs font-semibold text-slate-400 py-2 px-4 flex items-center justify-center gap-2 border border-slate-200">
                                         <Lock className="w-3 h-3" /> viraweb.app/demo-interativa
                                     </div>
                                     <div className="w-16"></div>
@@ -438,7 +438,7 @@ export default function FreeTrialPage() {
                                         <p className="text-slate-900 font-bold hidden sm:block">{t('demo.overlayText')}</p>
                                         <button 
                                             onClick={handleStartTrial} 
-                                            className="px-10 py-5 bg-[#3396D3] text-white rounded-2xl text-lg font-black shadow-2xl shadow-blue-600/30 hover:bg-[#2a7eb3] hover:scale-[1.05] transition-all flex items-center gap-3"
+                                            className="px-10 py-5 bg-[#3396D3] text-white text-lg font-black shadow-2xl shadow-blue-600/30 hover:bg-[#2a7eb3] hover:scale-[1.05] transition-all flex items-center gap-3"
                                         >
                                             {t('demo.overlayCta')} <ArrowRightCircle className="w-6 h-6" />
                                         </button>
@@ -462,8 +462,8 @@ export default function FreeTrialPage() {
                                 </p>
                                 <div className="space-y-6">
                                     {authorityItems.map((item, i) => (
-                                        <div key={i} className="flex gap-6 p-6 rounded-2xl bg-white/5 border border-white/10">
-                                            <div className="flex-shrink-0 w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-[#3396D3] font-bold text-xl">{i+1}</div>
+                                        <div key={i} className="flex gap-6 p-6 bg-white/5 border border-white/10">
+                                            <div className="flex-shrink-0 w-12 h-12 bg-blue-500/20 flex items-center justify-center text-[#3396D3] font-bold text-xl">{i+1}</div>
                                             <div>
                                                 <h4 className="text-xl font-bold mb-1">{t(item.titleKey)}</h4>
                                                 <p className="text-slate-400">{t(item.descKey)}</p>
@@ -474,8 +474,8 @@ export default function FreeTrialPage() {
                             </div>
                             
                             <div className="relative">
-                                <div className="bg-blue-600/10 border border-blue-500/30 p-12 rounded-[3rem] text-center space-y-8">
-                                    <div className="w-20 h-20 bg-[#3396D3] rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-blue-600/50">
+                                <div className="bg-blue-600/10 border border-blue-500/30 p-12 text-center space-y-8">
+                                    <div className="w-20 h-20 bg-[#3396D3] flex items-center justify-center mx-auto shadow-2xl shadow-blue-600/50">
                                         <Shield className="w-10 h-10 text-white" />
                                     </div>
                                     <h3 className="text-3xl font-bold">{t('authority.guaranteeTitle')}</h3>
@@ -517,13 +517,13 @@ export default function FreeTrialPage() {
                             <div className="flex flex-col sm:flex-row gap-5 w-full justify-center">
                                 <button 
                                     onClick={handleStartTrial} 
-                                    className="h-20 px-12 bg-slate-900 text-white rounded-[1.5rem] text-2xl font-black shadow-2xl shadow-slate-900/30 hover:bg-slate-800 hover:-translate-y-2 transition-all flex items-center justify-center gap-4 group"
+                                    className="h-20 px-12 bg-slate-900 text-white text-2xl font-black shadow-2xl shadow-slate-900/30 hover:bg-slate-800 hover:-translate-y-2 transition-all flex items-center justify-center gap-4 group"
                                 >
                                     {t('finalCta.ctaPrimary')} <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                                 </button>
                                 <button 
                                     onClick={scrollToDemo} 
-                                    className="h-20 px-12 bg-white text-slate-900 rounded-[1.5rem] text-2xl font-black border-4 border-slate-100 hover:border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-4"
+                                    className="h-20 px-12 bg-white text-slate-900 text-2xl font-black border-4 border-slate-100 hover:border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-4"
                                 >
                                     {t('finalCta.ctaSecondary')}
                                 </button>
