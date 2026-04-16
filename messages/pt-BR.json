@@ -1650,9 +1650,9 @@
                 "paidRequiredInfo": "Nota: Apenas orçamentos com status 'Pago' são contabilizados no seu fluxo de caixa real.",
                 "downPayment": "Entrada",
                 "installments": "Parcelas",
-                "product": "Produto"
+                "product": "Produto",
+                "net": "Receita Líquida"
             },
-            "net": "Líquido:",
             "total": "Total",
             "changeStatus": "Trocar Status",
             "status": {

@@ -1646,9 +1646,9 @@
                 "paidRequiredInfo": "Note: Only budgets with 'Paid' status are counted in your actual cash flow.",
                 "downPayment": "Down Payment",
                 "installments": "Installments",
-                "product": "Product"
+                "product": "Product",
+                "net": "Net Revenue"
             },
-            "net": "Net Revenue",
             "total": "Total",
             "changeStatus": "Change Status",
             "status": {
