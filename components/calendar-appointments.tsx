@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2, Clock, CheckCircle2, XCircle, Loader2, CalendarDays, Calendar as CalendarIcon, Eye } from "lucide-react"
@@ -16,6 +17,7 @@ import {
   updateAppointment,
   deleteAppointment,
   updateAppointmentStatus,
+  updateAppointmentOccurrence,
 } from "@/app/actions/appointments"
 import { getPatients } from "@/app/actions/patients"
 import { getProfessionals } from "@/app/actions/professionals"
@@ -136,6 +138,7 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
   const selectedDateAppointments = getAppointmentsForDate(selectedDate)
   const daysInMonth = getDaysInMonth(currentDate)
   const firstDay = getFirstDayOfMonth(currentDate)
+  const calendarDays: (number | null)[] = []
 
   for (let i = 0; i < firstDay; i++) {
     calendarDays.push(null)
@@ -347,11 +350,11 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
   const dayNames = getDayNames()
 
   const getPatientName = (patientId: string) => {
-    return patients.find((p) => p.id === patientId)?.name || "Cliente não encontrado"
+    return patients.find((p) => p.id === patientId)?.name || t('patientNotFound')
   }
 
   const getProfessionalName = (professionalId: string) => {
-    return professionals.find((p) => p.id === professionalId)?.name || "Profissional não encontrado"
+    return professionals.find((p) => p.id === professionalId)?.name || t('professionalNotFound')
   }
 
   if (isLoading) {
@@ -380,6 +383,8 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
               appointment_time: "",
               duration_minutes: 60,
               notes: "",
+              planned_procedure: "",
+              occurrence: "",
               recurrence_type: "none",
               recurrence_weekdays: [],
               recurrence_count: 1,
@@ -436,13 +441,16 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
               onChange={(e) => setFormData({ ...formData, appointment_time: e.target.value })}
               className="bg-background"
             />
-            <Input
-              type="number"
-              placeholder={t('form.duration')}
-              value={formData.duration_minutes}
-              onChange={(e) => setFormData({ ...formData, duration_minutes: Number.parseInt(e.target.value) || 60 })}
-              className="bg-background"
-            />
+            <div className="space-y-1">
+              <Label className="text-xs">{t('form.duration')}</Label>
+              <Input
+                type="number"
+                placeholder={t('form.duration')}
+                value={formData.duration_minutes}
+                onChange={(e) => setFormData({ ...formData, duration_minutes: Number.parseInt(e.target.value) || 60 })}
+                className="bg-background"
+              />
+            </div>
             <Input
               placeholder={t('form.notes')}
               value={formData.notes}
@@ -450,7 +458,7 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
               className="bg-background"
             />
             <Input
-              placeholder="O que será feito (Previsto)"
+              placeholder={t('form.plannedPlaceholder')}
               value={formData.planned_procedure}
               onChange={(e) => setFormData({ ...formData, planned_procedure: e.target.value })}
               className="bg-background col-span-2"
@@ -660,11 +668,20 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
                               </span>
                             </div>
                             <p className="text-sm text-muted-foreground mb-1">
-                              {appointment.appointment_time} - {getProfessionalName(appointment.professional_id)} (
-                              {appointment.duration_minutes} min)
+                              {(() => {
+                                const [h, m] = appointment.appointment_time.split(':')
+                                const hour = parseInt(h)
+                                if (locale === 'en') {
+                                  const ampm = hour >= 12 ? 'PM' : 'AM'
+                                  const h12 = hour % 12 || 12
+                                  return `${h12}:${m} ${ampm}`
+                                }
+                                return `${h}:${m}`
+                              })()} - {getProfessionalName(appointment.professional_id)} (
+                              {appointment.duration_minutes} {tCommon('min')})
                             </p>
                             {appointment.notes && (
-                              <p className="text-sm text-muted-foreground italic">Notas: {appointment.notes}</p>
+                              <p className="text-sm text-muted-foreground italic">{tCommon('notes')}: {appointment.notes}</p>
                             )}
                           </div>
 
@@ -714,76 +731,30 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
                         {/* Planned Procedure Section */}
                         {(appointment as any).planned_procedure && (
                           <div className="p-2 bg-blue-50 rounded border border-blue-100 text-sm">
-                            <p className="font-semibold text-blue-900 text-xs mb-1">Previsto:</p>
+                            <p className="font-semibold text-blue-900 text-xs mb-1">{t('planned')}</p>
                             <p className="text-blue-800">{(appointment as any).planned_procedure}</p>
                           </div>
                         )}
-
                         {/* Occurrence Section (for completed appointments) */}
                         {appointment.status === "completed" && (
-                          <div>
-                            {selectedAppointmentId === appointment.id && !occurrenceNotes[appointment.id] ? (
-                              <div className="space-y-2 p-3 bg-green-50 rounded border border-green-100">
-                                <p className="font-semibold text-green-900 text-sm">O que Ocorreu:</p>
-                                <Textarea
-                                  placeholder="Descreva o que ocorreu durante o atendimento..."
-                                  value={occurrenceNotes[appointment.id] || (appointment as any).occurrence || ""}
-                                  onChange={(e) => setOccurrenceNotes({ ...occurrenceNotes, [appointment.id]: e.target.value })}
-                                  className="min-h-[80px] text-xs"
-                                />
-                                <div className="flex gap-2">
-                                  <Button
-                                    size="sm"
-                                    className="bg-green-600 hover:bg-green-700"
-                                    onClick={() => {
-                                      setSelectedAppointmentId(null)
-                                      // Here you would save this to the database
-                                    }}
-                                  >
-                                    Salvar
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                      setSelectedAppointmentId(null)
-                                      setOccurrenceNotes({ ...occurrenceNotes, [appointment.id]: "" })
-                                    }}
-                                  >
-                                    Cancelar
-                                  </Button>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="p-2 bg-emerald-50 rounded border border-emerald-100 text-sm">
-                                <p className="font-semibold text-emerald-900 text-xs mb-1">O que Ocorreu:</p>
-                                {(appointment as any).occurrence || occurrenceNotes[appointment.id] ? (
-                                  <>
-                                    <p className="text-emerald-800 mb-2">{(appointment as any).occurrence || occurrenceNotes[appointment.id]}</p>
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      className="text-xs h-7"
-                                      onClick={() => setSelectedAppointmentId(appointment.id)}
-                                    >
-                                      Editar
-                                    </Button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <p className="text-emerald-600 italic text-xs mb-2">Nenhuma informação adicionada</p>
-                                    <Button
-                                      size="sm"
-                                      className="bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
-                                      onClick={() => setSelectedAppointmentId(appointment.id)}
-                                    >
-                                      Adicionar informações
-                                    </Button>
-                                  </>
-                                )}
-                              </div>
-                            )}
-                          </div>
+                          <OccurrenceSection
+                            key={appointment.id}
+                            apt={appointment}
+                            onSave={async (id, note) => {
+                              try {
+                                const updated = await updateAppointmentOccurrence(id, note)
+                                setAppointments(appointments.map((a) => (a.id === id ? { ...a, occurrence: note } : a)))
+                                return updated
+                              } catch (error) {
+                                toast({
+                                  title: t('toast.saveError'),
+                                  description: error instanceof Error ? error.message : t('common.error'),
+                                  variant: "destructive",
+                                })
+                                throw error
+                              }
+                            }}
+                          />
                         )}
                       </div>
                     </Card>
@@ -827,6 +798,90 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
         patientId={selectedPatientId}
         isDemo={isDemo}
       />
+    </div>
+  )
+}
+
+function OccurrenceSection({ apt, onSave }: { apt: any; onSave: (id: string, note: string) => Promise<any> }) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [note, setNote] = useState(apt.occurrence || "")
+  const [saving, setSaving] = useState(false)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    setNote(apt.occurrence || "")
+  }, [apt.occurrence])
+
+  const t = useTranslations('dashboard.appointments')
+
+  const handleSave = async () => {
+    setSaving(true)
+    try {
+      await onSave(apt.id, note)
+      setIsEditing(false)
+    } catch (error) {
+      // toast is already handled in onSave caller
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (isEditing) {
+    return (
+      <div className="space-y-2 p-3 bg-green-50 rounded border border-green-100 mt-2">
+        <p className="text-xs font-semibold text-green-900">{t('occurrence')}:</p>
+        <Textarea
+          placeholder={t('occurrencePlaceholder')}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="min-h-[80px] text-xs bg-white"
+          autoFocus
+        />
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            className="bg-green-600 hover:bg-green-700 font-medium"
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saving ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <CheckCircle2 className="w-3 h-3 mr-2" />}
+            {t('form.save')}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              setNote(apt.occurrence || "")
+              setIsEditing(false)
+            }}
+          >
+            {t('form.cancel')}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-2 bg-emerald-50 rounded border border-emerald-100 text-sm mt-2">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex-1">
+          <p className="font-semibold text-emerald-900 text-xs mb-1">{t('occurrence')}:</p>
+          {apt.occurrence ? (
+            <p className="text-emerald-800 whitespace-pre-wrap">{apt.occurrence}</p>
+          ) : (
+            <p className="text-emerald-600 italic text-xs">{t('noOccurrence')}</p>
+          )}
+        </div>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="text-xs h-7 text-emerald-700 hover:text-emerald-800 hover:bg-emerald-100"
+          onClick={() => setIsEditing(true)}
+        >
+          {apt.occurrence ? t('edit') : t('addOccurrence')}
+        </Button>
+      </div>
     </div>
   )
 }

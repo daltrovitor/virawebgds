@@ -43,8 +43,8 @@ export async function getClosingData(month: number, year: number) {
     .from("appointments")
     .select("id, status")
     .eq("user_id", user.id)
-    .gte("date", startDate)
-    .lte("date", endDate)
+    .gte("appointment_date", startDate)
+    .lte("appointment_date", endDate)
     .in("status", ["completed", "attended"])
 
   let totalRevenue = 0

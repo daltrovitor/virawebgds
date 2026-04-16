@@ -40,6 +40,7 @@ import {
   INSTALLMENT_INTERVAL_LABELS,
 } from "@/lib/budget-types"
 import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 import { useTranslations } from "next-intl"
 
 type Patient = { id: string; name: string; email?: string | null; phone?: string | null }
@@ -93,14 +94,27 @@ export default function BudgetTab() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Excluir este orçamento?")) return
-    const res = await deleteBudget(id)
-    if (res.success) {
-      toast({ title: t("toasts.deleted") })
-      await loadData()
-    } else {
-      toast({ title: t("toasts.errorLabel"), description: res.error, variant: "destructive" })
-    }
+    toast({
+      title: "Excluir orçamento?",
+      description: "Esta ação não pode ser desfeita.",
+      variant: "destructive",
+      action: (
+        <ToastAction
+          altText="Excluir"
+          onClick={async () => {
+            const res = await deleteBudget(id)
+            if (res.success) {
+              toast({ title: t("toasts.deleted") })
+              await loadData()
+            } else {
+              toast({ title: t("toasts.errorLabel"), description: res.error, variant: "destructive" })
+            }
+          }}
+        >
+          {t("wizard.cancel") ? "Excluir" : "Excluir"}
+        </ToastAction>
+      ),
+    })
   }
 
   const [isStatusLoading, setIsStatusLoading] = useState(false)

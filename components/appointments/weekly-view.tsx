@@ -61,9 +61,16 @@ export function WeeklyView({
     return (selectedProfessional === "all" || appointment.professional_id === selectedProfessional) && isInWeek
   })
 
+  const isEn = locale === 'en'
+
   // Generate time slots from 8:00 to 18:00
   const timeSlots = Array.from({ length: 11 }, (_, i) => {
     const hour = i + 8
+    if (isEn) {
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const h12 = hour % 12 || 12
+      return `${h12} ${ampm}`
+    }
     return `${hour.toString().padStart(2, '0')}:00`
   })
 
@@ -155,8 +162,19 @@ export function WeeklyView({
                 <div className="p-1 md:p-2 text-xs md:text-sm text-center border-r">{time}</div>
                 {weekDays.map((day, dayIndex) => {
                   const currentSlotDate = new Date(day)
-                  const [hours] = time.split(':')
-                  currentSlotDate.setHours(parseInt(hours), 0, 0, 0)
+                  const [hoursText] = time.split(' ')
+                  const isPM = time.includes('PM')
+                  let hours = parseInt(hoursText)
+                  
+                  if (!isEn) {
+                    const [h] = time.split(':')
+                    hours = parseInt(h)
+                  } else {
+                    if (isPM && hours !== 12) hours += 12
+                    if (!isPM && hours === 12) hours = 0
+                  }
+                  
+                  currentSlotDate.setHours(hours, 0, 0, 0)
 
                   const appointmentsInSlot = filteredAppointments?.filter(
                     (apt) => {
@@ -194,7 +212,16 @@ export function WeeklyView({
                             </span>
                           </div>
                           <div className={`text-xs md:block hidden md:text-sm mb-1 ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
-                            {apt.appointment_time} - {apt.notes || t('noDescription')} ({apt.duration_minutes} min)
+                            {(() => {
+                              const [h, m] = apt.appointment_time.split(':')
+                              const hour = parseInt(h)
+                              if (isEn) {
+                                const ampm = hour >= 12 ? 'PM' : 'AM'
+                                const h12 = hour % 12 || 12
+                                return `${h12}:${m} ${ampm}`
+                              }
+                              return `${h}:${m}`
+                            })()} - {apt.notes || t('noDescription')} ({apt.duration_minutes} min)
                           </div>
 
                         </div>

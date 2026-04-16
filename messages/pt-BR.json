@@ -63,7 +63,15 @@
         "visitor": "Visitante",
         "noResults": "Nenhum resultado encontrado",
         "records": "registro(s)",
-        "demoMode": "Modo Demonstração"
+        "demoMode": "Modo Demonstração",
+        "status": {
+            "completed": "Realizado",
+            "scheduled": "Agendado",
+            "cancelled": "Cancelado",
+            "pending": "Pendente"
+        },
+        "notes": "Notas",
+        "min": "min"
     },
     "landing": {
         "header": {
@@ -539,6 +547,9 @@
             "activatePushTitle": "Ative as Notificações no Celular",
             "activatePushDesc": "Para garantir que você vai receber os lembretes do sistema, ative o envio de notificações push neste dispositivo.",
             "activatePushBtn": "Ativar Lembretes",
+            "tutorialTitle": "Tutorial do Aplicativo",
+            "tutorialDesc": "Aprenda como instalar o ViraWeb no seu celular para receber lembretes mesmo com o app fechado e ter um acesso muito mais rápido.",
+            "tutorialBtn": "Ver Tutorial do App →",
             "formTitle": "Novo Lembrete",
             "formSubject": "Título (assunto)",
             "formSubjectPlaceholder": "Reunião com Paciente X",
@@ -596,6 +607,92 @@
                 "reports": "Relatórios",
                 "settings": "Configurações",
                 "metrics": "Ver Métricas"
+            },
+            "pwa": {
+                "title": "Instale o ViraWeb como App",
+                "description": "Acesse sua clínica/consultório offline com o ViraWeb instalado na tela inicial do seu navegador. Funciona como um aplicativo nativo em qualquer dispositivo, sem precisar baixar pela App Store ou Google Play.",
+                "install": "Instalar",
+                "tutorial": "Tutorial de Instalação",
+                "toast": {
+                    "title": "Instalação",
+                    "description": "Clique no ícone de instalar na barra de endereços do Chrome ou use o menu (⋮) do navegador."
+                }
+            }
+        },
+        "patientProfile": {
+            "title": "Perfil do Cliente",
+            "tabs": {
+                "info": "Informações",
+                "appointments": "Agendamentos",
+                "financial": "Financeiro",
+                "files": "Arquivos"
+            },
+            "active": "Ativo",
+            "inactive": "Inativo",
+            "info": {
+                "title": "Informações de Contato",
+                "email": "Email",
+                "phone": "Telefone",
+                "cpf": "CPF",
+                "birthday": "Data de Nascimento",
+                "address": "Endereço"
+            },
+            "notes": {
+                "title": "Notas Internas",
+                "placeholder": "Anotações sobre o cliente...",
+                "save": "Salvar Notas"
+            },
+            "financial": {
+                "title": "Resumo Financeiro",
+                "register": "Registrar Pagamento",
+                "totalPaid": "Total Pago",
+                "totalDue": "Total em Aberto",
+                "discounts": "Descontos",
+                "loading": "Carregando resumo..."
+            },
+            "files": {
+                "title": "Arquivos Armazenados",
+                "uploadTitle": "Adicionar Arquivos e Fotos",
+                "uploadDesc": "Clique ou arraste arquivos aqui",
+                "empty": "Nenhum arquivo armazenado",
+                "emptyDesc": "Comece adicionando fotos e documentos do paciente",
+                "select": "Selecionar Arquivos",
+                "hint": "Imagens, PDFs e documentos são suportados",
+                "photos": "Fotos",
+                "docs": "Documentos",
+                "uploading": "Enviando...",
+                "delete": "Excluir",
+                "download": "Baixar"
+            },
+            "appointments": {
+                "title": "Histórico de Agendamentos",
+                "empty": "Nenhum agendamento encontrado",
+                "at": "às",
+                "planned": "Previamente Planejado:",
+                "notesLabel": "Notas:",
+                "occurrence": "O que Ocorreu:",
+                "placeholder": "Descreva o que ocorreu durante o atendimento...",
+                "save": "Salvar",
+                "cancel": "Cancelar",
+                "saving": "Salvando...",
+                "noInfo": "Nenhuma informação adicionada",
+                "edit": "Editar",
+                "occurrenceSaved": "Ocorrência salva",
+                "saveError": "Erro ao salvar",
+                "saveErrorDesc": "Não foi possível salvar a ocorrência."
+            },
+            "toast": {
+                "notesSaved": "Notas salvas",
+                "notesSavedDesc": "As notas foram atualizadas com sucesso.",
+                "notesError": "Erro ao salvar",
+                "photoUpdated": "Foto atualizada",
+                "photoUpdatedDesc": "A foto de perfil foi atualizada com sucesso.",
+                "uploadError": "Erro no upload",
+                "filesUploaded": "Arquivos enviados",
+                "filesUploadedDesc": "{count} arquivo(s) adicionado(s) com sucesso",
+                "fileDeleted": "Arquivo removido",
+                "saveError": "Erro ao salvar",
+                "saveErrorDesc": "Não foi possível salvar os arquivos no banco de dados."
             }
         },
         "ai": {
@@ -758,6 +855,15 @@
                 "all": "Geral (todos profissionais)",
                 "select": "Selecione um profissional"
             },
+            "patientNotFound": "Cliente não encontrado",
+            "professionalNotFound": "Profissional não encontrado",
+            "planned": "Previsto",
+            "occurrence": "O que Ocorreu",
+            "occurrencePlaceholder": "Descreva o que ocorreu durante o atendimento...",
+            "noOccurrence": "Nenhuma informação adicionada",
+            "addOccurrence": "Adicionar Ocorrência",
+            "edit": "Editar",
+            "add": "Adicionar",
             "calendar": {
                 "selectDay": "Selecione um dia para ver agendamentos",
                 "appointmentsOf": "Agendamentos de"
@@ -781,8 +887,9 @@
             "form": {
                 "patient": "Selecione um cliente",
                 "professional": "Selecione um profissional",
-                "duration": "Duração (minutos)",
+                "duration": "Duração da Sessão (minutos)",
                 "notes": "Notas (opcional)",
+                "plannedPlaceholder": "O que será feito (Previsto)",
                 "recurrence": {
                     "label": "Recorrência",
                     "none": "Nenhuma",
@@ -1350,62 +1457,7 @@
                 "emailInvalidDesc": "Por favor, insira um novo email"
             }
         },
-        "patientProfile": {
-            "title": "Perfil do Cliente",
-            "active": "Ativo",
-            "inactive": "Inativo",
-            "tabs": {
-                "info": "Informações",
-                "appointments": "Agendamentos",
-                "financial": "Financeiro",
-                "files": "Arquivos"
-            },
-            "appointments": {
-                "title": "Histórico de Agendamentos",
-                "planned": "Procedimento Previsto",
-                "occurrence": "Anotações de Ocorrência",
-                "empty": "Nenhum agendamento registrado",
-                "completed": "Concluído",
-                "scheduled": "Agendado",
-                "cancelled": "Cancelado"
-            },
-            "info": {
-                "title": "Informações do Cliente",
-                "email": "Email",
-                "phone": "Telefone",
-                "cpf": "CPF",
-                "birthday": "Data de Nascimento",
-                "address": "Endereço"
-            },
-            "notes": {
-                "title": "Notas do Cliente",
-                "placeholder": "Adicione notas sobre o cliente, histórico, observações, etc...",
-                "save": "Salvar Notas"
-            },
-            "financial": {
-                "title": "Resumo Financeiro",
-                "register": "Registrar Pagamento",
-                "totalPaid": "Total Pago",
-                "totalDue": "Total Devido",
-                "discounts": "Descontos",
-                "loading": "Carregando resumo financeiro..."
-            },
-            "photo": {
-                "invalid": "Arquivo inválido",
-                "invalidDesc": "Por favor, selecione uma imagem"
-            },
-            "toast": {
-                "loadError": "Erro ao carregar cliente",
-                "notesSaved": "Notas salvas",
-                "notesSavedDesc": "As notas do cliente foram atualizadas com sucesso",
-                "notesError": "Erro ao salvar notas",
-                "photoUpdated": "Foto atualizada",
-                "photoUpdatedDesc": "A foto do perfil foi atualizada com sucesso",
-                "uploadError": "Erro ao fazer upload",
-                "filesUploaded": "Arquivos enviados",
-                "filesUploadedDesc": "Arquivos adicionados com sucesso ao perfil"
-            }
-        },
+
         "attendance": {
             "title": "Controle de Presença",
             "selectPatient": "Selecione um cliente",

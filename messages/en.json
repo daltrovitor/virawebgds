@@ -63,7 +63,15 @@
         "visitor": "Visitor",
         "noResults": "No results found",
         "records": "records",
-        "demoMode": "Demo Mode"
+        "demoMode": "Demo Mode",
+        "status": {
+            "completed": "Completed",
+            "scheduled": "Scheduled",
+            "cancelled": "Cancelled",
+            "pending": "Pending"
+        },
+        "notes": "Notes",
+        "min": "min"
     },
     "landing": {
         "header": {
@@ -535,6 +543,9 @@
             "activatePushTitle": "Enable Mobile Notifications",
             "activatePushDesc": "To ensure you receive system reminders, enable push notifications on this device.",
             "activatePushBtn": "Enable Reminders",
+            "tutorialTitle": "App Tutorial",
+            "tutorialDesc": "Learn how to install ViraWeb on your phone to receive reminders even with the app closed and have faster access.",
+            "tutorialBtn": "View App Tutorial →",
             "formTitle": "New Reminder",
             "formSubject": "Title (subject)",
             "formSubjectPlaceholder": "Meeting with Client X",
@@ -592,6 +603,92 @@
                 "reports": "Reports",
                 "settings": "Settings",
                 "metrics": "View Metrics"
+            },
+            "pwa": {
+                "title": "Install ViraWeb as App",
+                "description": "Access your clinic/office offline with ViraWeb installed on your browser's home screen. It works like a native app on any device, without needing to download from the App Store or Google Play.",
+                "install": "Install",
+                "tutorial": "Installation Tutorial",
+                "toast": {
+                    "title": "Installation",
+                    "description": "Click the install icon in Chrome's address bar or use the browser menu (⋮)."
+                }
+            }
+        },
+        "patientProfile": {
+            "title": "Client Profile",
+            "tabs": {
+                "info": "Information",
+                "appointments": "Appointments",
+                "financial": "Financial",
+                "files": "Files"
+            },
+            "active": "Active",
+            "inactive": "Inactive",
+            "info": {
+                "title": "Contact Information",
+                "email": "Email",
+                "phone": "Phone",
+                "cpf": "ID/CPF",
+                "birthday": "Birth Date",
+                "address": "Address"
+            },
+            "notes": {
+                "title": "Internal Notes",
+                "placeholder": "Customer notes...",
+                "save": "Save Notes"
+            },
+            "financial": {
+                "title": "Financial Summary",
+                "register": "Register Payment",
+                "totalPaid": "Total Paid",
+                "totalDue": "Total Due",
+                "discounts": "Discounts",
+                "loading": "Loading summary..."
+            },
+            "files": {
+                "title": "Stored Files",
+                "uploadTitle": "Add Files and Photos",
+                "uploadDesc": "Click or drag files here",
+                "empty": "No files stored",
+                "emptyDesc": "Start by adding patient photos and documents",
+                "select": "Select Files",
+                "hint": "Images, PDFs, and documents are supported",
+                "photos": "Photos",
+                "docs": "Documents",
+                "uploading": "Uploading...",
+                "delete": "Delete",
+                "download": "Download"
+            },
+            "appointments": {
+                "title": "Appointment History",
+                "empty": "No appointments found",
+                "at": "at",
+                "planned": "Previously Planned:",
+                "notesLabel": "Notes:",
+                "occurrence": "What Happened:",
+                "placeholder": "Describe what happened during the session...",
+                "save": "Save",
+                "cancel": "Cancel",
+                "saving": "Saving...",
+                "noInfo": "No information added",
+                "edit": "Edit",
+                "occurrenceSaved": "Occurrence saved",
+                "saveError": "Error saving",
+                "saveErrorDesc": "Could not save the occurrence."
+            },
+            "toast": {
+                "notesSaved": "Notes saved",
+                "notesSavedDesc": "Notes were successfully updated.",
+                "notesError": "Error saving",
+                "photoUpdated": "Photo updated",
+                "photoUpdatedDesc": "Profile photo was successfully updated.",
+                "uploadError": "Upload error",
+                "filesUploaded": "Files uploaded",
+                "filesUploadedDesc": "{count} file(s) successfully added",
+                "fileDeleted": "File removed",
+                "saveError": "Error saving",
+                "saveErrorDesc": "Could not save files to the database."
             }
         },
         "ai": {
@@ -754,6 +851,15 @@
                 "all": "General (all professionals)",
                 "select": "Select a professional"
             },
+            "patientNotFound": "Client not found",
+            "professionalNotFound": "Professional not found",
+            "planned": "Planned",
+            "occurrence": "Outcome",
+            "occurrencePlaceholder": "Describe what happened during the session...",
+            "noOccurrence": "No information added",
+            "addOccurrence": "Add Outcome",
+            "edit": "Edit",
+            "add": "Add",
             "calendar": {
                 "selectDay": "Select a day to view appointments",
                 "appointmentsOf": "Appointments for"
@@ -777,8 +883,9 @@
             "form": {
                 "patient": "Select a client",
                 "professional": "Select a professional",
-                "duration": "Duration (minutes)",
+                "duration": "Session Duration (minutes)",
                 "notes": "Notes (optional)",
+                "plannedPlaceholder": "What will be done (Planned)",
                 "recurrence": {
                     "label": "Recurrence",
                     "none": "None",
@@ -1210,62 +1317,7 @@
                 "emailInvalidDesc": "Please enter a new email"
             }
         },
-        "patientProfile": {
-            "title": "Client Profile",
-            "active": "Active",
-            "inactive": "Inactive",
-            "tabs": {
-                "info": "Information",
-                "appointments": "Appointments",
-                "financial": "Financial",
-                "files": "Files"
-            },
-            "appointments": {
-                "title": "Appointment History",
-                "planned": "Planned Procedure",
-                "occurrence": "Occurrence Notes",
-                "empty": "No appointments recorded",
-                "completed": "Completed",
-                "scheduled": "Scheduled",
-                "cancelled": "Cancelled"
-            },
-            "info": {
-                "title": "Client Information",
-                "email": "Email",
-                "phone": "Phone",
-                "cpf": "CPF",
-                "birthday": "Date of Birth",
-                "address": "Address"
-            },
-            "notes": {
-                "title": "Client Notes",
-                "placeholder": "Add notes about the client, history, observations, etc...",
-                "save": "Save Notes"
-            },
-            "financial": {
-                "title": "Financial Summary",
-                "register": "Register Payment",
-                "totalPaid": "Total Paid",
-                "totalDue": "Total Due",
-                "discounts": "Discounts",
-                "loading": "Loading financial summary..."
-            },
-            "photo": {
-                "invalid": "Invalid file",
-                "invalidDesc": "Please select an image"
-            },
-            "toast": {
-                "loadError": "Error loading client",
-                "notesSaved": "Notes saved",
-                "notesSavedDesc": "Client notes updated successfully",
-                "notesError": "Error saving notes",
-                "photoUpdated": "Photo updated",
-                "photoUpdatedDesc": "Profile photo updated successfully",
-                "uploadError": "Error uploading",
-                "filesUploaded": "Files uploaded",
-                "filesUploadedDesc": "Files successfully added to profile"
-            }
-        },
+
         "attendance": {
             "title": "Attendance Control",
             "selectPatient": "Select a client",

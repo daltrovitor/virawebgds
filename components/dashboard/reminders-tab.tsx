@@ -10,10 +10,11 @@ import { Calendar as CalendarIcon, Clock, Bell, Plus, Loader2, Trash2, CheckCirc
 import { createReminder, getReminders, deleteReminder, type Reminder } from "@/app/actions/reminders"
 import { useToast } from "@/hooks/use-toast"
 import { useFCM } from "@/hooks/use-fcm"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 
 export default function RemindersTab({ isDemo = false }: { isDemo?: boolean }) {
     const t = useTranslations('dashboard.reminders')
+    const locale = useLocale()
     const [reminders, setReminders] = useState<Reminder[]>([])
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
@@ -146,20 +147,19 @@ export default function RemindersTab({ isDemo = false }: { isDemo?: boolean }) {
                     <PlayCircle className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
-                    <h4 className="text-sm font-bold text-blue-900">Tutorial do Aplicativo</h4>
+                    <h4 className="text-sm font-bold text-blue-900">{t('tutorialTitle') || "Tutorial do Aplicativo"}</h4>
                     <p className="text-xs text-blue-700/80 mt-0.5 mb-2 max-w-md">
-                        Aprenda como instalar o ViraWeb no seu celular para receber lembretes mesmo com o app fechado e ter um acesso muito mais rápido.
+                        {t('tutorialDesc') || "Aprenda como instalar o ViraWeb no seu celular para receber lembretes mesmo com o app fechado e ter um acesso muito mais rápido."}
                     </p>
                     <Button 
                         variant="link" 
                         size="sm" 
                         className="p-0 h-auto text-blue-600 font-bold text-xs"
                         onClick={() => {
-                            // Find the sidebar button for tutorial and click it or just emit an event
                             window.dispatchEvent(new CustomEvent('vwd:goto_tab', { detail: 'tutorial' }))
                         }}
                     >
-                        Ver Tutorial do App →
+                        {t('tutorialBtn') || "Ver Tutorial do App →"}
                     </Button>
                 </div>
             </Card>
@@ -254,11 +254,11 @@ export default function RemindersTab({ isDemo = false }: { isDemo?: boolean }) {
                                     <div className="flex gap-4">
                                         <div className="flex items-center gap-1.5 text-xs font-semibold text-primary/80 bg-primary/5 px-2 py-0.5 rounded-md">
                                             <CalendarIcon className="w-3.5 h-3.5" />
-                                            {new Date(reminder.scheduled_at).toLocaleDateString('pt-BR')}
+                                            {new Date(reminder.scheduled_at).toLocaleDateString(locale)}
                                         </div>
                                         <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
                                             <Clock className="w-3.5 h-3.5" />
-                                            {new Date(reminder.scheduled_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(reminder.scheduled_at).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: locale === 'en' })}
                                         </div>
                                     </div>
                                 </div>

@@ -16,6 +16,8 @@ export interface Appointment {
   duration_minutes: number
   status: string
   notes: string | null
+  planned_procedure?: string | null
+  occurrence?: string | null
   created_at: string
   updated_at: string
 }
@@ -54,6 +56,8 @@ export async function createAppointment(appointmentData: {
   appointment_time: string
   duration_minutes: number
   notes?: string
+  planned_procedure?: string
+  occurrence?: string
   recurrence?: {
     type: 'daily' | 'weekly' | 'monthly' | string
     weekdays?: number[]
@@ -81,27 +85,45 @@ export async function createAppointment(appointmentData: {
   }
 
   // Support recurring appointments: if recurrence provided, generate multiple rows
-  const recurrence = (appointmentData as any).recurrence
+  const recurrence = appointmentData.recurrence
 
   if (recurrence && recurrence.count && recurrence.count > 100) {
     throw new Error('Número de repetições muito alto')
   }
 
   if (!recurrence || recurrence.type === 'none') {
+    const insertData: any = {
+      user_id: user.id,
+      patient_id: appointmentData.patient_id,
+      professional_id: appointmentData.professional_id,
+      appointment_date: appointmentData.appointment_date,
+      appointment_time: appointmentData.appointment_time,
+      duration_minutes: appointmentData.duration_minutes,
+      notes: appointmentData.notes || null,
+      status: "scheduled",
+    }
+
+    // Só inclui campos se o valor não for vazio para evitar erros caso as colunas não existam no banco
+    if (appointmentData.planned_procedure) {
+      insertData.planned_procedure = appointmentData.planned_procedure
+    }
+    
+    if (appointmentData.occurrence) {
+      insertData.occurrence = appointmentData.occurrence
+    }
+
     const { data, error } = await supabase
       .from("appointments")
-      .insert({
-        user_id: user.id,
-        ...appointmentData,
-        notes: appointmentData.notes || null,
-        status: "scheduled",
-      })
+      .insert(insertData)
       .select()
       .single()
 
     if (error) {
       console.error(" Error creating appointment:", error)
-      throw new Error("Failed to create appointment")
+      const errorMsg = error.message.includes('planned_procedure') 
+        ? "Erro: Campo 'planned_procedure' não encontrado no banco de dados. " 
+        : error.message
+      throw new Error("Failed to create appointment: " + errorMsg)
     }
 
     try {
@@ -132,8 +154,6 @@ export async function createAppointment(appointmentData: {
   // generate occurrences based on recurrence rules
   const occurrences: Array<any> = []
   const startDate = new Date(appointmentData.appointment_date + 'T00:00:00')
-  const timePart = appointmentData.appointment_time || '00:00'
-  const [startHour, startMinute] = timePart.split(':').map((v) => parseInt(v, 10))
 
   const count = recurrence.count || 1
 
@@ -142,7 +162,7 @@ export async function createAppointment(appointmentData: {
       const d = new Date(startDate)
       d.setDate(d.getDate() + i)
       const dateStr = d.toISOString().split('T')[0]
-      occurrences.push({
+      const occ: any = {
         user_id: user.id,
         patient_id: appointmentData.patient_id,
         professional_id: appointmentData.professional_id,
@@ -151,7 +171,9 @@ export async function createAppointment(appointmentData: {
         duration_minutes: appointmentData.duration_minutes,
         notes: appointmentData.notes || null,
         status: 'scheduled',
-      })
+      }
+      if (appointmentData.planned_procedure !== undefined) occ.planned_procedure = appointmentData.planned_procedure
+      occurrences.push(occ)
     }
   } else if (recurrence.type === 'weekly') {
     // recurrence.weekdays is array of weekday indexes 0(Sun)-6
@@ -161,7 +183,7 @@ export async function createAppointment(appointmentData: {
     // iterate forward until we collect 'count' occurrences
     while (found < count) {
       if (weekdays.includes(cursor.getDay())) {
-        occurrences.push({
+        const occ: any = {
           user_id: user.id,
           patient_id: appointmentData.patient_id,
           professional_id: appointmentData.professional_id,
@@ -170,7 +192,9 @@ export async function createAppointment(appointmentData: {
           duration_minutes: appointmentData.duration_minutes,
           notes: appointmentData.notes || null,
           status: 'scheduled',
-        })
+        }
+        if (appointmentData.planned_procedure !== undefined) occ.planned_procedure = appointmentData.planned_procedure
+        occurrences.push(occ)
         found++
       }
       cursor.setDate(cursor.getDate() + 1)
@@ -180,7 +204,7 @@ export async function createAppointment(appointmentData: {
     for (let i = 0; i < count; i++) {
       const d = new Date(startDate.getFullYear(), startDate.getMonth() + i, dayOfMonth)
       const dateStr = d.toISOString().split('T')[0]
-      occurrences.push({
+      const occ: any = {
         user_id: user.id,
         patient_id: appointmentData.patient_id,
         professional_id: appointmentData.professional_id,
@@ -189,7 +213,9 @@ export async function createAppointment(appointmentData: {
         duration_minutes: appointmentData.duration_minutes,
         notes: appointmentData.notes || null,
         status: 'scheduled',
-      })
+      }
+      if (appointmentData.planned_procedure !== undefined) occ.planned_procedure = appointmentData.planned_procedure
+      occurrences.push(occ)
     }
   } else {
     throw new Error('Tipo de recorrência não suportado')
@@ -199,7 +225,7 @@ export async function createAppointment(appointmentData: {
   const { data: inserted, error: insertErr } = await supabase.from('appointments').insert(occurrences).select()
   if (insertErr) {
     console.error(' Error creating recurring appointments:', insertErr)
-    throw new Error('Failed to create recurring appointments')
+    throw new Error('Failed to create recurring appointments: ' + insertErr.message)
   }
 
   try {
@@ -240,6 +266,8 @@ export async function updateAppointment(
     appointment_time: string
     duration_minutes: number
     notes?: string
+    planned_procedure?: string
+    occurrence?: string
   },
 ) {
   const supabase = await createClient()
@@ -253,13 +281,27 @@ export async function updateAppointment(
     throw new Error("User not authenticated")
   }
 
+  const updatePayload: any = {
+    patient_id: appointmentData.patient_id,
+    professional_id: appointmentData.professional_id,
+    appointment_date: appointmentData.appointment_date,
+    appointment_time: appointmentData.appointment_time,
+    duration_minutes: appointmentData.duration_minutes,
+    notes: appointmentData.notes || null,
+    updated_at: new Date().toISOString(),
+  }
+
+  if (appointmentData.planned_procedure) {
+    updatePayload.planned_procedure = appointmentData.planned_procedure
+  }
+
+  if (appointmentData.occurrence) {
+    updatePayload.occurrence = appointmentData.occurrence
+  }
+
   const { data, error } = await supabase
     .from("appointments")
-    .update({
-      ...appointmentData,
-      notes: appointmentData.notes || null,
-      updated_at: new Date().toISOString(),
-    })
+    .update(updatePayload)
     .eq("id", appointmentId)
     .eq("user_id", user.id)
     .select()
@@ -420,12 +462,6 @@ export async function updateAppointmentStatus(appointmentId: string, status: str
 
           if (sessErr) {
             console.error("Error creating financial session:", sessErr)
-          } else {
-            await createNotification(
-              "Sessão Registrada",
-              `Sessão do dia ${new Date(appointment.appointment_date).toLocaleDateString("pt-BR")} registrada no financeiro.`,
-              user.id,
-            )
           }
         }
       }
@@ -435,4 +471,56 @@ export async function updateAppointmentStatus(appointmentId: string, status: str
   }
 
   return { success: true }
+}
+
+export async function getPatientAppointments(patientId: string) {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user) throw new Error("User not authenticated")
+
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("patient_id", patientId)
+    .eq("user_id", user.id)
+    .order("appointment_date", { ascending: false })
+    .order("appointment_time", { ascending: false })
+
+  if (error) {
+    console.error("Error fetching patient appointments:", error)
+    throw new Error("Failed to fetch patient appointments")
+  }
+
+  return data as Appointment[]
+}
+
+export async function updateAppointmentOccurrence(appointmentId: string, occurrence: string) {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user) throw new Error("User not authenticated")
+
+  const { data, error } = await supabase
+    .from("appointments")
+    .update({ occurrence, updated_at: new Date().toISOString() })
+    .eq("id", appointmentId)
+    .eq("user_id", user.id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error("Error updating appointment occurrence:", error)
+    throw new Error("Failed to update appointment occurrence")
+  }
+
+  return data as Appointment
 }

@@ -23,7 +23,7 @@ import {
   getRecentPatients,
   getTodayBirthdays,
 } from "@/app/actions/dashboard"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import { useToast } from "@/hooks/use-toast"
 import { createClient } from "@/lib/supabase-client"
 
@@ -46,11 +46,20 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
   const [isLoading, setIsLoading] = useState(true)
   const [hasWatchedTutorial, setHasWatchedTutorial] = useState(true)
   const [showAppDownloadBanner, setShowAppDownloadBanner] = useState(true)
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
   const t = useTranslations('dashboard.overview')
+  const locale = useLocale()
   const { toast } = useToast()
   const supabase = createClient()
 
   useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault()
+      setDeferredPrompt(e)
+    }
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+
     const loadData = async () => {
       if (isDemo) {
         setStats({ appointmentsToday: 5, activePatients: 28, completionRate: 92, growthRate: 15 })
@@ -100,7 +109,26 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
     }
 
     loadData()
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    }
   }, [])
+
+  const isEn = locale === 'en'
+
+  const formatTime = (timeStr: string) => {
+    if (!timeStr) return ""
+    const [h, m] = timeStr.split(':')
+    if (!h || !m) return timeStr
+    const hour = parseInt(h)
+    if (isEn) {
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const h12 = hour % 12 || 12
+      return `${h12}:${m} ${ampm}`
+    }
+    return `${h.padStart(2, '0')}:${m}`
+  }
 
   const statsCards = [
     {
@@ -178,35 +206,38 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
                 <Download className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">Instale o ViraWeb como App</h3>
+                <h3 className="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">{t('pwa.title')}</h3>
                 <p className="text-blue-800 dark:text-blue-200 mb-4">
-                  Acesse sua clínica/consultório offline com o ViraWeb instalado na tela inicial do seu navegador. Funciona como um aplicativo nativo em qualquer dispositivo, sem precisar baixar pela App Store ou Google Play.
+                  {t('pwa.description')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button 
-                    onClick={() => {
-                      toast({
-                        title: "Instalação de PWA",
-                        description: "Clique no menu do seu navegador (⋮) e selecione 'Instalar ViraWeb' ou 'Adicionar à tela inicial'",
-                      })
+                    onClick={async () => {
+                      if (deferredPrompt) {
+                        deferredPrompt.prompt()
+                        const { outcome } = await deferredPrompt.userChoice
+                        if (outcome === 'accepted') {
+                          setDeferredPrompt(null)
+                        }
+                      } else {
+                        toast({
+                          title: t('pwa.toast.title'),
+                          description: t('pwa.toast.description'),
+                        })
+                      }
                     }}
                     className="bg-blue-600 hover:bg-blue-700 text-white gap-2 w-full sm:w-auto"
                   >
                     <Download className="w-4 h-4" />
-                    Como Instalar
+                    {t('pwa.install')}
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => {
-                      toast({
-                        title: "Benefícios do PWA",
-                        description: "✓ Acesso offline\n✓ Notificações push\n✓ Atualizado automaticamente\n✓ Espaço economizado",
-                      })
-                    }}
-                    className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 gap-2"
+                    onClick={() => onNavigate("tutorial")}
+                    className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 gap-2 w-full sm:w-auto"
                   >
                     <PlayCircle className="w-4 h-4" />
-                    Ver Benefícios
+                    {t('pwa.tutorial')}
                   </Button>
                 </div>
               </div>
@@ -298,7 +329,7 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
                       <p className="text-sm text-muted-foreground">{apt.professional}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-foreground">{apt.time}</p>
+                      <p className="font-semibold text-foreground">{formatTime(apt.time)}</p>
                       <span
                         className={`text-[10px] uppercase font-bold px-2 py-1 rounded-none border ${apt.status === "scheduled"
                           ? "bg-green-50 text-green-700 border-green-200"

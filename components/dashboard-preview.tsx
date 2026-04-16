@@ -3,10 +3,23 @@
 import { Calendar, Users, Clock, TrendingUp, Plus, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function DashboardPreview() {
   const t = useTranslations('dashboard.preview')
+  const locale = useLocale()
+  const isEn = locale === 'en'
+
+  const formatTime = (timeStr: string) => {
+    const [h, m] = timeStr.split(':')
+    const hour = parseInt(h)
+    if (isEn) {
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const h12 = hour % 12 || 12
+      return `${h12}:${m} ${ampm}`
+    }
+    return `${h}:${m}`
+  }
 
   return (
     <div className="bg-gradient-to-br from-primary/5 via-accent/5 to-background rounded-2xl p-8 border border-border">
@@ -20,7 +33,7 @@ export default function DashboardPreview() {
         <div className="flex items-center justify-between">
           <div>
             <h4 className="text-lg font-semibold text-foreground">{t('welcome')}</h4>
-            <p className="text-sm text-muted-foreground">{t('today', { date: '19/10/2026' })}</p>
+            <p className="text-sm text-muted-foreground">{t('today', { date: new Date().toLocaleDateString(locale) })}</p>
           </div>
           <div className="flex gap-2">
             <Button size="sm" variant="outline">
@@ -69,7 +82,7 @@ export default function DashboardPreview() {
                 <div>
                   <p className="font-medium text-foreground">{apt.patient}</p>
                   <p className="text-sm text-muted-foreground">
-                    {apt.time} • {apt.professional}
+                    {formatTime(apt.time)} • {apt.professional}
                   </p>
                 </div>
                 <span

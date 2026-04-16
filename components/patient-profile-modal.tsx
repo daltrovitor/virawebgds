@@ -10,7 +10,8 @@ import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard, Clock, CheckCircle2, XCircle, Image as ImageIcon, File, Trash2, Download } from "lucide-react"
-import { getPatientById, updatePatientNotes, updatePatientPhoto } from "@/app/actions/patients"
+import { getPatientById, updatePatientNotes, updatePatientPhoto, updatePatientFiles } from "@/app/actions/patients"
+import { getPatientAppointments, updateAppointmentOccurrence } from "@/app/actions/appointments"
 import { mapDbErrorToUserMessage } from "@/lib/error-messages"
 import { getPatientFinancialSummary, getRecentPayments } from "@/app/actions/financial-actions"
 import PaymentModal from "@/components/financial/payment-modal"
@@ -39,14 +40,26 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
   const [activeTab, setActiveTab] = useState("info")
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [initialPendingPaymentId, setInitialPendingPaymentId] = useState<string | null>(null)
-  const [editingOccurrenceId, setEditingOccurrenceId] = useState<string | null>(null)
-  const [occurrenceNotes, setOccurrenceNotes] = useState<Record<string, string>>({})
   const [patientFiles, setPatientFiles] = useState<{ id: string; name: string; url: string; type: 'image' | 'file'; uploadedAt: string }[]>([])
   const [uploadingFiles, setUploadingFiles] = useState(false)
   const { toast } = useToast()
   const t = useTranslations("dashboard.patientProfile")
   const tCommon = useTranslations("common")
   const locale = useLocale()
+  const isEn = locale === 'en'
+
+  const formatTime = (timeStr: string) => {
+    if (!timeStr) return ""
+    const [h, m] = timeStr.split(':')
+    if (!h || !m) return timeStr
+    const hour = parseInt(h)
+    if (isEn) {
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const h12 = hour % 12 || 12
+      return `${h12}:${m} ${ampm}`
+    }
+    return `${h.padStart(2, '0')}:${m}`
+  }
 
   useEffect(() => {
     if (patientId && isOpen) {
@@ -84,16 +97,19 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
       return
     }
     try {
-      const [data, fin, recentPayments] = await Promise.all([
+      const [data, fin, recentPayments, apts] = await Promise.all([
         getPatientById(patientId),
         getPatientFinancialSummary(patientId),
-        getRecentPayments(50)
+        getRecentPayments(50),
+        getPatientAppointments(patientId),
       ])
-
+  
       setPatient(data)
       setNotes(data.notes || "")
       setFinancialSummary(fin)
       setPayments(recentPayments)
+      setAppointments(apts)
+      setPatientFiles(data.patient_files || [])
     } catch (error) {
       toast({
         title: t("toast.loadError"),
@@ -167,8 +183,10 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     }
   }
 
+
+
   const handleMultipleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return
+    if (!patientId || !e.target.files || e.target.files.length === 0) return
 
     setUploadingFiles(true)
     try {
@@ -196,11 +214,15 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         })
       }
 
-      setPatientFiles([...patientFiles, ...newFiles])
+      const updatedFiles = [...patientFiles, ...newFiles]
+      await updatePatientFiles(patientId, updatedFiles)
+      setPatientFiles(updatedFiles)
+      
       toast({
-        title: t("toast.filesUploaded") || "Arquivos enviados",
-        description: `${newFiles.length} arquivo(s) adicionado(s) com sucesso`,
+        title: t("toast.filesUploaded"),
+        description: t("toast.filesUploadedDesc", { count: newFiles.length }),
       })
+      if (onUpdate) onUpdate()
     } catch (error) {
       toast({
         title: t("toast.uploadError"),
@@ -212,9 +234,22 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     }
   }
 
-  const handleDeleteFile = (fileId: string) => {
-    setPatientFiles(patientFiles.filter(f => f.id !== fileId))
-    toast({ title: "Arquivo removido" })
+  const handleDeleteFile = async (fileId: string) => {
+    if (!patientId) return
+    
+    try {
+      const updatedFiles = patientFiles.filter(f => f.id !== fileId)
+      await updatePatientFiles(patientId, updatedFiles)
+      setPatientFiles(updatedFiles)
+      toast({ title: t("toast.fileDeleted") })
+      if (onUpdate) onUpdate()
+    } catch (error) {
+      toast({
+        title: t("toast.saveError"),
+        description: t("toast.saveErrorDesc"),
+        variant: "destructive",
+      })
+    }
   }
 
   if (!patient && !loading) return null
@@ -285,7 +320,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 </TabsTrigger>
                 <TabsTrigger value="appointments" className="gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("tabs.appointments") || "Agendamentos"}</span>
+                  <span className="hidden sm:inline">{t("tabs.appointments")}</span>
                 </TabsTrigger>
                 <TabsTrigger value="financial" className="gap-2">
                   <CreditCard className="w-4 h-4" />
@@ -293,7 +328,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 </TabsTrigger>
                 <TabsTrigger value="files" className="gap-2">
                   <ImageIcon className="w-4 h-4" />
-                  <span className="hidden sm:inline">Arquivos</span>
+                  <span className="hidden sm:inline">{t("tabs.files")}</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -393,13 +428,12 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
               <TabsContent value="appointments" className="mt-4 focus-visible:outline-none">
                 <div className="space-y-6">
-                  {/* Appointments Header */}
                   <div>
-                    <h4 className="text-lg font-bold text-foreground mb-4">{t("appointments.title") || "Histórico de Agendamentos"}</h4>
+                    <h4 className="text-lg font-bold text-foreground mb-4">{t("appointments.title")}</h4>
                     
                     {appointments.length > 0 ? (
                       <div className="space-y-3">
-                        {appointments
+                        {[...appointments]
                           .sort((a, b) => new Date(b.appointment_date).getTime() - new Date(a.appointment_date).getTime())
                           .map((apt) => (
                             <Card key={apt.id} className="p-4 border border-border hover:shadow-md transition-shadow">
@@ -411,7 +445,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                                       <span className="font-semibold text-foreground">
                                         {new Date(apt.appointment_date + "T00:00:00").toLocaleDateString(locale, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
                                       </span>
-                                      <span className="text-muted-foreground">às {apt.appointment_time}</span>
+                                      <span className="text-muted-foreground">{t("appointments.at")} {formatTime(apt.appointment_time)}</span>
                                     </div>
                                     
                                     <div className="flex items-center gap-2 mb-2">
@@ -427,7 +461,11 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                                         {apt.status === "completed" && <CheckCircle2 className="w-3 h-3" />}
                                         {apt.status === "scheduled" && <Clock className="w-3 h-3" />}
                                         {apt.status === "cancelled" && <XCircle className="w-3 h-3" />}
-                                        {apt.status === "completed" ? "Realizado" : apt.status === "scheduled" ? "Agendado" : "Cancelado"}
+                                        {apt.status === "completed" 
+                                          ? tCommon("status.completed") 
+                                          : apt.status === "scheduled" 
+                                            ? tCommon("status.scheduled") 
+                                            : tCommon("status.cancelled")}
                                       </span>
                                     </div>
                                   </div>
@@ -436,7 +474,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                                 {/* Planned Procedure */}
                                 {apt.planned_procedure && (
                                   <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-                                    <p className="text-xs font-semibold text-blue-900 mb-1">Previamente Planejado:</p>
+                                    <p className="text-xs font-semibold text-blue-900 mb-1">{t("appointments.planned")}</p>
                                     <p className="text-sm text-blue-800">{apt.planned_procedure}</p>
                                   </div>
                                 )}
@@ -444,67 +482,21 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                                 {/* Original Notes */}
                                 {apt.notes && (
                                   <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                    <p className="text-xs font-semibold text-slate-900 mb-1">Notas:</p>
+                                    <p className="text-xs font-semibold text-slate-900 mb-1">{t("appointments.notesLabel")}</p>
                                     <p className="text-sm text-slate-700">{apt.notes}</p>
                                   </div>
                                 )}
 
                                 {/* Occurrence Notes */}
                                 {apt.status === "completed" && (
-                                  <div className="space-y-2">
-                                    {editingOccurrenceId === apt.id ? (
-                                      <div className="space-y-2">
-                                        <p className="text-xs font-semibold text-foreground">O que Ocorreu:</p>
-                                        <Textarea
-                                          placeholder="Descreva o que ocorreu durante o atendimento..."
-                                          value={occurrenceNotes[apt.id] || apt.occurrence || ""}
-                                          onChange={(e) => setOccurrenceNotes({ ...occurrenceNotes, [apt.id]: e.target.value })}
-                                          className="min-h-[80px]"
-                                        />
-                                        <div className="flex gap-2">
-                                          <Button
-                                            size="sm"
-                                            onClick={() => {
-                                              setEditingOccurrenceId(null)
-                                              // Here you would save this to the database
-                                            }}
-                                            className="bg-primary hover:bg-primary/90"
-                                          >
-                                            <Save className="w-4 h-4 mr-2" />
-                                            Salvar
-                                          </Button>
-                                          <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => setEditingOccurrenceId(null)}
-                                          >
-                                            Cancelar
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
-                                        <div className="flex items-start justify-between">
-                                          <div className="flex-1">
-                                            <p className="text-xs font-semibold text-emerald-900 mb-1">O que Ocorreu:</p>
-                                            {apt.occurrence ? (
-                                              <p className="text-sm text-emerald-800">{apt.occurrence}</p>
-                                            ) : (
-                                              <p className="text-sm text-emerald-600 italic">Nenhuma informação adicionada</p>
-                                            )}
-                                          </div>
-                                          <Button
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => setEditingOccurrenceId(apt.id)}
-                                            className="ml-2"
-                                          >
-                                            Editar
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
+                                  <OccurrenceSection
+                                     key={apt.id}
+                                     apt={apt}
+                                     onSave={async (id, note) => {
+                                       await updateAppointmentOccurrence(id, note)
+                                       setAppointments(appointments.map(a => a.id === id ? { ...a, occurrence: note } : a))
+                                     }}
+                                  />
                                 )}
                               </div>
                             </Card>
@@ -581,25 +573,25 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                           <div className="p-4 bg-primary/10 rounded-lg mb-3">
                             <ImageIcon className="w-8 h-8 text-primary" />
                           </div>
-                          <h3 className="text-lg font-bold text-foreground mb-2">Adicionar Arquivos e Fotos</h3>
-                          <p className="text-sm text-muted-foreground mb-4">Clique ou arraste arquivos aqui</p>
+                          <h3 className="text-lg font-bold text-foreground mb-2">{t("files.uploadTitle") || "Adicionar Arquivos e Fotos"}</h3>
+                          <p className="text-sm text-muted-foreground mb-4">{t("files.uploadDesc") || "Clique ou arraste arquivos aqui"}</p>
                           <Button asChild disabled={uploadingFiles} className="gap-2">
                             <span>
                               {uploadingFiles ? (
                                 <>
                                   <Loader2 className="w-4 h-4 animate-spin" />
-                                  Carregando...
+                                  {t("files.uploading")}
                                 </>
                               ) : (
                                 <>
                                   <Upload className="w-4 h-4" />
-                                  Selecionar Arquivos
+                                  {t("files.select")}
                                 </>
                               )}
                             </span>
                           </Button>
                           <p className="text-xs text-muted-foreground mt-3">
-                            Imagens, PDFs e documentos são suportados
+                            {t("files.hint")}
                           </p>
                         </div>
                         <input
@@ -618,12 +610,12 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                   {/* Files List */}
                   {patientFiles.length > 0 ? (
                     <div className="space-y-3">
-                      <h4 className="text-lg font-bold text-foreground">Arquivos Armazenados ({patientFiles.length})</h4>
+                      <h4 className="text-lg font-bold text-foreground">{t("files.title")} ({patientFiles.length})</h4>
                       
                       {/* Images Gallery */}
                       {patientFiles.filter(f => f.type === "image").length > 0 && (
                         <div>
-                          <p className="text-sm font-semibold text-foreground mb-3">Fotos</p>
+                          <p className="text-sm font-semibold text-foreground mb-3">{t("files.photos")}</p>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {patientFiles.filter(f => f.type === "image").map((file) => (
                               <div key={file.id} className="relative group">
@@ -653,7 +645,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                       {/* Documents List */}
                       {patientFiles.filter(f => f.type === "file").length > 0 && (
                         <div>
-                          <p className="text-sm font-semibold text-foreground mb-3">Documentos</p>
+                          <p className="text-sm font-semibold text-foreground mb-3">{t("files.docs")}</p>
                           <div className="space-y-2">
                             {patientFiles.filter(f => f.type === "file").map((file) => (
                               <Card key={file.id} className="p-4 flex items-center justify-between hover:shadow-md transition-shadow">
@@ -673,14 +665,14 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                                     href={file.url}
                                     download={file.name}
                                     className="p-2 hover:bg-muted rounded transition-colors"
-                                    title="Baixar"
+                                    title={t("files.download")}
                                   >
                                     <Download className="w-4 h-4 text-muted-foreground hover:text-foreground" />
                                   </a>
                                   <button
                                     onClick={() => handleDeleteFile(file.id)}
                                     className="p-2 hover:bg-red-50 dark:hover:bg-red-950/20 rounded transition-colors"
-                                    title="Excluir"
+                                    title={t("files.delete")}
                                   >
                                     <Trash2 className="w-4 h-4 text-red-500 hover:text-red-600" />
                                   </button>
@@ -694,8 +686,8 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                   ) : (
                     <Card className="p-12 border-dashed text-center">
                       <ImageIcon className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                      <p className="text-muted-foreground">Nenhum arquivo armazenado</p>
-                      <p className="text-sm text-muted-foreground mt-1">Comece adicionando fotos e documentos do paciente</p>
+                      <p className="text-muted-foreground">{t("files.empty")}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{t("files.emptyDesc")}</p>
                     </Card>
                   )}
                 </div>
@@ -723,5 +715,101 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         />
       )}
     </Dialog>
+  )
+}
+
+function OccurrenceSection({ apt, onSave }: { apt: any, onSave: (id: string, note: string) => Promise<void> }) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [note, setNote] = useState(apt.occurrence || "")
+  const [saving, setSaving] = useState(false)
+  const { toast } = useToast()
+
+  const tApt = useTranslations("dashboard.patientProfile.appointments")
+
+  useEffect(() => {
+    setNote(apt.occurrence || "")
+  }, [apt.occurrence])
+
+  const handleSave = async () => {
+    setSaving(true)
+    try {
+      await onSave(apt.id, note)
+      toast({ title: tApt("occurrenceSaved") })
+      setIsEditing(false)
+    } catch (error) {
+       toast({
+        title: tApt("saveError"),
+        description: tApt("saveErrorDesc"),
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (isEditing) {
+    return (
+      <div className="space-y-2">
+        <p className="text-xs font-semibold text-foreground">{tApt("occurrence")}</p>
+        <Textarea
+          placeholder={tApt("placeholder")}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="min-h-[80px]"
+          autoFocus
+        />
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-primary hover:bg-primary/90"
+          >
+            {saving ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+            {tApt("save")}
+          </Button>
+          <Button
+            size="sm"
+            type="button"
+            variant="outline"
+            onClick={(e) => {
+              e.stopPropagation()
+              setNote(apt.occurrence || "")
+              setIsEditing(false)
+            }}
+          >
+            {tApt("cancel")}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-xs font-semibold text-emerald-900 mb-1">{tApt("occurrence")}</p>
+          {apt.occurrence ? (
+            <p className="text-sm text-emerald-800 whitespace-pre-wrap">{apt.occurrence}</p>
+          ) : (
+            <p className="text-sm text-emerald-600 italic">{tApt("noInfo")}</p>
+          )}
+        </div>
+        <Button
+          size="sm"
+          type="button"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsEditing(true)
+          }}
+          className="ml-2"
+        >
+          {tApt("edit")}
+        </Button>
+      </div>
+    </div>
   )
 }

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "@/hooks/use-auth"
 import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { 
     Users, BarChart3, Settings, Shield, LayoutDashboard, Search, Bell, 
@@ -489,15 +490,28 @@ export default function AdminPage() {
     }
     
     const handleDeleteTicket = async (ticketId: string) => {
-        if (!confirm("Tem certeza que deseja excluir permanentemente este ticket?")) return
-        try {
-            await deleteSupportTicket(ticketId)
-            toast({ title: "Ticket excluído com sucesso" })
-            if (activeTicket?.id === ticketId) setActiveTicket(null)
-            fetchDashboardData()
-        } catch (err) {
-            toast({ title: "Erro ao excluir ticket", variant: "destructive" })
-        }
+        toast({
+            title: "Excluir ticket?",
+            description: "Esta ação é irreversível.",
+            variant: "destructive",
+            action: (
+                <ToastAction
+                    altText="Excluir"
+                    onClick={async () => {
+                        try {
+                            await deleteSupportTicket(ticketId)
+                            toast({ title: "Ticket excluído com sucesso" })
+                            if (activeTicket?.id === ticketId) setActiveTicket(null)
+                            fetchDashboardData()
+                        } catch (err) {
+                            toast({ title: "Erro ao excluir ticket", variant: "destructive" })
+                        }
+                    }}
+                >
+                    Excluir
+                </ToastAction>
+            )
+        })
     }
 
     const handleSendBroadcast = async () => {

@@ -18,6 +18,7 @@ export interface Patient {
   address: string | null
   notes: string | null
   profile_photo_url: string | null
+  patient_files: any[] | null
   status: "active" | "inactive"
   payment_status: string | null
   last_payment_date: string | null
@@ -297,6 +298,37 @@ export async function updatePatientPhoto(patientId: string, photoUrl: string) {
   if (error) {
     console.error("Error updating patient photo:", error)
     throw new Error("Failed to update patient photo")
+  }
+
+  return data as Patient
+}
+
+export async function updatePatientFiles(patientId: string, files: any[]) {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user) {
+    throw new Error("User not authenticated")
+  }
+
+  const { data, error } = await supabase
+    .from("patients")
+    .update({
+      patient_files: files,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", patientId)
+    .eq("user_id", user.id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error("Error updating patient files:", error)
+    throw new Error("Failed to update patient files")
   }
 
   return data as Patient

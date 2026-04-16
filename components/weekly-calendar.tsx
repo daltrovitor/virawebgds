@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useLocale } from "next-intl"
 
 interface WeeklyCalendarProps {
   value?: Date
@@ -20,11 +21,18 @@ interface WeeklyCalendarProps {
 export default function WeeklyCalendar({ value = new Date(), onChange, appointments = [] }: WeeklyCalendarProps) {
   const [selectedDate, setSelectedDate] = useState(value)
   const [weekDates, setWeekDates] = useState<Date[]>([])
+  const locale = useLocale()
+  const isEn = locale === 'en'
   
   const timeSlots = Array.from({ length: 24 }, (_, i) => i)
-  const hourLabels = timeSlots.map(hour => 
-    `${hour.toString().padStart(2, '0')}:00`
-  )
+  const hourLabels = timeSlots.map(hour => {
+    if (isEn) {
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const h12 = hour % 12 || 12
+      return `${h12} ${ampm}`
+    }
+    return `${hour.toString().padStart(2, '0')}:00`
+  })
 
   useEffect(() => {
     const dates = getWeekDates(selectedDate)
@@ -43,9 +51,8 @@ export default function WeeklyCalendar({ value = new Date(), onChange, appointme
   }
 
   const formatDay = (date: Date) => {
-    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
     return {
-      dayName: days[date.getDay()],
+      dayName: date.toLocaleDateString(locale, { weekday: 'short' }),
       dayNumber: date.getDate(),
       isToday: isSameDay(date, new Date())
     }
@@ -79,7 +86,7 @@ export default function WeeklyCalendar({ value = new Date(), onChange, appointme
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="font-medium">
-            {weekDates[0]?.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+            {weekDates[0]?.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}
           </span>
           <Button variant="outline" onClick={handleNextWeek}>
             <ChevronRight className="h-4 w-4" />

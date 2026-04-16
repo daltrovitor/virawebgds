@@ -22,6 +22,7 @@ import {
 import type { ServiceCategory, ServiceProduct } from "@/lib/budget-types"
 import { CATEGORY_COLORS } from "@/lib/budget-types"
 import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 import { useTranslations } from "next-intl"
 
 export default function PriceTableTab() {
@@ -118,14 +119,27 @@ export default function PriceTableTab() {
   }
 
   const handleDeleteCategory = async (id: string) => {
-    if (!confirm(t("deleteCategoryConfirm"))) return
-    const res = await deleteCategory(id)
-    if (!res.success) {
-      toast({ title: "Erro", description: res.error, variant: "destructive" })
-      return
-    }
-    toast({ title: t("categoryDeleted") })
-    await loadData()
+    toast({
+      title: t("deleteCategoryTitle") || "Excluir categoria?",
+      description: t("deleteCategoryDesc") || "Esta ação removerá a categoria permanentemente.",
+      variant: "destructive",
+      action: (
+        <ToastAction
+          altText="Remover"
+          onClick={async () => {
+            const res = await deleteCategory(id)
+            if (!res.success) {
+              toast({ title: "Erro", description: res.error, variant: "destructive" })
+              return
+            }
+            toast({ title: t("categoryDeleted") })
+            await loadData()
+          }}
+        >
+          {t("delete") || "Excluir"}
+        </ToastAction>
+      )
+    })
   }
 
   const resetCategoryForm = () => {
@@ -187,14 +201,27 @@ export default function PriceTableTab() {
   }
 
   const handleDeleteProduct = async (id: string) => {
-    if (!confirm(t("deleteProductConfirm"))) return
-    const res = await deleteProduct(id)
-    if (!res.success) {
-      toast({ title: "Erro", description: res.error, variant: "destructive" })
-      return
-    }
-    toast({ title: t("productDeleted") })
-    await loadData()
+    toast({
+      title: t("deleteProductTitle") || "Excluir serviço?",
+      description: t("deleteProductDesc") || "O serviço será removido do catálogo.",
+      variant: "destructive",
+      action: (
+        <ToastAction
+          altText="Remover"
+          onClick={async () => {
+             const res = await deleteProduct(id)
+             if (!res.success) {
+               toast({ title: "Erro", description: res.error, variant: "destructive" })
+               return
+             }
+             toast({ title: t("productDeleted") })
+             await loadData()
+          }}
+        >
+          {t("delete") || "Excluir"}
+        </ToastAction>
+      )
+    })
   }
 
   const resetProductForm = () => {
