@@ -671,7 +671,8 @@ function BudgetWizard({
                               <X className="w-3.5 h-3.5" />
                             </button>
                           </div>
-                          <div className="grid grid-cols-3 gap-2">
+                          {/* First row: Qty, Unit Price, Cost per Unit, Tax % */}
+                          <div className="grid grid-cols-4 gap-2 mb-2">
                             <div>
                               <label className="text-[10px] text-muted-foreground">{t("wizard.qty")}</label>
                               <Input
@@ -692,17 +693,55 @@ function BudgetWizard({
                                 className="h-8 text-sm"
                               />
                             </div>
-                            <div className="flex flex-col">
-                              <label className="text-[10px] text-muted-foreground">{t("wizard.total")}</label>
-                              <span className="text-sm font-bold text-emerald-600 mt-1">
-                                R$ {calc.total.toFixed(2)}
-                              </span>
+                            <div>
+                              <label className="text-[10px] text-muted-foreground">Custo un.</label>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={item.cost_per_unit}
+                                onChange={(e) => updateItem(idx, "cost_per_unit", parseFloat(e.target.value) || 0)}
+                                className="h-8 text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-muted-foreground">Imposto %</label>
+                              <Input
+                                type="number"
+                                step="0.1"
+                                value={item.tax_percent}
+                                onChange={(e) => updateItem(idx, "tax_percent", parseFloat(e.target.value) || 0)}
+                                className="h-8 text-sm"
+                              />
                             </div>
                           </div>
-                          {item.tax_percent > 0 && (
-                            <p className="text-[10px] text-amber-600 mt-1">
-                              Imposto ({item.tax_percent}%): R$ {calc.tax_amount.toFixed(2)}
-                            </p>
+                          {/* Summary row */}
+                          <div className="grid grid-cols-2 gap-2 p-2 bg-slate-50/50 dark:bg-slate-900/50 rounded text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">{t("wizard.total")}:</span>
+                              <span className="font-bold text-emerald-600">R$ {calc.total.toFixed(2)}</span>
+                            </div>
+                            {(item.tax_percent > 0 || item.cost_per_unit > 0) && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Líqui.:</span>
+                                <span className="font-bold text-primary">
+                                  R$ {(calc.total + calc.tax_amount - (item.cost_per_unit * item.quantity)).toFixed(2)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          {(item.tax_percent > 0 || item.cost_per_unit > 0) && (
+                            <div className="text-[10px] text-muted-foreground mt-1 space-y-0.5">
+                              {item.tax_percent > 0 && (
+                                <p className="text-amber-600">
+                                  Imposto: R$ {calc.tax_amount.toFixed(2)} ({item.tax_percent}%)
+                                </p>
+                              )}
+                              {item.cost_per_unit > 0 && (
+                                <p className="text-destructive">
+                                  Custo: R$ {(item.cost_per_unit * item.quantity).toFixed(2)} ({item.quantity}x R$ {item.cost_per_unit.toFixed(2)})
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
                       )

@@ -1632,6 +1632,10 @@
                 "errorCreate": "Erro ao criar orçamento",
                 "errorLabel": "Erro"
             },
+            "common": {
+                "previous": "Anterior",
+                "next": "Próximo"
+            },
             "detail": {
                 "budget": "Orçamento",
                 "back": "Voltar",

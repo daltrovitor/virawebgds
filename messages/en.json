@@ -1628,6 +1628,10 @@
                 "errorCreate": "Error creating budget",
                 "errorLabel": "Error"
             },
+            "common": {
+                "previous": "Previous",
+                "next": "Next"
+            },
             "detail": {
                 "budget": "Budget",
                 "back": "Back",
