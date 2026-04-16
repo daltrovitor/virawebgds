@@ -331,9 +331,15 @@ export default function SupportTab({ isDemo = false }: { isDemo?: boolean }) {
           <Button
             variant="outline"
             className="w-full h-11 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium"
-            onClick={() => window.open("mailto:suporte@viraweb.online", "_blank")}
+            onClick={() => {
+              navigator.clipboard.writeText("suporte@viraweb.online")
+              toast({
+                title: "Email copiado!",
+                description: "suporte@viraweb.online foi copiado para a área de transferência",
+              })
+            }}
           >
-            <ExternalLink className="w-4 h-4 mr-2" />
+            <Mail className="w-4 h-4 mr-2" />
             {t("sendEmail")}
           </Button>
         </Card>
@@ -347,9 +353,15 @@ export default function SupportTab({ isDemo = false }: { isDemo?: boolean }) {
           <Button
             variant="outline"
             className="w-full h-11 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium"
-            onClick={() => window.open("https://wa.me/5562992466109", "_blank")}
+            onClick={() => {
+              navigator.clipboard.writeText("5562992466109")
+              toast({
+                title: "WhatsApp copiado!",
+                description: "(62) 9 9246-6109 foi copiado para a área de transferência",
+              })
+            }}
           >
-            <ExternalLink className="w-4 h-4 mr-2" />
+            <MessageSquare className="w-4 h-4 mr-2" />
             {t("openWhatsapp")}
           </Button>
         </Card>

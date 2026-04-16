@@ -424,7 +424,7 @@ export default function FreeTrialPage() {
                                         <div className="w-3 h-3 bg-slate-300"></div>
                                     </div>
                                     <div className="flex-1 max-w-sm mx-auto bg-white text-xs font-semibold text-slate-400 py-2 px-4 flex items-center justify-center gap-2 border border-slate-200">
-                                        <Lock className="w-3 h-3" /> viraweb.app/demo-interativa
+                                        <Lock className="w-3 h-3" /> gdc.viraweb.online/demo-interativa
                                     </div>
                                     <div className="w-16"></div>
                                 </div>

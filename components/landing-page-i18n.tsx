@@ -35,6 +35,7 @@ import {
 import { PRODUCTS } from "@/lib/products"
 import Image from "next/image"
 import { useTranslations } from 'next-intl'
+import { useToast } from "@/hooks/use-toast"
 import LanguageToggle from "@/components/language-toggle"
 
 // Dynamic imports for heavy components
@@ -118,6 +119,7 @@ const StaggeredCards = ({ children, columns = 3 }: { children: React.ReactNode[]
 export default function LandingPage({ onLoginClick, onSignupClick }: LandingPageProps) {
     const [showDemo, setShowDemo] = useState(false)
     const demoRef = useRef<HTMLDivElement>(null)
+    const { toast } = useToast()
 
     const t = useTranslations('landing')
     const tPricing = useTranslations('landing.pricing')
@@ -728,7 +730,13 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                 {t('discord.description')}
                             </p>
                             <button 
-                                onClick={() => window.open('https://discord.gg/2NceQ7vJr2', '_blank')}
+                                onClick={() => {
+                                    navigator.clipboard.writeText("https://discord.gg/2NceQ7vJr2")
+                                    toast({
+                                        title: "Link do Discord copiado!",
+                                        description: "Você pode compartilhar com seus amigos",
+                                    })
+                                }}
                                 className="bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold h-14 px-10 rounded-none shadow-sm transition-all text-sm gap-3 w-full sm:w-auto uppercase tracking-widest border border-[#4752c4]"
                             >
                                 {t('discord.cta')} ↗
@@ -789,7 +797,13 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     <h4 className="font-bold text-slate-900 text-lg mb-2 uppercase tracking-tight">{t('contactTalk.whatsappTitle')}</h4>
                                     <p className="text-slate-600 text-[13px] mb-6 max-w-[280px]">{t('contactTalk.whatsappDesc')}</p>
                                     <div className="mt-auto w-full">
-                                        <button onClick={() => window.open('https://wa.me/5562992466109', '_blank')} className="bg-green-600 hover:bg-green-700 text-white font-bold h-12 px-6 rounded-none shadow-sm w-full text-[14px] border border-green-700 transition-all uppercase tracking-wider">
+                                        <button onClick={() => {
+                                            navigator.clipboard.writeText("5562992466109")
+                                            toast({
+                                                title: "WhatsApp copiado!",
+                                                description: "(62) 9 9246-6109",
+                                            })
+                                        }} className="bg-green-600 hover:bg-green-700 text-white font-bold h-12 px-6 rounded-none shadow-sm w-full text-[14px] border border-green-700 transition-all uppercase tracking-wider">
                                             (62) 9 9246-6109
                                         </button>
                                     </div>
@@ -803,7 +817,13 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     <h4 className="font-bold text-slate-900 text-lg mb-2 uppercase tracking-tight">{t('contactTalk.emailTitle')}</h4>
                                     <p className="text-slate-600 text-[13px] mb-6 max-w-[280px]">{t('contactTalk.emailDesc')}</p>
                                     <div className="mt-auto w-full">
-                                        <button onClick={() => window.open('mailto:suporte@viraweb.online', '_blank')} className="border-slate-300 hover:bg-white text-slate-900 bg-white font-bold h-12 px-6 rounded-none shadow-sm w-full text-[14px] transition-all uppercase tracking-wider">
+                                        <button onClick={() => {
+                                            navigator.clipboard.writeText("suporte@viraweb.online")
+                                            toast({
+                                                title: "Email copiado!",
+                                                description: "suporte@viraweb.online",
+                                            })
+                                        }} className="border-slate-300 hover:bg-white text-slate-900 bg-white font-bold h-12 px-6 rounded-none shadow-sm w-full text-[14px] transition-all uppercase tracking-wider">
                                             suporte@viraweb.online
                                         </button>
                                     </div>
