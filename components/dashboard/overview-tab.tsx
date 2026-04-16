@@ -24,6 +24,7 @@ import {
   getTodayBirthdays,
 } from "@/app/actions/dashboard"
 import { useTranslations } from "next-intl"
+import { useToast } from "@/hooks/use-toast"
 import { createClient } from "@/lib/supabase-client"
 
 interface OverviewTabProps {
@@ -46,6 +47,7 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
   const [hasWatchedTutorial, setHasWatchedTutorial] = useState(true)
   const [showAppDownloadBanner, setShowAppDownloadBanner] = useState(true)
   const t = useTranslations('dashboard.overview')
+  const { toast } = useToast()
   const supabase = createClient()
 
   useEffect(() => {
@@ -167,56 +169,51 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
         </Card>
       )}
 
-      {/* App Download Banner */}
+      {/* PWA Installation Banner */}
       {showAppDownloadBanner && (
-        <Card className="p-6 border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
+        <Card className="p-6 border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-4 flex-1">
-              <div className="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/30 mt-1">
-                <Download className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 mt-1">
+                <Download className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100 mb-2">Baixe nosso aplicativo</h3>
-                <p className="text-amber-800 dark:text-amber-200 mb-4">
-                  Acesse sua clínica/consultório em qualquer lugar com o aplicativo mobile ViraWeb. Gerencie agendamentos, pacientes e finanças na palma da sua mão.
+                <h3 className="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">Instale o ViraWeb como App</h3>
+                <p className="text-blue-800 dark:text-blue-200 mb-4">
+                  Acesse sua clínica/consultório offline com o ViraWeb instalado na tela inicial do seu navegador. Funciona como um aplicativo nativo em qualquer dispositivo, sem precisar baixar pela App Store ou Google Play.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href="https://apps.apple.com/br/app/viraweb" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block"
+                  <Button 
+                    onClick={() => {
+                      toast({
+                        title: "Instalação de PWA",
+                        description: "Clique no menu do seu navegador (⋮) e selecione 'Instalar ViraWeb' ou 'Adicionar à tela inicial'",
+                      })
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white gap-2 w-full sm:w-auto"
                   >
-                    <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2 w-full sm:w-auto">
-                      <Download className="w-4 h-4" />
-                      Ir para App Store
-                    </Button>
-                  </a>
-                  <a
-                    href="https://play.google.com/store/apps/details?id=com.viraweb"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block"
-                  >
-                    <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2 w-full sm:w-auto">
-                      <Download className="w-4 h-4" />
-                      Google Play
-                    </Button>
-                  </a>
+                    <Download className="w-4 h-4" />
+                    Como Instalar
+                  </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => onNavigate("tutorial")}
-                    className="border-amber-300 text-amber-700 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 gap-2"
+                    onClick={() => {
+                      toast({
+                        title: "Benefícios do PWA",
+                        description: "✓ Acesso offline\n✓ Notificações push\n✓ Atualizado automaticamente\n✓ Espaço economizado",
+                      })
+                    }}
+                    className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 gap-2"
                   >
                     <PlayCircle className="w-4 h-4" />
-                    Tutorial de Download
+                    Ver Benefícios
                   </Button>
                 </div>
               </div>
             </div>
             <button
               onClick={() => setShowAppDownloadBanner(false)}
-              className="text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 p-1"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 p-1"
             >
               <AlertCircle className="w-5 h-5 rotate-45" />
             </button>
