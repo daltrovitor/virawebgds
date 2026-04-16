@@ -1216,7 +1216,18 @@
             "inactive": "Inactive",
             "tabs": {
                 "info": "Information",
-                "financial": "Financial"
+                "appointments": "Appointments",
+                "financial": "Financial",
+                "files": "Files"
+            },
+            "appointments": {
+                "title": "Appointment History",
+                "planned": "Planned Procedure",
+                "occurrence": "Occurrence Notes",
+                "empty": "No appointments recorded",
+                "completed": "Completed",
+                "scheduled": "Scheduled",
+                "cancelled": "Cancelled"
             },
             "info": {
                 "title": "Client Information",

@@ -1356,7 +1356,18 @@
             "inactive": "Inativo",
             "tabs": {
                 "info": "Informações",
-                "financial": "Financeiro"
+                "appointments": "Agendamentos",
+                "financial": "Financeiro",
+                "files": "Arquivos"
+            },
+            "appointments": {
+                "title": "Histórico de Agendamentos",
+                "planned": "Procedimento Previsto",
+                "occurrence": "Anotações de Ocorrência",
+                "empty": "Nenhum agendamento registrado",
+                "completed": "Concluído",
+                "scheduled": "Agendado",
+                "cancelled": "Cancelado"
             },
             "info": {
                 "title": "Informações do Cliente",
