@@ -89,7 +89,6 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         getPatientFinancialSummary(patientId),
         getRecentPayments(50)
       ])
-      ])
 
       setPatient(data)
       setNotes(data.notes || "")
