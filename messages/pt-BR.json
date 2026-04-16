@@ -1401,7 +1401,9 @@
                 "notesError": "Erro ao salvar notas",
                 "photoUpdated": "Foto atualizada",
                 "photoUpdatedDesc": "A foto do perfil foi atualizada com sucesso",
-                "uploadError": "Erro ao fazer upload"
+                "uploadError": "Erro ao fazer upload",
+                "filesUploaded": "Arquivos enviados",
+                "filesUploadedDesc": "Arquivos adicionados com sucesso ao perfil"
             }
         },
         "attendance": {

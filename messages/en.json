@@ -1261,7 +1261,9 @@
                 "notesError": "Error saving notes",
                 "photoUpdated": "Photo updated",
                 "photoUpdatedDesc": "Profile photo updated successfully",
-                "uploadError": "Error uploading"
+                "uploadError": "Error uploading",
+                "filesUploaded": "Files uploaded",
+                "filesUploadedDesc": "Files successfully added to profile"
             }
         },
         "attendance": {

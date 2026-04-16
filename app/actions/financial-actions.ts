@@ -64,6 +64,7 @@ export async function getRecentPayments(limit = 10) {
     .from("payments")
     .select(`
       id,
+      patient_id,
       amount,
       discount,
       currency,
