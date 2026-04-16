@@ -402,10 +402,6 @@ function BudgetWizard({
   const [paymentMethods, setPaymentMethods] = useState<{ method: BudgetPaymentMethod['method']; amount: number }[]>([])
   const [notes, setNotes] = useState("")
   const [validUntil, setValidUntil] = useState("")
-  
-  // Additional costs
-  const [additionalCosts, setAdditionalCosts] = useState<{ name: string; amount: number }[]>([])
-  const [additionalTax, setAdditionalTax] = useState(0)
 
   const totals = useMemo(
     () => calculateBudgetTotals(items, downPayment, installmentCount),
@@ -759,35 +755,22 @@ function BudgetWizard({
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t("wizard.totalTax")}</span>
-                        <span className="font-medium text-amber-600">R$ {(totals.total_tax + additionalTax).toFixed(2)}</span>
+                        <span className="font-medium text-amber-600">R$ {totals.total_tax.toFixed(2)}</span>
                       </div>
-                      
-                      {/* Additional Costs Section */}
-                      {additionalCosts.length > 0 && (
-                        <div className="pt-2 border-t border-border mt-2">
-                          <p className="text-xs font-semibold text-foreground mb-1">Custos Adicionais:</p>
-                          {additionalCosts.map((cost, idx) => (
-                            <div key={idx} className="flex justify-between text-xs ml-2">
-                              <span className="text-muted-foreground">{cost.name}</span>
-                              <span className="text-destructive">- R$ {cost.amount.toFixed(2)}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
                       
                       <div className="flex justify-between items-end border-t border-border pt-2">
                         <span className="font-bold text-foreground mb-1">{t("wizard.total")}</span>
-                        <span className="font-bold text-primary text-4xl">R$ {(totals.total_amount + additionalTax - additionalCosts.reduce((sum, c) => sum + c.amount, 0)).toFixed(2)}</span>
+                        <span className="font-bold text-primary text-4xl">R$ {totals.total_amount.toFixed(2)}</span>
                       </div>
-                      {(totals.total_cost > 0 || additionalCosts.length > 0) && (
+                      {totals.total_cost > 0 && (
                         <>
                           <div className="flex justify-between text-xs">
                             <span className="text-muted-foreground">{t("wizard.costs")}</span>
-                            <span className="text-destructive">- R$ {(totals.total_cost + additionalCosts.reduce((sum, c) => sum + c.amount, 0)).toFixed(2)}</span>
+                            <span className="text-destructive">- R$ {totals.total_cost.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between text-xs">
                             <span className="text-muted-foreground">{t("wizard.netRevenue")}</span>
-                            <span className="text-emerald-600 font-bold">R$ {(totals.net_revenue - additionalCosts.reduce((sum, c) => sum + c.amount, 0) + additionalTax).toFixed(2)}</span>
+                            <span className="text-emerald-600 font-bold">R$ {totals.net_revenue.toFixed(2)}</span>
                           </div>
                         </>
                       )}
@@ -795,64 +778,6 @@ function BudgetWizard({
                   </div>
                 )}
                 
-                {/* Additional Costs and Tax Input */}
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-lg space-y-3">
-                  <p className="text-xs font-semibold text-blue-900 dark:text-blue-300">Custos e Impostos Adicionais</p>
-                  
-                  {/* Additional tax input */}
-                  <div>
-                    <label className="text-xs text-muted-foreground">Imposto Adicional</label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={additionalTax}
-                      onChange={(e) => setAdditionalTax(parseFloat(e.target.value) || 0)}
-                      placeholder="Ex: 50.00"
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                  
-                  {/* Additional costs list */}
-                  <div>
-                    <label className="text-xs text-muted-foreground block mb-2">Custos Adicionais</label>
-                    {additionalCosts.map((cost, idx) => (
-                      <div key={idx} className="flex gap-2 mb-2">
-                        <Input
-                          type="text"
-                          value={cost.name}
-                          onChange={(e) => setAdditionalCosts(additionalCosts.map((c, i) => i === idx ? { ...c, name: e.target.value } : c))}
-                          placeholder="Nome do custo"
-                          className="h-7 text-xs flex-1"
-                        />
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={cost.amount}
-                          onChange={(e) => setAdditionalCosts(additionalCosts.map((c, i) => i === idx ? { ...c, amount: parseFloat(e.target.value) || 0 } : c))}
-                          placeholder="Valor"
-                          className="h-7 text-xs w-20"
-                        />
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setAdditionalCosts(additionalCosts.filter((_, i) => i !== idx))}
-                          className="h-7 px-2"
-                        >
-                          <X className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setAdditionalCosts([...additionalCosts, { name: "", amount: 0 }])}
-                      className="gap-1 text-xs h-7"
-                    >
-                      <Plus className="w-3 h-3" />
-                      Adicionar Custo
-                    </Button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
