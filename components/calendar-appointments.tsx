@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2, Clock, CheckCircle2, XCircle, Loader2, CalendarDays, Calendar as CalendarIcon, Eye } from "lucide-react"
 import WeeklyCalendar from "@/components/weekly-calendar"
@@ -65,10 +66,15 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
     appointment_time: "",
     duration_minutes: 60,
     notes: "",
+    planned_procedure: "",
+    occurrence: "",
     recurrence_type: "none",
     recurrence_weekdays: [] as number[],
     recurrence_count: 1,
   })
+  const [selectedDateAppointments, setSelectedDateAppointments] = useState<Appointment[]>([])
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<string | null>(null)
+  const [occurrenceNotes, setOccurrenceNotes] = useState<Record<string, string>>({})
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null)
 
@@ -187,6 +193,7 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
             appointment_time: formData.appointment_time,
             duration_minutes: formData.duration_minutes,
             notes: formData.notes,
+            planned_procedure: formData.planned_procedure,
           }
 
           if (formData.recurrence_type && formData.recurrence_type !== 'none') {
@@ -217,6 +224,8 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
           appointment_time: "",
           duration_minutes: 60,
           notes: "",
+          planned_procedure: "",
+          occurrence: "",
           recurrence_type: "none",
           recurrence_weekdays: [],
           recurrence_count: 1,
@@ -243,6 +252,8 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
       appointment_time: appointment.appointment_time,
       duration_minutes: appointment.duration_minutes,
       notes: appointment.notes || "",
+      planned_procedure: (appointment as any).planned_procedure || "",
+      occurrence: (appointment as any).occurrence || "",
       // existing appointments don't have recurrence stored yet, default to none
       recurrence_type: "none",
       recurrence_weekdays: [],
@@ -441,6 +452,12 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               className="bg-background"
             />
+            <Input
+              placeholder="O que será feito (Previsto)"
+              value={formData.planned_procedure}
+              onChange={(e) => setFormData({ ...formData, planned_procedure: e.target.value })}
+              className="bg-background col-span-2"
+            />
 
             {/* Recurrence options */}
             <div className="col-span-2">
@@ -631,69 +648,146 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
                   .sort((a, b) => a.appointment_time.localeCompare(b.appointment_time))
                   .map((appointment) => (
                     <Card key={appointment.id} className="p-4 border border-border hover:shadow-lg transition-shadow">
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h4 className="font-bold text-foreground">{getPatientName(appointment.patient_id)}</h4>
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(appointment.status)}`}
-                            >
-                              {getStatusIcon(appointment.status)}
-                              {appointment.status === "scheduled" && t('status.scheduled')}
-                              {appointment.status === "completed" && t('status.completed')}
-                              {appointment.status === "cancelled" && t('status.cancelled')}
-                            </span>
+                      <div className="space-y-3">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h4 className="font-bold text-foreground">{getPatientName(appointment.patient_id)}</h4>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(appointment.status)}`}
+                              >
+                                {getStatusIcon(appointment.status)}
+                                {appointment.status === "scheduled" && t('status.scheduled')}
+                                {appointment.status === "completed" && t('status.completed')}
+                                {appointment.status === "cancelled" && t('status.cancelled')}
+                              </span>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-1">
+                              {appointment.appointment_time} - {getProfessionalName(appointment.professional_id)} (
+                              {appointment.duration_minutes} min)
+                            </p>
+                            {appointment.notes && (
+                              <p className="text-sm text-muted-foreground italic">Notas: {appointment.notes}</p>
+                            )}
                           </div>
-                          <p className="text-sm text-muted-foreground mb-1">
-                            {appointment.appointment_time} - {getProfessionalName(appointment.professional_id)} (
-                            {appointment.duration_minutes} min)
-                          </p>
-                          {appointment.notes && (
-                            <p className="text-sm text-muted-foreground italic">{appointment.notes}</p>
-                          )}
-                        </div>
 
-                        <div className="flex gap-2 w-full sm:w-auto">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEditAppointment(appointment)}
-                            className="flex-1 sm:flex-none"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDeleteAppointment(appointment.id)}
-                            className="flex-1 sm:flex-none text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedPatientId(appointment.patient_id)
-                              setShowProfileModal(true)
-                            }}
-                            className="flex-1 sm:flex-none"
-                            title={tCommon('viewProfile')}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-
-                          {appointment.status === "scheduled" && (
+                          <div className="flex gap-2 w-full sm:w-auto">
                             <Button
+                              variant="outline"
                               size="sm"
-                              onClick={() => handleStatusChange(appointment.id, "completed")}
-                              className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white"
+                              onClick={() => handleEditAppointment(appointment)}
+                              className="flex-1 sm:flex-none"
                             >
-                              {t('status.complete')}
+                              <Edit2 className="w-4 h-4" />
                             </Button>
-                          )}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDeleteAppointment(appointment.id)}
+                              className="flex-1 sm:flex-none text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedPatientId(appointment.patient_id)
+                                setShowProfileModal(true)
+                              }}
+                              className="flex-1 sm:flex-none"
+                              title={tCommon('viewProfile')}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+
+                            {appointment.status === "scheduled" && (
+                              <Button
+                                size="sm"
+                                onClick={() => handleStatusChange(appointment.id, "completed")}
+                                className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white"
+                              >
+                                {t('status.complete')}
+                              </Button>
+                            )}
+                          </div>
                         </div>
+
+                        {/* Planned Procedure Section */}
+                        {(appointment as any).planned_procedure && (
+                          <div className="p-2 bg-blue-50 rounded border border-blue-100 text-sm">
+                            <p className="font-semibold text-blue-900 text-xs mb-1">Previsto:</p>
+                            <p className="text-blue-800">{(appointment as any).planned_procedure}</p>
+                          </div>
+                        )}
+
+                        {/* Occurrence Section (for completed appointments) */}
+                        {appointment.status === "completed" && (
+                          <div>
+                            {selectedAppointmentId === appointment.id && !occurrenceNotes[appointment.id] ? (
+                              <div className="space-y-2 p-3 bg-green-50 rounded border border-green-100">
+                                <p className="font-semibold text-green-900 text-sm">O que Ocorreu:</p>
+                                <Textarea
+                                  placeholder="Descreva o que ocorreu durante o atendimento..."
+                                  value={occurrenceNotes[appointment.id] || (appointment as any).occurrence || ""}
+                                  onChange={(e) => setOccurrenceNotes({ ...occurrenceNotes, [appointment.id]: e.target.value })}
+                                  className="min-h-[80px] text-xs"
+                                />
+                                <div className="flex gap-2">
+                                  <Button
+                                    size="sm"
+                                    className="bg-green-600 hover:bg-green-700"
+                                    onClick={() => {
+                                      setSelectedAppointmentId(null)
+                                      // Here you would save this to the database
+                                    }}
+                                  >
+                                    Salvar
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setSelectedAppointmentId(null)
+                                      setOccurrenceNotes({ ...occurrenceNotes, [appointment.id]: "" })
+                                    }}
+                                  >
+                                    Cancelar
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="p-2 bg-emerald-50 rounded border border-emerald-100 text-sm">
+                                <p className="font-semibold text-emerald-900 text-xs mb-1">O que Ocorreu:</p>
+                                {(appointment as any).occurrence || occurrenceNotes[appointment.id] ? (
+                                  <>
+                                    <p className="text-emerald-800 mb-2">{(appointment as any).occurrence || occurrenceNotes[appointment.id]}</p>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="text-xs h-7"
+                                      onClick={() => setSelectedAppointmentId(appointment.id)}
+                                    >
+                                      Editar
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="text-emerald-600 italic text-xs mb-2">Nenhuma informação adicionada</p>
+                                    <Button
+                                      size="sm"
+                                      className="bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
+                                      onClick={() => setSelectedAppointmentId(appointment.id)}
+                                    >
+                                      Adicionar informações
+                                    </Button>
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </Card>
                   ))}

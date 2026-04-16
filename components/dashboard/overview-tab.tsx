@@ -15,6 +15,7 @@ import {
   Cake,
   Briefcase,
   PlayCircle,
+  Download,
 } from "lucide-react"
 import {
   getDashboardStats,
@@ -43,6 +44,7 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
   const [birthdays, setBirthdays] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasWatchedTutorial, setHasWatchedTutorial] = useState(true)
+  const [showAppDownloadBanner, setShowAppDownloadBanner] = useState(true)
   const t = useTranslations('dashboard.overview')
   const supabase = createClient()
 
@@ -161,6 +163,63 @@ export default function OverviewTab({ user, onNavigate, isDemo = false }: Overvi
                 {t('buttonTutorial')}
               </Button>
             </div>
+          </div>
+        </Card>
+      )}
+
+      {/* App Download Banner */}
+      {showAppDownloadBanner && (
+        <Card className="p-6 border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/30 mt-1">
+                <Download className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100 mb-2">Baixe nosso aplicativo</h3>
+                <p className="text-amber-800 dark:text-amber-200 mb-4">
+                  Acesse sua clínica/consultório em qualquer lugar com o aplicativo mobile ViraWeb. Gerencie agendamentos, pacientes e finanças na palma da sua mão.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="https://apps.apple.com/br/app/viraweb" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block"
+                  >
+                    <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2 w-full sm:w-auto">
+                      <Download className="w-4 h-4" />
+                      Ir para App Store
+                    </Button>
+                  </a>
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.viraweb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block"
+                  >
+                    <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2 w-full sm:w-auto">
+                      <Download className="w-4 h-4" />
+                      Google Play
+                    </Button>
+                  </a>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => onNavigate("tutorial")}
+                    className="border-amber-300 text-amber-700 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 gap-2"
+                  >
+                    <PlayCircle className="w-4 h-4" />
+                    Tutorial de Download
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowAppDownloadBanner(false)}
+              className="text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 p-1"
+            >
+              <AlertCircle className="w-5 h-5 rotate-45" />
+            </button>
           </div>
         </Card>
       )}

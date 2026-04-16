@@ -9,14 +9,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard } from "lucide-react"
+import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard, Clock, CheckCircle2, XCircle } from "lucide-react"
 import { getPatientById, updatePatientNotes, updatePatientPhoto } from "@/app/actions/patients"
 import { mapDbErrorToUserMessage } from "@/lib/error-messages"
 import { getPatientFinancialSummary, getRecentPayments } from "@/app/actions/financial-actions"
 import PaymentModal from "@/components/financial/payment-modal"
 import { PatientFinancialTab } from "@/components/financial/patient-financial-tab"
 import { useToast } from "@/hooks/use-toast"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import type { Patient } from "@/app/actions/patients"
 
 interface PatientProfileModalProps {
@@ -31,6 +31,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
   const [patient, setPatient] = useState<Patient | null>(null)
   const [financialSummary, setFinancialSummary] = useState<{ paid: number; due: number; discounts: number } | null>(null)
   const [payments, setPayments] = useState<any[]>([])
+  const [appointments, setAppointments] = useState<any[]>([])
   const [notes, setNotes] = useState("")
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -38,9 +39,12 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
   const [activeTab, setActiveTab] = useState("info")
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [initialPendingPaymentId, setInitialPendingPaymentId] = useState<string | null>(null)
+  const [editingOccurrenceId, setEditingOccurrenceId] = useState<string | null>(null)
+  const [occurrenceNotes, setOccurrenceNotes] = useState<Record<string, string>>({})
   const { toast } = useToast()
   const t = useTranslations("dashboard.patientProfile")
   const tCommon = useTranslations("common")
+  const locale = useLocale()
 
   useEffect(() => {
     if (patientId && isOpen) {
@@ -70,6 +74,10 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         { id: "2", patient_id: "1", amount: 150, status: "paid", date: new Date().toISOString() },
         { id: "3", patient_id: "1", amount: 150, status: "pending", date: new Date().toISOString() },
       ])
+      setAppointments([
+        { id: "1", patient_id: "1", professional_id: "1", appointment_date: new Date().toISOString().split('T')[0], appointment_time: "09:00", status: "completed", notes: "Consulta realizada com sucesso", planned_procedure: "Consulta geral", occurrence: "Paciente apresentou bom progresso" },
+        { id: "2", patient_id: "1", professional_id: "2", appointment_date: new Date().toISOString().split('T')[0], appointment_time: "14:00", status: "scheduled", notes: "Consulta de acompanhamento", planned_procedure: "Avaliação", occurrence: null },
+      ] as any)
       setLoading(false)
       return
     }
@@ -78,6 +86,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         getPatientById(patientId),
         getPatientFinancialSummary(patientId),
         getRecentPayments(50)
+      ])
       ])
 
       setPatient(data)
@@ -161,7 +170,7 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+      <DialogContent className="max-w-5xl w-[98vw] max-h-[95vh] overflow-y-auto p-4 sm:p-8">
         <DialogHeader>
           <DialogTitle className="text-2xl">{t("title")}</DialogTitle>
         </DialogHeader>
@@ -173,12 +182,12 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
         ) : patient ? (
           <div className="mt-4 space-y-6 min-w-0">
             {/* Profile Header - Always visible */}
-            <Card className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-secondary/5">
-              <div className="flex flex-col sm:flex-row items-center gap-6">
+            <Card className="p-4 sm:p-8 bg-gradient-to-br from-primary/5 to-secondary/5">
+              <div className="flex flex-col sm:flex-row items-center gap-8">
                 <div className="relative">
-                  <Avatar className="w-24 h-24">
+                  <Avatar className="w-40 h-40 border-4 border-white shadow-lg">
                     <AvatarImage src={patient.profile_photo_url || undefined} alt={patient.name} />
-                    <AvatarFallback className="text-2xl bg-gradient-to-br from-primary to-secondary text-white">
+                    <AvatarFallback className="text-4xl bg-gradient-to-br from-primary to-secondary text-white font-bold">
                       {patient.name
                         .split(" ")
                         .map((n) => n[0])
@@ -189,9 +198,9 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                   </Avatar>
                   <label
                     htmlFor="photo-upload"
-                    className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-colors"
+                    className="absolute bottom-2 right-2 p-3 bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-colors shadow-md"
                   >
-                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
                     <input
                       id="photo-upload"
                       type="file"
@@ -204,9 +213,10 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                 </div>
 
                 <div className="flex-1 text-center sm:text-left">
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{patient.name}</h3>
+                  <h3 className="text-4xl font-bold text-foreground mb-3">{patient.name}</h3>
+                  <p className="text-lg text-muted-foreground mb-4">{patient.email}</p>
                   <span
-                    className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${patient.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
+                    className={`inline-block text-sm font-semibold px-4 py-2 rounded-full ${patient.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
                       }`}
                   >
                     {patient.status === "active" ? t("active") : t("inactive")}
@@ -217,10 +227,14 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
             {/* Tabs Section */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="info" className="gap-2">
                   <FileText className="w-4 h-4" />
                   {t("tabs.info")}
+                </TabsTrigger>
+                <TabsTrigger value="appointments" className="gap-2">
+                  <Calendar className="w-4 h-4" />
+                  {t("tabs.appointments") || "Agendamentos"}
                 </TabsTrigger>
                 <TabsTrigger value="financial" className="gap-2">
                   <CreditCard className="w-4 h-4" />
@@ -319,6 +333,135 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                       {t("notes.save")}
                     </Button>
                   </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="appointments" className="mt-4 focus-visible:outline-none">
+                <div className="space-y-6">
+                  {/* Appointments Header */}
+                  <div>
+                    <h4 className="text-lg font-bold text-foreground mb-4">{t("appointments.title") || "Histórico de Agendamentos"}</h4>
+                    
+                    {appointments.length > 0 ? (
+                      <div className="space-y-3">
+                        {appointments
+                          .sort((a, b) => new Date(b.appointment_date).getTime() - new Date(a.appointment_date).getTime())
+                          .map((apt) => (
+                            <Card key={apt.id} className="p-4 border border-border hover:shadow-md transition-shadow">
+                              <div className="space-y-3">
+                                <div className="flex items-start justify-between gap-4">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <Calendar className="w-4 h-4 text-primary" />
+                                      <span className="font-semibold text-foreground">
+                                        {new Date(apt.appointment_date + "T00:00:00").toLocaleDateString(locale, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+                                      </span>
+                                      <span className="text-muted-foreground">às {apt.appointment_time}</span>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${
+                                          apt.status === "completed"
+                                            ? "bg-green-100 text-green-700 border-green-200"
+                                            : apt.status === "scheduled"
+                                            ? "bg-blue-100 text-blue-700 border-blue-200"
+                                            : "bg-red-100 text-red-700 border-red-200"
+                                        }`}
+                                      >
+                                        {apt.status === "completed" && <CheckCircle2 className="w-3 h-3" />}
+                                        {apt.status === "scheduled" && <Clock className="w-3 h-3" />}
+                                        {apt.status === "cancelled" && <XCircle className="w-3 h-3" />}
+                                        {apt.status === "completed" ? "Realizado" : apt.status === "scheduled" ? "Agendado" : "Cancelado"}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Planned Procedure */}
+                                {apt.planned_procedure && (
+                                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                                    <p className="text-xs font-semibold text-blue-900 mb-1">Previamente Planejado:</p>
+                                    <p className="text-sm text-blue-800">{apt.planned_procedure}</p>
+                                  </div>
+                                )}
+
+                                {/* Original Notes */}
+                                {apt.notes && (
+                                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p className="text-xs font-semibold text-slate-900 mb-1">Notas:</p>
+                                    <p className="text-sm text-slate-700">{apt.notes}</p>
+                                  </div>
+                                )}
+
+                                {/* Occurrence Notes */}
+                                {apt.status === "completed" && (
+                                  <div className="space-y-2">
+                                    {editingOccurrenceId === apt.id ? (
+                                      <div className="space-y-2">
+                                        <p className="text-xs font-semibold text-foreground">O que Ocorreu:</p>
+                                        <Textarea
+                                          placeholder="Descreva o que ocorreu durante o atendimento..."
+                                          value={occurrenceNotes[apt.id] || apt.occurrence || ""}
+                                          onChange={(e) => setOccurrenceNotes({ ...occurrenceNotes, [apt.id]: e.target.value })}
+                                          className="min-h-[80px]"
+                                        />
+                                        <div className="flex gap-2">
+                                          <Button
+                                            size="sm"
+                                            onClick={() => {
+                                              setEditingOccurrenceId(null)
+                                              // Here you would save this to the database
+                                            }}
+                                            className="bg-primary hover:bg-primary/90"
+                                          >
+                                            <Save className="w-4 h-4 mr-2" />
+                                            Salvar
+                                          </Button>
+                                          <Button
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => setEditingOccurrenceId(null)}
+                                          >
+                                            Cancelar
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <p className="text-xs font-semibold text-emerald-900 mb-1">O que Ocorreu:</p>
+                                            {apt.occurrence ? (
+                                              <p className="text-sm text-emerald-800">{apt.occurrence}</p>
+                                            ) : (
+                                              <p className="text-sm text-emerald-600 italic">Nenhuma informação adicionada</p>
+                                            )}
+                                          </div>
+                                          <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setEditingOccurrenceId(apt.id)}
+                                            className="ml-2"
+                                          >
+                                            Editar
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </Card>
+                          ))}
+                      </div>
+                    ) : (
+                      <Card className="p-8 border border-border text-center">
+                        <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-muted-foreground">{t("appointments.empty") || "Nenhum agendamento registrado"}</p>
+                      </Card>
+                    )}
+                  </div>
                 </div>
               </TabsContent>
 
