@@ -72,7 +72,6 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
     recurrence_weekdays: [] as number[],
     recurrence_count: 1,
   })
-  const [selectedDateAppointments, setSelectedDateAppointments] = useState<Appointment[]>([])
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<string | null>(null)
   const [occurrenceNotes, setOccurrenceNotes] = useState<Record<string, string>>({})
   const [showProfileModal, setShowProfileModal] = useState(false)
@@ -135,8 +134,6 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
   }
 
   const selectedDateAppointments = getAppointmentsForDate(selectedDate)
-
-  const calendarDays = []
   const daysInMonth = getDaysInMonth(currentDate)
   const firstDay = getFirstDayOfMonth(currentDate)
 

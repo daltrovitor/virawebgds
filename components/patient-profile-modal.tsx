@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard, Clock, CheckCircle2, XCircle } from "lucide-react"
+import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard, Clock, CheckCircle2, XCircle, Image as ImageIcon, File, Trash2, Download } from "lucide-react"
 import { getPatientById, updatePatientNotes, updatePatientPhoto } from "@/app/actions/patients"
 import { mapDbErrorToUserMessage } from "@/lib/error-messages"
 import { getPatientFinancialSummary, getRecentPayments } from "@/app/actions/financial-actions"
@@ -41,6 +41,8 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
   const [initialPendingPaymentId, setInitialPendingPaymentId] = useState<string | null>(null)
   const [editingOccurrenceId, setEditingOccurrenceId] = useState<string | null>(null)
   const [occurrenceNotes, setOccurrenceNotes] = useState<Record<string, string>>({})
+  const [patientFiles, setPatientFiles] = useState<{ id: string; name: string; url: string; type: 'image' | 'file'; uploadedAt: string }[]>([])
+  const [uploadingFiles, setUploadingFiles] = useState(false)
   const { toast } = useToast()
   const t = useTranslations("dashboard.patientProfile")
   const tCommon = useTranslations("common")
@@ -166,6 +168,56 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
     }
   }
 
+  const handleMultipleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return
+
+    setUploadingFiles(true)
+    try {
+      const files = Array.from(e.target.files)
+      const newFiles: typeof patientFiles = []
+
+      for (const file of files) {
+        const reader = new FileReader()
+        
+        await new Promise<void>((resolve) => {
+          reader.onloadend = async () => {
+            const fileUrl = reader.result as string
+            const isImage = file.type.startsWith("image/")
+            
+            newFiles.push({
+              id: Math.random().toString(36).substr(2, 9),
+              name: file.name,
+              url: fileUrl,
+              type: isImage ? "image" : "file",
+              uploadedAt: new Date().toISOString(),
+            })
+            resolve()
+          }
+          reader.readAsDataURL(file)
+        })
+      }
+
+      setPatientFiles([...patientFiles, ...newFiles])
+      toast({
+        title: t("toast.filesUploaded") || "Arquivos enviados",
+        description: `${newFiles.length} arquivo(s) adicionado(s) com sucesso`,
+      })
+    } catch (error) {
+      toast({
+        title: t("toast.uploadError"),
+        description: mapDbErrorToUserMessage(error instanceof Error ? error.message : String(error)),
+        variant: "destructive",
+      })
+    } finally {
+      setUploadingFiles(false)
+    }
+  }
+
+  const handleDeleteFile = (fileId: string) => {
+    setPatientFiles(patientFiles.filter(f => f.id !== fileId))
+    toast({ title: "Arquivo removido" })
+  }
+
   if (!patient && !loading) return null
 
   return (
@@ -227,18 +279,22 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
             {/* Tabs Section */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="info" className="gap-2">
                   <FileText className="w-4 h-4" />
-                  {t("tabs.info")}
+                  <span className="hidden sm:inline">{t("tabs.info")}</span>
                 </TabsTrigger>
                 <TabsTrigger value="appointments" className="gap-2">
                   <Calendar className="w-4 h-4" />
-                  {t("tabs.appointments") || "Agendamentos"}
+                  <span className="hidden sm:inline">{t("tabs.appointments") || "Agendamentos"}</span>
                 </TabsTrigger>
                 <TabsTrigger value="financial" className="gap-2">
                   <CreditCard className="w-4 h-4" />
-                  {t("tabs.financial")}
+                  <span className="hidden sm:inline">{t("tabs.financial")}</span>
+                </TabsTrigger>
+                <TabsTrigger value="files" className="gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  <span className="hidden sm:inline">Arquivos</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -512,6 +568,136 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                         setShowPaymentModal(true)
                       }}
                     />
+                  )}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="files" className="mt-4 focus-visible:outline-none">
+                <div className="space-y-6">
+                  {/* Upload Section */}
+                  <Card className="p-6 border-2 border-dashed border-primary/50 bg-primary/5">
+                    <div className="flex flex-col items-center justify-center py-8">
+                      <label htmlFor="files-upload" className="cursor-pointer w-full">
+                        <div className="flex flex-col items-center">
+                          <div className="p-4 bg-primary/10 rounded-lg mb-3">
+                            <ImageIcon className="w-8 h-8 text-primary" />
+                          </div>
+                          <h3 className="text-lg font-bold text-foreground mb-2">Adicionar Arquivos e Fotos</h3>
+                          <p className="text-sm text-muted-foreground mb-4">Clique ou arraste arquivos aqui</p>
+                          <Button asChild disabled={uploadingFiles} className="gap-2">
+                            <span>
+                              {uploadingFiles ? (
+                                <>
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  Carregando...
+                                </>
+                              ) : (
+                                <>
+                                  <Upload className="w-4 h-4" />
+                                  Selecionar Arquivos
+                                </>
+                              )}
+                            </span>
+                          </Button>
+                          <p className="text-xs text-muted-foreground mt-3">
+                            Imagens, PDFs e documentos são suportados
+                          </p>
+                        </div>
+                        <input
+                          id="files-upload"
+                          type="file"
+                          multiple
+                          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                          onChange={handleMultipleFilesUpload}
+                          disabled={uploadingFiles}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  </Card>
+
+                  {/* Files List */}
+                  {patientFiles.length > 0 ? (
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-bold text-foreground">Arquivos Armazenados ({patientFiles.length})</h4>
+                      
+                      {/* Images Gallery */}
+                      {patientFiles.filter(f => f.type === "image").length > 0 && (
+                        <div>
+                          <p className="text-sm font-semibold text-foreground mb-3">Fotos</p>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            {patientFiles.filter(f => f.type === "image").map((file) => (
+                              <div key={file.id} className="relative group">
+                                <img
+                                  src={file.url}
+                                  alt={file.name}
+                                  className="w-full h-32 object-cover rounded-lg border border-border"
+                                />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                                  <a href={file.url} download={file.name} className="p-2 bg-white rounded hover:bg-gray-100">
+                                    <Download className="w-4 h-4 text-black" />
+                                  </a>
+                                  <button
+                                    onClick={() => handleDeleteFile(file.id)}
+                                    className="p-2 bg-red-500 rounded hover:bg-red-600"
+                                  >
+                                    <Trash2 className="w-4 h-4 text-white" />
+                                  </button>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-2 truncate">{file.name}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Documents List */}
+                      {patientFiles.filter(f => f.type === "file").length > 0 && (
+                        <div>
+                          <p className="text-sm font-semibold text-foreground mb-3">Documentos</p>
+                          <div className="space-y-2">
+                            {patientFiles.filter(f => f.type === "file").map((file) => (
+                              <Card key={file.id} className="p-4 flex items-center justify-between hover:shadow-md transition-shadow">
+                                <div className="flex items-center gap-3 flex-1 min-w-0">
+                                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded flex-shrink-0">
+                                    <File className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {new Date(file.uploadedAt).toLocaleDateString(locale)}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+                                  <a
+                                    href={file.url}
+                                    download={file.name}
+                                    className="p-2 hover:bg-muted rounded transition-colors"
+                                    title="Baixar"
+                                  >
+                                    <Download className="w-4 h-4 text-muted-foreground hover:text-foreground" />
+                                  </a>
+                                  <button
+                                    onClick={() => handleDeleteFile(file.id)}
+                                    className="p-2 hover:bg-red-50 dark:hover:bg-red-950/20 rounded transition-colors"
+                                    title="Excluir"
+                                  >
+                                    <Trash2 className="w-4 h-4 text-red-500 hover:text-red-600" />
+                                  </button>
+                                </div>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Card className="p-12 border-dashed text-center">
+                      <ImageIcon className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                      <p className="text-muted-foreground">Nenhum arquivo armazenado</p>
+                      <p className="text-sm text-muted-foreground mt-1">Comece adicionando fotos e documentos do paciente</p>
+                    </Card>
                   )}
                 </div>
               </TabsContent>
