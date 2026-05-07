@@ -134,3 +134,23 @@
     scrollbar-width: none;
   }
 }
+
+@layer utilities {
+  .scrollbar-visible::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+  }
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+    opacity: 0.5;
+  }
+  .scrollbar-visible {
+    -ms-overflow-style: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+  }
+}
