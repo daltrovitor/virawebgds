@@ -137,20 +137,19 @@
 
 @layer utilities {
   .scrollbar-visible::-webkit-scrollbar {
-    display: block;
-    width: 4px;
+    display: block !important;
+    width: 6px !important;
   }
   .scrollbar-visible::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.05) !important;
   }
   .scrollbar-visible::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 10px;
-    opacity: 0.5;
+    background: var(--primary) !important;
+    border-radius: 10px !important;
   }
   .scrollbar-visible {
-    -ms-overflow-style: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) transparent;
+    -ms-overflow-style: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--primary) rgba(0, 0, 0, 0.05) !important;
   }
 }

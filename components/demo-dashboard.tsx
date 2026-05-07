@@ -165,7 +165,7 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
                     </button>
                 </div>
 
-                <nav className="flex-1 overflow-y-auto custom-scrollbar pt-4 space-y-0.5">
+                <nav className="flex-1 overflow-y-auto scrollbar-visible pt-4 space-y-0.5">
                     {menuItems.map((item) => (
                         <button
                             key={item.id}

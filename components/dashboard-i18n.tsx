@@ -367,13 +367,31 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
             </header>
 
             <div className="flex">
+                {/* Sidebar Overlay for Mobile */}
+                {sidebarOpen && (
+                    <div 
+                        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                        onClick={() => setSidebarOpen(false)}
+                    />
+                )}
                 {/* Sidebar */}
                  <aside
-                    className={`fixed inset-y-0 left-0 lg:relative z-50 transition-all duration-300 overflow-hidden shrink-0 border-r border-slate-200 bg-white ${
+                    className={`fixed inset-y-0 left-0 lg:relative z-50 transition-all duration-300 overflow-hidden shrink-0 border-r border-slate-200 bg-white flex flex-col ${
                         sidebarOpen ? "w-full lg:w-64 translate-x-0" : "-translate-x-full lg:translate-x-0 w-0 lg:w-64"
                     }`}
                 >
-                    <nav className="p-4 space-y-1 h-[calc(100vh-64px)] overflow-hidden w-full lg:w-64">
+                    {sidebarOpen && (
+                        <div className="flex-none flex items-center justify-between p-4 lg:hidden border-b sticky top-0 bg-white z-10">
+                            <Image width={512} height={160} alt="ViraWeb logo" src="/viraweb3.png" className="w-24" style={{ height: "auto" }} />
+                            <button
+                                onClick={() => setSidebarOpen(false)}
+                                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+                    )}
+                    <nav className="flex-1 p-4 space-y-1 overflow-y-auto w-full lg:w-64 scrollbar-visible">
                         {navItems.map((item) => (
                             <div key={item.id} className="relative">
                                 <NavItem
