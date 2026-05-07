@@ -291,9 +291,20 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         {/* Sidebar */}
         <aside
           className={`fixed inset-y-0 left-0 z-50 lg:relative lg:z-30 ${sidebarOpen ? "translate-x-0 w-full lg:w-64" : "-translate-x-full lg:translate-x-0 w-0 lg:w-64"
-            } border-r border-border bg-white transition-all duration-300 overflow-hidden ${!sidebarOpen ? "pointer-events-none lg:pointer-events-auto" : "pointer-events-auto"}`}
+            } border-r border-border bg-white transition-all duration-300 ${sidebarOpen ? "overflow-y-auto" : "overflow-hidden"} ${!sidebarOpen ? "pointer-events-none lg:pointer-events-auto" : "pointer-events-auto"}`}
         >
-          <nav className="p-4 space-y-2 h-[calc(100vh-73px)] overflow-hidden">
+          {sidebarOpen && (
+            <div className="flex items-center justify-between p-4 lg:hidden border-b sticky top-0 bg-white z-10">
+              <Image width={512} height={160} alt="ViraWeb logo" src="/viraweb3.png" className="w-24" style={{ height: "auto" }} />
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          )}
+          <nav className="p-4 space-y-2 lg:h-[calc(100vh-73px)] lg:overflow-y-auto">
             {navItems.map((item) => (
               <div key={item.id} className="relative">
                 <NavItem
