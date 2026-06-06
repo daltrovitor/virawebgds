@@ -26,7 +26,7 @@ const plans: Plan[] = [
   {
     id: "basic",
     name: "Plano Básico",
-    price: 149.9,
+    price: 74.9,
     period: "mês",
     description: "Perfeito para profissionais solo",
     features: [
@@ -42,7 +42,7 @@ const plans: Plan[] = [
   {
     id: "premium",
     name: "Plano Premium",
-    price: 249.9,
+    price: 147.9,
     period: "mês",
     description: "Para empresas em crescimento",
     highlighted: true,
@@ -60,7 +60,7 @@ const plans: Plan[] = [
   {
     id: "master",
     name: "Plano Master",
-    price: 249.9,
+    price: 247.9,
     period: "mês",
     description: "Recursos completos para grandes empresas",
     features: [

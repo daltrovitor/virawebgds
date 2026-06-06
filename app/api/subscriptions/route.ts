@@ -6,9 +6,9 @@ import Stripe from "stripe"
 export const dynamic = "force-dynamic"
 
 const PLANS = {
-  basic: { price: 14990, name: "Básico" },
-  premium: { price: 15000, name: "Premium" },
-  master: { price: 147990, name: "Vitalício" },
+  basic: { price: 7490, name: "Básico" },
+  premium: { price: 14790, name: "Premium" },
+  master: { price: 24790, name: "Vitalício" },
 } as const
 
 function getStripe() {

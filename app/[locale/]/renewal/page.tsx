@@ -85,9 +85,9 @@ export default function RenewalPage() {
     const isPremium = currentPlan === "premium" || currentPlan === "master"
 
     const plans = [
-        { id: "basic", name: "Básico", price: "R$ 149,90", desc: "Gestão essencial para seu negócio.", color: "text-slate-600", bg: "bg-slate-100" },
-        { id: "premium", name: "Premium", price: "R$ 249,90", desc: "Automação total e ViraBot IA.", color: "text-blue-600", bg: "bg-blue-100", highlight: true },
-        { id: "master", name: "Master", price: "R$ 1479,90", desc: "Vitalício e suporte exclusivo.", color: "text-purple-600", bg: "bg-purple-100" },
+        { id: "basic", name: "Básico", price: "R$ 74,90", desc: "Gestão essencial para seu negócio.", color: "text-slate-600", bg: "bg-slate-100" },
+        { id: "premium", name: "Premium", price: "R$ 147,90", desc: "Automação total e ViraBot IA.", color: "text-blue-600", bg: "bg-blue-100", highlight: true },
+        { id: "master", name: "Master", price: "R$ 247,90", desc: "Vitalício e suporte exclusivo.", color: "text-purple-600", bg: "bg-purple-100" },
     ]
 
     return (

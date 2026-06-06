@@ -121,9 +121,9 @@ export default function TermsPage() {
             </p>
             <DataList
               items={[
-                { label: "Basic Plan", value: "R$ 75.00/month — Up to 75 clients, 7 professionals, 50 appointments/month" },
-                { label: "Premium Plan", value: "R$ 150.00/month — Up to 500 clients, 50 professionals, 500 appointments/month + ViraBot AI" },
-                { label: "Master Plan", value: "R$ 250.00/month — Unlimited resources + ViraBot AI + 24/7 Support + Dedicated Manager" },
+                { label: "Basic Plan", value: "R$ 74.90/month — Up to 75 clients, 7 professionals, 50 appointments/month" },
+                { label: "Premium Plan", value: "R$ 147.90/month — Up to 500 clients, 50 professionals, 500 appointments/month + ViraBot AI" },
+                { label: "Master Plan", value: "R$ 247.90/month — Unlimited resources + ViraBot AI + 24/7 Support + Dedicated Manager" },
               ]}
             />
             <h3>Free Trial Period</h3>
@@ -316,9 +316,9 @@ export default function TermsPage() {
           </p>
           <DataList
             items={[
-              { label: "Plano Básico", value: "R$ 75,00/mês — Até 75 clientes, 7 profissionais, 50 agendamentos/mês" },
-              { label: "Plano Premium", value: "R$ 150,00/mês — Até 500 clientes, 50 profissionais, 500 agendamentos/mês + ViraBot IA" },
-              { label: "Plano Master", value: "R$ 250,00/mês — Recursos ilimitados + ViraBot IA + Suporte 24/7 + Gerente dedicado" },
+              { label: "Plano Básico", value: "R$ 74,90/mês — Até 75 clientes, 7 profissionais, 50 agendamentos/mês" },
+              { label: "Plano Premium", value: "R$ 147,90/mês — Até 500 clientes, 50 profissionais, 500 agendamentos/mês + ViraBot IA" },
+              { label: "Plano Master", value: "R$ 247,90/mês — Recursos ilimitados + ViraBot IA + Suporte 24/7 + Gerente dedicado" },
             ]}
           />
           <h3>Período de Teste Gratuito</h3>

@@ -6,9 +6,9 @@ import Stripe from "stripe"
 export const dynamic = "force-dynamic"
 
 const PLANS = {
-  basic: { priceId: "price_basic", amount: 14990, name: "Básico" },
-  premium: { priceId: "price_premium", amount: 15000, name: "Premium" },
-  master: { priceId: "price_master", amount: 34990, name: "Master" },
+  basic: { priceId: "price_basic", amount: 7490, name: "Básico" },
+  premium: { priceId: "price_premium", amount: 14790, name: "Premium" },
+  master: { priceId: "price_master", amount: 24790, name: "Master" },
 } as const
 
 export async function POST(request: NextRequest) {

@@ -13,7 +13,7 @@ export const PRODUCTS: Product[] = [
     id: "basic-plan",
     name: "Plano Básico",
     description: "Perfeito para começar sua clínica",
-    priceInCents: 7500, // R$ 75,00
+    priceInCents: 7490, // R$ 74,90
     planType: "basic",
     billingCycle: "monthly",
     features: [
@@ -28,7 +28,7 @@ export const PRODUCTS: Product[] = [
     id: "premium-plan",
     name: "Plano Premium",
     description: "Recursos avançados com IA",
-    priceInCents: 15000, // R$ 150,00
+    priceInCents: 14790, // R$ 147,90
     planType: "premium",
     billingCycle: "monthly",
     features: [
@@ -46,7 +46,7 @@ export const PRODUCTS: Product[] = [
     id: "master-plan",
     name: "Plano Master",
     description: "Recursos ilimitados e suporte premium",
-    priceInCents: 25000, // R$ 250,00
+    priceInCents: 24790, // R$ 247,90
     planType: "master",
     billingCycle: "monthly",
     features: [
