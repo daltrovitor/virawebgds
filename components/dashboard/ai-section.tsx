@@ -54,7 +54,8 @@ export default function AISection({ planType, isDemo = false }: AISectionProps) 
         <Button variant="outline" onClick={() => setShowAssistant(false)} className="mb-4">
           ← {t('back')}
         </Button>
-        <AIAssistant hasAccess={hasAccess} />
+        {/* ponytail: Reduce height in demo mockup context so that the input bar does not get cut off at the bottom */}
+        <AIAssistant hasAccess={hasAccess} className={isDemo ? "h-[365px] min-h-[300px]" : ""} />
       </div>
     )
   }

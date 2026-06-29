@@ -59,7 +59,10 @@ export default function RenewalPage() {
             })
 
             if (url) {
-                window.location.href = url
+                // ponytail: Redirect top-level window because Stripe Checkout does not allow iframe embedding
+                if (typeof window !== 'undefined') {
+                    (window.top || window).location.href = url
+                }
             } else {
                 throw new Error("Não foi possível gerar o link de checkout")
             }

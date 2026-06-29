@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Send, MessageCircle, X, Lock, Loader2 } from "lucide-react"
 import { fetchRaw } from "@/lib/fetch-client"
 import { useTranslations, useLocale } from "next-intl"
+import { cn } from "@/lib/utils"
 
 interface Message {
   id: string
@@ -19,9 +20,10 @@ interface AIAssistantProps {
   isOpen?: boolean
   onClose?: () => void
   hasAccess?: boolean
+  className?: string
 }
 
-export default function AIAssistant({ isOpen = true, onClose, hasAccess = false }: AIAssistantProps) {
+export default function AIAssistant({ isOpen = true, onClose, hasAccess = false, className }: AIAssistantProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const t = useTranslations('dashboard.ai.chat')
   const locale = useLocale()
@@ -147,7 +149,7 @@ export default function AIAssistant({ isOpen = true, onClose, hasAccess = false 
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto flex flex-col border-2 border-primary shadow-2xl h-[600px]">
+    <Card className={cn("w-full max-w-2xl mx-auto flex flex-col border-2 border-primary shadow-2xl h-[600px] max-h-[70vh] min-h-[350px]", className)}>
       <div className="flex items-center justify-between p-4 border-b border-border bg-primary/5">
         <div className="flex items-center gap-2">
           <MessageCircle className="w-5 h-5 text-primary" />

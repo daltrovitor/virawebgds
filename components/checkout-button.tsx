@@ -26,7 +26,10 @@ export default function CheckoutButton({ planType, children, className, variant 
     setIsLoading(true)
     try {
       const checkoutUrl = await startCheckoutSession(planType)
-      window.location.href = checkoutUrl
+      // ponytail: Redirect top-level window to avoid iframe CSP blocks
+      if (typeof window !== 'undefined') {
+        (window.top || window).location.href = checkoutUrl
+      }
     } catch (error) {
       console.error(" Checkout error:", error)
       toast({

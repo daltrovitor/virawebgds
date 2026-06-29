@@ -96,7 +96,10 @@ export default function PlansSelectionPage() {
             })
 
             if (url) {
-                window.location.href = url
+                // ponytail: Redirect top-level window in case this is embedded or we need top redirect
+                if (typeof window !== 'undefined') {
+                    (window.top || window).location.href = url
+                }
             } else {
                 throw new Error("Não foi possível gerar o link de checkout")
             }
