@@ -365,7 +365,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
 
 
             {/* ViraBot AI Feature Section */}
-            <section className="py-16 sm:py-20 relative bg-slate-100 border-t border-slate-300">
+            <section className="py-16 sm:py-20 relative z-40 bg-slate-100 border-t border-slate-300">
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <ScrollAnimatedSection className="text-center mb-12">
                         <div className="inline-block mb-4 px-3 py-1 bg-white border border-slate-300 text-[11px] font-bold uppercase tracking-wider text-slate-700">
