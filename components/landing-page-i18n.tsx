@@ -798,7 +798,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
                                     <p className="text-slate-600 text-[13px] mb-6 max-w-[280px]">{t('contactTalk.whatsappDesc')}</p>
                                     <div className="mt-auto w-full">
                                         <button onClick={() => {
-                                            navigator.clipboard.writeText("5562992466109")
+                                            navigator.clipboard.writeText("5562984638578")
                                             toast({
                                                 title: "WhatsApp copiado!",
                                                 description: "(62) 9 9246-6109",

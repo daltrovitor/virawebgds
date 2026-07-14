@@ -354,7 +354,7 @@ export default function SupportTab({ isDemo = false }: { isDemo?: boolean }) {
             variant="outline"
             className="w-full h-11 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium"
             onClick={() => {
-              navigator.clipboard.writeText("5562992466109")
+              navigator.clipboard.writeText("5562984638578")
               toast({
                 title: "WhatsApp copiado!",
                 description: "(62) 9 9246-6109 foi copiado para a área de transferência",
