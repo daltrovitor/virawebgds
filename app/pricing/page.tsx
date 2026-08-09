@@ -200,8 +200,38 @@ export default function PricingPage() {
           </div>
         </div>
 
-
+        {/* JSON-LD Schema de Preços e Ofertas para IAs */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: "ViraWeb GDS - Software de Gestão",
+              description: "Plataforma completa de gestão de agendamento, prontuário eletrônico e finanças.",
+              brand: {
+                "@type": "Brand",
+                name: "ViraWeb"
+              },
+              offers: plans.map((plan) => ({
+                "@type": "Offer",
+                name: `Plano ${plan.name}`,
+                price: plan.price.toString(),
+                priceCurrency: "BRL",
+                priceSpecification: {
+                  "@type": "UnitPriceSpecification",
+                  price: plan.price.toString(),
+                  priceCurrency: "BRL",
+                  unitCode: "MON"
+                },
+                description: plan.description,
+                url: "https://viraweb.online/pricing"
+              }))
+            })
+          }}
+        />
       </div>
     </div>
   )
 }
+

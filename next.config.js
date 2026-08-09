@@ -19,10 +19,11 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   serverExternalPackages: ["tesseract.js"],
+  outputFileTracingRoot: __dirname,
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion", "@radix-ui/react-icons"],
-    outputFileTracingRoot: __dirname,
   },
+
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },

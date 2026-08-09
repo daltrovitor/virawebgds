@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import React from 'react'
 
 type SeoProps = {
@@ -22,31 +21,18 @@ export default function Seo({
   jsonLd,
   canonical
 }: SeoProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
-  const url = canonical || (siteUrl && slug ? `${siteUrl.replace(/\/$/, '')}/${slug}` : undefined)
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://viraweb.online'
+  const url = canonical || (slug ? `${siteUrl.replace(/\/$/, '')}/${slug}` : siteUrl)
 
   return (
-    <Head>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      {url && <link rel="canonical" href={url} />}
-
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={ogTitle || title} />
-      <meta property="og:description" content={ogDescription || description} />
-      {ogImage && <meta property="og:image" content={ogImage} />}
-
-      <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-      <meta name="twitter:title" content={ogTitle || title} />
-      <meta name="twitter:description" content={ogDescription || description} />
-
+    <>
       {jsonLd && (
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
-    </Head>
+    </>
   )
 }
+
