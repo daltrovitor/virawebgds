@@ -1,3 +1,4 @@
+// Hello World
 "use client"
 
 import { useState, useEffect } from "react"
@@ -546,246 +547,52 @@ export default function CalendarAppointments({ isDemo = false }: { isDemo?: bool
         </Card>
       )}
 
-      {/* Main Content */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Calendar */}
-        <Card className="lg:col-span-1 p-6 border border-border">
-          {/* Professional filter on top */}
-
-
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
-              <div className="flex-1">
-                <h3 className="font-bold text-foreground capitalize">
-                  {new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(currentDate)}
-                </h3>
-                <p className="text-xs text-muted-foreground">{t('calendar.selectDay')}</p>
-              </div>
-
-              {/* Professional filter: stack under title on mobile, inline on desktop */}
-              <div className="w-full sm:w-44 mt-2 sm:mt-0">
-                <Select value={selectedProfessional} onValueChange={(v) => setSelectedProfessional(v as any)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t('filter.all')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">{t('filter.all')}</SelectItem>
-                    {professionals.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        <div className="cursor-pointer">{p.name}</div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div />
-          </div>
-
-          {/* Day names */}
-          <div className="grid grid-cols-7 gap-2 mb-2">
-            {dayNames.map((day) => (
-              <div key={day} className="text-center text-xs font-semibold text-muted-foreground py-2">
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* Calendar days */}
-          <div className="grid grid-cols-7 gap-3">
-            {calendarDays.map((day, index) => {
-              const dateStr = day ? formatDate(currentDate.getFullYear(), currentDate.getMonth(), day) : null
-              const dayAppointments = dateStr ? getAppointmentsForDate(dateStr) : []
-              const isSelected = dateStr === selectedDate
-              const now = new Date()
-              const isToday = dateStr === formatDate(now.getFullYear(), now.getMonth(), now.getDate())
-
-              if (!day) {
-                return <div key={index} className="w-10 h-10" />
-              }
-
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleDayClick(day)}
-                  className={`w-10 h-10 flex flex-col cursor-pointer items-center justify-center text-sm font-medium transition-all relative ${isSelected
-                    ? "bg-primary text-primary-foreground rounded-full shadow-lg"
-                    : "bg-background rounded-md border border-border hover:bg-primary/5"
-                    }`}
-                >
-                  <span className="leading-none">{day}</span>
-
-                  {/* Today indicator (small dot) */}
-                  {isToday && !isSelected && (
-                    <span className="absolute -top-2 -right-2 w-2 h-2 rounded-full ring-2 ring-primary/40 bg-primary" />
-                  )}
-
-                  {/* Appointment count under the number; hide when the day is selected */}
-                  {dayAppointments.length > 0 && !isSelected && (
-                    <span className="mt-1 text-[11px] text-primary">{dayAppointments.length} </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Month navigation below the calendar */}
-          <div className="flex items-center justify-center gap-2 mt-3">
-            <Button variant="outline" size="sm" onClick={handlePrevMonth} className="p-2">
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleNextMonth} className="p-2">
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </Card>
-
-        {/* Appointments for selected date */}
-        <div className="lg:col-span-2 space-y-4">
-          <div>
-            <h3 className="text-lg font-bold text-foreground mb-4">
-              {t('calendar.appointmentsOf')} {new Date(selectedDate + "T00:00:00").toLocaleDateString(locale)}
-            </h3>
-
-            {selectedDateAppointments.length > 0 ? (
-              <div className="space-y-3">
-                {selectedDateAppointments
-                  .sort((a, b) => a.appointment_time.localeCompare(b.appointment_time))
-                  .map((appointment) => (
-                    <Card key={appointment.id} className="p-4 border border-border hover:shadow-lg transition-shadow">
-                      <div className="space-y-3">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h4 className="font-bold text-foreground">{getPatientName(appointment.patient_id)}</h4>
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(appointment.status)}`}
-                              >
-                                {getStatusIcon(appointment.status)}
-                                {appointment.status === "scheduled" && t('status.scheduled')}
-                                {appointment.status === "completed" && t('status.completed')}
-                                {appointment.status === "cancelled" && t('status.cancelled')}
-                              </span>
-                            </div>
-                            <p className="text-sm text-muted-foreground mb-1">
-                              {(() => {
-                                const [h, m] = appointment.appointment_time.split(':')
-                                const hour = parseInt(h)
-                                if (locale === 'en') {
-                                  const ampm = hour >= 12 ? 'PM' : 'AM'
-                                  const h12 = hour % 12 || 12
-                                  return `${h12}:${m} ${ampm}`
-                                }
-                                return `${h}:${m}`
-                              })()} - {getProfessionalName(appointment.professional_id)} (
-                              {appointment.duration_minutes} {tCommon('min')})
-                            </p>
-                            {appointment.notes && (
-                              <p className="text-sm text-muted-foreground italic">{tCommon('notes')}: {appointment.notes}</p>
-                            )}
-                          </div>
-
-                          <div className="flex gap-2 w-full sm:w-auto">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditAppointment(appointment)}
-                              className="flex-1 sm:flex-none"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleDeleteAppointment(appointment.id)}
-                              className="flex-1 sm:flex-none text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                setSelectedPatientId(appointment.patient_id)
-                                setShowProfileModal(true)
-                              }}
-                              className="flex-1 sm:flex-none"
-                              title={tCommon('viewProfile')}
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-
-                            {appointment.status === "scheduled" && (
-                              <Button
-                                size="sm"
-                                onClick={() => handleStatusChange(appointment.id, "completed")}
-                                className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white"
-                              >
-                                {t('status.complete')}
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Planned Procedure Section */}
-                        {(appointment as any).planned_procedure && (
-                          <div className="p-2 bg-blue-50 rounded border border-blue-100 text-sm">
-                            <p className="font-semibold text-blue-900 text-xs mb-1">{t('planned')}</p>
-                            <p className="text-blue-800">{(appointment as any).planned_procedure}</p>
-                          </div>
-                        )}
-                        {/* Occurrence Section (for completed appointments) */}
-                        {appointment.status === "completed" && (
-                          <OccurrenceSection
-                            key={appointment.id}
-                            apt={appointment}
-                            onSave={async (id, note) => {
-                              try {
-                                const updated = await updateAppointmentOccurrence(id, note)
-                                setAppointments(appointments.map((a) => (a.id === id ? { ...a, occurrence: note } : a)))
-                                return updated
-                              } catch (error) {
-                                toast({
-                                  title: t('toast.saveError'),
-                                  description: error instanceof Error ? error.message : t('common.error'),
-                                  variant: "destructive",
-                                })
-                                throw error
-                              }
-                            }}
-                          />
-                        )}
-                      </div>
-                    </Card>
-                  ))}
-              </div>
-            ) : (
-              <Card className="p-8 border border-border text-center">
-                <p className="text-muted-foreground">{t('emptyDay')}</p>
-              </Card>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Weekly Calendar View */}
-      <div className="mt-8 border-t pt-8">
-        <h3 className="text-lg font-semibold mb-4">{t('tabs.weekly')}</h3>
+      {/* Agenda Principal - Visão Semanal */}
+      <div className="pt-2">
         <WeeklyView
-          appointments={appointments.map(apt => ({
+          appointments={appointments.map((apt) => ({
             ...apt,
             id: apt.id?.toString() || "",
             user_id: apt.user_id?.toString() || "",
             patient_id: apt.patient_id?.toString() || "",
-            professional_id: apt.professional_id?.toString() || ""
+            professional_id: apt.professional_id?.toString() || "",
           }))}
-          professionals={professionals.map(prof => ({
+          professionals={professionals.map((prof) => ({
             id: prof.id?.toString() || "",
-            name: prof.name
+            name: prof.name,
+          }))}
+          patients={patients.map((p) => ({
+            id: p.id?.toString() || "",
+            name: p.name,
           }))}
           selectedProfessional={selectedProfessional}
           onSelectProfessional={setSelectedProfessional}
+          onSelectPatient={(patientId) => {
+            setSelectedPatientId(patientId)
+            setShowProfileModal(true)
+          }}
+          onEditAppointment={(apt) => {
+            handleEditAppointment(apt as any)
+          }}
+          onSlotClick={(dateStr, timeStr) => {
+            setEditingId(null)
+            setFormData({
+              patient_id: "",
+              professional_id: selectedProfessional === "all" ? "" : selectedProfessional,
+              appointment_date: dateStr,
+              appointment_time: timeStr,
+              duration_minutes: 60,
+              notes: "",
+              planned_procedure: "",
+              occurrence: "",
+              recurrence_type: "none",
+              recurrence_weekdays: [],
+              recurrence_count: 1,
+            })
+            setShowForm(true)
+          }}
+          onStatusChange={handleStatusChange}
+          onDeleteAppointment={handleDeleteAppointment}
         />
       </div>
 
