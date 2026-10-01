@@ -1,3 +1,4 @@
+// Hello World
 "use client"
 
 import { useState, useEffect } from "react"
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import {
   Plus, Trash2, Edit2, Search, Loader2, Tag,
   Package, DollarSign, Clock, Percent, ChevronDown,
-  ChevronRight, LayoutGrid, List as ListIcon, X,
+  ChevronRight, LayoutGrid, List as ListIcon, X, Sparkles,
 } from "lucide-react"
 import {
   getCategories,
@@ -268,6 +269,99 @@ export default function PriceTableTab() {
     )
   }
 
+  const handleLoadDentalCatalog = async () => {
+    setSaving(true)
+    try {
+      const dentalCategories = [
+        {
+          name: "Clínica Geral & Prevenção",
+          color: "#0f766e",
+          description: "Profilaxia, raspagem e restaurações",
+          products: [
+            { name: "Avaliação Odontológica / Exame Clínico", base_price: 150, cost: 20, duration_minutes: 30 },
+            { name: "Profilaxia e Raspagem Supragengival", base_price: 220, cost: 30, duration_minutes: 45 },
+            { name: "Aplicação Tópica de Flúor Gel", base_price: 90, cost: 15, duration_minutes: 15 },
+            { name: "Restauração Resina Composta 1 Face", base_price: 180, cost: 35, duration_minutes: 30 },
+            { name: "Restauração Resina Composta 2 Faces (MOD)", base_price: 230, cost: 45, duration_minutes: 45 },
+          ],
+        },
+        {
+          name: "Endodontia",
+          color: "#7c3aed",
+          description: "Tratamento de canais e pinos de sustentação",
+          products: [
+            { name: "Endodontia Dente Unirradicular", base_price: 550, cost: 80, duration_minutes: 60 },
+            { name: "Endodontia Dente Molar (3 ou 4 canais)", base_price: 950, cost: 150, duration_minutes: 90 },
+            { name: "Pino de Fibra de Vidro e Preenchimento", base_price: 380, cost: 60, duration_minutes: 45 },
+          ],
+        },
+        {
+          name: "Cirurgia Oral & Sisos",
+          color: "#dc2626",
+          description: "Exodontias e cirurgias bucais",
+          products: [
+            { name: "Exodontia Simples Dente Permanente", base_price: 220, cost: 35, duration_minutes: 30 },
+            { name: "Exodontia Terceiro Molar Incluso (Siso)", base_price: 450, cost: 70, duration_minutes: 60 },
+          ],
+        },
+        {
+          name: "Prótese Dentária & Implantes",
+          color: "#d97706",
+          description: "Reabilitação oral, coroas e próteses",
+          products: [
+            { name: "Coroa Cerâmica Pura E-max", base_price: 1650, cost: 450, duration_minutes: 60 },
+            { name: "Instalação de Implante Titânio", base_price: 1800, cost: 500, duration_minutes: 60 },
+            { name: "Prótese sobre Implante Parafusada", base_price: 1500, cost: 400, duration_minutes: 60 },
+          ],
+        },
+        {
+          name: "Estética & Clareamento",
+          color: "#ec4899",
+          description: "Clareamento e estética dental",
+          products: [
+            { name: "Clareamento Dental em Consultório (Sessão)", base_price: 600, cost: 90, duration_minutes: 60 },
+            { name: "Clareamento Caseiro com Moldeiras", base_price: 750, cost: 110, duration_minutes: 30 },
+            { name: "Faceta em Resina Composta", base_price: 500, cost: 70, duration_minutes: 60 },
+          ],
+        },
+      ]
+
+      for (const cat of dentalCategories) {
+        const catRes = await createCategory({
+          name: cat.name,
+          color: cat.color,
+          description: cat.description,
+        })
+        if (catRes.success && catRes.data) {
+          for (const prod of cat.products) {
+            await createProduct({
+              category_id: catRes.data.id,
+              name: prod.name,
+              base_price: prod.base_price,
+              cost: prod.cost,
+              duration_minutes: prod.duration_minutes,
+              tax_percent: 0,
+            })
+          }
+        }
+      }
+
+      toast({
+        title: "Catálogo Odontológico Carregado!",
+        description: "Especialidades e procedimentos odontológicos adicionados à sua tabela de preços.",
+      })
+      await loadData()
+    } catch (err) {
+      toast({
+        title: "Erro ao carregar catálogo",
+        description: "Não foi possível carregar os procedimentos odontológicos.",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -278,18 +372,27 @@ export default function PriceTableTab() {
             {t("subtitle")}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={handleLoadDentalCatalog}
+            variant="outline"
+            disabled={saving}
+            className="gap-2 border-primary/50 text-primary hover:bg-primary/10 cursor-pointer text-xs"
+          >
+            <Sparkles className="w-4 h-4 text-primary" />
+            Catálogo Odontológico
+          </Button>
           <Button
             onClick={() => { resetCategoryForm(); setShowCategoryForm(true); setShowProductForm(false) }}
             variant="outline"
-            className="gap-2"
+            className="gap-2 text-xs"
           >
             <Tag className="w-4 h-4" />
             {t("newCategory")}
           </Button>
           <Button
             onClick={() => openNewProductForm()}
-            className="bg-primary text-primary-foreground gap-2"
+            className="bg-primary text-primary-foreground gap-2 text-xs font-semibold"
           >
             <Plus className="w-4 h-4" />
             {t("newProduct")}

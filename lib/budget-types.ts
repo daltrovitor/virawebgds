@@ -46,6 +46,8 @@ export interface BudgetItem {
   subtotal: number        // quantity * unit_price
   tax_amount: number      // subtotal * (tax_percent / 100)
   total: number           // subtotal + tax_amount
+  tooth?: number | null
+  face?: string | null
   created_at: string
   // Joined
   product?: ServiceProduct | null
@@ -98,6 +100,8 @@ export interface BudgetItemDraft {
   unit_price: number
   cost_per_unit: number
   tax_percent: number
+  tooth?: number | null
+  face?: string | null
 }
 
 export interface BudgetDraft {

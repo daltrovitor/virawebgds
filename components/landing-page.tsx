@@ -863,6 +863,7 @@ export default function LandingPage({ onLoginClick, onSignupClick }: LandingPage
           </div>
         </motion.div>
       </footer>
+      </div>
     </LazyMotion>
   )
 }

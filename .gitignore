@@ -21,6 +21,7 @@ build/
 dist/
 .next/
 out/
+*.tsbuildinfo
 
 # --- Logs e Debug ---
 npm-debug.log*

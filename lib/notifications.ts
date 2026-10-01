@@ -1,15 +1,18 @@
 import { messaging } from './firebase-admin'
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+function getSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder'
+  return createClient(supabaseUrl, supabaseServiceKey)
+}
 
 /**
  * Sends notifications via Firebase Cloud Messaging (FCM)
  */
 export async function sendNotification(userId: string, payload: { title: string; body: string; url?: string; targetDomain?: string }) {
   try {
+    const supabase = getSupabase()
     // 1. Save to Database (In-app)
     const { data: notification, error: dbError } = await supabase
       .from('notifications')

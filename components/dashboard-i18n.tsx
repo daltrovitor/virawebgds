@@ -1,3 +1,4 @@
+// Hello World
 "use client"
 
 import type React from "react"
@@ -27,6 +28,11 @@ import {
     Receipt,
     Tag,
     TrendingUp,
+    Smile,
+    ClipboardList,
+    ShieldAlert,
+    Building,
+    FileText,
 } from "lucide-react"
 
 import dynamic from 'next/dynamic'
@@ -44,6 +50,11 @@ const ChecklistTab = dynamic(() => import("./dashboard/checklist-tab"), { loadin
 const OverviewTab = dynamic(() => import("./dashboard/overview-tab"), { loading: () => <TabLoading /> })
 const AppointmentsTab = dynamic(() => import("./dashboard/appointments-tab"), { loading: () => <TabLoading /> })
 const PatientsTab = dynamic(() => import("./dashboard/patients-tab"), { loading: () => <TabLoading /> })
+const OdontogramTab = dynamic(() => import("./dashboard/odontogram-tab"), { loading: () => <TabLoading /> })
+const TreatmentsTab = dynamic(() => import("./dashboard/treatments-tab"), { loading: () => <TabLoading /> })
+const AnamnesisTab = dynamic(() => import("./dashboard/anamnesis-tab"), { loading: () => <TabLoading /> })
+const DentalDocumentsTab = dynamic(() => import("./dashboard/dental-documents-tab"), { loading: () => <TabLoading /> })
+const ReconciliationTab = dynamic(() => import("./dashboard/reconciliation-tab"), { loading: () => <TabLoading /> })
 const ProfessionalsTab = dynamic(() => import("./dashboard/professionals-tab"), { loading: () => <TabLoading /> })
 const ReportsTab = dynamic(() => import("./dashboard/reports-tab"), { ssr: false, loading: () => <TabLoading /> })
 const SubscriptionsTab = dynamic(() => import("./dashboard/subscriptions-tab"), { loading: () => <TabLoading /> })
@@ -243,7 +254,12 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         { id: "goals", label: t('sidebar.goals'), icon: <Target className="w-5 h-5" /> },
         { id: "appointments", label: t('sidebar.appointments'), icon: <Calendar className="w-5 h-5" /> },
         { id: "patients", label: t('sidebar.patients'), icon: <Users className="w-5 h-5" /> },
+        { id: "odontogram", label: t('sidebar.odontogram'), icon: <Smile className="w-5 h-5" /> },
+        { id: "treatments", label: t('sidebar.treatments'), icon: <ClipboardList className="w-5 h-5" /> },
+        { id: "anamnesis", label: t('sidebar.anamnesis'), icon: <ShieldAlert className="w-5 h-5" /> },
+        { id: "dentalDocuments", label: t('sidebar.dentalDocuments'), icon: <FileText className="w-5 h-5" /> },
         { id: "financial", label: t('sidebar.financial'), icon: <CreditCard className="w-5 h-5" /> },
+        { id: "reconciliation", label: t('sidebar.bankReconciliation'), icon: <Building className="w-5 h-5" /> },
         { id: "price-table", label: t('sidebar.priceTable'), icon: <Tag className="w-5 h-5" /> },
         { id: "budgets", label: t('sidebar.budgets'), icon: <Receipt className="w-5 h-5" /> },
         { id: "closing", label: t('sidebar.closing'), icon: <TrendingUp className="w-5 h-5" /> },
@@ -430,7 +446,12 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                             )}
                             {activeTab === "appointments" && <AppointmentsTab />}
                             {activeTab === "patients" && <PatientsTab />}
+                            {activeTab === "odontogram" && <OdontogramTab />}
+                            {activeTab === "treatments" && <TreatmentsTab />}
+                            {activeTab === "anamnesis" && <AnamnesisTab />}
+                            {activeTab === "dentalDocuments" && <DentalDocumentsTab />}
                             {activeTab === "financial" && <FinancialTab />}
+                            {activeTab === "reconciliation" && <ReconciliationTab />}
                             {activeTab === "price-table" && <PriceTableTab />}
                             {activeTab === "budgets" && <BudgetTab />}
                             {activeTab === "closing" && <ClosingTab />}

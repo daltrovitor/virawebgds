@@ -1,3 +1,4 @@
+// Hello World
 "use client"
 
 import type React from "react"
@@ -24,11 +25,23 @@ import {
   BellRing,
   Tag,
   Receipt,
+  Calendar,
+  Smile,
+  ClipboardList,
+  ShieldAlert,
+  Building,
+  FileText,
 } from "lucide-react"
 import ChecklistTab from "./dashboard/checklist-tab"
 import RemindersTab from "./dashboard/reminders-tab"
 import OverviewTab from "./dashboard/overview-tab"
+import AppointmentsTab from "./dashboard/appointments-tab"
 import PatientsTab from "./dashboard/patients-tab"
+import OdontogramTab from "./dashboard/odontogram-tab"
+import TreatmentsTab from "./dashboard/treatments-tab"
+import AnamnesisTab from "./dashboard/anamnesis-tab"
+import DentalDocumentsTab from "./dashboard/dental-documents-tab"
+import ReconciliationTab from "./dashboard/reconciliation-tab"
 import ProfessionalsTab from "./dashboard/professionals-tab"
 import ReportsTab from "./dashboard/reports-tab"
 import SubscriptionsTab from "./dashboard/subscriptions-tab"
@@ -185,8 +198,14 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
     { id: "reminders", label: "Lembretes", icon: <BellRing className="w-5 h-5" /> },
     { id: "ai", label: "ViraBot IA", icon: <Sparkles className="w-5 h-5" /> },
     { id: "goals", label: "Metas", icon: <Target className="w-5 h-5" /> },
+    { id: "appointments", label: "Agendamentos", icon: <Calendar className="w-5 h-5" /> },
     { id: "patients", label: "Clientes", icon: <Users className="w-5 h-5" /> },
+    { id: "odontogram", label: "Odontograma", icon: <Smile className="w-5 h-5" /> },
+    { id: "treatments", label: "Tratamentos", icon: <ClipboardList className="w-5 h-5" /> },
+    { id: "anamnesis", label: "Anamnese", icon: <ShieldAlert className="w-5 h-5" /> },
+    { id: "dentalDocuments", label: "Documentos Odonto", icon: <FileText className="w-5 h-5" /> },
     { id: "financial", label: "Financeiro", icon: <CreditCard className="w-5 h-5" /> },
+    { id: "reconciliation", label: "Conciliação OFX", icon: <Building className="w-5 h-5" /> },
     { id: "price-table", label: "Tabela de Preços", icon: <Tag className="w-5 h-5" /> },
     { id: "budgets", label: "Orçamentos", icon: <Receipt className="w-5 h-5" /> },
     { id: "professionals", label: "Profissionais", icon: <Users className="w-5 h-5" /> },
@@ -341,8 +360,14 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
               {activeTab === "tutorial" && (
                 <TutorialTab onMarkWatched={() => setHasWatchedTutorial(true)} />
               )}
+              {activeTab === "appointments" && <AppointmentsTab />}
               {activeTab === "patients" && <PatientsTab />}
+              {activeTab === "odontogram" && <OdontogramTab />}
+              {activeTab === "treatments" && <TreatmentsTab />}
+              {activeTab === "anamnesis" && <AnamnesisTab />}
+              {activeTab === "dentalDocuments" && <DentalDocumentsTab />}
               {activeTab === "financial" && <FinancialTab />}
+              {activeTab === "reconciliation" && <ReconciliationTab />}
               {activeTab === "price-table" && <PriceTableTab />}
               {activeTab === "budgets" && <BudgetTab />}
               {activeTab === "professionals" && <ProfessionalsTab />}

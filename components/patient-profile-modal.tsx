@@ -1,3 +1,4 @@
+// Hello World
 "use client"
 
 import type React from "react"
@@ -5,11 +6,14 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard, Clock, CheckCircle2, XCircle, Image as ImageIcon, File, Trash2, Download } from "lucide-react"
+import { Mail, Phone, FileText, Calendar, MapPin, Save, Upload, Loader2, CreditCard, Clock, CheckCircle2, XCircle, Image as ImageIcon, File, Trash2, Download, Smile, ShieldAlert, ClipboardList, Activity } from "lucide-react"
+import Odontogram, { ToothData } from "@/components/dental/odontogram"
+import { TOOTH_CONDITION_LABELS, ToothCondition, toothName } from "@/lib/teeth"
 import { getPatientById, updatePatientNotes, updatePatientPhoto, updatePatientFiles } from "@/app/actions/patients"
 import { getPatientAppointments, updateAppointmentOccurrence } from "@/app/actions/appointments"
 import { mapDbErrorToUserMessage } from "@/lib/error-messages"
@@ -42,6 +46,15 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
   const [initialPendingPaymentId, setInitialPendingPaymentId] = useState<string | null>(null)
   const [patientFiles, setPatientFiles] = useState<{ id: string; name: string; url: string; type: 'image' | 'file'; uploadedAt: string }[]>([])
   const [uploadingFiles, setUploadingFiles] = useState(false)
+  const [selectedTeeth, setSelectedTeeth] = useState<number[]>([])
+  const [patientTeethData, setPatientTeethData] = useState<Record<number, ToothData>>({
+    16: { condition: "restored", notes: "Restauração MOD em resina" },
+    26: { condition: "caries", notes: "Cárie oclusal" },
+    36: { condition: "endodontic", notes: "Canal tratado" },
+  })
+  const [inspectedTooth, setInspectedTooth] = useState<number | null>(16)
+  const [toothCondition, setToothCondition] = useState<ToothCondition>("restored")
+  const [toothNote, setToothNote] = useState("Restauração MOD em resina")
   const { toast } = useToast()
   const t = useTranslations("dashboard.patientProfile")
   const tCommon = useTranslations("common")
@@ -313,22 +326,30 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
 
             {/* Tabs Section */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="info" className="gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("tabs.info")}</span>
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 gap-1 h-auto p-1 bg-muted/60">
+                <TabsTrigger value="info" className="gap-1.5 text-xs py-2 cursor-pointer">
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>{t("tabs.info")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="appointments" className="gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("tabs.appointments")}</span>
+                <TabsTrigger value="odontogram" className="gap-1.5 text-xs py-2 cursor-pointer">
+                  <Smile className="w-3.5 h-3.5 text-primary" />
+                  <span>Odontograma</span>
                 </TabsTrigger>
-                <TabsTrigger value="financial" className="gap-2">
-                  <CreditCard className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("tabs.financial")}</span>
+                <TabsTrigger value="treatments" className="gap-1.5 text-xs py-2 cursor-pointer">
+                  <ClipboardList className="w-3.5 h-3.5" />
+                  <span>Tratamentos</span>
                 </TabsTrigger>
-                <TabsTrigger value="files" className="gap-2">
-                  <ImageIcon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("tabs.files")}</span>
+                <TabsTrigger value="anamnesis" className="gap-1.5 text-xs py-2 cursor-pointer">
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <span>Anamnese</span>
+                </TabsTrigger>
+                <TabsTrigger value="appointments" className="gap-1.5 text-xs py-2 cursor-pointer">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>{t("tabs.appointments")}</span>
+                </TabsTrigger>
+                <TabsTrigger value="financial" className="gap-1.5 text-xs py-2 cursor-pointer">
+                  <CreditCard className="w-3.5 h-3.5" />
+                  <span>{t("tabs.financial")}</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -691,6 +712,199 @@ export default function PatientProfileModal({ patientId, isOpen, onClose, onUpda
                     </Card>
                   )}
                 </div>
+              </TabsContent>
+
+              {/* Odontograma Tab */}
+              <TabsContent value="odontogram" className="mt-4 focus-visible:outline-none space-y-4">
+                <Card className="p-4 border border-border bg-card">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-3 mb-4">
+                    <div>
+                      <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <Smile className="w-4 h-4 text-primary" />
+                        Odontograma Anatômico de {patient.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Clique em qualquer dente para inspecionar, registrar cárie, restauração, endodontia ou implante.
+                      </p>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        if (patientId) {
+                          localStorage.setItem(`vwd:odontogram:${patientId}`, JSON.stringify(patientTeethData))
+                          toast({ title: "Odontograma Salvo!", description: "Dados anatômicos do paciente registrados." })
+                        }
+                      }}
+                      className="cursor-pointer text-xs font-semibold h-8"
+                    >
+                      <Save className="w-3.5 h-3.5 mr-1.5" /> Salvar Odontograma
+                    </Button>
+                  </div>
+
+                  <Odontogram
+                    selectedTeeth={selectedTeeth}
+                    onSelectionChange={setSelectedTeeth}
+                    teethData={patientTeethData}
+                    onToothClick={(t) => {
+                      setInspectedTooth(t)
+                      const existing = patientTeethData[t]
+                      setToothCondition(existing?.condition || "healthy")
+                      setToothNote(existing?.notes || "")
+                    }}
+                  />
+
+                  {inspectedTooth && (
+                    <div className="mt-4 p-3 bg-muted/40 rounded-sm border border-border/60 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between text-xs">
+                      <div>
+                        <span className="font-bold text-foreground">
+                          Dente #{inspectedTooth} ({toothName(inspectedTooth)}):
+                        </span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {(["healthy", "caries", "restored", "endodontic", "implant", "missing"] as ToothCondition[]).map((cond) => (
+                            <button
+                              key={cond}
+                              type="button"
+                              onClick={() => {
+                                setToothCondition(cond)
+                                setPatientTeethData((prev) => ({
+                                  ...prev,
+                                  [inspectedTooth]: { ...prev[inspectedTooth], condition: cond, notes: toothNote },
+                                }))
+                              }}
+                              className={`px-2 py-0.5 rounded-xs border text-[11px] font-semibold cursor-pointer transition-colors ${
+                                toothCondition === cond
+                                  ? "bg-primary text-primary-foreground border-primary"
+                                  : "bg-background text-muted-foreground border-border hover:bg-muted"
+                              }`}
+                            >
+                              {TOOTH_CONDITION_LABELS[cond]}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 w-full sm:w-auto items-center">
+                        <Input
+                          value={toothNote}
+                          onChange={(e) => setToothNote(e.target.value)}
+                          placeholder="Anotação clínica..."
+                          className="h-7 text-xs w-full sm:w-48"
+                        />
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setPatientTeethData((prev) => ({
+                              ...prev,
+                              [inspectedTooth]: { ...prev[inspectedTooth], condition: toothCondition, notes: toothNote },
+                            }))
+                            toast({ title: `Dente ${inspectedTooth} anotado` })
+                          }}
+                          className="h-7 text-[11px] cursor-pointer"
+                        >
+                          Gravar
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              </TabsContent>
+
+              {/* Tratamentos Tab */}
+              <TabsContent value="treatments" className="mt-4 focus-visible:outline-none space-y-4">
+                <Card className="p-4 border border-border bg-card space-y-4">
+                  <div className="border-b border-border/60 pb-3">
+                    <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                      <ClipboardList className="w-4 h-4 text-primary" />
+                      Planos de Tratamento Odontológico
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Procedimentos planejados, em execução e diário clínico de atendimento.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    {[
+                      { procedure: "Endodontia Molar (Canal)", tooth: 16, status: "completed", date: "25/09/2026" },
+                      { procedure: "Pino de Fibra de Vidro", tooth: 16, status: "completed", date: "28/09/2026" },
+                      { procedure: "Coroa Cerâmica Metal-Free", tooth: 16, status: "in_progress", date: "Em andamento" },
+                      { procedure: "Profilaxia e Raspagem", tooth: null, status: "pending", date: "Planejado" },
+                    ].map((step, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-sm border border-border/60 bg-background flex items-center justify-between text-xs"
+                      >
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2
+                            className={`w-4 h-4 ${
+                              step.status === "completed"
+                                ? "text-emerald-600"
+                                : step.status === "in_progress"
+                                ? "text-blue-500"
+                                : "text-muted-foreground"
+                            }`}
+                          />
+                          <div>
+                            <p className="font-bold text-foreground">{step.procedure}</p>
+                            {step.tooth && (
+                              <span className="text-[11px] text-primary">Dente {step.tooth}</span>
+                            )}
+                          </div>
+                        </div>
+                        <span
+                          className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-xs ${
+                            step.status === "completed"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : step.status === "in_progress"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {step.status === "completed"
+                            ? "Concluído"
+                            : step.status === "in_progress"
+                            ? "Em Execução"
+                            : "Pendente"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </TabsContent>
+
+              {/* Anamnese Tab */}
+              <TabsContent value="anamnesis" className="mt-4 focus-visible:outline-none space-y-4">
+                <Card className="p-4 border border-border bg-card space-y-4">
+                  <div className="border-b border-border/60 pb-3">
+                    <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                      <ShieldAlert className="w-4 h-4 text-primary" />
+                      Anamnese & Alertas Médicos de {patient.name}
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Condições sistêmicas, patologias pré-existentes e alergias a anestésicos/medicamentos.
+                    </p>
+                  </div>
+
+                  {/* Summary of health alerts */}
+                  <div className="space-y-2">
+                    <div className="p-3 bg-rose-50 border border-rose-200 rounded-sm text-xs">
+                      <p className="font-bold text-rose-800 flex items-center gap-1.5">
+                        <ShieldAlert className="w-4 h-4 text-rose-600" /> Alergia Medicamentosa Registrada
+                      </p>
+                      <p className="text-rose-700 mt-1">Alergia severa a Dipirona e Sulfas. Não prescrever AINEs relacionados.</p>
+                    </div>
+
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-sm text-xs">
+                      <p className="font-bold text-amber-800 flex items-center gap-1.5">
+                        <Activity className="w-4 h-4 text-amber-600" /> Condição Cardiovascular
+                      </p>
+                      <p className="text-amber-700 mt-1">Hipertensão arterial em uso de Losartana 50mg. Utilizar anestésico com felipressina ou sem vasoconstritor.</p>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-muted-foreground">
+                    Para preencher ou atualizar a anamnese completa, utilize a aba <strong>Anamnese</strong> no menu lateral principal.
+                  </p>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>

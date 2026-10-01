@@ -343,7 +343,12 @@
             "goals": "Goals",
             "appointments": "Appointments",
             "patients": "Clients",
+            "odontogram": "Odontogram",
+            "treatments": "Treatments",
+            "anamnesis": "Anamnesis",
+            "dentalDocuments": "Dental Documents",
             "financial": "Financial",
+            "bankReconciliation": "OFX Reconciliation",
             "priceTable": "Price Table",
             "budgets": "Budgets",
             "closing": "Closing",
@@ -384,6 +389,10 @@
                 "xlsx": "XLSX",
                 "maxSize": "Max size: 10MB"
             },
+            "pastingTitle": "Paste Text Manually",
+            "pastingPlaceholder": "Paste CSV content, raw text records or any data here...",
+            "processText": "Process Text",
+            "orPasteText": "Or paste text manually",
             "processing": "Processing data...",
             "uploading": "Uploading file...",
             "status": {

@@ -1,10 +1,12 @@
+// Hello World
 "use client"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Menu, X, Calendar, Users, BarChart3, Home,
-    CreditCard, List, Sparkles, Target, Settings, HeadphonesIcon, StickyNote, PlayCircle, LogOut, Upload, BellRing, Tag, Receipt, TrendingUp
+    CreditCard, List, Sparkles, Target, Settings, HeadphonesIcon, StickyNote, PlayCircle, LogOut, Upload, BellRing, Tag, Receipt, TrendingUp,
+    Smile, ClipboardList, ShieldAlert, FileText, Building
 } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import Image from "next/image"
@@ -13,6 +15,11 @@ import LanguageToggle from "@/components/language-toggle"
 // Import real components
 import OverviewTab from "./dashboard/overview-tab"
 import AppointmentsTab from "./dashboard/appointments-tab"
+import OdontogramTab from "./dashboard/odontogram-tab"
+import TreatmentsTab from "./dashboard/treatments-tab"
+import AnamnesisTab from "./dashboard/anamnesis-tab"
+import DentalDocumentsTab from "./dashboard/dental-documents-tab"
+import ReconciliationTab from "./dashboard/reconciliation-tab"
 import PatientsTab from "./dashboard/patients-tab"
 import ProfessionalsTab from "./dashboard/professionals-tab"
 import ReportsTab from "./dashboard/reports-tab"
@@ -62,8 +69,14 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
         { id: "reminders", label: tSidebar('reminders'), icon: <BellRing className="w-5 h-5" /> },
         { id: "ai", label: tSidebar('ai'), icon: <Sparkles className="w-5 h-5 text-purple-500" /> },
         { id: "goals", label: tSidebar('goals'), icon: <Target className="w-5 h-5" /> },
+        { id: "appointments", label: tSidebar('appointments'), icon: <Calendar className="w-5 h-5" /> },
         { id: "patients", label: tSidebar('patients'), icon: <Users className="w-5 h-5" /> },
+        { id: "odontogram", label: tSidebar('odontogram'), icon: <Smile className="w-5 h-5" /> },
+        { id: "treatments", label: tSidebar('treatments'), icon: <ClipboardList className="w-5 h-5" /> },
+        { id: "anamnesis", label: tSidebar('anamnesis'), icon: <ShieldAlert className="w-5 h-5" /> },
+        { id: "dentalDocuments", label: tSidebar('dentalDocuments'), icon: <FileText className="w-5 h-5" /> },
         { id: "financial", label: tSidebar('financial'), icon: <CreditCard className="w-5 h-5" /> },
+        { id: "reconciliation", label: tSidebar('bankReconciliation'), icon: <Building className="w-5 h-5" /> },
         { id: "price-table", label: tSidebar('priceTable'), icon: <Tag className="w-5 h-5" /> },
         { id: "budgets", label: tSidebar('budgets'), icon: <Receipt className="w-5 h-5" /> },
         { id: "closing", label: tSidebar('closing'), icon: <TrendingUp className="w-5 h-5" /> },
@@ -106,12 +119,18 @@ export default function DemoDashboard({ showFullPage = true }: DemoDashboardProp
         switch (activeTab) {
             case "overview": return <OverviewTab user={{ name: tCommon('visitor'), email: "demo@viraweb.com" }} onNavigate={setActiveTab} {...props} />
             case "import": return <ImportTab isDemo={true} onImportSuccess={handleImportDemoSuccess} />
+            case "appointments": return <AppointmentsTab {...props} />
             case "patients": return <PatientsTab {...props} />
-            case "professionals": return <ProfessionalsTab {...props} />
+            case "odontogram": return <OdontogramTab {...props} />
+            case "treatments": return <TreatmentsTab {...props} />
+            case "anamnesis": return <AnamnesisTab {...props} />
+            case "dentalDocuments": return <DentalDocumentsTab {...props} />
             case "financial": return <FinancialTab {...props} />
+            case "reconciliation": return <ReconciliationTab {...props} />
             case "price-table": return <PriceTableTab {...props} />
             case "budgets": return <BudgetTab {...props} />
             case "closing": return <ClosingTab />
+            case "professionals": return <ProfessionalsTab {...props} />
             case "ai": return <AISection planType="premium" {...props} />
             case "goals": return <GoalsSection {...props} />
             case "notes": return <NotesTab {...props} />
