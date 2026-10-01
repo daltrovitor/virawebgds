@@ -1,0 +1,124 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - link "Pular para o conteúdo" [ref=e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=e14]:
+      - generic [ref=e15]:
+        - paragraph [ref=e16]: Gestão Odonto
+        - paragraph [ref=e17]: Clínica Demonstração
+      - navigation "Seções" [ref=e18]:
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - link "Visão geral" [ref=e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=e22]:
+            - link "Agenda" [ref=e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=e24]:
+            - link "Pacientes" [ref=e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=e27]:
+            - link "Orçamentos e tratamentos" [ref=e28] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=e29]:
+            - link "Financeiro" [ref=e30] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=e31]:
+            - link "Relatórios" [ref=e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=e33]:
+            - link "Cadastros" [ref=e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=e35]:
+            - link "Configurações" [ref=e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Administrador Demo
+        - paragraph [ref=e39]: Administrador / proprietário
+        - generic [ref=e40]:
+          - link "Minha conta" [ref=e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=e42] [cursor=pointer]
+    - generic [ref=e43]:
+      - banner [ref=e44]:
+        - search [ref=e46]:
+          - generic [ref=e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=e49]
+        - generic [ref=e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=e51]:
+        - generic [ref=e53]:
+          - link "← Pacientes" [ref=e54] [cursor=pointer]:
+            - /url: /pacientes
+          - heading "Novo paciente" [level=1] [ref=e55]
+          - paragraph [ref=e56]: Somente o nome é obrigatório. Possíveis duplicidades são verificadas antes de salvar.
+        - generic [ref=e59]:
+          - group "Identificação" [ref=e60]:
+            - generic [ref=e62]:
+              - generic [ref=e63] [cursor=pointer]:
+                - text: Nome completo
+                - generic [aria-hidden] [ref=e64]: "*"
+              - textbox "Nome completo" [ref=e65]
+            - generic [ref=e66]:
+              - generic [ref=e67] [cursor=pointer]: Nome social / preferido
+              - textbox "Nome social / preferido" [ref=e68]
+            - generic [ref=e69]:
+              - generic [ref=e70] [cursor=pointer]: Nascimento
+              - textbox "Nascimento" [ref=e71]
+            - generic [ref=e72]:
+              - generic [ref=e73] [cursor=pointer]: CPF
+              - textbox "CPF" [ref=e74]
+              - paragraph [ref=e75]: Opcional até ser informado
+            - generic [ref=e76]:
+              - generic [ref=e77] [cursor=pointer]: Profissional de referência
+              - combobox "Profissional de referência" [ref=e78] [cursor=pointer]:
+                - option "Nenhum" [selected]
+                - option "Dr. Rafael Demo"
+                - option "Dra. Paula Demo"
+          - group "Contato" [ref=e79]:
+            - generic [ref=e81]:
+              - generic [ref=e82] [cursor=pointer]: Telefone principal (com DDD)
+              - textbox "Telefone principal (com DDD)" [ref=e83]
+            - generic [ref=e84]:
+              - generic [ref=e85] [cursor=pointer]: Telefone alternativo
+              - textbox "Telefone alternativo" [ref=e86]
+            - generic [ref=e87]:
+              - generic [ref=e88] [cursor=pointer]: E-mail
+              - textbox "E-mail" [ref=e89]
+          - group "Endereço" [ref=e90]:
+            - generic [ref=e92]:
+              - generic [ref=e93] [cursor=pointer]: CEP
+              - textbox "CEP" [ref=e94]
+            - generic [ref=e95]:
+              - generic [ref=e96] [cursor=pointer]: Logradouro
+              - textbox "Logradouro" [ref=e97]
+            - generic [ref=e98]:
+              - generic [ref=e99] [cursor=pointer]: Número
+              - textbox "Número" [ref=e100]
+            - generic [ref=e101]:
+              - generic [ref=e102] [cursor=pointer]: Complemento
+              - textbox "Complemento" [ref=e103]
+            - generic [ref=e104]:
+              - generic [ref=e105] [cursor=pointer]: Bairro
+              - textbox "Bairro" [ref=e106]
+            - generic [ref=e107]:
+              - generic [ref=e108] [cursor=pointer]: Cidade
+              - textbox "Cidade" [ref=e109]
+            - generic [ref=e110]:
+              - generic [ref=e111] [cursor=pointer]: UF
+              - textbox "UF" [ref=e112]
+          - group "Administrativo" [ref=e113]:
+            - generic [ref=e115]:
+              - generic [ref=e116] [cursor=pointer]: Origem / campanha
+              - textbox "Origem / campanha" [ref=e117]
+            - generic [ref=e118]:
+              - generic [ref=e119] [cursor=pointer]: Indicado por
+              - textbox "Indicado por" [ref=e120]
+            - generic [ref=e121]:
+              - generic [ref=e122] [cursor=pointer]: Observações administrativas
+              - textbox "Observações administrativas" [ref=e123]
+              - paragraph [ref=e124]: Não registre informações clínicas aqui.
+          - generic [ref=e125]:
+            - button "Cancelar" [ref=e126] [cursor=pointer]
+            - button "Salvar cadastro" [ref=e127] [cursor=pointer]

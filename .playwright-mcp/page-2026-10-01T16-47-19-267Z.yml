@@ -1,0 +1,84 @@
+- generic [active] [ref=f5e1]:
+  - button "Open Next.js Dev Tools" [ref=f5e7] [cursor=pointer]
+  - alert [ref=f5e11]: Prévia da importação · Gestão Odonto
+  - generic [ref=f5e12]:
+    - link "Pular para o conteúdo" [ref=f5e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=f5e14]:
+      - generic [ref=f5e15]:
+        - paragraph [ref=f5e16]: Gestão Odonto
+        - paragraph [ref=f5e17]: Clínica Demonstração
+      - navigation "Seções" [ref=f5e18]:
+        - list [ref=f5e19]:
+          - listitem [ref=f5e20]:
+            - link "Visão geral" [ref=f5e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=f5e22]:
+            - link "Agenda" [ref=f5e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=f5e24]:
+            - link "Pacientes" [ref=f5e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=f5e26]:
+            - link "Orçamentos e tratamentos" [ref=f5e27] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=f5e28]:
+            - link "Financeiro" [ref=f5e29] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=f5e31]:
+            - link "Relatórios" [ref=f5e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=f5e33]:
+            - link "Cadastros" [ref=f5e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=f5e35]:
+            - link "Configurações" [ref=f5e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=f5e37]:
+        - paragraph [ref=f5e38]: Administrador Demo
+        - paragraph [ref=f5e39]: Administrador / proprietário
+        - generic [ref=f5e40]:
+          - link "Minha conta" [ref=f5e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=f5e42] [cursor=pointer]
+    - generic [ref=f5e43]:
+      - banner [ref=f5e44]:
+        - search [ref=f5e46]:
+          - generic [ref=f5e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=f5e49]
+        - generic [ref=f5e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=f5e51]:
+        - generic [ref=f5e152]:
+          - link "← Conciliação" [ref=f5e153] [cursor=pointer]:
+            - /url: /financeiro/conciliacao?conta=47c863d1-8e5d-4b70-8df3-a342e5035acb
+          - 'heading "Importação: extrato-jornada.ofx" [level=1] [ref=f5e154]'
+          - paragraph [ref=f5e155]: Conta Banco Demo — conta corrente · arquivo •••12-3 · período 01/10/2026 a 01/10/2026 · saldo informado R$ 16.985,00 em 01/10/2026
+        - generic [ref=f5e157]:
+          - generic [ref=f5e159]:
+            - heading "2 movimentação(ões) no arquivo" [level=2] [ref=f5e160]
+            - paragraph [ref=f5e161]: Serão importadas 2. Duplicadas por identificador do banco nunca são reimportadas.
+          - region "Prévia do extrato" [ref=f5e162]:
+            - table [ref=f5e163]:
+              - rowgroup [ref=f5e164]:
+                - row [ref=f5e165]:
+                  - columnheader "Data" [ref=f5e166]
+                  - columnheader "Descrição" [ref=f5e167]
+                  - columnheader "Valor" [ref=f5e168]
+                  - columnheader "Classificação" [ref=f5e169]
+                  - columnheader "Importar mesmo assim" [ref=f5e170]
+              - rowgroup [ref=f5e171]:
+                - row [ref=f5e172]:
+                  - cell "01/10/2026" [ref=f5e173]
+                  - cell "PIX RECEBIDO PACIENTE JORNADA" [ref=f5e174]
+                  - cell "R$ 1.000,00" [ref=f5e176]
+                  - cell "Nova" [ref=f5e177]
+                  - cell [ref=f5e180]
+                - row [ref=f5e181]:
+                  - cell "01/10/2026" [ref=f5e182]
+                  - cell "TARIFA PIX" [ref=f5e183]
+                  - cell "-R$ 15,00" [ref=f5e185]
+                  - cell "Nova" [ref=f5e186]
+                  - cell [ref=f5e189]
+          - generic [ref=f5e190]:
+            - button "Descartar" [ref=f5e191] [cursor=pointer]
+            - button "Confirmar importação" [ref=f5e192] [cursor=pointer]

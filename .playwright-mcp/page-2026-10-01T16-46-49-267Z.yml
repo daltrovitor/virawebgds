@@ -1,0 +1,210 @@
+- generic [active] [ref=f3e1]:
+  - button "Open Next.js Dev Tools" [ref=f3e166] [cursor=pointer]
+  - alert [ref=f3e170]
+  - generic [ref=f3e171]:
+    - link "Pular para o conteúdo" [ref=f3e172] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=f3e173]:
+      - generic [ref=f3e174]:
+        - paragraph [ref=f3e175]: Gestão Odonto
+        - paragraph [ref=f3e176]: Clínica Demonstração
+      - navigation "Seções" [ref=f3e177]:
+        - list [ref=f3e178]:
+          - listitem [ref=f3e179]:
+            - link "Visão geral" [ref=f3e180] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=f3e181]:
+            - link "Agenda" [ref=f3e182] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=f3e183]:
+            - link "Pacientes" [ref=f3e184] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=f3e186]:
+            - link "Orçamentos e tratamentos" [ref=f3e187] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=f3e188]:
+            - link "Financeiro" [ref=f3e189] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=f3e190]:
+            - link "Relatórios" [ref=f3e191] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=f3e192]:
+            - link "Cadastros" [ref=f3e193] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=f3e194]:
+            - link "Configurações" [ref=f3e195] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=f3e196]:
+        - paragraph [ref=f3e197]: Administrador Demo
+        - paragraph [ref=f3e198]: Administrador / proprietário
+        - generic [ref=f3e199]:
+          - link "Minha conta" [ref=f3e200] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=f3e201] [cursor=pointer]
+    - generic [ref=f3e202]:
+      - banner [ref=f3e203]:
+        - search [ref=f3e205]:
+          - generic [ref=f3e206] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=f3e208]
+        - generic [ref=f3e209]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=f3e210]:
+        - link "← Pacientes" [ref=f3e211] [cursor=pointer]:
+          - /url: /pacientes
+        - generic [ref=f3e212]:
+          - generic [ref=f3e213]:
+            - generic [aria-hidden] [ref=f3e214]: PS
+            - generic [ref=f3e215]:
+              - heading "Paciente Jornada Sintética" [level=1] [ref=f3e216]
+              - paragraph [ref=f3e217]:
+                - generic [ref=f3e218]: Nº 13
+                - generic [ref=f3e219]: 36 anos
+                - generic [ref=f3e220]: (62) 98765-4321
+                - link "Abrir WhatsApp" [ref=f3e221] [cursor=pointer]:
+                  - /url: https://wa.me/5562987654321
+          - generic [ref=f3e222]:
+            - link "Agendar" [ref=f3e223] [cursor=pointer]:
+              - /url: /agenda?nova=1&paciente=a880ad83-f1c5-4a30-9983-73f8398138e3
+            - button "Novo orçamento" [ref=f3e224] [cursor=pointer]
+            - link "Adicionar arquivo" [ref=f3e225] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=arquivos#enviar
+            - link "Editar cadastro" [ref=f3e226] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=cadastro
+        - navigation "Seções da ficha" [ref=f3e227]:
+          - list [ref=f3e228]:
+            - listitem [ref=f3e229]:
+              - link "Visão geral" [ref=f3e230] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=visao-geral
+            - listitem [ref=f3e231]:
+              - link "Cadastro" [ref=f3e232] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=cadastro
+            - listitem [ref=f3e233]:
+              - link "Agenda" [ref=f3e234] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=agenda
+            - listitem [ref=f3e235]:
+              - link "Orçamentos" [ref=f3e236] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=orcamentos
+            - listitem [ref=f3e237]:
+              - link "Tratamentos" [ref=f3e238] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=tratamentos
+            - listitem [ref=f3e239]:
+              - link "Histórico clínico" [ref=f3e240] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=historico
+            - listitem [ref=f3e241]:
+              - link "Imagens e arquivos" [ref=f3e242] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=arquivos
+            - listitem [ref=f3e243]:
+              - link "Financeiro" [ref=f3e244] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=financeiro
+            - listitem [ref=f3e245]:
+              - link "Anamnese" [ref=f3e246] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=anamnese
+            - listitem [ref=f3e247]:
+              - link "Documentos" [ref=f3e248] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=documentos
+        - generic [ref=f3e249]:
+          - generic [ref=f3e250]:
+            - generic [ref=f3e251]:
+              - paragraph [ref=f3e252]: Em aberto
+              - paragraph [ref=f3e253]: R$ 3.065,33
+            - generic [ref=f3e254]:
+              - paragraph [ref=f3e255]: Vencido
+              - paragraph [ref=f3e256]: R$ 0,00
+            - generic [ref=f3e257]:
+              - paragraph [ref=f3e258]: Recebido (efetivo)
+              - paragraph [ref=f3e259]: R$ 2.532,67
+          - generic [ref=f3e260]:
+            - generic [ref=f3e262]:
+              - heading "Títulos a receber" [level=2] [ref=f3e263]
+              - paragraph [ref=f3e264]: Entrada e parcelas de orçamentos aprovados e lançamentos avulsos identificados.
+            - table [ref=f3e266]:
+              - rowgroup [ref=f3e267]:
+                - row [ref=f3e268]:
+                  - columnheader "Descrição" [ref=f3e269]
+                  - columnheader "Vencimento" [ref=f3e270]
+                  - columnheader "Forma prevista" [ref=f3e271]
+                  - columnheader "Valor" [ref=f3e272]
+                  - columnheader "Saldo" [ref=f3e273]
+                  - columnheader "Situação" [ref=f3e274]
+                  - columnheader "Ações" [ref=f3e275]
+              - rowgroup [ref=f3e276]:
+                - row [ref=f3e377]:
+                  - cell "Orçamento nº 5 — Entrada" [ref=f3e278]
+                  - cell "01/10/2026" [ref=f3e279]
+                  - cell "Pix" [ref=f3e280]
+                  - cell "R$ 1.000,00" [ref=f3e281]
+                  - cell "R$ 0,00" [ref=f3e378]
+                  - cell "Quitado" [ref=f3e379]
+                  - cell [ref=f3e380]
+                - row [ref=f3e474]:
+                  - cell "Orçamento nº 5 — Parcela 1/3" [ref=f3e289]
+                  - cell "30/10/2026" [ref=f3e290]
+                  - cell "Cartão de crédito" [ref=f3e291]
+                  - cell "R$ 1.532,67" [ref=f3e292]
+                  - cell "R$ 0,00" [ref=f3e475]
+                  - cell "Quitado" [ref=f3e476]
+                  - cell [ref=f3e477]
+                - row [ref=f3e299]:
+                  - cell "Orçamento nº 5 — Parcela 2/3" [ref=f3e300]
+                  - cell "30/11/2026" [ref=f3e301]
+                  - cell "Cartão de crédito" [ref=f3e302]
+                  - cell "R$ 1.532,67" [ref=f3e303]
+                  - cell "R$ 1.532,67" [ref=f3e304]
+                  - cell "Em aberto" [ref=f3e305]
+                  - cell [ref=f3e308]:
+                    - button "Receber" [ref=f3e309] [cursor=pointer]
+                - row [ref=f3e310]:
+                  - cell "Orçamento nº 5 — Parcela 3/3" [ref=f3e311]
+                  - cell "30/12/2026" [ref=f3e312]
+                  - cell "Cartão de crédito" [ref=f3e313]
+                  - cell "R$ 1.532,66" [ref=f3e314]
+                  - cell "R$ 1.532,66" [ref=f3e315]
+                  - cell "Em aberto" [ref=f3e316]
+                  - cell [ref=f3e319]:
+                    - button "Receber" [ref=f3e320] [cursor=pointer]
+          - generic [ref=f3e321]:
+            - generic [ref=f3e323]:
+              - heading "Recebimentos registrados" [level=2] [ref=f3e324]
+              - paragraph [ref=f3e325]: Estorno cria movimento reverso; o registro original é mantido.
+            - table [ref=f3e382]:
+              - rowgroup [ref=f3e383]:
+                - row [ref=f3e384]:
+                  - columnheader "Data" [ref=f3e385]
+                  - columnheader "Título" [ref=f3e386]
+                  - columnheader "Forma / conta" [ref=f3e387]
+                  - columnheader "Recebido" [ref=f3e388]
+                  - columnheader "Desconto" [ref=f3e389]
+                  - columnheader "Situação" [ref=f3e390]
+                  - columnheader "Ações" [ref=f3e391]
+              - rowgroup [ref=f3e392]:
+                - row [ref=f3e393]:
+                  - cell "01/10/2026" [ref=f3e394]
+                  - cell "Orçamento nº 5 — Entrada" [ref=f3e395]
+                  - cell "Pix Banco Demo — conta corrente" [ref=f3e396]:
+                    - text: Pix
+                    - generic [ref=f3e397]: Banco Demo — conta corrente
+                  - cell "R$ 1.000,00" [ref=f3e398]
+                  - cell "—" [ref=f3e399]
+                  - cell "Efetivo" [ref=f3e400]
+                  - cell [ref=f3e403]:
+                    - generic [ref=f3e404]:
+                      - button "Recibo" [ref=f3e405] [cursor=pointer]
+                      - button "Estornar" [ref=f3e406] [cursor=pointer]
+                - row [ref=f3e478]:
+                  - cell "01/10/2026" [ref=f3e479]
+                  - cell "Orçamento nº 5 — Parcela 1/3" [ref=f3e480]
+                  - cell "Cartão de crédito Recebíveis de cartão — Operadora Demo" [ref=f3e481]:
+                    - text: Cartão de crédito
+                    - generic [ref=f3e482]: Recebíveis de cartão — Operadora Demo
+                  - cell "R$ 1.532,67" [ref=f3e483]
+                  - cell "—" [ref=f3e484]
+                  - cell "Efetivo" [ref=f3e485]
+                  - cell [ref=f3e488]:
+                    - generic [ref=f3e489]:
+                      - button "Recibo" [ref=f3e490] [cursor=pointer]
+                      - button "Estornar" [ref=f3e491] [cursor=pointer]
+          - paragraph [ref=f3e328]:
+            - text: Para conciliar com o extrato bancário, use
+            - link "Financeiro › Conciliação" [ref=f3e329] [cursor=pointer]:
+              - /url: /financeiro/conciliacao
+            - text: .
+  - status [ref=f3e492]: Concluído.Pagamento em cartão registrado; recebíveis da operadora criados

@@ -1,0 +1,284 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]
+  - alert [ref=e11]: Orçamento · Gestão Odonto
+  - generic [ref=e12]:
+    - link "Pular para o conteúdo" [ref=e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=e14]:
+      - generic [ref=e15]:
+        - paragraph [ref=e16]: Gestão Odonto
+        - paragraph [ref=e17]: Clínica Demonstração
+      - navigation "Seções" [ref=e18]:
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - link "Visão geral" [ref=e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=e22]:
+            - link "Agenda" [ref=e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=e24]:
+            - link "Pacientes" [ref=e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=e27]:
+            - link "Orçamentos e tratamentos" [ref=e28] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=e29]:
+            - link "Financeiro" [ref=e30] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=e31]:
+            - link "Relatórios" [ref=e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=e33]:
+            - link "Cadastros" [ref=e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=e35]:
+            - link "Configurações" [ref=e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Administrador Demo
+        - paragraph [ref=e39]: Administrador / proprietário
+        - generic [ref=e40]:
+          - link "Minha conta" [ref=e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=e42] [cursor=pointer]
+    - generic [ref=e43]:
+      - banner [ref=e44]:
+        - search [ref=e46]:
+          - generic [ref=e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=e49]
+        - generic [ref=e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=e51]:
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - link "← Ficha do paciente" [ref=e242] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=orcamentos
+            - heading "Orçamento nº 5" [level=1] [ref=e243]
+            - paragraph [ref=e244]: Paciente Jornada Sintética · 01/10/2026 · válido até 31/10/2026
+          - generic [ref=e246]:
+            - link "PDF" [ref=e247] [cursor=pointer]:
+              - /url: /api/orcamentos/d3b8a86f-4f98-4dbe-8ef1-4ae4e10f356f/pdf
+            - button "Recusar" [ref=e248] [cursor=pointer]
+            - button "Cancelar" [ref=e249] [cursor=pointer]
+        - generic [ref=e250]:
+          - generic [ref=e251]: Rascunho
+          - generic [ref=e253]: Versão 1
+          - generic [ref=e255]: Tabela Particular · Responsável Dr. Rafael Demo
+        - generic [ref=e256]:
+          - generic [ref=e257]:
+            - generic [ref=e259]:
+              - heading "Incluir procedimento" [level=2] [ref=e260]
+              - paragraph [ref=e261]: "Tabela: Particular. O valor do item é editável e não altera a tabela."
+            - generic [ref=e263]:
+              - generic [ref=e264]:
+                - generic [ref=e265]:
+                  - generic [ref=e266] [cursor=pointer]: Especialidade
+                  - combobox "Especialidade" [ref=e267] [cursor=pointer]:
+                    - option "Selecione"
+                    - option "Prótese"
+                    - option "Dentística" [selected]
+                    - option "Implantodontia"
+                    - option "Endodontia"
+                    - option "Periodontia"
+                    - option "Ortodontia"
+                    - option "Radiologia"
+                    - option "Clínica geral"
+                - generic [ref=e268]:
+                  - generic [ref=e269] [cursor=pointer]: Procedimento
+                  - combobox "Procedimento" [ref=e270] [cursor=pointer]:
+                    - option "Selecione"
+                    - option "DEN-03 — Clareamento de consultório" [selected]
+                    - option "DEN-04 — Faceta em resina"
+                    - option "DEN-01 — Restauração em resina (1 face)"
+                    - option "DEN-02 — Restauração em resina (2+ faces)"
+              - generic [ref=e503]:
+                - strong [ref=e504]: Procedimento global.
+                - text: Preço único para a região informada; não multiplica por dentes.
+              - radiogroup "Tipo de localização" [ref=e692]:
+                - radio "Arcada(s)" [checked] [ref=e693] [cursor=pointer]
+                - radio "Sem região" [ref=e694] [cursor=pointer]
+              - group "Arcadas" [ref=e695]:
+                - generic [ref=e697] [cursor=pointer]:
+                  - checkbox "Superior" [ref=e698]
+                  - text: Superior
+                - generic [ref=e699] [cursor=pointer]:
+                  - checkbox "Inferior" [ref=e700]
+                  - text: Inferior
+              - generic [ref=e589]:
+                - generic [ref=e701]:
+                  - generic [ref=e702] [cursor=pointer]: Quantidade
+                  - spinbutton "Quantidade" [ref=e703]: "1"
+                - generic [ref=e590]:
+                  - generic [ref=e591] [cursor=pointer]: Preço unitário
+                  - generic [ref=e592]:
+                    - generic [aria-hidden]: R$
+                    - textbox "Preço unitário" [ref=e593]: 1.200,00
+                  - paragraph [ref=e594]: "Tabela: R$ 1.200,00"
+                - generic [ref=e595]:
+                  - generic [ref=e596] [cursor=pointer]: Observação do item
+                  - textbox "Observação do item" [ref=e597]
+              - generic [ref=e598]:
+                - paragraph [ref=e599]: Selecione ao menos uma região ou escolha sem região
+                - button "Incluir no orçamento" [disabled]
+          - generic [ref=e271]:
+            - generic [ref=e273]:
+              - heading "Itens do orçamento" [level=2] [ref=e274]
+              - paragraph [ref=e275]: Valor de referência = tabela no momento da inclusão. Valor aplicado = negociado para este item.
+            - region "Itens do orçamento" [ref=e393]:
+              - table [ref=e394]:
+                - rowgroup [ref=e395]:
+                  - row [ref=e396]:
+                    - columnheader "Procedimento" [ref=e397]
+                    - columnheader "Região" [ref=e398]
+                    - columnheader "Qtd" [ref=e399]
+                    - columnheader "Referência" [ref=e400]
+                    - columnheader "Valor aplicado" [ref=e401]
+                    - columnheader "Subtotal" [ref=e402]
+                    - columnheader "Ações" [ref=e403]
+                - rowgroup [ref=e404]:
+                  - row [ref=e405]:
+                    - cell "Prótese" [ref=e406]
+                  - row [ref=e407]:
+                    - cell "Coroa em zircônia PRT-02" [ref=e408]:
+                      - text: Coroa em zircônia
+                      - generic [ref=e409]: PRT-02
+                    - cell "Dente 11" [ref=e410]
+                    - cell "1" [ref=e411]
+                    - cell "R$ 2.500,00" [ref=e412]
+                    - cell "R$ 2.400,00" [ref=e413]
+                    - cell "R$ 2.400,00" [ref=e414]
+                    - cell [ref=e415]:
+                      - generic [ref=e416]:
+                        - button "Editar valor" [ref=e417] [cursor=pointer]
+                        - button "Remover" [ref=e418] [cursor=pointer]
+                  - row [ref=e419]:
+                    - cell "Coroa em zircônia PRT-02" [ref=e420]:
+                      - text: Coroa em zircônia
+                      - generic [ref=e421]: PRT-02
+                    - cell "Dente 21" [ref=e422]
+                    - cell "1" [ref=e423]
+                    - cell "R$ 2.500,00" [ref=e424]
+                    - cell "R$ 2.400,00" [ref=e425]
+                    - cell "R$ 2.400,00" [ref=e426]
+                    - cell [ref=e427]:
+                      - generic [ref=e428]:
+                        - button "Editar valor" [ref=e429] [cursor=pointer]
+                        - button "Remover" [ref=e430] [cursor=pointer]
+                  - row [ref=e604]:
+                    - cell "Dentística" [ref=e605]
+                  - row [ref=e606]:
+                    - cell "Restauração em resina (1 face) DEN-01" [ref=e607]:
+                      - text: Restauração em resina (1 face)
+                      - generic [ref=e608]: DEN-01
+                    - cell "Dente 11" [ref=e609]
+                    - cell "1" [ref=e610]
+                    - cell "R$ 220,00" [ref=e611]
+                    - cell "R$ 220,00" [ref=e612]
+                    - cell "R$ 220,00" [ref=e613]
+                    - cell [ref=e614]:
+                      - generic [ref=e615]:
+                        - button "Editar valor" [ref=e616] [cursor=pointer]
+                        - button "Remover" [ref=e617] [cursor=pointer]
+                - rowgroup [ref=e431]:
+                  - row [ref=e618]:
+                    - cell "Subtotal (exceto recusados)" [ref=e433]
+                    - cell "R$ 5.020,00" [ref=e619]
+                    - cell [ref=e435]
+          - generic [ref=e620]:
+            - generic [ref=e622]:
+              - heading "Negociação e plano de pagamento" [level=2] [ref=e623]
+              - paragraph [ref=e624]: Simular não cria dívida nem receita. Aprovar cria tratamento e títulos uma única vez.
+            - generic [ref=e625]:
+              - group "Itens aceitos pelo paciente" [ref=e626]:
+                - list [ref=e628]:
+                  - listitem [ref=e629]:
+                    - generic [ref=e630] [cursor=pointer]:
+                      - checkbox "Coroa em zircônia · Dente 11 R$ 2.400,00" [checked] [ref=e631]
+                      - generic [ref=e632]: Coroa em zircônia · Dente 11
+                      - generic [ref=e633]: R$ 2.400,00
+                  - listitem [ref=e634]:
+                    - generic [ref=e635] [cursor=pointer]:
+                      - checkbox "Coroa em zircônia · Dente 21 R$ 2.400,00" [checked] [ref=e636]
+                      - generic [ref=e637]: Coroa em zircônia · Dente 21
+                      - generic [ref=e638]: R$ 2.400,00
+                  - listitem [ref=e639]:
+                    - generic [ref=e640] [cursor=pointer]:
+                      - checkbox "Restauração em resina (1 face) · Dente 11 R$ 220,00" [checked] [ref=e641]
+                      - generic [ref=e642]: Restauração em resina (1 face) · Dente 11
+                      - generic [ref=e643]: R$ 220,00
+                - paragraph [ref=e644]: Itens desmarcados ficam como recusados; aprovação parcial gera tratamento e títulos só do aceito.
+              - generic [ref=e645]:
+                - generic [ref=e646]:
+                  - generic [ref=e647] [cursor=pointer]: Desconto global
+                  - combobox "Desconto global" [ref=e648] [cursor=pointer]:
+                    - option "Sem desconto" [selected]
+                    - option "Em reais"
+                    - option "Percentual"
+                - generic [ref=e650]:
+                  - generic [ref=e651]:
+                    - term [ref=e652]: Subtotal
+                    - definition [ref=e653]: R$ 5.020,00
+                  - generic [ref=e654]:
+                    - term [ref=e655]: Desconto
+                    - definition [ref=e656]: R$ 0,00
+                  - generic [ref=e657]:
+                    - term [ref=e658]: Total
+                    - definition [ref=e659]: R$ 5.020,00
+              - group "Plano de pagamento" [ref=e660]:
+                - generic [ref=e662]:
+                  - generic [ref=e663]:
+                    - generic [ref=e664] [cursor=pointer]: Entrada
+                    - generic [ref=e665]:
+                      - generic [aria-hidden]: R$
+                      - textbox "Entrada" [ref=e666]: 0,00
+                  - generic [ref=e667]:
+                    - generic [ref=e668] [cursor=pointer]: Data da entrada
+                    - textbox "Data da entrada" [ref=e669]: 2026-10-01
+                  - generic [ref=e670]:
+                    - generic [ref=e671] [cursor=pointer]: Forma da entrada
+                    - combobox "Forma da entrada" [ref=e672] [cursor=pointer]:
+                      - option "Pix" [selected]
+                      - option "Dinheiro"
+                      - option "Cartão de débito"
+                      - option "Cartão de crédito"
+                      - option "Boleto"
+                      - option "Transferência"
+                      - option "Outra"
+                  - generic [ref=e673]:
+                    - generic [ref=e674] [cursor=pointer]: Quantidade de parcelas
+                    - spinbutton "Quantidade de parcelas" [ref=e675]: "1"
+                  - generic [ref=e676]:
+                    - generic [ref=e677] [cursor=pointer]: Primeiro vencimento
+                    - textbox "Primeiro vencimento" [ref=e678]: 2026-10-31
+                    - paragraph [ref=e679]: "Meses seguintes preservam o dia (ex.: 30 → 28/02 → 30/03)"
+                  - generic [ref=e680]:
+                    - generic [ref=e681] [cursor=pointer]: Forma padrão das parcelas
+                    - combobox "Forma padrão das parcelas" [ref=e682] [cursor=pointer]:
+                      - option "Pix"
+                      - option "Dinheiro"
+                      - option "Cartão de débito"
+                      - option "Cartão de crédito"
+                      - option "Boleto" [selected]
+                      - option "Transferência"
+                      - option "Outra"
+                - generic [ref=e683]:
+                  - button "Gerar parcelas" [ref=e684] [cursor=pointer]
+                  - generic [ref=e685]: Centavos restantes vão para as primeiras parcelas. Cada linha pode ser editada.
+                - paragraph [ref=e686]:
+                  - text: "Entrada + parcelas:"
+                  - strong [ref=e687]: R$ 0,00
+                  - text: de
+                  - strong [ref=e688]: R$ 5.020,00
+                  - text: — faltam R$ 5.020,00.
+              - generic [ref=e689]:
+                - button "Salvar simulação" [ref=e690] [cursor=pointer]
+                - button "Aprovar orçamento" [disabled]
+          - generic [ref=e279]:
+            - generic [ref=e281]:
+              - heading "Histórico de versões" [level=2] [ref=e282]
+              - paragraph [ref=e283]: Versões aprovadas são preservadas com autor, data e motivo.
+            - list [ref=e284]:
+              - listitem [ref=e285]:
+                - generic [ref=e286]:
+                  - strong [ref=e287]: Versão 1
+                  - text: · Administrador Demo · 01/10/2026 13:44
+                - generic [ref=e288]: Em edição

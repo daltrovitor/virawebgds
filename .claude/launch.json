@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "odonto", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "odonto", "run", "dev"], "port": 3100 }
+  ]
+}

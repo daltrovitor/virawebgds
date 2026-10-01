@@ -1,0 +1,105 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]
+  - alert [ref=e11]: Orçamento · Gestão Odonto
+  - generic [ref=e12]:
+    - link "Pular para o conteúdo" [ref=e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=e14]:
+      - generic [ref=e15]:
+        - paragraph [ref=e16]: Gestão Odonto
+        - paragraph [ref=e17]: Clínica Demonstração
+      - navigation "Seções" [ref=e18]:
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - link "Visão geral" [ref=e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=e22]:
+            - link "Agenda" [ref=e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=e24]:
+            - link "Pacientes" [ref=e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=e27]:
+            - link "Orçamentos e tratamentos" [ref=e28] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=e29]:
+            - link "Financeiro" [ref=e30] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=e31]:
+            - link "Relatórios" [ref=e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=e33]:
+            - link "Cadastros" [ref=e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=e35]:
+            - link "Configurações" [ref=e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Administrador Demo
+        - paragraph [ref=e39]: Administrador / proprietário
+        - generic [ref=e40]:
+          - link "Minha conta" [ref=e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=e42] [cursor=pointer]
+    - generic [ref=e43]:
+      - banner [ref=e44]:
+        - search [ref=e46]:
+          - generic [ref=e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=e49]
+        - generic [ref=e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=e51]:
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - link "← Ficha do paciente" [ref=e242] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=orcamentos
+            - heading "Orçamento nº 5" [level=1] [ref=e243]
+            - paragraph [ref=e244]: Paciente Jornada Sintética · 01/10/2026 · válido até 31/10/2026
+          - generic [ref=e246]:
+            - link "PDF" [ref=e247] [cursor=pointer]:
+              - /url: /api/orcamentos/d3b8a86f-4f98-4dbe-8ef1-4ae4e10f356f/pdf
+            - button "Recusar" [ref=e248] [cursor=pointer]
+            - button "Cancelar" [ref=e249] [cursor=pointer]
+        - generic [ref=e250]:
+          - generic [ref=e251]: Rascunho
+          - generic [ref=e253]: Versão 1
+          - generic [ref=e255]: Tabela Particular · Responsável Dr. Rafael Demo
+        - generic [ref=e256]:
+          - generic [ref=e257]:
+            - generic [ref=e259]:
+              - heading "Incluir procedimento" [level=2] [ref=e260]
+              - paragraph [ref=e261]: "Tabela: Particular. O valor do item é editável e não altera a tabela."
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - generic [ref=e266] [cursor=pointer]: Especialidade
+                - combobox "Especialidade" [ref=e267] [cursor=pointer]:
+                  - option "Selecione" [selected]
+                  - option "Prótese"
+                  - option "Dentística"
+                  - option "Implantodontia"
+                  - option "Endodontia"
+                  - option "Periodontia"
+                  - option "Ortodontia"
+                  - option "Radiologia"
+                  - option "Clínica geral"
+              - generic [ref=e268]:
+                - generic [ref=e269] [cursor=pointer]: Procedimento
+                - combobox "Procedimento" [disabled] [ref=e270] [cursor=pointer]:
+                  - option "Escolha a especialidade" [selected]
+          - generic [ref=e271]:
+            - generic [ref=e273]:
+              - heading "Itens do orçamento" [level=2] [ref=e274]
+              - paragraph [ref=e275]: Valor de referência = tabela no momento da inclusão. Valor aplicado = negociado para este item.
+            - generic [ref=e276]:
+              - paragraph [ref=e277]: Nenhum item
+              - paragraph [ref=e278]: Inclua procedimentos de qualquer especialidade; o mesmo dente admite vários procedimentos.
+          - generic [ref=e279]:
+            - generic [ref=e281]:
+              - heading "Histórico de versões" [level=2] [ref=e282]
+              - paragraph [ref=e283]: Versões aprovadas são preservadas com autor, data e motivo.
+            - list [ref=e284]:
+              - listitem [ref=e285]:
+                - generic [ref=e286]:
+                  - strong [ref=e287]: Versão 1
+                  - text: · Administrador Demo · 01/10/2026 13:44
+                - generic [ref=e288]: Em edição
+  - status [ref=e290]: Concluído.Orçamento nº 5 criado

@@ -1,0 +1,168 @@
+- generic [active] [ref=f6e1]:
+  - generic [ref=f6e2]:
+    - link "Pular para o conteúdo" [ref=f6e3] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=f6e4]:
+      - generic [ref=f6e5]:
+        - paragraph [ref=f6e6]: Gestão Odonto
+        - paragraph [ref=f6e7]: Clínica Demonstração
+      - navigation "Seções" [ref=f6e8]:
+        - list [ref=f6e9]:
+          - listitem [ref=f6e10]:
+            - link "Visão geral" [ref=f6e11] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=f6e12]:
+            - link "Agenda" [ref=f6e13] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=f6e14]:
+            - link "Pacientes" [ref=f6e15] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=f6e16]:
+            - link "Orçamentos e tratamentos" [ref=f6e17] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=f6e18]:
+            - link "Financeiro" [ref=f6e19] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=f6e21]:
+            - link "Relatórios" [ref=f6e22] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=f6e23]:
+            - link "Cadastros" [ref=f6e24] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=f6e25]:
+            - link "Configurações" [ref=f6e26] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=f6e27]:
+        - paragraph [ref=f6e28]: Administrador Demo
+        - paragraph [ref=f6e29]: Administrador / proprietário
+        - generic [ref=f6e30]:
+          - link "Minha conta" [ref=f6e31] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=f6e32] [cursor=pointer]
+    - generic [ref=f6e33]:
+      - banner [ref=f6e34]:
+        - search [ref=f6e36]:
+          - generic [ref=f6e37] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=f6e39]
+        - generic [ref=f6e40]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=f6e41]:
+        - generic [ref=f6e43]:
+          - heading "Conciliação bancária" [level=1] [ref=f6e44]
+          - paragraph [ref=f6e45]: O extrato importado não vira receita sozinho. Cada vínculo é confirmado por você; sugestões mostram o motivo. Conciliar não significa quitar tudo.
+        - navigation "Seções do financeiro" [ref=f6e46]:
+          - list [ref=f6e47]:
+            - listitem [ref=f6e48]:
+              - link "Painel" [ref=f6e49] [cursor=pointer]:
+                - /url: /financeiro
+            - listitem [ref=f6e50]:
+              - link "A receber" [ref=f6e51] [cursor=pointer]:
+                - /url: /financeiro/receber
+            - listitem [ref=f6e52]:
+              - link "A pagar" [ref=f6e53] [cursor=pointer]:
+                - /url: /financeiro/pagar
+            - listitem [ref=f6e54]:
+              - link "Contas e movimentos" [ref=f6e55] [cursor=pointer]:
+                - /url: /financeiro/contas
+            - listitem [ref=f6e56]:
+              - link "Cartões" [ref=f6e57] [cursor=pointer]:
+                - /url: /financeiro/cartoes
+            - listitem [ref=f6e58]:
+              - link "Fluxo de caixa" [ref=f6e59] [cursor=pointer]:
+                - /url: /financeiro/fluxo-de-caixa
+            - listitem [ref=f6e60]:
+              - link "Conciliação" [ref=f6e61] [cursor=pointer]:
+                - /url: /financeiro/conciliacao
+        - generic [ref=f6e62]:
+          - generic [ref=f6e63]:
+            - heading "Conta e período" [level=2] [ref=f6e66]
+            - generic [ref=f6e67]:
+              - generic [ref=f6e68]:
+                - generic [ref=f6e69]:
+                  - generic [ref=f6e70] [cursor=pointer]: Conta
+                  - combobox "Conta" [ref=f6e71] [cursor=pointer]:
+                    - option "Banco Demo — conta corrente" [selected]
+                    - option "Caixa da recepção"
+                - generic [ref=f6e72]:
+                  - generic [ref=f6e73] [cursor=pointer]: De
+                  - textbox "De" [ref=f6e74]: 2026-08-02
+                - generic [ref=f6e75]:
+                  - generic [ref=f6e76] [cursor=pointer]: Até
+                  - textbox "Até" [ref=f6e77]: 2026-10-01
+                - generic [ref=f6e78]:
+                  - generic [ref=f6e79] [cursor=pointer]: Extrato
+                  - combobox "Extrato" [ref=f6e80] [cursor=pointer]:
+                    - option "Pendentes"
+                    - option "Conciliados"
+                    - option "Ignorados"
+                    - option "Todos" [selected]
+                - button "Aplicar" [ref=f6e81] [cursor=pointer]
+              - generic [ref=f6e82]:
+                - generic [ref=f6e83]:
+                  - paragraph [ref=f6e84]: Saldo bancário conhecido
+                  - paragraph [ref=f6e85]: R$ 16.985,00 em 01/10/2026
+                - generic [ref=f6e86]:
+                  - paragraph [ref=f6e87]: Saldo interno na mesma data
+                  - paragraph [ref=f6e88]: R$ 16.985,00
+                - generic [ref=f6e89]:
+                  - paragraph [ref=f6e90]: Divergência
+                  - paragraph [ref=f6e91]: Sem divergência
+          - generic [ref=f6e92]:
+            - generic [ref=f6e94]:
+              - heading "Importar extrato OFX" [level=2] [ref=f6e95]
+              - paragraph [ref=f6e96]: Prévia antes de confirmar. Reimportar não duplica.
+            - generic [ref=f6e97]:
+              - generic [ref=f6e98]:
+                - generic [ref=f6e99] [cursor=pointer]: Arquivo OFX da conta selecionada
+                - button "Arquivo OFX da conta selecionada" [ref=f6e100]
+                - button "Ler e pré-visualizar" [ref=f6e101] [cursor=pointer]
+              - list [ref=f6e102]:
+                - listitem [ref=f6e103]:
+                  - link "extrato-jornada.ofx" [ref=f6e104] [cursor=pointer]:
+                    - /url: /financeiro/conciliacao/importacao/ed690aa7-2a19-4a4c-aafa-ca252d214dcc
+                  - generic [ref=f6e105]: Importado
+                  - text: 2 nova(s), 0 ignorada(s)
+        - generic [ref=f6e107]:
+          - generic [ref=f6e108]:
+            - paragraph [ref=f6e109]:
+              - text: "Extrato selecionado:"
+              - strong [ref=f6e110]: R$ 0,00
+              - text: "· Alocado:"
+              - strong [ref=f6e111]: R$ 0,00
+            - generic [ref=f6e112]:
+              - button "Conciliar selecionados" [disabled]
+          - generic [ref=f6e113]:
+            - generic [ref=f6e114]:
+              - generic [ref=f6e116]:
+                - heading "Movimentações do banco" [level=2] [ref=f6e117]
+                - paragraph [ref=f6e118]: Selecione uma ou mais (mesmo sentido) para vincular.
+              - list [ref=f6e119]:
+                - listitem [ref=f6e120]:
+                  - generic [ref=f6e122]:
+                    - generic [ref=f6e123]:
+                      - generic [ref=f6e124]: 01/10/2026
+                      - generic [ref=f6e125]: R$ 1.000,00
+                    - paragraph [ref=f6e126]: PIX RECEBIDO PACIENTE JORNADA
+                    - generic [ref=f6e127]: Conciliado
+                    - button "Desfazer conciliação" [ref=f6e131] [cursor=pointer]
+                - listitem [ref=f6e132]:
+                  - generic [ref=f6e134]:
+                    - generic [ref=f6e135]:
+                      - generic [ref=f6e136]: 01/10/2026
+                      - generic [ref=f6e137]: "-R$ 15,00"
+                    - paragraph [ref=f6e138]: TARIFA PIX
+                    - generic [ref=f6e139]: Conciliado
+                    - button "Desfazer conciliação" [ref=f6e143] [cursor=pointer]
+            - generic [ref=f6e144]:
+              - generic [ref=f6e146]:
+                - heading "Lançamentos internos da conta" [level=2] [ref=f6e147]
+                - paragraph [ref=f6e148]: Baixas, transferências e repasses ainda não conciliados (±10 dias do período).
+              - list [ref=f6e149]:
+                - listitem [ref=f6e150]:
+                  - generic [ref=f6e151]:
+                    - checkbox "Vincular Orçamento nº 1 — Entrada" [disabled] [ref=f6e152] [cursor=pointer]
+                    - generic [ref=f6e153]:
+                      - generic [ref=f6e154]:
+                        - generic [ref=f6e155]: 01/10/2026
+                        - generic [ref=f6e156]: R$ 1.000,00
+                      - paragraph [ref=f6e157]: Orçamento nº 1 — Entrada
+  - button "Open Next.js Dev Tools" [ref=f6e163] [cursor=pointer]

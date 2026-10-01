@@ -1,0 +1,349 @@
+- generic [ref=f1e1]:
+  - button "Open Next.js Dev Tools" [ref=f1e105] [cursor=pointer]
+  - alert [ref=f1e109]
+  - generic [ref=f1e110]:
+    - link "Pular para o conteúdo" [ref=f1e111] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=f1e112]:
+      - generic [ref=f1e113]:
+        - paragraph [ref=f1e114]: Gestão Odonto
+        - paragraph [ref=f1e115]: Clínica Demonstração
+      - navigation "Seções" [ref=f1e116]:
+        - list [ref=f1e117]:
+          - listitem [ref=f1e118]:
+            - link "Visão geral" [ref=f1e119] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=f1e120]:
+            - link "Agenda" [ref=f1e121] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=f1e123]:
+            - link "Pacientes" [ref=f1e124] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=f1e125]:
+            - link "Orçamentos e tratamentos" [ref=f1e126] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=f1e127]:
+            - link "Financeiro" [ref=f1e128] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=f1e129]:
+            - link "Relatórios" [ref=f1e130] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=f1e131]:
+            - link "Cadastros" [ref=f1e132] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=f1e133]:
+            - link "Configurações" [ref=f1e134] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=f1e135]:
+        - paragraph [ref=f1e136]: Administrador Demo
+        - paragraph [ref=f1e137]: Administrador / proprietário
+        - generic [ref=f1e138]:
+          - link "Minha conta" [ref=f1e139] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=f1e140] [cursor=pointer]
+    - generic [ref=f1e141]:
+      - banner [ref=f1e142]:
+        - search [ref=f1e144]:
+          - generic [ref=f1e145] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=f1e147]
+        - generic [ref=f1e148]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=f1e149]:
+        - generic [ref=f1e150]:
+          - generic [ref=f1e151]:
+            - heading "Agenda" [level=1] [ref=f1e152]
+            - paragraph [ref=f1e153]: Consultas, bloqueios e encaixes. Conflitos são verificados no servidor ao salvar.
+          - generic [ref=f1e154]:
+            - link "Pendências" [ref=f1e155] [cursor=pointer]:
+              - /url: /agenda/pendencias
+            - link "Bloqueios" [ref=f1e156] [cursor=pointer]:
+              - /url: /agenda/bloqueios
+        - generic [ref=f1e157]:
+          - generic [ref=f1e158]:
+            - generic [ref=f1e159]:
+              - button "Hoje" [ref=f1e160] [cursor=pointer]
+              - generic [ref=f1e161]:
+                - button "Dia anterior" [ref=f1e162] [cursor=pointer]
+                - button "Próximo dia" [ref=f1e165] [cursor=pointer]
+              - generic [ref=f1e168] [cursor=pointer]: Ir para a data
+              - textbox "Ir para a data" [ref=f1e169]: 2026-10-02
+              - heading "Sexta-feira, 02/10/2026" [level=2] [ref=f1e170]
+            - generic [ref=f1e171]:
+              - group "Modo de visualização" [ref=f1e172]:
+                - button "dia" [pressed] [ref=f1e173] [cursor=pointer]
+                - button "semana" [ref=f1e174] [cursor=pointer]
+              - generic [ref=f1e175] [cursor=pointer]: Profissional
+              - combobox "Profissional" [ref=f1e176] [cursor=pointer]:
+                - option "Todos (lado a lado)" [selected]
+                - option "Dr. Rafael Demo"
+                - option "Dra. Paula Demo"
+              - button "Nova consulta" [ref=f1e177] [cursor=pointer]
+          - generic [ref=f1e180]:
+            - generic [ref=f1e183]:
+              - generic [ref=f1e184]: 08:00
+              - generic [ref=f1e185]: 09:00
+              - generic [ref=f1e186]: 10:00
+              - generic [ref=f1e187]: 11:00
+              - generic [ref=f1e188]: 12:00
+              - generic [ref=f1e189]: 13:00
+              - generic [ref=f1e190]: 14:00
+              - generic [ref=f1e191]: 15:00
+              - generic [ref=f1e192]: 16:00
+              - generic [ref=f1e193]: 17:00
+              - generic [ref=f1e194]: 18:00
+            - generic [ref=f1e195]: Dr. Rafael Demo
+            - generic [ref=f1e198]:
+              - generic [ref=f1e199]: Dra. Paula Demo
+              - button "João Demo Almeida, 15:00 a 16:00, Agendado, Dra. Paula Demo" [ref=f1e202] [cursor=pointer]:
+                - generic [ref=f1e203]: 15:00–16:00
+                - generic [ref=f1e204]: João Demo Almeida
+                - generic [ref=f1e205]: Agendado
+          - paragraph [ref=f1e207]: Grade de 15 minutos. Clique em um horário livre para agendar; arraste a consulta para mover ou a borda inferior para mudar a duração. Pelo teclado, abra a consulta e use “Editar”.
+          - dialog [ref=f1e208]:
+            - generic [ref=f1e209]:
+              - generic [ref=f1e210]:
+                - heading "Nova consulta" [level=2] [ref=f1e212]
+                - button "Fechar" [ref=f1e213] [cursor=pointer]
+              - generic [ref=f1e218]:
+                - generic [ref=f1e219]:
+                  - paragraph [ref=f1e220]: Paciente
+                  - generic [ref=f1e221]:
+                    - generic [ref=f1e222]:
+                      - generic [ref=f1e223]: Paciente Jornada Sintética
+                      - generic [ref=f1e224]: (62) 98765-4321
+                    - button "Trocar" [ref=f1e225] [cursor=pointer]
+                  - paragraph [ref=f1e226]:
+                    - link "Abrir WhatsApp (não envia nada sozinho)" [ref=f1e227] [cursor=pointer]:
+                      - /url: https://wa.me/5562987654321
+                    - link "Abrir ficha" [ref=f1e228] [cursor=pointer]:
+                      - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3
+                - generic [ref=f1e229]:
+                  - generic [ref=f1e230]:
+                    - generic [ref=f1e231] [cursor=pointer]: Profissional
+                    - combobox "Profissional" [ref=f1e232] [cursor=pointer]:
+                      - option "Dr. Rafael Demo" [selected]
+                      - option "Dra. Paula Demo"
+                  - generic [ref=f1e233]:
+                    - generic [ref=f1e234] [cursor=pointer]: Data
+                    - textbox "Data" [ref=f1e235]: 2026-10-02
+                  - generic [ref=f1e236]:
+                    - generic [ref=f1e237] [cursor=pointer]: Início
+                    - combobox "Início" [ref=f1e238] [cursor=pointer]:
+                      - option "00:00"
+                      - option "00:15"
+                      - option "00:30"
+                      - option "00:45"
+                      - option "01:00"
+                      - option "01:15"
+                      - option "01:30"
+                      - option "01:45"
+                      - option "02:00"
+                      - option "02:15"
+                      - option "02:30"
+                      - option "02:45"
+                      - option "03:00"
+                      - option "03:15"
+                      - option "03:30"
+                      - option "03:45"
+                      - option "04:00"
+                      - option "04:15"
+                      - option "04:30"
+                      - option "04:45"
+                      - option "05:00"
+                      - option "05:15"
+                      - option "05:30"
+                      - option "05:45"
+                      - option "06:00"
+                      - option "06:15"
+                      - option "06:30"
+                      - option "06:45"
+                      - option "07:00"
+                      - option "07:15"
+                      - option "07:30"
+                      - option "07:45"
+                      - option "08:00"
+                      - option "08:15"
+                      - option "08:30"
+                      - option "08:45"
+                      - option "09:00"
+                      - option "09:15" [selected]
+                      - option "09:30"
+                      - option "09:45"
+                      - option "10:00"
+                      - option "10:15"
+                      - option "10:30"
+                      - option "10:45"
+                      - option "11:00"
+                      - option "11:15"
+                      - option "11:30"
+                      - option "11:45"
+                      - option "12:00"
+                      - option "12:15"
+                      - option "12:30"
+                      - option "12:45"
+                      - option "13:00"
+                      - option "13:15"
+                      - option "13:30"
+                      - option "13:45"
+                      - option "14:00"
+                      - option "14:15"
+                      - option "14:30"
+                      - option "14:45"
+                      - option "15:00"
+                      - option "15:15"
+                      - option "15:30"
+                      - option "15:45"
+                      - option "16:00"
+                      - option "16:15"
+                      - option "16:30"
+                      - option "16:45"
+                      - option "17:00"
+                      - option "17:15"
+                      - option "17:30"
+                      - option "17:45"
+                      - option "18:00"
+                      - option "18:15"
+                      - option "18:30"
+                      - option "18:45"
+                      - option "19:00"
+                      - option "19:15"
+                      - option "19:30"
+                      - option "19:45"
+                      - option "20:00"
+                      - option "20:15"
+                      - option "20:30"
+                      - option "20:45"
+                      - option "21:00"
+                      - option "21:15"
+                      - option "21:30"
+                      - option "21:45"
+                      - option "22:00"
+                      - option "22:15"
+                      - option "22:30"
+                      - option "22:45"
+                      - option "23:00"
+                      - option "23:15"
+                      - option "23:30"
+                      - option "23:45"
+                  - generic [ref=f1e239]:
+                    - generic [ref=f1e240] [cursor=pointer]: Fim
+                    - combobox "Fim" [ref=f1e241] [cursor=pointer]:
+                      - option "09:30 (15 min)"
+                      - option "09:45 (30 min)"
+                      - option "10:00 (45 min)" [selected]
+                      - option "10:15 (1 h)"
+                      - option "10:30 (1 h 15 min)"
+                      - option "10:45 (1 h 30 min)"
+                      - option "11:00 (1 h 45 min)"
+                      - option "11:15 (2 h)"
+                      - option "11:30 (2 h 15 min)"
+                      - option "11:45 (2 h 30 min)"
+                      - option "12:00 (2 h 45 min)"
+                      - option "12:15 (3 h)"
+                      - option "12:30 (3 h 15 min)"
+                      - option "12:45 (3 h 30 min)"
+                      - option "13:00 (3 h 45 min)"
+                      - option "13:15 (4 h)"
+                      - option "13:30 (4 h 15 min)"
+                      - option "13:45 (4 h 30 min)"
+                      - option "14:00 (4 h 45 min)"
+                      - option "14:15 (5 h)"
+                      - option "14:30 (5 h 15 min)"
+                      - option "14:45 (5 h 30 min)"
+                      - option "15:00 (5 h 45 min)"
+                      - option "15:15 (6 h)"
+                      - option "15:30 (6 h 15 min)"
+                      - option "15:45 (6 h 30 min)"
+                      - option "16:00 (6 h 45 min)"
+                      - option "16:15 (7 h)"
+                      - option "16:30 (7 h 15 min)"
+                      - option "16:45 (7 h 30 min)"
+                      - option "17:00 (7 h 45 min)"
+                      - option "17:15 (8 h)"
+                      - option "17:30 (8 h 15 min)"
+                      - option "17:45 (8 h 30 min)"
+                      - option "18:00 (8 h 45 min)"
+                      - option "18:15 (9 h)"
+                      - option "18:30 (9 h 15 min)"
+                      - option "18:45 (9 h 30 min)"
+                      - option "19:00 (9 h 45 min)"
+                      - option "19:15 (10 h)"
+                      - option "19:30 (10 h 15 min)"
+                      - option "19:45 (10 h 30 min)"
+                      - option "20:00 (10 h 45 min)"
+                      - option "20:15 (11 h)"
+                      - option "20:30 (11 h 15 min)"
+                      - option "20:45 (11 h 30 min)"
+                      - option "21:00 (11 h 45 min)"
+                      - option "21:15 (12 h)"
+                      - option "21:30 (12 h 15 min)"
+                      - option "21:45 (12 h 30 min)"
+                      - option "22:00 (12 h 45 min)"
+                      - option "22:15 (13 h)"
+                      - option "22:30 (13 h 15 min)"
+                      - option "22:45 (13 h 30 min)"
+                      - option "23:00 (13 h 45 min)"
+                      - option "23:15 (14 h)"
+                      - option "23:30 (14 h 15 min)"
+                      - option "23:45 (14 h 30 min)"
+                      - option "24:00 (14 h 45 min)"
+                - generic [ref=f1e242]:
+                  - generic [ref=f1e243] [cursor=pointer]:
+                    - checkbox "Primeira consulta" [ref=f1e244]
+                    - generic [ref=f1e245]: Primeira consulta
+                  - generic [ref=f1e246]:
+                    - generic [ref=f1e247] [cursor=pointer]: Situação inicial
+                    - combobox "Situação inicial" [ref=f1e248] [cursor=pointer]:
+                      - option "Agendado" [selected]
+                      - option "Confirmado"
+                    - paragraph [ref=f1e249]: Confirmado só com confirmação explícita do paciente
+                  - generic [ref=f1e250]:
+                    - generic [ref=f1e251] [cursor=pointer]: Lembrete
+                    - combobox "Lembrete" [ref=f1e252] [cursor=pointer]:
+                      - option "Sem lembrete" [selected]
+                      - option "WhatsApp"
+                      - option "SMS"
+                      - option "E-mail"
+                    - paragraph [ref=f1e253]: Envio automático só com integração configurada
+                - group "Procedimentos programados" [ref=f1e254]:
+                  - group "Filtrar procedimentos" [ref=f1e256]:
+                    - button "Pendentes" [pressed] [ref=f1e257] [cursor=pointer]
+                    - button "Não realizado" [ref=f1e258] [cursor=pointer]
+                    - button "Em andamento" [ref=f1e259] [cursor=pointer]
+                    - button "Concluído" [ref=f1e260] [cursor=pointer]
+                    - button "Todos" [ref=f1e261] [cursor=pointer]
+                  - list [ref=f1e277]:
+                    - listitem [ref=f1e278]:
+                      - generic [ref=f1e279] [cursor=pointer]:
+                        - checkbox "Coroa em zircônia · Dente 11 orç. 5 · Não realizado" [checked] [active] [ref=f1e280]
+                        - generic [ref=f1e281]: Coroa em zircônia · Dente 11
+                        - generic [ref=f1e282]: orç. 5 · Não realizado
+                    - listitem [ref=f1e283]:
+                      - generic [ref=f1e284] [cursor=pointer]:
+                        - checkbox "Coroa em zircônia · Dente 21 orç. 5 · Não realizado" [ref=f1e285]
+                        - generic [ref=f1e286]: Coroa em zircônia · Dente 21
+                        - generic [ref=f1e287]: orç. 5 · Não realizado
+                    - listitem [ref=f1e288]:
+                      - generic [ref=f1e289] [cursor=pointer]:
+                        - checkbox "Restauração em resina (1 face) · Dente 11 orç. 5 · Não realizado" [ref=f1e290]
+                        - generic [ref=f1e291]: Restauração em resina (1 face) · Dente 11
+                        - generic [ref=f1e292]: orç. 5 · Não realizado
+                    - listitem [ref=f1e293]:
+                      - generic [ref=f1e294] [cursor=pointer]:
+                        - checkbox "Clareamento de consultório · Ambas as arcadas orç. 5 · Não realizado" [ref=f1e295]
+                        - generic [ref=f1e296]: Clareamento de consultório · Ambas as arcadas
+                        - generic [ref=f1e297]: orç. 5 · Não realizado
+                  - paragraph [ref=f1e263]: Selecionar para a consulta não marca a execução; o desfecho é registrado no atendimento.
+                - generic [ref=f1e264]:
+                  - generic [ref=f1e265]:
+                    - generic [ref=f1e266] [cursor=pointer]: Previsto
+                    - textbox "Previsto" [ref=f1e267]
+                  - generic [ref=f1e268]:
+                    - generic [ref=f1e269] [cursor=pointer]: Observações
+                    - textbox "Observações" [ref=f1e270]
+                    - paragraph [ref=f1e271]: Administrativas
+              - generic [ref=f1e272]:
+                - generic [ref=f1e273]:
+                  - text: "Duração:"
+                  - strong [ref=f1e274]: 45 min
+                - button "Cancelar" [ref=f1e275] [cursor=pointer]
+                - button "Agendar" [ref=f1e276] [cursor=pointer]

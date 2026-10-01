@@ -1,0 +1,127 @@
+- generic [active] [ref=f45e1]:
+  - generic [ref=f45e2]:
+    - link "Pular para o conteúdo" [ref=f45e3] [cursor=pointer]:
+      - /url: "#conteudo"
+    - generic [ref=f45e4]:
+      - banner [ref=f45e5]:
+        - generic [ref=f45e6]:
+          - button "Abrir menu" [ref=f45e7] [cursor=pointer]
+          - paragraph [ref=f45e9]: Clínica Demonstração
+          - search [ref=f45e10]:
+            - generic [ref=f45e11] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+            - searchbox "Buscar paciente por nome, telefone ou código" [ref=f45e13]
+        - generic [ref=f45e14]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=f45e15]:
+        - generic [ref=f45e16]:
+          - generic [ref=f45e17]:
+            - heading "Visão geral" [level=1] [ref=f45e18]
+            - paragraph [ref=f45e19]: quinta-feira, 1 de outubro de 2026 · Clínica Demonstração
+          - link "Agendar consulta" [ref=f45e21] [cursor=pointer]:
+            - /url: /agenda?nova=1
+        - region "Indicadores do dia" [ref=f45e22]:
+          - link [ref=f45e23] [cursor=pointer]:
+            - /url: /agenda
+            - paragraph [ref=f45e24]: Consultas hoje
+            - paragraph [ref=f45e25]: "2"
+            - paragraph [ref=f45e26]: 0 finalizada(s)
+          - generic [ref=f45e27]:
+            - paragraph [ref=f45e28]: Aguardando
+            - paragraph [ref=f45e29]: "2"
+            - paragraph [ref=f45e30]: 1 confirmada(s) · 0 na recepção
+          - generic [ref=f45e31]:
+            - paragraph [ref=f45e32]: Em atendimento
+            - paragraph [ref=f45e33]: "0"
+          - link [ref=f45e34] [cursor=pointer]:
+            - /url: /agenda/pendencias
+            - paragraph [ref=f45e35]: Pendências
+            - paragraph [ref=f45e36]: "6"
+            - paragraph [ref=f45e37]: 6 sem desfecho · 0 a agendar
+          - link [ref=f45e38] [cursor=pointer]:
+            - /url: /orcamentos?status=negotiating
+            - paragraph [ref=f45e39]: Em negociação
+            - paragraph [ref=f45e40]: "1"
+            - paragraph [ref=f45e41]: R$ 1.360,00
+          - link [ref=f45e42] [cursor=pointer]:
+            - /url: /financeiro/receber?status=overdue
+            - paragraph [ref=f45e43]: Recebimentos vencidos
+            - paragraph [ref=f45e44]: R$ 0,00
+            - paragraph [ref=f45e45]: 0 título(s)
+        - generic [ref=f45e46]:
+          - generic [ref=f45e47]:
+            - generic [ref=f45e48]:
+              - generic [ref=f45e49]:
+                - heading "Agenda de hoje" [level=2] [ref=f45e50]
+                - paragraph [ref=f45e51]: Ordem por horário. Situação sempre com texto.
+              - link "Abrir agenda" [ref=f45e53] [cursor=pointer]:
+                - /url: /agenda
+            - list [ref=f45e54]:
+              - listitem [ref=f45e55]:
+                - generic [ref=f45e56]: 10:00–11:00
+                - generic [ref=f45e57]:
+                  - link "Isabela Demo Rocha" [ref=f45e58] [cursor=pointer]:
+                    - /url: /pacientes/40febf16-d932-4657-bb13-43cb6683897b
+                  - generic [ref=f45e59]: Dr. Rafael Demo
+                - generic [ref=f45e60]: Agendado
+              - listitem [ref=f45e62]:
+                - generic [ref=f45e63]: 16:00–17:00
+                - generic [ref=f45e64]:
+                  - link "Ana Demo Ribeiro" [ref=f45e65] [cursor=pointer]:
+                    - /url: /pacientes/0b64e62b-f62b-4ede-a480-d9e75165e820
+                  - generic [ref=f45e66]: Dra. Paula Demo
+                - generic [ref=f45e67]: Confirmado
+          - generic [ref=f45e69]:
+            - generic [ref=f45e70]:
+              - generic [ref=f45e71]:
+                - generic [ref=f45e72]:
+                  - heading "Financeiro de hoje" [level=2] [ref=f45e73]
+                  - paragraph [ref=f45e74]: Realizado e previsto aparecem separados.
+                - link "Abrir" [ref=f45e76] [cursor=pointer]:
+                  - /url: /financeiro
+              - generic [ref=f45e78]:
+                - generic [ref=f45e79]:
+                  - term [ref=f45e80]: A receber hoje
+                  - definition [ref=f45e81]: R$ 0,00
+                - generic [ref=f45e82]:
+                  - term [ref=f45e83]: A pagar hoje
+                  - definition [ref=f45e84]: R$ 0,00
+                - generic [ref=f45e85]:
+                  - term [ref=f45e86]: Recebido no mês
+                  - definition [ref=f45e87]: R$ 6.732,67
+                - generic [ref=f45e88]:
+                  - term [ref=f45e89]: Pago no mês
+                  - definition [ref=f45e90]: R$ 15,00
+                - generic [ref=f45e91]:
+                  - term [ref=f45e92]: Contas a pagar vencidas
+                  - definition [ref=f45e93]: R$ 1.200,00
+                - generic [ref=f45e94]:
+                  - term [ref=f45e95]: Extrato a conciliar
+                  - definition [ref=f45e96]:
+                    - link "0 movimentação(ões)" [ref=f45e97] [cursor=pointer]:
+                      - /url: /financeiro/conciliacao
+            - generic [ref=f45e98]:
+              - generic [ref=f45e100]:
+                - heading "Saldos realizados por conta" [level=2] [ref=f45e101]
+                - paragraph [ref=f45e102]: Saldo inicial + movimentos efetivos até hoje.
+              - list [ref=f45e103]:
+                - listitem [ref=f45e104]:
+                  - generic [ref=f45e105]:
+                    - generic [ref=f45e106]: Banco Demo — conta corrente
+                    - generic [ref=f45e107]: Conta bancária
+                  - generic [ref=f45e108]: R$ 16.985,00
+                - listitem [ref=f45e109]:
+                  - generic [ref=f45e110]:
+                    - generic [ref=f45e111]: Caixa da recepção
+                    - generic [ref=f45e112]: Caixa
+                  - generic [ref=f45e113]: R$ 0,00
+                - listitem [ref=f45e114]:
+                  - generic [ref=f45e115]:
+                    - generic [ref=f45e116]: Recebíveis de cartão — Operadora Demo
+                    - generic [ref=f45e117]: Recebíveis de cartão (operadora)
+                  - generic [ref=f45e118]: R$ 4.732,67
+            - generic [ref=f45e119]:
+              - heading "Procedimentos aprovados sem agendamento" [level=2] [ref=f45e122]
+              - generic [ref=f45e123]:
+                - paragraph [ref=f45e124]: "8"
+                - link "Ver lista" [ref=f45e125] [cursor=pointer]:
+                  - /url: /orcamentos/nao-agendados
+  - button "Open Next.js Dev Tools" [ref=f45e131] [cursor=pointer]

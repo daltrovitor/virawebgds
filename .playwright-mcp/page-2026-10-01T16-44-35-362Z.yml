@@ -1,0 +1,164 @@
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]
+  - alert [ref=e11]: Paciente Jornada Sintética
+  - generic [ref=e12]:
+    - link "Pular para o conteúdo" [ref=e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=e14]:
+      - generic [ref=e15]:
+        - paragraph [ref=e16]: Gestão Odonto
+        - paragraph [ref=e17]: Clínica Demonstração
+      - navigation "Seções" [ref=e18]:
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - link "Visão geral" [ref=e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=e22]:
+            - link "Agenda" [ref=e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=e24]:
+            - link "Pacientes" [ref=e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=e27]:
+            - link "Orçamentos e tratamentos" [ref=e28] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=e29]:
+            - link "Financeiro" [ref=e30] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=e31]:
+            - link "Relatórios" [ref=e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=e33]:
+            - link "Cadastros" [ref=e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=e35]:
+            - link "Configurações" [ref=e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Administrador Demo
+        - paragraph [ref=e39]: Administrador / proprietário
+        - generic [ref=e40]:
+          - link "Minha conta" [ref=e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=e42] [cursor=pointer]
+    - generic [ref=e43]:
+      - banner [ref=e44]:
+        - search [ref=e46]:
+          - generic [ref=e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=e49]
+        - generic [ref=e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=e51]:
+        - link "← Pacientes" [ref=e128] [cursor=pointer]:
+          - /url: /pacientes
+        - generic [ref=e129]:
+          - generic [ref=e130]:
+            - generic [aria-hidden] [ref=e131]: PS
+            - generic [ref=e132]:
+              - heading "Paciente Jornada Sintética" [level=1] [ref=e133]
+              - paragraph [ref=e134]:
+                - generic [ref=e135]: Nº 13
+                - generic [ref=e136]: 36 anos
+                - generic [ref=e137]: (62) 98765-4321
+                - link "Abrir WhatsApp" [ref=e138] [cursor=pointer]:
+                  - /url: https://wa.me/5562987654321
+          - generic [ref=e139]:
+            - link "Agendar" [ref=e140] [cursor=pointer]:
+              - /url: /agenda?nova=1&paciente=a880ad83-f1c5-4a30-9983-73f8398138e3
+            - button "Novo orçamento" [ref=e141] [cursor=pointer]
+            - dialog [ref=e220]:
+              - generic [ref=e221]:
+                - generic [ref=e222]:
+                  - generic [ref=e223]:
+                    - heading "Novo orçamento" [level=2] [ref=e224]
+                    - paragraph [ref=e225]: Usa a tabela de preços padrão. Os itens são incluídos na próxima tela.
+                  - button "Fechar" [active] [ref=e226] [cursor=pointer]
+                - generic [ref=e231]:
+                  - generic [ref=e232]:
+                    - generic [ref=e233] [cursor=pointer]: Responsável
+                    - combobox "Responsável" [ref=e234] [cursor=pointer]:
+                      - option "Não definido"
+                      - option "Dr. Rafael Demo" [selected]
+                      - option "Dra. Paula Demo"
+                  - generic [ref=e235]:
+                    - generic [ref=e236] [cursor=pointer]: Origem / campanha (opcional)
+                    - textbox "Origem / campanha (opcional)" [ref=e237]
+                - button "Criar e montar" [ref=e239] [cursor=pointer]
+            - link "Adicionar arquivo" [ref=e142] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=arquivos#enviar
+            - link "Editar cadastro" [ref=e143] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=cadastro
+        - navigation "Seções da ficha" [ref=e144]:
+          - list [ref=e145]:
+            - listitem [ref=e146]:
+              - link "Visão geral" [ref=e147] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=visao-geral
+            - listitem [ref=e148]:
+              - link "Cadastro" [ref=e149] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=cadastro
+            - listitem [ref=e150]:
+              - link "Agenda" [ref=e151] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=agenda
+            - listitem [ref=e152]:
+              - link "Orçamentos" [ref=e153] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=orcamentos
+            - listitem [ref=e154]:
+              - link "Tratamentos" [ref=e155] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=tratamentos
+            - listitem [ref=e156]:
+              - link "Histórico clínico" [ref=e157] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=historico
+            - listitem [ref=e158]:
+              - link "Imagens e arquivos" [ref=e159] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=arquivos
+            - listitem [ref=e160]:
+              - link "Financeiro" [ref=e161] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=financeiro
+            - listitem [ref=e162]:
+              - link "Anamnese" [ref=e163] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=anamnese
+            - listitem [ref=e164]:
+              - link "Documentos" [ref=e165] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=documentos
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - generic [ref=e169]:
+                - heading "Alertas" [level=2] [ref=e170]
+                - paragraph [ref=e171]: Administrativos e clínicos são separados por permissão.
+              - button "Novo alerta" [ref=e173] [cursor=pointer]
+            - paragraph [ref=e175]: Nenhum alerta ativo.
+          - generic [ref=e176]:
+            - generic [ref=e177]:
+              - heading "Próxima consulta" [level=2] [ref=e179]
+              - link "Agenda" [ref=e181] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=agenda
+            - paragraph [ref=e183]: Nenhuma consulta futura.
+          - generic [ref=e184]:
+            - heading "Pendências" [level=2] [ref=e187]
+            - generic [ref=e188]:
+              - paragraph [ref=e189]: 0 consulta(s) passada(s) sem desfecho registrado
+              - paragraph [ref=e190]: 0 retorno(s)/procedimento(s) aguardando data
+              - paragraph [ref=e191]: 0 falta(s) registrada(s)
+          - generic [ref=e192]:
+            - generic [ref=e194]:
+              - heading "Tratamento" [level=2] [ref=e195]
+              - paragraph [ref=e196]: Itens concluídos ÷ itens ativos aprovados (sem ponderar preço).
+            - paragraph [ref=e198]: Sem itens ativos
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - heading "Resumo financeiro" [level=2] [ref=e202]
+              - link "Detalhes" [ref=e204] [cursor=pointer]:
+                - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=financeiro
+            - generic [ref=e206]:
+              - generic [ref=e207]:
+                - term [ref=e208]: Em aberto
+                - definition [ref=e209]: R$ 0,00
+              - generic [ref=e210]:
+                - term [ref=e211]: Vencido
+                - definition [ref=e212]: R$ 0,00
+              - generic [ref=e213]:
+                - term [ref=e214]: Recebido
+                - definition [ref=e215]: R$ 0,00
+              - generic [ref=e216]:
+                - term [ref=e217]: Próximo vencimento
+                - definition [ref=e218]: —

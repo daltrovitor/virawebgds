@@ -1,0 +1,137 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]
+  - alert [ref=e11]: Agenda · Gestão Odonto
+  - generic [ref=e30]:
+    - link "Pular para o conteúdo" [ref=e31] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=e32]:
+      - generic [ref=e33]:
+        - paragraph [ref=e34]: Gestão Odonto
+        - paragraph [ref=e35]: Clínica Demonstração
+      - navigation "Seções" [ref=e36]:
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "Visão geral" [ref=e39] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=e40]:
+            - link "Agenda" [ref=e41] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=e43]:
+            - link "Pacientes" [ref=e44] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=e45]:
+            - link "Orçamentos e tratamentos" [ref=e46] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=e47]:
+            - link "Financeiro" [ref=e48] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=e49]:
+            - link "Relatórios" [ref=e50] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=e51]:
+            - link "Cadastros" [ref=e52] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=e53]:
+            - link "Configurações" [ref=e54] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=e55]:
+        - paragraph [ref=e56]: Administrador Demo
+        - paragraph [ref=e57]: Administrador / proprietário
+        - generic [ref=e58]:
+          - link "Minha conta" [ref=e59] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=e60] [cursor=pointer]
+    - generic [ref=e61]:
+      - banner [ref=e62]:
+        - search [ref=e64]:
+          - generic [ref=e65] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=e67]
+        - generic [ref=e68]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - heading "Agenda" [level=1] [ref=e72]
+            - paragraph [ref=e73]: Consultas, bloqueios e encaixes. Conflitos são verificados no servidor ao salvar.
+          - generic [ref=e74]:
+            - link "Pendências" [ref=e75] [cursor=pointer]:
+              - /url: /agenda/pendencias
+            - link "Bloqueios" [ref=e76] [cursor=pointer]:
+              - /url: /agenda/bloqueios
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - button "Hoje" [ref=e80] [cursor=pointer]
+              - generic [ref=e81]:
+                - button "Semana anterior" [ref=e82] [cursor=pointer]
+                - button "Próxima semana" [ref=e85] [cursor=pointer]
+              - generic [ref=e88] [cursor=pointer]: Ir para a data
+              - textbox "Ir para a data" [ref=e89]: 2026-10-01
+              - heading "Semana de 28/09/2026 a 04/10/2026" [level=2] [ref=e90]
+            - generic [ref=e91]:
+              - group "Modo de visualização" [ref=e92]:
+                - button "dia" [ref=e93] [cursor=pointer]
+                - button "semana" [pressed] [ref=e94] [cursor=pointer]
+              - generic [ref=e95] [cursor=pointer]: Profissional
+              - combobox "Profissional" [ref=e96] [cursor=pointer]:
+                - option "Todos os profissionais" [selected]
+                - option "Dr. Rafael Demo"
+                - option "Dra. Paula Demo"
+              - button "Nova consulta" [ref=e97] [cursor=pointer]
+          - generic [ref=e100]:
+            - generic [ref=e103]:
+              - generic [ref=e104]: 08:00
+              - generic [ref=e105]: 09:00
+              - generic [ref=e106]: 10:00
+              - generic [ref=e107]: 11:00
+              - generic [ref=e108]: 12:00
+              - generic [ref=e109]: 13:00
+              - generic [ref=e110]: 14:00
+              - generic [ref=e111]: 15:00
+              - generic [ref=e112]: 16:00
+              - generic [ref=e113]: 17:00
+              - generic [ref=e114]: 18:00
+            - generic [ref=e115]:
+              - generic [ref=e116]: seg 28/09
+              - button "Elisa Demo Moraes, 08:00 a 09:00, Agendado, Dra. Paula Demo" [ref=e119] [cursor=pointer]:
+                - generic [ref=e120]: 08:00–09:00
+                - generic [ref=e121]: Elisa Demo Moraes
+                - generic [ref=e122]: Agendado · Dra. Paula Demo
+              - button "Fábio Demo Teixeira, 09:15 a 10:00, Agendado, Dra. Paula Demo" [ref=e125] [cursor=pointer]:
+                - generic [ref=e126]: 09:15–10:00
+                - generic [ref=e127]: Fábio Demo Teixeira
+                - generic [ref=e128]: Agendado · Dra. Paula Demo
+              - button "Bruno Demo Carvalho, 14:00 a 15:00, Finalizado, Dra. Paula Demo" [ref=e131] [cursor=pointer]:
+                - generic [ref=e132]: 14:00–15:00
+                - generic [ref=e133]: Bruno Demo Carvalho
+                - generic [ref=e134]: Finalizado · Dra. Paula Demo
+            - generic [ref=e135]:
+              - generic [ref=e136]: ter 29/09
+              - button "Gabriela Demo Pires, 14:00 a 15:30, Agendado, Dr. Rafael Demo" [ref=e139] [cursor=pointer]:
+                - generic [ref=e140]: 14:00–15:30
+                - generic [ref=e141]: Gabriela Demo Pires
+                - generic [ref=e142]: Agendado · Dr. Rafael Demo
+            - generic [ref=e144]:
+              - generic [ref=e145]: qua 30/09
+              - generic: "Bloqueado: Almoço da equipe"
+              - button "Heitor Demo Barros, 08:30 a 09:00, Agendado, Dra. Paula Demo" [ref=e148] [cursor=pointer]:
+                - generic [ref=e149]: 08:30–09:00
+                - generic [ref=e150]: Heitor Demo Barros
+                - generic [ref=e151]: Agendado · Dra. Paula Demo
+            - generic [ref=e153]:
+              - generic [ref=e154]: qui 01/10
+              - button "Isabela Demo Rocha, 10:00 a 11:00, Agendado, Dr. Rafael Demo" [ref=e157] [cursor=pointer]:
+                - generic [ref=e158]: 10:00–11:00
+                - generic [ref=e159]: Isabela Demo Rocha
+                - generic [ref=e160]: Agendado · Dr. Rafael Demo
+              - button "Ana Demo Ribeiro, 16:00 a 17:00, Confirmado, Dra. Paula Demo" [ref=e163] [cursor=pointer]:
+                - generic [ref=e164]: 16:00–17:00
+                - generic [ref=e165]: Ana Demo Ribeiro
+                - generic [ref=e166]: Confirmado · Dra. Paula Demo
+                - generic [ref=e167]: Preparo para coroa (dente 11)
+            - generic [ref=e169]:
+              - generic [ref=e170]: sex 02/10
+              - button "João Demo Almeida, 15:00 a 16:00, Agendado, Dra. Paula Demo" [ref=e173] [cursor=pointer]:
+                - generic [ref=e174]: 15:00–16:00
+                - generic [ref=e175]: João Demo Almeida
+                - generic [ref=e176]: Agendado · Dra. Paula Demo
+          - paragraph [ref=e178]: Grade de 15 minutos. Clique em um horário livre para agendar; arraste a consulta para mover ou a borda inferior para mudar a duração. Pelo teclado, abra a consulta e use “Editar”.

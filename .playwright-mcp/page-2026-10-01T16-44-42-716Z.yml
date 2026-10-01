@@ -1,0 +1,181 @@
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]
+  - alert [ref=e11]: Orçamento · Gestão Odonto
+  - generic [ref=e12]:
+    - link "Pular para o conteúdo" [ref=e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=e14]:
+      - generic [ref=e15]:
+        - paragraph [ref=e16]: Gestão Odonto
+        - paragraph [ref=e17]: Clínica Demonstração
+      - navigation "Seções" [ref=e18]:
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - link "Visão geral" [ref=e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=e22]:
+            - link "Agenda" [ref=e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=e24]:
+            - link "Pacientes" [ref=e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=e27]:
+            - link "Orçamentos e tratamentos" [ref=e28] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=e29]:
+            - link "Financeiro" [ref=e30] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=e31]:
+            - link "Relatórios" [ref=e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=e33]:
+            - link "Cadastros" [ref=e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=e35]:
+            - link "Configurações" [ref=e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Administrador Demo
+        - paragraph [ref=e39]: Administrador / proprietário
+        - generic [ref=e40]:
+          - link "Minha conta" [ref=e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=e42] [cursor=pointer]
+    - generic [ref=e43]:
+      - banner [ref=e44]:
+        - search [ref=e46]:
+          - generic [ref=e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=e49]
+        - generic [ref=e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=e51]:
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - link "← Ficha do paciente" [ref=e242] [cursor=pointer]:
+              - /url: /pacientes/a880ad83-f1c5-4a30-9983-73f8398138e3?aba=orcamentos
+            - heading "Orçamento nº 5" [level=1] [ref=e243]
+            - paragraph [ref=e244]: Paciente Jornada Sintética · 01/10/2026 · válido até 31/10/2026
+          - generic [ref=e246]:
+            - link "PDF" [ref=e247] [cursor=pointer]:
+              - /url: /api/orcamentos/d3b8a86f-4f98-4dbe-8ef1-4ae4e10f356f/pdf
+            - button "Recusar" [ref=e248] [cursor=pointer]
+            - button "Cancelar" [ref=e249] [cursor=pointer]
+        - generic [ref=e250]:
+          - generic [ref=e251]: Rascunho
+          - generic [ref=e253]: Versão 1
+          - generic [ref=e255]: Tabela Particular · Responsável Dr. Rafael Demo
+        - generic [ref=e256]:
+          - generic [ref=e257]:
+            - generic [ref=e259]:
+              - heading "Incluir procedimento" [level=2] [ref=e260]
+              - paragraph [ref=e261]: "Tabela: Particular. O valor do item é editável e não altera a tabela."
+            - generic [ref=e263]:
+              - generic [ref=e264]:
+                - generic [ref=e265]:
+                  - generic [ref=e266] [cursor=pointer]: Especialidade
+                  - combobox "Especialidade" [ref=e267] [cursor=pointer]:
+                    - option "Selecione"
+                    - option "Prótese" [selected]
+                    - option "Dentística"
+                    - option "Implantodontia"
+                    - option "Endodontia"
+                    - option "Periodontia"
+                    - option "Ortodontia"
+                    - option "Radiologia"
+                    - option "Clínica geral"
+                - generic [ref=e268]:
+                  - generic [ref=e269] [cursor=pointer]: Procedimento
+                  - combobox "Procedimento" [ref=e270] [cursor=pointer]:
+                    - option "Selecione"
+                    - option "PRT-02 — Coroa em zircônia" [selected]
+                    - option "PRT-01 — Coroa metalocerâmica"
+                    - option "PRT-03 — Placa miorrelaxante"
+                    - option "PRT-04 — Prótese total"
+              - generic [ref=e291]:
+                - strong [ref=e292]: Por dente.
+                - text: Cada dente selecionado vira um item rastreável.
+              - generic [ref=e293]:
+                - generic [ref=e294]:
+                  - group "Dentição" [ref=e295]:
+                    - button "Permanentes" [pressed] [ref=e296] [cursor=pointer]
+                    - button "Decíduos" [ref=e297] [cursor=pointer]
+                  - button "Limpar seleção (2)" [ref=e392] [cursor=pointer]
+                - generic [ref=e299]:
+                  - paragraph [ref=e300]:
+                    - generic [ref=e301]: Direita do paciente
+                    - generic [ref=e302]: Superior
+                    - generic [ref=e303]: Esquerda
+                  - group "Arcada superior" [ref=e304]:
+                    - 'button "Dente 18: terceiro molar superior direita" [ref=e306] [cursor=pointer]': "18"
+                    - 'button "Dente 17: segundo molar superior direita" [ref=e308] [cursor=pointer]': "17"
+                    - 'button "Dente 16: primeiro molar superior direita" [ref=e310] [cursor=pointer]': "16"
+                    - 'button "Dente 15: segundo pré-molar superior direita" [ref=e312] [cursor=pointer]': "15"
+                    - 'button "Dente 14: primeiro pré-molar superior direita" [ref=e314] [cursor=pointer]': "14"
+                    - 'button "Dente 13: canino superior direita" [ref=e316] [cursor=pointer]': "13"
+                    - 'button "Dente 12: incisivo lateral superior direita" [ref=e318] [cursor=pointer]': "12"
+                    - 'button "Dente 11: incisivo central superior direita" [pressed] [ref=e320] [cursor=pointer]': "11"
+                    - 'button "Dente 21: incisivo central superior esquerda" [active] [pressed] [ref=e322] [cursor=pointer]': "21"
+                    - 'button "Dente 22: incisivo lateral superior esquerda" [ref=e324] [cursor=pointer]': "22"
+                    - 'button "Dente 23: canino superior esquerda" [ref=e326] [cursor=pointer]': "23"
+                    - 'button "Dente 24: primeiro pré-molar superior esquerda" [ref=e328] [cursor=pointer]': "24"
+                    - 'button "Dente 25: segundo pré-molar superior esquerda" [ref=e330] [cursor=pointer]': "25"
+                    - 'button "Dente 26: primeiro molar superior esquerda" [ref=e332] [cursor=pointer]': "26"
+                    - 'button "Dente 27: segundo molar superior esquerda" [ref=e334] [cursor=pointer]': "27"
+                    - 'button "Dente 28: terceiro molar superior esquerda" [ref=e336] [cursor=pointer]': "28"
+                  - group "Arcada inferior" [ref=e337]:
+                    - 'button "Dente 48: terceiro molar inferior direita" [ref=e339] [cursor=pointer]': "48"
+                    - 'button "Dente 47: segundo molar inferior direita" [ref=e341] [cursor=pointer]': "47"
+                    - 'button "Dente 46: primeiro molar inferior direita" [ref=e343] [cursor=pointer]': "46"
+                    - 'button "Dente 45: segundo pré-molar inferior direita" [ref=e345] [cursor=pointer]': "45"
+                    - 'button "Dente 44: primeiro pré-molar inferior direita" [ref=e347] [cursor=pointer]': "44"
+                    - 'button "Dente 43: canino inferior direita" [ref=e349] [cursor=pointer]': "43"
+                    - 'button "Dente 42: incisivo lateral inferior direita" [ref=e351] [cursor=pointer]': "42"
+                    - 'button "Dente 41: incisivo central inferior direita" [ref=e353] [cursor=pointer]': "41"
+                    - 'button "Dente 31: incisivo central inferior esquerda" [ref=e355] [cursor=pointer]': "31"
+                    - 'button "Dente 32: incisivo lateral inferior esquerda" [ref=e357] [cursor=pointer]': "32"
+                    - 'button "Dente 33: canino inferior esquerda" [ref=e359] [cursor=pointer]': "33"
+                    - 'button "Dente 34: primeiro pré-molar inferior esquerda" [ref=e361] [cursor=pointer]': "34"
+                    - 'button "Dente 35: segundo pré-molar inferior esquerda" [ref=e363] [cursor=pointer]': "35"
+                    - 'button "Dente 36: primeiro molar inferior esquerda" [ref=e365] [cursor=pointer]': "36"
+                    - 'button "Dente 37: segundo molar inferior esquerda" [ref=e367] [cursor=pointer]': "37"
+                    - 'button "Dente 38: terceiro molar inferior esquerda" [ref=e369] [cursor=pointer]': "38"
+                  - paragraph [ref=e370]: Inferior
+                - generic [ref=e371]:
+                  - generic [ref=e372]:
+                    - generic [ref=e373] [cursor=pointer]: Ou digite os dentes
+                    - textbox "Ou digite os dentes" [ref=e374]:
+                      - /placeholder: "Ex.: 11, 12, 21-23"
+                  - button "Adicionar" [ref=e375] [cursor=pointer]
+                - paragraph [ref=e376]: "Selecionados: 11, 21"
+              - generic [ref=e377]:
+                - generic [ref=e378]:
+                  - generic [ref=e379] [cursor=pointer]: Preço unitário
+                  - generic [ref=e380]:
+                    - generic [aria-hidden]: R$
+                    - textbox "Preço unitário" [ref=e381]: 2.500,00
+                  - paragraph [ref=e382]: "Tabela: R$ 2.500,00"
+                - generic [ref=e383]:
+                  - generic [ref=e384] [cursor=pointer]: Observação do item
+                  - textbox "Observação do item" [ref=e385]
+              - generic [ref=e386]:
+                - paragraph [ref=e387]:
+                  - strong [ref=e389]: "2"
+                  - text: item(ns) × R$ 2.500,00 =
+                  - strong [ref=e390]: R$ 5.000,00
+                - button "Incluir no orçamento" [ref=e391] [cursor=pointer]
+          - generic [ref=e271]:
+            - generic [ref=e273]:
+              - heading "Itens do orçamento" [level=2] [ref=e274]
+              - paragraph [ref=e275]: Valor de referência = tabela no momento da inclusão. Valor aplicado = negociado para este item.
+            - generic [ref=e276]:
+              - paragraph [ref=e277]: Nenhum item
+              - paragraph [ref=e278]: Inclua procedimentos de qualquer especialidade; o mesmo dente admite vários procedimentos.
+          - generic [ref=e279]:
+            - generic [ref=e281]:
+              - heading "Histórico de versões" [level=2] [ref=e282]
+              - paragraph [ref=e283]: Versões aprovadas são preservadas com autor, data e motivo.
+            - list [ref=e284]:
+              - listitem [ref=e285]:
+                - generic [ref=e286]:
+                  - strong [ref=e287]: Versão 1
+                  - text: · Administrador Demo · 01/10/2026 13:44
+                - generic [ref=e288]: Em edição

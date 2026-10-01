@@ -1,0 +1,158 @@
+- generic [active] [ref=f5e1]:
+  - button "Open Next.js Dev Tools" [ref=f5e7] [cursor=pointer]
+  - alert [ref=f5e11]
+  - generic [ref=f5e12]:
+    - link "Pular para o conteúdo" [ref=f5e13] [cursor=pointer]:
+      - /url: "#conteudo"
+    - complementary "Navegação principal" [ref=f5e14]:
+      - generic [ref=f5e15]:
+        - paragraph [ref=f5e16]: Gestão Odonto
+        - paragraph [ref=f5e17]: Clínica Demonstração
+      - navigation "Seções" [ref=f5e18]:
+        - list [ref=f5e19]:
+          - listitem [ref=f5e20]:
+            - link "Visão geral" [ref=f5e21] [cursor=pointer]:
+              - /url: /visao-geral
+          - listitem [ref=f5e22]:
+            - link "Agenda" [ref=f5e23] [cursor=pointer]:
+              - /url: /agenda
+          - listitem [ref=f5e24]:
+            - link "Pacientes" [ref=f5e25] [cursor=pointer]:
+              - /url: /pacientes
+          - listitem [ref=f5e26]:
+            - link "Orçamentos e tratamentos" [ref=f5e27] [cursor=pointer]:
+              - /url: /orcamentos
+          - listitem [ref=f5e28]:
+            - link "Financeiro" [ref=f5e29] [cursor=pointer]:
+              - /url: /financeiro
+          - listitem [ref=f5e31]:
+            - link "Relatórios" [ref=f5e32] [cursor=pointer]:
+              - /url: /relatorios
+          - listitem [ref=f5e33]:
+            - link "Cadastros" [ref=f5e34] [cursor=pointer]:
+              - /url: /cadastros
+          - listitem [ref=f5e35]:
+            - link "Configurações" [ref=f5e36] [cursor=pointer]:
+              - /url: /configuracoes
+      - generic [ref=f5e37]:
+        - paragraph [ref=f5e38]: Administrador Demo
+        - paragraph [ref=f5e39]: Administrador / proprietário
+        - generic [ref=f5e40]:
+          - link "Minha conta" [ref=f5e41] [cursor=pointer]:
+            - /url: /configuracoes/minha-conta
+          - button "Sair" [ref=f5e42] [cursor=pointer]
+    - generic [ref=f5e43]:
+      - banner [ref=f5e44]:
+        - search [ref=f5e46]:
+          - generic [ref=f5e47] [cursor=pointer]: Buscar paciente por nome, telefone ou código
+          - searchbox "Buscar paciente por nome, telefone ou código" [ref=f5e49]
+        - generic [ref=f5e50]: "Ambiente de demonstração: dados sintéticos. Nenhuma mensagem, cobrança ou integração real é executada."
+      - main [ref=f5e51]:
+        - generic [ref=f5e53]:
+          - heading "Conciliação bancária" [level=1] [ref=f5e54]
+          - paragraph [ref=f5e55]: O extrato importado não vira receita sozinho. Cada vínculo é confirmado por você; sugestões mostram o motivo. Conciliar não significa quitar tudo.
+        - navigation "Seções do financeiro" [ref=f5e56]:
+          - list [ref=f5e57]:
+            - listitem [ref=f5e58]:
+              - link "Painel" [ref=f5e59] [cursor=pointer]:
+                - /url: /financeiro
+            - listitem [ref=f5e60]:
+              - link "A receber" [ref=f5e61] [cursor=pointer]:
+                - /url: /financeiro/receber
+            - listitem [ref=f5e62]:
+              - link "A pagar" [ref=f5e63] [cursor=pointer]:
+                - /url: /financeiro/pagar
+            - listitem [ref=f5e64]:
+              - link "Contas e movimentos" [ref=f5e65] [cursor=pointer]:
+                - /url: /financeiro/contas
+            - listitem [ref=f5e66]:
+              - link "Cartões" [ref=f5e67] [cursor=pointer]:
+                - /url: /financeiro/cartoes
+            - listitem [ref=f5e68]:
+              - link "Fluxo de caixa" [ref=f5e69] [cursor=pointer]:
+                - /url: /financeiro/fluxo-de-caixa
+            - listitem [ref=f5e70]:
+              - link "Conciliação" [ref=f5e71] [cursor=pointer]:
+                - /url: /financeiro/conciliacao
+        - generic [ref=f5e72]:
+          - generic [ref=f5e73]:
+            - heading "Conta e período" [level=2] [ref=f5e76]
+            - generic [ref=f5e77]:
+              - generic [ref=f5e78]:
+                - generic [ref=f5e79]:
+                  - generic [ref=f5e80] [cursor=pointer]: Conta
+                  - combobox "Conta" [ref=f5e81] [cursor=pointer]:
+                    - option "Banco Demo — conta corrente" [selected]
+                    - option "Caixa da recepção"
+                - generic [ref=f5e82]:
+                  - generic [ref=f5e83] [cursor=pointer]: De
+                  - textbox "De" [ref=f5e84]: 2026-08-02
+                - generic [ref=f5e85]:
+                  - generic [ref=f5e86] [cursor=pointer]: Até
+                  - textbox "Até" [ref=f5e87]: 2026-10-01
+                - generic [ref=f5e88]:
+                  - generic [ref=f5e89] [cursor=pointer]: Extrato
+                  - combobox "Extrato" [ref=f5e90] [cursor=pointer]:
+                    - option "Pendentes" [selected]
+                    - option "Conciliados"
+                    - option "Ignorados"
+                    - option "Todos"
+                - button "Aplicar" [ref=f5e91] [cursor=pointer]
+              - generic [ref=f5e92]:
+                - generic [ref=f5e93]:
+                  - paragraph [ref=f5e94]: Saldo bancário conhecido
+                  - paragraph [ref=f5e95]: Não informado pelo extrato
+                - generic [ref=f5e96]:
+                  - paragraph [ref=f5e97]: Saldo interno na mesma data
+                  - paragraph [ref=f5e98]: —
+                - generic [ref=f5e99]:
+                  - paragraph [ref=f5e100]: Divergência
+                  - paragraph [ref=f5e101]: —
+          - generic [ref=f5e102]:
+            - generic [ref=f5e104]:
+              - heading "Importar extrato OFX" [level=2] [ref=f5e105]
+              - paragraph [ref=f5e106]: Prévia antes de confirmar. Reimportar não duplica.
+            - generic [ref=f5e108]:
+              - generic [ref=f5e109] [cursor=pointer]: Arquivo OFX da conta selecionada
+              - button "Arquivo OFX da conta selecionada" [ref=f5e110]
+              - button "Ler e pré-visualizar" [ref=f5e111] [cursor=pointer]
+        - status [ref=f5e112]:
+          - generic [ref=f5e113]: Nenhuma movimentação pendente no período para esta conta.
+        - generic [ref=f5e114]:
+          - generic [ref=f5e115]:
+            - paragraph [ref=f5e116]:
+              - text: "Extrato selecionado:"
+              - strong [ref=f5e117]: R$ 0,00
+              - text: "· Alocado:"
+              - strong [ref=f5e118]: R$ 0,00
+            - generic [ref=f5e119]:
+              - button "Conciliar selecionados" [disabled]
+          - generic [ref=f5e120]:
+            - generic [ref=f5e121]:
+              - generic [ref=f5e123]:
+                - heading "Movimentações do banco" [level=2] [ref=f5e124]
+                - paragraph [ref=f5e125]: Selecione uma ou mais (mesmo sentido) para vincular.
+              - generic [ref=f5e126]:
+                - paragraph [ref=f5e127]: Nenhuma movimentação
+                - paragraph [ref=f5e128]: Importe um extrato OFX ou ajuste o filtro.
+            - generic [ref=f5e129]:
+              - generic [ref=f5e131]:
+                - heading "Lançamentos internos da conta" [level=2] [ref=f5e132]
+                - paragraph [ref=f5e133]: Baixas, transferências e repasses ainda não conciliados (±10 dias do período).
+              - list [ref=f5e134]:
+                - listitem [ref=f5e135]:
+                  - generic [ref=f5e136]:
+                    - checkbox "Vincular Orçamento nº 1 — Entrada" [disabled] [ref=f5e137] [cursor=pointer]
+                    - generic [ref=f5e138]:
+                      - generic [ref=f5e139]:
+                        - generic [ref=f5e140]: 01/10/2026
+                        - generic [ref=f5e141]: R$ 1.000,00
+                      - paragraph [ref=f5e142]: Orçamento nº 1 — Entrada
+                - listitem [ref=f5e143]:
+                  - generic [ref=f5e144]:
+                    - checkbox "Vincular Orçamento nº 5 — Entrada" [disabled] [ref=f5e145] [cursor=pointer]
+                    - generic [ref=f5e146]:
+                      - generic [ref=f5e147]:
+                        - generic [ref=f5e148]: 01/10/2026
+                        - generic [ref=f5e149]: R$ 1.000,00
+                      - paragraph [ref=f5e150]: Orçamento nº 5 — Entrada
