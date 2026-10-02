@@ -9,6 +9,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { createClient } from "@/lib/supabase-client"
 import LanguageToggle from "@/components/language-toggle"
 import LeadGenForm from "@/components/lead-gen-form"
+import { dismissLeadForm, getLeadFormStatus, submitLeadForm } from "@/app/actions/lead-profile"
 import { useToast } from "@/hooks/use-toast"
 import { useActivityTracker } from "@/hooks/use-activity-tracker"
 import { useFCM } from "@/hooks/use-fcm"
@@ -101,14 +102,28 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
         window.scrollTo({ top: 0, behavior: "smooth" })
     }, [])
 
-    const checkLeadStatus = useCallback(() => {
-        const leadSubmittedKey = `vwd:lead_gen_submitted_${user.email}`
+    // Formulário de perfil: uma única vez por conta (marcação nos metadados do usuário).
+    // O localStorage só evita uma consulta ao servidor neste navegador.
+    const leadSeenKey = `vwd:lead_gen_submitted_${user.email}`
+    const rememberLeadSeen = useCallback(() => {
         try {
-            if (subscription && !localStorage.getItem(leadSubmittedKey)) setShowLeadForm(true)
+            localStorage.setItem(leadSeenKey, "true")
         } catch {
-            // armazenamento indisponível (modo privado): não exibe o formulário
+            // armazenamento indisponível: a marcação no servidor já basta
         }
-    }, [subscription, user.email])
+    }, [leadSeenKey])
+
+    const checkLeadStatus = useCallback(async () => {
+        if (!subscription) return
+        try {
+            if (localStorage.getItem(leadSeenKey)) return
+        } catch {
+            // segue para a verificação no servidor
+        }
+        const { show } = await getLeadFormStatus()
+        if (show) setShowLeadForm(true)
+        else rememberLeadSeen()
+    }, [subscription, leadSeenKey, rememberLeadSeen])
 
     useEffect(() => {
         const loadTutorialStatus = async () => {
@@ -129,7 +144,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                 if (!hasSeenWelcome && (isNewUser || !watched)) {
                     setTimeout(() => setShowTutorial(true), 500)
                 } else {
-                    checkLeadStatus()
+                    void checkLeadStatus()
                 }
             } catch (error) {
                 console.error("Error loading tutorial status:", error)
@@ -216,18 +231,17 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
             {showLeadForm && (
                 <LeadGenForm
                     onComplete={(data) => {
-                        fetch("/api/leads", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(data),
-                        }).catch((e) => console.error("Failed to save lead:", e))
                         setShowLeadForm(false)
-                        try {
-                            localStorage.setItem(`vwd:lead_gen_submitted_${user.email}`, "true")
-                        } catch {
-                            // ignorado
-                        }
+                        rememberLeadSeen()
+                        submitLeadForm(data).then((res) => {
+                            if (!res.success) console.error("Failed to save lead:", res.error)
+                        })
                         toast({ title: t("leadForm.successTitle"), description: t("leadForm.successDesc") })
+                    }}
+                    onDismiss={() => {
+                        setShowLeadForm(false)
+                        rememberLeadSeen()
+                        dismissLeadForm().catch((e) => console.error("Failed to dismiss lead form:", e))
                     }}
                 />
             )}
@@ -241,7 +255,7 @@ export default function Dashboard({ user, onLogout, subscription, isNewUser = fa
                         } catch {
                             // ignorado
                         }
-                        checkLeadStatus()
+                        void checkLeadStatus()
                     } else {
                         setShowTutorial(true)
                     }
