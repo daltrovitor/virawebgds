@@ -3,82 +3,99 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Vira Web Odonto — design tokens (Modelo Padrão)
+ * Fundo branco puro, superfícies off-white, tinta grafite-marinho da logo
+ * e um único acento: Azul Mineral #0369a1 (odontologia, contraste AA 5,9:1).
+ */
 :root {
-  /* ViraWeb Color Palette: #FFF (white), #FFD400 (yellow), #3396D3 (blue) */
   --background: #ffffff;
-  --foreground: #1a1a1a;
+  --foreground: #0f1f33;
   --card: #ffffff;
-  --card-foreground: #1a1a1a;
+  --card-foreground: #0f1f33;
   --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
-  --primary: #3396d3;
+  --popover-foreground: #0f1f33;
+  --primary: #0369a1;
   --primary-foreground: #ffffff;
-  --secondary: #ffd400;
-  --secondary-foreground: #1a1a1a;
-  --muted: #f5f5f5;
-  --muted-foreground: #666666;
-  --accent: #ffd400;
-  --accent-foreground: #1a1a1a;
-  --destructive: #dc2626;
+  --secondary: #f3f6f9;
+  --secondary-foreground: #0f1f33;
+  --muted: #f7f9fb;
+  --muted-foreground: #4f5d6f;
+  --accent: #eef5fa;
+  --accent-foreground: #0f1f33;
+  --destructive: #c62828;
   --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #3396d3;
-  --chart-1: #3396d3;
-  --chart-2: #ffd400;
-  --chart-3: #66b3e0;
-  --chart-4: #ffe666;
-  --chart-5: #1a75a8;
-  --radius: 0px;
+  --border: #e3e8ee;
+  --input: #d6dee7;
+  --ring: #0369a1;
+  --chart-1: #0369a1;
+  --chart-2: #132a46;
+  --chart-3: #3aa7d4;
+  --chart-4: #d9a50d;
+  --chart-5: #8a97a8;
+  --radius: 4px;
   --sidebar: #ffffff;
-  --sidebar-foreground: #1a1a1a;
-  --sidebar-primary: #3396d3;
+  --sidebar-foreground: #0f1f33;
+  --sidebar-primary: #0369a1;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ffd400;
-  --sidebar-accent-foreground: #1a1a1a;
-  --sidebar-border: #e5e5e5;
-  --sidebar-ring: #3396d3;
+  --sidebar-accent: #eef5fa;
+  --sidebar-accent-foreground: #0f1f33;
+  --sidebar-border: #e3e8ee;
+  --sidebar-ring: #0369a1;
+
+  /* Tokens auxiliares do produto */
+  --ink: #0f1f33;
+  --ink-soft: #2b3b50;
+  --surface: #fafbfc;
+  --hairline: #edf1f5;
+  --brand-navy: #132a46;
+  --brand-gold: #f2bf12;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark {
-  /* Premium Dark mode palette: Slate 950 background, Slate 900 cards */
-  --background: #020617;
-  --foreground: #f8fafc;
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
-  --primary: #3396d3;
-  --primary-foreground: #ffffff;
-  --secondary: #ffd400;
-  --secondary-foreground: #020617;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #ffd400;
-  --accent-foreground: #020617;
-  --destructive: #ef4444;
+  --background: #0a1422;
+  --foreground: #eef3f8;
+  --card: #0f1c2e;
+  --card-foreground: #eef3f8;
+  --popover: #0f1c2e;
+  --popover-foreground: #eef3f8;
+  --primary: #38a3d8;
+  --primary-foreground: #06121f;
+  --secondary: #16263b;
+  --secondary-foreground: #eef3f8;
+  --muted: #13233a;
+  --muted-foreground: #9fb0c3;
+  --accent: #16263b;
+  --accent-foreground: #eef3f8;
+  --destructive: #ef5350;
   --destructive-foreground: #ffffff;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #3396d3;
-  --chart-1: #3396d3;
-  --chart-2: #ffd400;
-  --chart-3: #66b3e0;
-  --chart-4: #ffe666;
-  --chart-5: #1a75a8;
-  --sidebar: #0f172a;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #3396d3;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ffd400;
-  --sidebar-accent-foreground: #020617;
-  --sidebar-border: #1e293b;
-  --sidebar-ring: #3396d3;
+  --border: #1d2f47;
+  --input: #22364f;
+  --ring: #38a3d8;
+  --chart-1: #38a3d8;
+  --chart-2: #9fb0c3;
+  --chart-3: #3aa7d4;
+  --chart-4: #f2bf12;
+  --chart-5: #5b6b80;
+  --sidebar: #0f1c2e;
+  --sidebar-foreground: #eef3f8;
+  --sidebar-primary: #38a3d8;
+  --sidebar-primary-foreground: #06121f;
+  --sidebar-accent: #16263b;
+  --sidebar-accent-foreground: #eef3f8;
+  --sidebar-border: #1d2f47;
+  --sidebar-ring: #38a3d8;
+  --ink: #eef3f8;
+  --ink-soft: #c9d5e2;
+  --surface: #0d192a;
+  --hairline: #172a41;
 }
 
 @theme inline {
-  --font-sans: var(--font-outfit), "Google Sans", sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans: var(--font-outfit), "Google Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -103,10 +120,20 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-surface: var(--surface);
+  --color-hairline: var(--hairline);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-gold: var(--brand-gold);
+  /* Cantos arquitetônicos: nada acima de 4px (rounded-full continua disponível para avatares e pontos). */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -115,14 +142,39 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     @apply bg-background text-foreground;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: #ffffff;
+  }
+
+  /* Todo controle interativo indica clique (Modelo Padrão). */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  select,
+  summary {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
   /* Hide scrollbars but allow scrolling */
@@ -133,23 +185,77 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Entrada do hero em CSS puro: anima antes da hidratação (LCP não depende de JavaScript) */
+@keyframes vwo-rise {
+  from { transform: translate3d(0, 0.42em, 0); letter-spacing: 0.02em; }
+  to { transform: translate3d(0, 0, 0); letter-spacing: inherit; }
+}
+@keyframes vwo-fade-up {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.vwo-rise {
+  animation: vwo-rise 0.95s var(--ease-out-expo) both;
+}
+.vwo-fade-up {
+  animation: vwo-fade-up 0.85s var(--ease-out-expo) both;
+}
+
+/* Lenis (rolagem inercial) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
 }
 
 @layer utilities {
   .scrollbar-visible::-webkit-scrollbar {
     display: block !important;
     width: 6px !important;
+    height: 6px !important;
   }
   .scrollbar-visible::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05) !important;
+    background: transparent !important;
   }
   .scrollbar-visible::-webkit-scrollbar-thumb {
-    background: var(--primary) !important;
-    border-radius: 10px !important;
+    background: var(--border) !important;
+    border-radius: 2px !important;
   }
   .scrollbar-visible {
     -ms-overflow-style: auto !important;
     scrollbar-width: thin !important;
-    scrollbar-color: var(--primary) rgba(0, 0, 0, 0.05) !important;
+    scrollbar-color: var(--border) transparent !important;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Grão de papel sutil para superfícies editoriais (sem gradientes berrantes). */
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.12 0 0 0 0 0.2 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }

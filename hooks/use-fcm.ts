@@ -71,7 +71,7 @@ export function useFCM() {
             if (Notification.permission === 'granted') {
                 new Notification(notificationTitle, {
                     body: notificationBody,
-                    icon: data.icon || '/viraweb6.png'
+                    icon: data.icon || '/brand/vwo-icon-192.png'
                 })
             }
         })

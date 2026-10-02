@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { VwoLogo } from "@/components/brand/vwo-logo"
 import { useAuth } from "@/hooks/use-auth"
 import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
@@ -24,7 +25,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { PRODUCTS } from "@/lib/products"
-import Image from "next/image"
 import { useTranslations } from 'next-intl'
 import { useFCM } from "@/hooks/use-fcm"
 import { respondToTicket, updateTicketStatusAction, deleteSupportTicket, broadcastNotification } from "@/app/actions/support"
@@ -550,7 +550,7 @@ export default function AdminPage() {
             {/* Sidebar Slim */}
             <aside className="w-60 bg-white border-r border-slate-200 hidden lg:flex flex-col sticky top-0 h-screen z-50">
                 <div className="p-6 border-b border-slate-50">
-                    <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-32 mx-auto" />
+                    <VwoLogo variant="stacked" className="mx-auto" />
                     <div className="text-center mt-2">
                         <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Painel Admin</span>
                     </div>
@@ -608,7 +608,7 @@ export default function AdminPage() {
                                 <SheetContent side="left" className="p-0 w-72">
                                     <SheetHeader className="p-6 border-b border-slate-50">
                                         <SheetTitle className="flex flex-col items-center">
-                                            <Image width={120} height={40} alt="ViraWeb logo" src="/viraweb3.png" className="w-32 mb-2" />
+                                            <VwoLogo variant="stacked" className="mb-2" />
                                             <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Menu Admin</span>
                                         </SheetTitle>
                                     </SheetHeader>
@@ -1305,7 +1305,7 @@ function AdminLogin({ onAdminSuccess, currentEmail, onSignOut }: { onAdminSucces
             <Card className="max-w-md w-full border-none shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] rounded-[32px] overflow-hidden bg-white/80 backdrop-blur-xl">
                 <div className="h-1 bg-primary" />
                 <CardHeader className="pt-10 pb-6 text-center">
-                    <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-40 mx-auto mb-6" />
+                    <VwoLogo variant="stacked" className="mx-auto mb-6" />
                     <CardTitle className="text-2xl font-black text-slate-900 tracking-tight">Admin System</CardTitle>
                     <CardDescription className="text-xs font-bold text-slate-400 uppercase tracking-widest pt-1">
                         Acesso Restrito - Monitoramento

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 766 621" role="img" aria-label="Vira Web Odonto">
+  <title>Vira Web Odonto</title>
+  <polygon id="descent-cap" fill="#132a46" stroke="#132a46" stroke-width="1" stroke-linejoin="round" points="2,93.5 84.7,239.5 223.5,92.5"/>
+  <polygon id="descent-upper" fill="#113f73" stroke="#113f73" stroke-width="1" stroke-linejoin="round" points="307,243.5 223.5,92.5 84.7,239.5"/>
+  <polygon id="descent-lower" fill="#2965ae" stroke="#2965ae" stroke-width="1" stroke-linejoin="round" points="84.7,239.5 200.5,446 307,243.5"/>
+  <polygon id="descent-arrow" fill="#132a46" stroke="#132a46" stroke-width="1" stroke-linejoin="round" points="307,243.5 200.5,446 245,527.5 184,527.5 299,616.5 415,525.5 352,524 386.7,465.5 409,421.5"/>
+  <polygon id="core-apex" fill="#f2bf12" stroke="#f2bf12" stroke-width="1" stroke-linejoin="round" points="489,286.5 409,421.5 386.7,465.5 474,465 529,377"/>
+  <polygon id="core-notch" fill="#e4a009" stroke="#e4a009" stroke-width="1" stroke-linejoin="round" points="386.7,465.5 430.5,534 474,465"/>
+  <polygon id="core-crest" fill="#edb00e" stroke="#edb00e" stroke-width="1" stroke-linejoin="round" points="529,377 474,465 568.3,465.2"/>
+  <polygon id="core-base" fill="#edb00e" stroke="#edb00e" stroke-width="1" stroke-linejoin="round" points="386.7,465.5 352,524 415,525.5 299,616.5 480.5,619 430.5,534"/>
+  <polygon id="core-ember" fill="#e39907" stroke="#e39907" stroke-width="1" stroke-linejoin="round" points="568.3,465.2 474,465 430.5,534 480.5,619"/>
+  <polygon id="ascent-glint" fill="#3aa7d4" stroke="#3aa7d4" stroke-width="1" stroke-linejoin="round" points="585.5,286.2 489,286.5 529,377"/>
+  <polygon id="ascent-shaft" fill="#246ba6" stroke="#246ba6" stroke-width="1" stroke-linejoin="round" points="585.5,286.2 529,377 568.3,465.2 637,344"/>
+  <polygon id="ascent-head" fill="#266ca6" stroke="#266ca6" stroke-width="1" stroke-linejoin="round" points="763,2 493,99.5 567,151.5 489,286.5 585.5,286.2"/>
+  <polygon id="ascent-edge" fill="#1958a5" stroke="#1958a5" stroke-width="1" stroke-linejoin="round" points="763,2 585.5,286.2 637,344 696,242.5 764,291.5"/>
+</svg>

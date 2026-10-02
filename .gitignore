@@ -43,3 +43,8 @@ coverage/
 # --- Sistema Operacional ---
 .DS_Store
 Thumbs.db
+# Capturas com dados reais de pacientes (LGPD) — nunca versionar
+Prints_Sistema_Odontologico/
+
+# Builds locais isolados (NEXT_DIST_DIR)
+.next-*/

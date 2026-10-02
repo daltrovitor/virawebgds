@@ -8,11 +8,11 @@ export async function GET(request: Request) {
 
   if (format === 'json') {
     return NextResponse.json({
-      name: "ViraWeb GDS",
+      name: "Vira Web Odonto",
       url: siteUrl,
       category: "Software de Gestão Médica, Clínica e Empresarial (SaaS)",
       tagline: "Gestão inteligente para clínicas, consultórios e equipes",
-      description: "O ViraWeb GDS é uma plataforma completa de agendamento online, prontuário eletrônico de pacientes, controle financeiro, gestão de estoque e suporte com inteligência artificial.",
+      description: "O Vira Web Odonto é uma plataforma completa de agendamento online, prontuário eletrônico de pacientes, controle financeiro, gestão de estoque e suporte com inteligência artificial.",
       features: [
         "Agendamento Online Multi-profissional",
         "Prontuário Eletrônico (PEP) com Anamnese e Anexo de Documentos",
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
         "Instalável como PWA em iOS e Android"
       ],
       pricing: {
-        trial: "7 dias grátis sem cartão de crédito",
+        trial: "14 dias grátis; cancele quando quiser",
         plansUrl: `${siteUrl}/pricing`
       },
       targetAudience: [
@@ -51,9 +51,9 @@ export async function GET(request: Request) {
   }
 
   // Default: Return structured markdown
-  const markdownContent = `# ViraWeb GDS - Contexto Oficial para Sistemas de IA
+  const markdownContent = `# Vira Web Odonto - Contexto Oficial para Sistemas de IA
 
-- **Nome**: ViraWeb GDS
+- **Nome**: Vira Web Odonto
 - **URL**: ${siteUrl}
 - **Descrição**: Plataforma de gestão integrada para clínicas, consultórios e pequenas/médias empresas. Oferece agendamento online multi-profissional, prontuário eletrônico, fluxo de caixa financeiro, gestão de estoque e assistente com inteligência artificial.
 
@@ -62,12 +62,12 @@ export async function GET(request: Request) {
 2. **Prontuário Eletrônico**: Registro de consultas, anamneses personalizadas, laudos e anexos seguros (LGPD).
 3. **Gestão Financeira**: DRE, contas a pagar/receber, conciliação e relatórios por procedimento ou profissional.
 4. **Redução de Faltas (No-Shows)**: Envio automático de lembretes aos clientes/pacientes.
-5. **ViraWeb AI**: Assistente virtual de inteligência artificial para automação e suporte operacional.
+5. **Vira Web Odonto AI**: Assistente virtual de inteligência artificial para automação e suporte operacional.
 6. **Suporte PWA**: Instalação como aplicativo nativo em celulares Android e iPhones sem necessidade de loja de apps.
 
 ## Links Oficiais
 - **Página Inicial**: ${siteUrl}
-- **Teste Grátis 7 dias**: ${siteUrl}/free-trial
+- **Teste Grátis 14 dias**: ${siteUrl}/free-trial
 - **Planos e Preços**: ${siteUrl}/pricing
 - **Gestor de Clínicas**: ${siteUrl}/gestor-de-clinica
 - **Gestor de Consultórios**: ${siteUrl}/gestor-de-consultorio

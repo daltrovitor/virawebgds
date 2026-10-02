@@ -19,7 +19,7 @@ type Props = Partial<{
 export default function SchemaLocalBusiness(props: Props) {
   const name = props.name || process.env.NEXT_PUBLIC_COMPANY_NAME || '(coloque aqui)'
   const url = props.url || process.env.NEXT_PUBLIC_SITE_URL || '(coloque aqui)'
-  const logo = props.logo || (process.env.NEXT_PUBLIC_SITE_LOGO || '/viraweb6.png')
+  const logo = props.logo || (process.env.NEXT_PUBLIC_SITE_LOGO || '/brand/vwo-icon-192.png')
   const telephone = props.telephone || process.env.NEXT_PUBLIC_PHONE || ''
   const email = props.email || process.env.NEXT_PUBLIC_EMAIL || ''
   const sameAs = props.sameAs || JSON.parse(process.env.NEXT_PUBLIC_SOCIALS || '[]')

@@ -43,12 +43,12 @@ export async function sendAppointmentConfirmation(appointmentId: string) {
     professionalName: appointment.professionals.name,
     date: appointment.appointment_date,
     time: appointment.appointment_time,
-    clinicName: "ViraWeb Clínica",
+    clinicName: "Vira Web Odonto",
   })
 
   await sendEmail({
     to: appointment.patients.email,
-    subject: "Confirmação de Agendamento - ViraWeb",
+    subject: "Confirmação de Agendamento - Vira Web Odonto",
     html: emailContent.html,
     text: emailContent.text,
   })
@@ -98,12 +98,12 @@ export async function sendAppointmentReminders() {
         professionalName: appointment.professionals.name,
         date: appointment.appointment_date,
         time: appointment.appointment_time,
-        clinicName: "ViraWeb Clínica",
+        clinicName: "Vira Web Odonto",
       })
 
       await sendEmail({
         to: appointment.patients.email,
-        subject: "Lembrete: Consulta Amanhã - ViraWeb",
+        subject: "Lembrete: Consulta Amanhã - Vira Web Odonto",
         html: emailContent.html,
         text: emailContent.text,
       })
@@ -150,12 +150,12 @@ export async function sendPaymentReminders() {
         patientName: patient.name,
         amount: 150.0, // This should come from a payments table
         dueDate: patient.payment_due_date,
-        clinicName: "ViraWeb Clínica",
+        clinicName: "Vira Web Odonto",
       })
 
       await sendEmail({
         to: patient.email,
-        subject: "Lembrete de Pagamento - ViraWeb",
+        subject: "Lembrete de Pagamento - Vira Web Odonto",
         html: emailContent.html,
         text: emailContent.text,
       })
@@ -173,12 +173,12 @@ export async function sendWelcomeEmailToUser(userName: string, userEmail: string
   const emailContent = generateWelcomeEmail({
     userName,
     userEmail,
-    clinicName: "ViraWeb",
+    clinicName: "Vira Web Odonto",
   })
 
   await sendEmail({
     to: userEmail,
-    subject: "Bem-vindo ao ViraWeb!",
+    subject: "Bem-vindo ao Vira Web Odonto!",
     html: emailContent.html,
     text: emailContent.text,
   })

@@ -36,7 +36,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            Welcome to <strong>ViraWeb</strong>. By accessing or using the ViraWeb platform, available at{" "}
+            Welcome to <strong>Vira Web Odonto</strong>. By accessing or using the Vira Web Odonto platform, available at{" "}
             <a href="https://viraweb.online" target="_blank" rel="noopener noreferrer">
               viraweb.online
             </a>{" "}
@@ -44,10 +44,10 @@ export default function TermsPage() {
             declare that you have read, understood, and agree to these Terms of Service.
           </p>
           <WarningBox>
-            If you do not agree with any of the terms presented, please do not use the platform. Continued use of ViraWeb constitutes full acceptance of these terms and any updates.
+            If you do not agree with any of the terms presented, please do not use the platform. Continued use of Vira Web Odonto constitutes full acceptance of these terms and any updates.
           </WarningBox>
           <p>
-            These terms constitute a binding legal agreement between you ("User", "Client" or "Subscriber") and the company responsible for ViraWeb ("we", "our" or "ViraWeb"), regulating access and use of the software as a service (SaaS) for client management, scheduling, and business operations.
+            These terms constitute a binding legal agreement between you ("User", "Client" or "Subscriber") and the company responsible for Vira Web Odonto ("we", "our" or "Vira Web Odonto"), regulating access and use of the software as a service (SaaS) for client management, scheduling, and business operations.
           </p>
         </>
       ),
@@ -59,7 +59,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            ViraWeb is a SaaS (Software as a Service) platform designed for professionals and companies that need to manage their operations efficiently. The platform offers the following main features:
+            Vira Web Odonto is a SaaS (Software as a Service) platform designed for professionals and companies that need to manage their operations efficiently. The platform offers the following main features:
           </p>
           <ul>
             <li><strong>Client Management</strong> — Complete record with name, email, phone, Tax ID, date of birth, address, clinical notes and profile photo</li>
@@ -70,7 +70,7 @@ export default function TermsPage() {
             <li><strong>Smart Import</strong> — AI-automated import of PDF, CSV, XLSX files and images with optical character recognition (OCR)</li>
             <li><strong>Reports and Goals</strong> — Analytical dashboards with performance visualization, tracked goals and dynamic checklists</li>
             <li><strong>Push Notifications</strong> — Reminders and alerts via Firebase Cloud Messaging for appointments and events</li>
-            <li><strong>Support System</strong> — Support tickets with direct communication with the ViraWeb team</li>
+            <li><strong>Support System</strong> — Support tickets with direct communication with the Vira Web Odonto team</li>
           </ul>
           <InfoBox>
             Feature availability varies by subscription plan (Basic, Premium or Master). Refer to the plans page for more details on each level.
@@ -85,18 +85,18 @@ export default function TermsPage() {
         content: (
           <>
             <p>
-              To use ViraWeb, it is necessary to create an account providing true and up-to-date information. Registration can be done via email and password or through Google authentication (OAuth).
+              To use Vira Web Odonto, it is necessary to create an account providing true and up-to-date information. Registration can be done via email and password or through Google authentication (OAuth).
             </p>
             <h3>User Responsibilities</h3>
             <ul>
               <li>Maintain the confidentiality of your access credentials (email and password)</li>
               <li>Provide true, accurate and updated information in the registration</li>
-              <li>Immediately notify ViraWeb of any unauthorized use of your account</li>
+              <li>Immediately notify Vira Web Odonto of any unauthorized use of your account</li>
               <li>Be responsible for all activities performed in your account, including actions of authorized third parties</li>
               <li>Ensure that the use of the platform complies with all applicable laws</li>
             </ul>
             <h3>Usage Restrictions</h3>
-            <p>By using ViraWeb, you agree NOT to:</p>
+            <p>By using Vira Web Odonto, you agree NOT to:</p>
             <ul>
               <li>Use the platform for illegal, fraudulent or unauthorized purposes</li>
               <li>Share access credentials with unauthorized third parties</li>
@@ -105,7 +105,7 @@ export default function TermsPage() {
               <li>Utilize robots, scrapers or automated tools without prior authorization</li>
             </ul>
             <WarningBox>
-              ViraWeb reserves the right to suspend or terminate accounts that violate these rules, without prior notice and without refund.
+              Vira Web Odonto reserves the right to suspend or terminate accounts that violate these rules, without prior notice and without refund.
             </WarningBox>
           </>
         ),
@@ -117,7 +117,7 @@ export default function TermsPage() {
         content: (
           <>
             <p>
-              ViraWeb operates with a monthly subscription model, offering three plans that meet different needs:
+              Vira Web Odonto operates with a monthly subscription model, offering three plans that meet different needs:
             </p>
             <DataList
               items={[
@@ -132,7 +132,7 @@ export default function TermsPage() {
             </p>
             <h3>Payment Processing</h3>
             <p>
-              Payments are processed securely by <strong>Stripe</strong>. ViraWeb does not store credit card data on its servers.
+              Payments are processed securely by <strong>Stripe</strong>. Vira Web Odonto does not store credit card data on its servers.
             </p>
             <h3>Renewal and Cancellation</h3>
             <ul>
@@ -151,12 +151,12 @@ export default function TermsPage() {
         content: (
           <>
             <p>
-              All content, design, source code, logos, brands, texts, images, AI algorithms (including ViraBot) and other materials present on the ViraWeb platform are the exclusive property of ViraWeb or its licensors.
+              All content, design, source code, logos, brands, texts, images, AI algorithms (including ViraBot) and other materials present on the Vira Web Odonto platform are the exclusive property of Vira Web Odonto or its licensors.
             </p>
             <ul>
               <li>The user license granted is <strong>limited, non-exclusive, non-transferable and revocable</strong></li>
               <li>The data entered by the User remains the property of the User</li>
-              <li>The User grants ViraWeb a limited license to process their data exclusively for the provision of the contracted service</li>
+              <li>The User grants Vira Web Odonto a limited license to process their data exclusively for the provision of the contracted service</li>
             </ul>
           </>
         ),
@@ -186,7 +186,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            Bem-vindo ao <strong>ViraWeb</strong>. Ao acessar ou utilizar a plataforma ViraWeb, disponível em{" "}
+            Bem-vindo ao <strong>Vira Web Odonto</strong>. Ao acessar ou utilizar a plataforma Vira Web Odonto, disponível em{" "}
             <a href="https://viraweb.online" target="_blank" rel="noopener noreferrer">
               viraweb.online
             </a>{" "}
@@ -195,11 +195,11 @@ export default function TermsPage() {
           </p>
           <WarningBox>
             Se você não concorda com algum dos termos apresentados, por favor, não utilize a plataforma. O uso
-            continuado do ViraWeb constitui aceitação plena destes termos e de eventuais atualizações.
+            continuado do Vira Web Odonto constitui aceitação plena destes termos e de eventuais atualizações.
           </WarningBox>
           <p>
             Estes termos constituem um acordo legal vinculante entre você ("Usuário", "Cliente" ou "Assinante") e
-            a empresa responsável pelo ViraWeb ("nós", "nossa" ou "ViraWeb"), regulando o acesso e uso do
+            a empresa responsável pelo Vira Web Odonto ("nós", "nossa" ou "Vira Web Odonto"), regulando o acesso e uso do
             software como serviço (SaaS) de gestão de clientes, agendamentos e operações empresariais.
           </p>
         </>
@@ -212,7 +212,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            O ViraWeb é uma plataforma SaaS (Software como Serviço) projetada para profissionais e empresas que
+            O Vira Web Odonto é uma plataforma SaaS (Software como Serviço) projetada para profissionais e empresas que
             precisam gerenciar suas operações de forma eficiente. A plataforma oferece as seguintes funcionalidades
             principais:
           </p>
@@ -250,7 +250,7 @@ export default function TermsPage() {
               agendamentos e eventos
             </li>
             <li>
-              <strong>Sistema de Suporte</strong> — Tickets de suporte com comunicação direta com a equipe ViraWeb
+              <strong>Sistema de Suporte</strong> — Tickets de suporte com comunicação direta com a equipe Vira Web Odonto
             </li>
           </ul>
           <InfoBox>
@@ -267,7 +267,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            Para utilizar o ViraWeb, é necessário criar uma conta fornecendo informações verdadeiras e atualizadas.
+            Para utilizar o Vira Web Odonto, é necessário criar uma conta fornecendo informações verdadeiras e atualizadas.
             O cadastro pode ser feito via email e senha ou através de autenticação pelo Google (OAuth).
           </p>
           <h3>Responsabilidades do Usuário</h3>
@@ -275,7 +275,7 @@ export default function TermsPage() {
             <li>Manter a confidencialidade de suas credenciais de acesso (email e senha)</li>
             <li>Fornecer informações verdadeiras, precisas e atualizadas no cadastro</li>
             <li>
-              Notificar imediatamente o ViraWeb sobre qualquer uso não autorizado da sua conta
+              Notificar imediatamente o Vira Web Odonto sobre qualquer uso não autorizado da sua conta
             </li>
             <li>
               Ser responsável por todas as atividades realizadas em sua conta, incluindo ações de terceiros
@@ -286,7 +286,7 @@ export default function TermsPage() {
             </li>
           </ul>
           <h3>Restrições de Uso</h3>
-          <p>Ao usar o ViraWeb, você concorda em NÃO:</p>
+          <p>Ao usar o Vira Web Odonto, você concorda em NÃO:</p>
           <ul>
             <li>Utilizar a plataforma para fins ilegais, fraudulentos ou não autorizados</li>
             <li>Compartilhar credenciais de acesso com terceiros não autorizados</li>
@@ -298,7 +298,7 @@ export default function TermsPage() {
             <li>Utilizar robôs, scrapers ou ferramentas automatizadas sem autorização prévia</li>
           </ul>
           <WarningBox>
-            O ViraWeb se reserva o direito de suspender ou encerrar contas que violem estas regras, sem aviso prévio
+            O Vira Web Odonto se reserva o direito de suspender ou encerrar contas que violem estas regras, sem aviso prévio
             e sem reembolso.
           </WarningBox>
         </>
@@ -311,7 +311,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            O ViraWeb opera com um modelo de assinatura mensal, oferecendo três planos que atendem diferentes
+            O Vira Web Odonto opera com um modelo de assinatura mensal, oferecendo três planos que atendem diferentes
             necessidades:
           </p>
           <DataList
@@ -329,7 +329,7 @@ export default function TermsPage() {
           </p>
           <h3>Processamento de Pagamentos</h3>
           <p>
-            Os pagamentos são processados de forma segura pelo <strong>Stripe</strong>. O ViraWeb não armazena dados de cartão de crédito em seus servidores.
+            Os pagamentos são processados de forma segura pelo <strong>Stripe</strong>. O Vira Web Odonto não armazena dados de cartão de crédito em seus servidores.
           </p>
           <h3>Renovação e Cancelamento</h3>
           <ul>
@@ -351,8 +351,8 @@ export default function TermsPage() {
         <>
           <p>
             Todo o conteúdo, design, código-fonte, logotipos, marcas, textos, imagens, algoritmos de inteligência
-            artificial (incluindo o ViraBot) e demais materiais presentes na plataforma ViraWeb são de propriedade
-            exclusiva da ViraWeb ou de seus licenciadores.
+            artificial (incluindo o ViraBot) e demais materiais presentes na plataforma Vira Web Odonto são de propriedade
+            exclusiva da Vira Web Odonto ou de seus licenciadores.
           </p>
           <ul>
             <li>
@@ -361,7 +361,7 @@ export default function TermsPage() {
             </li>
             <li>Os dados inseridos pelo Usuário permanecem de propriedade do Usuário</li>
             <li>
-              O Usuário concede ao ViraWeb uma licença limitada para processar seus dados exclusivamente para a
+              O Usuário concede ao Vira Web Odonto uma licença limitada para processar seus dados exclusivamente para a
               prestação do serviço contratado
             </li>
           </ul>
@@ -394,7 +394,7 @@ export default function TermsPage() {
   return (
     <LegalPageLayout
       title={isEn ? "Terms of Service" : "Termos de Serviço"}
-      description={isEn ? "Please read carefully the terms that govern the use of the ViraWeb platform. Our commitment is to offer total transparency about rights and responsibilities." : "Leia com atenção os termos que regem o uso da plataforma ViraWeb. Nosso compromisso é oferecer transparência total sobre direitos e responsabilidades."}
+      description={isEn ? "Please read carefully the terms that govern the use of the Vira Web Odonto platform. Our commitment is to offer total transparency about rights and responsibilities." : "Leia com atenção os termos que regem o uso da plataforma Vira Web Odonto. Nosso compromisso é oferecer transparência total sobre direitos e responsabilidades."}
       lastUpdated="2026-04-11"
       badgeLabel={isEn ? "Terms of Service" : "Termos de Serviço"}
       badgeIcon={<FileText className="w-4 h-4 text-primary" />}

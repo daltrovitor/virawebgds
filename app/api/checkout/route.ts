@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: "brl",
             product_data: {
-              name: `ViraWeb - Plano ${plan.name}`,
-              description: is_trial ? `Teste Grátis de 14 dias - Plano ${plan.name}` : `Assinatura ${plan.name} do ViraWeb`,
+              name: `Vira Web Odonto - Plano ${plan.name}`,
+              description: is_trial ? `Teste Grátis de 14 dias - Plano ${plan.name}` : `Assinatura ${plan.name} do Vira Web Odonto`,
             },
             unit_amount: plan.amount,
             recurring: {

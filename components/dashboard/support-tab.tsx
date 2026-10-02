@@ -545,7 +545,7 @@ export default function SupportTab({ isDemo = false }: { isDemo?: boolean }) {
               >
                 <div className="flex items-center gap-2 mb-1.5">
                   <span className={`text-xs font-bold ${message.is_staff ? "text-[#3b82f6]" : "text-slate-600"}`}>
-                    {message.is_staff ? "🛡️ Equipe ViraWeb" : "Você"}
+                    {message.is_staff ? "🛡️ Equipe Vira Web Odonto" : "Você"}
                   </span>
                   <span className="text-[10px] text-slate-400">
                     {new Date(message.created_at).toLocaleString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}

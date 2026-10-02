@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     canonical: 'https://viraweb.online/gestor-de-clientes',
   },
   openGraph: {
-    title: 'Gestor de Clientes & CRM | ViraWeb GDS',
-    description: 'Centralize dados, automatize comunicações e reduza a perda de clientes com a plataforma ViraWeb.',
+    title: 'Gestor de Clientes & CRM | Vira Web Odonto',
+    description: 'Centralize dados, automatize comunicações e reduza a perda de clientes com a plataforma Vira Web Odonto.',
     url: 'https://viraweb.online/gestor-de-clientes',
   },
 }
@@ -22,9 +22,9 @@ export default function Page() {
       <main className="max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-4">Gestão de Clientes Inteligente e CRM para Crescer seu Negócio</h1>
         <p className="text-lg text-muted-foreground mb-6">
-          Tenha controle completo sobre o relacionamento com seus clientes e pacientes usando o módulo de CRM do ViraWeb GDS. Centralize fichas de contato, acompanhe o histórico de agendamentos e vendas, segmente sua base e automatize follow-ups personalizados para aumentar a taxa de retenção.
+          Tenha controle completo sobre o relacionamento com seus clientes e pacientes usando o módulo de CRM do Vira Web Odonto. Centralize fichas de contato, acompanhe o histórico de agendamentos e vendas, segmente sua base e automatize follow-ups personalizados para aumentar a taxa de retenção.
         </p>
-        <h2 className="text-2xl font-semibold mb-3">Benefícios do Gestor de Clientes ViraWeb</h2>
+        <h2 className="text-2xl font-semibold mb-3">Benefícios do Gestor de Clientes Vira Web Odonto</h2>
         <ul className="list-disc pl-6 space-y-2 mb-8">
           <li><strong>Centralização da Base de Clientes:</strong> Ficha unificada com histórico de consultas, pagamentos, preferências e notas de atendimento.</li>
           <li><strong>Retenção & Lembretes de Retorno:</strong> Identificação automática de clientes inativos para ações de reativação e pós-venda.</li>

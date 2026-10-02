@@ -1,4 +1,4 @@
-# robots.txt para ViraWeb (Otimizado para SEO e IAs)
+# robots.txt — Vira Web Odonto (otimizado para buscadores e IAs)
 Sitemap: https://viraweb.online/sitemap.xml
 
 User-agent: *

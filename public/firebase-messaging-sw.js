@@ -41,7 +41,7 @@ messaging.onBackgroundMessage((payload) => {
 
   const notificationOptions = {
     body: data.body || '',
-    icon: data.icon || '/viraweb6.png',
+    icon: data.icon || '/brand/vwo-icon-192.png',
     data: {
         url: targetUrl
     }

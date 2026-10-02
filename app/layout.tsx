@@ -1,94 +1,117 @@
+// Hello World
 import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import { Providers } from "./providers"
-import { Outfit } from 'next/font/google'
-import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getLocale } from 'next-intl/server'
+import { Montserrat, Outfit } from "next/font/google"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages, getLocale } from "next-intl/server"
+import AnalyticsTracker from "@/components/analytics-tracker"
+import { BRAND, SITE_URL } from "@/lib/brand"
 
 const outfit = Outfit({
-  subsets: ['latin'],
-  variable: '--font-outfit',
-  display: 'swap',
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
   preload: true,
   adjustFontFallback: true,
 })
 
-import AnalyticsTracker from "@/components/analytics-tracker"
+// Montserrat é a família da logo original (Vira 700 / Web 300): usada na assinatura e nos títulos.
+// display "optional": sem troca tardia de fonte no título do hero (o LCP não é reemitido em redes lentas).
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-montserrat",
+  display: "optional",
+  preload: true,
+  adjustFontFallback: true,
+})
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://viraweb.online"
+const TITLE = `${BRAND.name} | Software odontológico para clínicas e consultórios`
+const DESCRIPTION =
+  "Vira Web Odonto (VWO): agenda odontológica, ficha do paciente, odontograma, orçamentos com plano de pagamento, financeiro e conciliação bancária em uma plataforma em nuvem."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "ViraWeb GDS | Sistema de Gestão Inteligente para Clínicas e Consultórios",
-    template: "%s | ViraWeb GDS"
+    default: TITLE,
+    template: `%s | ${BRAND.name}`,
   },
-  description: "Plataforma de gestão inteligente para clínicas, consultórios e empresas. Agendamento online multi-profissional, prontuário eletrônico, controle financeiro, gestão de estoque e assistente com IA.",
+  description: DESCRIPTION,
+  applicationName: BRAND.name,
   keywords: [
-    "gestão de clínicas",
-    "agendamento online",
-    "software médico",
-    "prontuário eletrônico",
-    "gestão de consultório",
-    "sistema para clínicas",
-    "controle financeiro para clínicas",
-    "CRM de clientes",
-    "ViraWeb",
-    "ViraWeb GDS",
-    "sistema SaaS de agendamento"
+    "software odontológico",
+    "sistema para dentista",
+    "gestão de clínica odontológica",
+    "odontograma online",
+    "orçamento odontológico",
+    "agenda odontológica",
+    "prontuário odontológico",
+    "plano de pagamento odontológico",
+    "Vira Web Odonto",
+    "VWO",
   ],
-  authors: [{ name: "Equipe ViraWeb", url: SITE_URL }],
-  creator: "ViraWeb",
-  publisher: "ViraWeb",
+  authors: [{ name: BRAND.company, url: SITE_URL }],
+  creator: BRAND.company,
+  publisher: BRAND.company,
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/brand/vwo-mark.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/brand/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/manifest.json",
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   alternates: {
     canonical: SITE_URL,
     languages: {
-      'pt-BR': `${SITE_URL}/pt-BR`,
-      'en': `${SITE_URL}/en`,
+      "pt-BR": `${SITE_URL}/pt-BR`,
+      en: `${SITE_URL}/en`,
     },
   },
   openGraph: {
-    title: "ViraWeb GDS | Gestão Inteligente para Clínicas e Consultórios",
-    description: "O sistema completo para agendamento online, prontuário eletrônico, gestão financeira e IA em clínicas e consultórios.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: SITE_URL,
-    siteName: "ViraWeb GDS",
+    siteName: BRAND.name,
     locale: "pt_BR",
     type: "website",
     images: [
       {
-        url: `${SITE_URL}/viraweb6.png`,
-        width: 1200,
-        height: 630,
-        alt: "ViraWeb GDS - Gestão Inteligente para Clínicas e Consultórios",
+        url: `${SITE_URL}/brand/vwo-icon-512.png`,
+        width: 512,
+        height: 512,
+        alt: `${BRAND.name} — software odontológico`,
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "ViraWeb GDS | Gestão Inteligente para Clínicas e Consultórios",
-    description: "Agendamento online, prontuário eletrônico e controle financeiro integrado.",
-    images: [`${SITE_URL}/viraweb6.png`],
+    card: "summary",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [`${SITE_URL}/brand/vwo-icon-512.png`],
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0ea5a4",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
 }
 
 export default async function RootLayout({
@@ -96,69 +119,69 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const locale = await getLocale()
+  const messages = await getMessages()
 
-  // Expanded JSON-LD for AI Search Engines & RAG
+  // JSON-LD para buscadores e motores generativos
   const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: process.env.NEXT_PUBLIC_COMPANY_NAME || "ViraWeb GDS",
+    name: BRAND.name,
+    alternateName: BRAND.short,
     operatingSystem: "Web, iOS, Android (PWA)",
     applicationCategory: "BusinessApplication",
-    applicationSubCategory: "MedicalManagementSoftware, CRM, FinancialSoftware",
+    applicationSubCategory: "DentalPracticeManagementSoftware",
     url: SITE_URL,
-    image: `${SITE_URL}/viraweb6.png`,
-    description: "Sistema de gestão definitivo para clínicas, consultórios e equipes de atendimento com agendamento online, prontuário eletrônico, controle financeiro e inteligência artificial.",
+    image: `${SITE_URL}/brand/vwo-icon-512.png`,
+    description: DESCRIPTION,
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "BRL",
       lowPrice: "0",
-      highPrice: "299",
+      highPrice: "247.90",
       offerCount: "3",
       offers: [
         {
           "@type": "Offer",
-          name: "Teste Gratuito",
+          name: "Teste gratuito",
           price: "0",
           priceCurrency: "BRL",
-          description: "Teste completo por 7 dias sem necessidade de cartão de crédito."
-        }
-      ]
+          description: "Teste completo por 14 dias; a cobrança começa só depois do período de teste.",
+        },
+      ],
     },
     featureList: [
-      "Agendamento Online Multi-profissional",
-      "Prontuário Eletrônico de Pacientes",
-      "Controle Financeiro e Fluxo de Caixa",
-      "Lembretes e Confirmações de Consulta",
-      "Assistente Virtual com IA Integrada",
-      "Gestão de Insumos e Estoque Médico",
-      "Suporte PWA para Celulares e Tablets"
+      "Agenda odontológica semanal com status de consulta",
+      "Ficha do paciente com agendamentos, faltas, imagens e orçamentos",
+      "Orçamento pelo odontograma (dente, hemiarco, arcada ou sem região)",
+      "Plano de pagamento parcelado integrado ao contas a receber",
+      "Anamnese, documentos clínicos e tratamentos",
+      "Financeiro, fechamento e conciliação bancária",
     ],
     publisher: {
       "@type": "Organization",
-      name: process.env.NEXT_PUBLIC_COMPANY_NAME || "ViraWeb GDS",
-      logo: `${SITE_URL}/viraweb6.png`,
+      name: BRAND.company,
+      logo: `${SITE_URL}/brand/vwo-icon-512.png`,
       url: SITE_URL,
-      sameAs: JSON.parse(process.env.NEXT_PUBLIC_SOCIALS || "[]")
-    }
+      sameAs: JSON.parse(process.env.NEXT_PUBLIC_SOCIALS || "[]"),
+    },
   }
 
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "ViraWeb GDS",
+    name: BRAND.company,
+    brand: { "@type": "Brand", name: BRAND.name, alternateName: BRAND.short },
     url: SITE_URL,
-    logo: `${SITE_URL}/viraweb6.png`,
-    description: "Desenvolvedora do ViraWeb GDS, plataforma SaaS de gestão inteligente para saúde e negócios de serviços.",
+    logo: `${SITE_URL}/brand/vwo-icon-512.png`,
+    description: `Desenvolvedora do ${BRAND.name}, plataforma SaaS de gestão para clínicas e consultórios odontológicos.`,
     knowsAbout: [
-      "Gestão de Clínicas Médicas",
-      "Agendamento Online",
-      "Prontuário Eletrônico",
-      "Gestão de Consultórios",
-      "CRM e Fidelização de Clientes",
-      "Finanças para Profissionais da Saúde"
-    ]
+      "Gestão de clínicas odontológicas",
+      "Odontograma digital",
+      "Orçamentos e planos de tratamento",
+      "Agenda odontológica",
+      "Financeiro para dentistas",
+    ],
   }
 
   const faqSchema = {
@@ -167,67 +190,49 @@ export default async function RootLayout({
     mainEntity: [
       {
         "@type": "Question",
-        name: "O que é o ViraWeb GDS?",
+        name: "O que é o Vira Web Odonto?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "O ViraWeb GDS é um sistema SaaS de gestão empresarial e clínica em nuvem que integra agendamento online multi-profissional, prontuário eletrônico, controle financeiro, gestão de estoque e inteligência artificial."
-        }
+          text: "O Vira Web Odonto (VWO) é um software odontológico em nuvem que reúne agenda, ficha do paciente, odontograma, orçamentos com plano de pagamento, financeiro e conciliação bancária.",
+        },
       },
       {
         "@type": "Question",
-        name: "Para quais tipos de negócios o ViraWeb é indicado?",
+        name: "Como funciona o orçamento pelo odontograma?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "O ViraWeb é indicado para clínicas médicas, odontológicas, estéticas, psicólogos, fisioterapeutas, consultórios individuais, prestadores de serviços e pequenas/médias empresas de agendamento."
-        }
+          text: "Você escolhe o procedimento da tabela de preços e clica nos dentes, em um hemiarco, na arcada ou em 'sem região'. Cada dente vira uma linha do orçamento e o plano de pagamento gera as parcelas no contas a receber.",
+        },
       },
       {
         "@type": "Question",
-        name: "O ViraWeb possui teste grátis?",
+        name: "O Vira Web Odonto tem teste grátis?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Sim! O ViraWeb oferece um teste gratuito de 7 dias com acesso a todas as funcionalidades principais sem necessidade de cartão de crédito prévio."
-        }
+          text: "Sim. São 14 dias de teste com acesso às funcionalidades principais; a cobrança só começa depois do período de teste e você pode cancelar antes.",
+        },
       },
       {
         "@type": "Question",
-        name: "O ViraWeb funciona no celular ou tablet?",
+        name: "Funciona no celular e no tablet?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Sim, o ViraWeb é 100% responsivo e possui suporte a PWA (Progressive Web App), podendo ser adicionado diretamente à tela inicial de dispositivos iOS (iPhone/iPad) e Android."
-        }
+          text: "Sim. A plataforma é responsiva e pode ser instalada como app (PWA) no iPhone, iPad e Android.",
+        },
       },
-      {
-        "@type": "Question",
-        name: "Como o ViraWeb reduz faltas (no-shows) dos clientes?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "O ViraWeb envia confirmações e lembretes automáticos de agendamento, permitindo que os clientes confirmem ou cancelem com antecedência, otimizando a taxa de ocupação da agenda."
-        }
-      }
-    ]
+    ],
   }
 
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "ViraWeb GDS",
+    name: BRAND.name,
     url: SITE_URL,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${SITE_URL}/?s={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
   }
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="shortcut icon" href="/viraweb6.png" type="image/x-icon" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href={process.env.NEXT_PUBLIC_APPLE_TOUCH_ICON || "/viraweb6.png"} />
-
-        {/* JSON-LD Schemas para IAs e Motores de Busca */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
@@ -245,20 +250,22 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
-      <body className={`${outfit.variable} font-sans antialiased selection:bg-primary selection:text-white`}>
-        {/* Theme initialization script - Optimized and moved */}
+      <body
+        suppressHydrationWarning
+        className={`${outfit.variable} ${montserrat.variable} font-sans antialiased`}
+      >
+        {/* Tema: aplica a preferência salva antes da hidratação (padrão: claro). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark"}else{document.documentElement.classList.remove("dark");document.documentElement.style.colorScheme="light"}}catch(e){}})();`
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark"}else{document.documentElement.classList.remove("dark");document.documentElement.style.colorScheme="light"}}catch(e){}})();`,
           }}
         />
 
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <AnalyticsTracker />
-            <main id="main-content">
-              {children}
-            </main>
+            {/* Cada página declara o próprio <main>; aqui só um contêiner para evitar landmarks aninhados. */}
+            <div id="main-content">{children}</div>
           </Providers>
         </NextIntlClientProvider>
         <Toaster />
@@ -267,4 +274,3 @@ export default async function RootLayout({
     </html>
   )
 }
-

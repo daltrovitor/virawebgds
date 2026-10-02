@@ -77,7 +77,7 @@ export default function ThemeSettings() {
   }
 
   const themes = [
-    { id: "viraweb", name: "ViraWeb", primary: "#3396d3", secondary: "#ffd400" },
+    { id: "viraweb", name: "Vira Web Odonto", primary: "#3396d3", secondary: "#ffd400" },
     { id: "midnight", name: "Midnight", primary: "#0f172a", secondary: "#334155" },
     { id: "emerald", name: "Emerald", primary: "#059669", secondary: "#10b981" },
     { id: "violet", name: "Violet", primary: "#7c3aed", secondary: "#a78bfa" },

@@ -83,11 +83,15 @@ export default function TreatmentsTab({ isDemo = false }: { isDemo?: boolean }) 
       setPatients(pts)
 
       // Initial treatments from localStorage or default samples
-      const stored = localStorage.getItem("vwd:dental_treatments")
+      // A demonstração nunca lê dados reais salvos neste navegador
+      const stored = isDemo ? null : localStorage.getItem("vwd:dental_treatments")
       if (stored) {
         const parsed = JSON.parse(stored)
         setTreatments(parsed)
         if (parsed.length > 0) setSelectedTreatment(parsed[0])
+      } else if (!isDemo) {
+        // Conta real sem tratamentos: começa vazia (exemplos existem apenas na demonstração)
+        setTreatments([])
       } else {
         const defaultTreatments: DentalTreatment[] = [
           {
@@ -137,7 +141,6 @@ export default function TreatmentsTab({ isDemo = false }: { isDemo?: boolean }) 
         ]
         setTreatments(defaultTreatments)
         if (defaultTreatments.length > 0) setSelectedTreatment(defaultTreatments[0])
-        localStorage.setItem("vwd:dental_treatments", JSON.stringify(defaultTreatments))
       }
     } catch (err) {
       console.error("Error loading treatments:", err)

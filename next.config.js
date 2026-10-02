@@ -4,6 +4,10 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Permite builds/dev servers isolados (ex.: NEXT_DIST_DIR=.next-local) sem disputar o mesmo .next
+  distDir: process.env.NEXT_DIST_DIR || '.next',
+  // Metadados sempre no <head> (sem streaming no <body>) — SEO e Lighthouse leem a description no head
+  htmlLimitedBots: /.*/,
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -21,7 +25,9 @@ const nextConfig = {
   serverExternalPackages: ["tesseract.js"],
   outputFileTracingRoot: __dirname,
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion", "@radix-ui/react-icons"],
+    // CSS embutido no HTML: remove a requisição de CSS que bloqueia a renderização
+    inlineCss: true,
+    optimizePackageImports: ["lucide-react", "framer-motion", "motion", "@radix-ui/react-icons"],
   },
 
   compiler: {

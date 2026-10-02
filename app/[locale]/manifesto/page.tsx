@@ -18,7 +18,7 @@ export default function ManifestoPage() {
       {/* HEADER METADATA */}
       <header className="brutal-section" style={{ padding: '1rem 2rem', borderBottom: '2px solid var(--brutal-muted)', display: 'flex', justifyContent: 'space-between' }}>
         <div className="brutal-mono">[ STATUS: OPERANT ]</div>
-        <div className="brutal-mono">{time} // VIRAWEB_GDC</div>
+        <div className="brutal-mono">{time} // VIRA_WEB_ODONTO</div>
         <div className="brutal-mono">PROTOCOLO: ANTI_GENERIC</div>
       </header>
 

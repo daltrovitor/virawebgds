@@ -1,52 +1,23 @@
 // Hello World
 "use client"
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import {
-    LogOut,
-    Menu,
-    X,
-    Calendar,
-    Users,
-    BarChart3,
-    Home,
-    CreditCard,
-    List,
-    Sparkles,
-    Target,
-    Settings,
-    HeadphonesIcon,
-    StickyNote,
-    PlayCircle,
-    AlertCircle,
-    Loader2,
-    Upload,
-    BellRing,
-    Receipt,
-    Tag,
-    TrendingUp,
-    Smile,
-    ClipboardList,
-    ShieldAlert,
-    Building,
-    FileText,
-} from "lucide-react"
-
-import dynamic from 'next/dynamic'
-import Image from "next/image"
+import { useState, useEffect, useMemo, useCallback } from "react"
+import dynamic from "next/dynamic"
+import { AnimatePresence, motion } from "motion/react"
+import { LogOut, Menu, X, Loader2 } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 import { createClient } from "@/lib/supabase-client"
-import { useTranslations } from 'next-intl'
 import LanguageToggle from "@/components/language-toggle"
 import LeadGenForm from "@/components/lead-gen-form"
 import { useToast } from "@/hooks/use-toast"
 import { useActivityTracker } from "@/hooks/use-activity-tracker"
 import { useFCM } from "@/hooks/use-fcm"
+import { VwoMark } from "@/components/brand/vwo-mark"
+import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
+import { DASHBOARD_NAV, isDashboardTab, type DashboardTabId } from "@/components/dashboard/nav-config"
+import { BRAND } from "@/lib/brand"
 
-// Dynamic imports to optimize bundle splitting and fix SSR issues with charts
-const ChecklistTab = dynamic(() => import("./dashboard/checklist-tab"), { loading: () => <TabLoading /> })
+// Abas carregadas sob demanda (divide o bundle e evita SSR de gráficos)
 const OverviewTab = dynamic(() => import("./dashboard/overview-tab"), { loading: () => <TabLoading /> })
 const AppointmentsTab = dynamic(() => import("./dashboard/appointments-tab"), { loading: () => <TabLoading /> })
 const PatientsTab = dynamic(() => import("./dashboard/patients-tab"), { loading: () => <TabLoading /> })
@@ -56,29 +27,27 @@ const AnamnesisTab = dynamic(() => import("./dashboard/anamnesis-tab"), { loadin
 const DentalDocumentsTab = dynamic(() => import("./dashboard/dental-documents-tab"), { loading: () => <TabLoading /> })
 const ReconciliationTab = dynamic(() => import("./dashboard/reconciliation-tab"), { loading: () => <TabLoading /> })
 const ProfessionalsTab = dynamic(() => import("./dashboard/professionals-tab"), { loading: () => <TabLoading /> })
-const ReportsTab = dynamic(() => import("./dashboard/reports-tab"), { ssr: false, loading: () => <TabLoading /> })
 const SubscriptionsTab = dynamic(() => import("./dashboard/subscriptions-tab"), { loading: () => <TabLoading /> })
 const FinancialTab = dynamic(() => import("./dashboard/financial-tab"), { ssr: false, loading: () => <TabLoading /> })
 const AISection = dynamic(() => import("./dashboard/ai-section"), { loading: () => <TabLoading /> })
-const GoalsSection = dynamic(() => import("./dashboard/goals-section").then(mod => mod.GoalsSection), { loading: () => <TabLoading /> })
+const GoalsSection = dynamic(() => import("./dashboard/goals-section").then((mod) => mod.GoalsSection), { loading: () => <TabLoading /> })
 const SettingsTab = dynamic(() => import("./dashboard/settings-tab"), { loading: () => <TabLoading /> })
 const SupportTab = dynamic(() => import("./dashboard/support-tab"), { loading: () => <TabLoading /> })
-const NotesTab = dynamic(() => import("./dashboard/notes-tab"), { loading: () => <TabLoading /> })
 const RemindersTab = dynamic(() => import("./dashboard/reminders-tab"), { loading: () => <TabLoading /> })
 const TutorialTab = dynamic(() => import("./dashboard/tutorial-tab"), { loading: () => <TabLoading /> })
 const ImportTab = dynamic(() => import("./dashboard/import-tab"), { loading: () => <TabLoading /> })
-const NotificationsPanel = dynamic(() => import("./notifications-panel"), { ssr: false })
-const TutorialModal = dynamic(() => import("./tutorial-modal"), { ssr: false })
-const ImportOnboardingModal = dynamic(() => import("./import-onboarding-modal"), { ssr: false })
 const PriceTableTab = dynamic(() => import("./dashboard/price-table-tab"), { loading: () => <TabLoading /> })
 const BudgetTab = dynamic(() => import("./dashboard/budget-tab"), { loading: () => <TabLoading /> })
 const ClosingTab = dynamic(() => import("./dashboard/closing-tab"), { loading: () => <TabLoading /> })
-
+const NotificationsPanel = dynamic(() => import("./notifications-panel"), { ssr: false })
+const TutorialModal = dynamic(() => import("./tutorial-modal"), { ssr: false })
+const ImportOnboardingModal = dynamic(() => import("./import-onboarding-modal"), { ssr: false })
 
 function TabLoading() {
     return (
-        <div className="flex items-center justify-center p-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex items-center justify-center p-12" role="status" aria-live="polite">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" aria-hidden />
+            <span className="sr-only">Carregando…</span>
         </div>
     )
 }
@@ -111,396 +80,310 @@ interface DashboardProps {
 
 export default function Dashboard({ user, onLogout, subscription, isNewUser = false }: DashboardProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const [activeTab, setActiveTab] = useState("overview")
+    const [activeTab, setActiveTab] = useState<DashboardTabId>("overview")
     const [showTutorial, setShowTutorial] = useState(false)
     const [hasWatchedTutorial, setHasWatchedTutorial] = useState(false)
     const [showImportOnboarding, setShowImportOnboarding] = useState(false)
-    const [hasSeenImportFeature, setHasSeenImportFeature] = useState(true)
-    const [hasClickedImport, setHasClickedImport] = useState(false)
     const [showLeadForm, setShowLeadForm] = useState(false)
-    const supabase = createClient()
+    const [isTrial, setIsTrial] = useState(false)
+    const supabase = useMemo(() => createClient(), [])
     const { toast } = useToast()
-    const t = useTranslations('dashboard')
-    const tTitles = useTranslations('titles')
+    const t = useTranslations("dashboard")
+    const tSidebar = useTranslations("dashboard.sidebar")
+    const tTitles = useTranslations("titles")
+    const locale = useLocale()
     useFCM()
-
-    // Track user activity (heartbeat every 5 min)
     useActivityTracker()
 
-    useEffect(() => {
-        loadTutorialStatus()
-
-        // Tab switching listener for deep-linking
-        const tabHandler = (e: Event) => {
-            const detail = (e as CustomEvent).detail
-            if (detail) {
-                setActiveTab(detail)
-                // Scroll to top when switching tabs
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-            }
-        }
-        window.addEventListener('vwd:goto_tab', tabHandler as EventListener)
-        return () => window.removeEventListener('vwd:goto_tab', tabHandler as EventListener)
+    const goToTab = useCallback((tab: DashboardTabId) => {
+        setActiveTab(tab)
+        setSidebarOpen(false)
+        window.scrollTo({ top: 0, behavior: "smooth" })
     }, [])
 
-    const checkLeadStatus = () => {
-        // Show lead form if new user, has subscription and hasn't submitted before for this account
+    const checkLeadStatus = useCallback(() => {
         const leadSubmittedKey = `vwd:lead_gen_submitted_${user.email}`
-        const leadSubmitted = localStorage.getItem(leadSubmittedKey)
-        if (subscription && !leadSubmitted) {
-            setShowLeadForm(true)
-        }
-    }
-
-    const dismissWelcomeModal = () => {
-        setShowTutorial(false)
-        localStorage.setItem('vwd:has_seen_welcome_modal', 'true')
-    }
-
-    const loadTutorialStatus = async () => {
         try {
-            const { data: { user: currentUser } } = await supabase.auth.getUser()
-            if (!currentUser) return
-
-            const { data } = await supabase
-                .from('user_settings')
-                .select('has_watched_tutorial')
-                .eq('user_id', currentUser.id)
-                .maybeSingle()
-
-            const watched = data?.has_watched_tutorial || false
-            setHasWatchedTutorial(watched)
-            
-            const hasSeenWelcome = localStorage.getItem('vwd:has_seen_welcome_modal')
-            if (!hasSeenWelcome && (isNewUser || !watched)) {
-                // Show welcome modal automatically if they haven't seen it AND (it's signup OR they never watched tutorial)
-                setTimeout(() => {
-                    setShowTutorial(true)
-                }, 500)
-            } else {
-                // If they already watched it (or we don't need to show it), check the lead status
-                checkLeadStatus()
-            }
-        } catch (error) {
-            console.error('Error loading tutorial status:', error)
+            if (subscription && !localStorage.getItem(leadSubmittedKey)) setShowLeadForm(true)
+        } catch {
+            // armazenamento indisponível (modo privado): não exibe o formulário
         }
-    }
-
-    const loadImportFeatureStatus = async () => {
-        try {
-            const { data: { user: currentUser } } = await supabase.auth.getUser()
-            if (!currentUser) return
-
-            const { data } = await supabase
-                .from('user_settings')
-                .select('has_seen_import_feature')
-                .eq('user_id', currentUser.id)
-                .maybeSingle()
-
-            const seen = data?.has_seen_import_feature ?? false
-            setHasSeenImportFeature(seen)
-            setHasClickedImport(seen)
-
-            if (!seen) {
-                setTimeout(() => {
-                    setShowImportOnboarding(true)
-                }, 1500)
-            }
-        } catch (error) {
-            console.error('Error loading import feature status:', error)
-        }
-    }
-
-    const dismissImportOnboarding = async () => {
-        setHasSeenImportFeature(true)
-        try {
-            const { data: { user: currentUser } } = await supabase.auth.getUser()
-            if (!currentUser) return
-
-            await supabase
-                .from('user_settings')
-                .upsert({
-                    user_id: currentUser.id,
-                    has_seen_import_feature: true,
-                    updated_at: new Date().toISOString(),
-                }, { onConflict: 'user_id' })
-        } catch (error) {
-            console.error('Error updating import feature status:', error)
-        }
-    }
-
-    const navItems = [
-        {
-            id: "overview",
-            label: t('sidebar.overview'),
-            icon: <Home className="w-5 h-5" />,
-            notification: !hasWatchedTutorial ? (
-                <div className="absolute -right-1 -top-1">
-                    <AlertCircle className="w-4 h-4 text-primary animate-pulse" />
-                </div>
-            ) : null
-        },
-        {
-            id: "import",
-            label: t('sidebar.import'),
-            icon: <Upload className="w-5 h-5" />,
-            badge: t('sidebar.new'),
-            pulsing: false,
-        },
-        { id: "notes", label: t('sidebar.notes'), icon: <StickyNote className="w-5 h-5" /> },
-        { id: "checklist", label: t('sidebar.checklist'), icon: <List className="w-5 h-5" /> },
-        { id: "reminders", label: t('sidebar.reminders'), icon: <BellRing className="w-5 h-5" /> },
-        { id: "ai", label: t('sidebar.ai'), icon: <Sparkles className="w-5 h-5" /> },
-        { id: "goals", label: t('sidebar.goals'), icon: <Target className="w-5 h-5" /> },
-        { id: "appointments", label: t('sidebar.appointments'), icon: <Calendar className="w-5 h-5" /> },
-        { id: "patients", label: t('sidebar.patients'), icon: <Users className="w-5 h-5" /> },
-        { id: "odontogram", label: t('sidebar.odontogram'), icon: <Smile className="w-5 h-5" /> },
-        { id: "treatments", label: t('sidebar.treatments'), icon: <ClipboardList className="w-5 h-5" /> },
-        { id: "anamnesis", label: t('sidebar.anamnesis'), icon: <ShieldAlert className="w-5 h-5" /> },
-        { id: "dentalDocuments", label: t('sidebar.dentalDocuments'), icon: <FileText className="w-5 h-5" /> },
-        { id: "financial", label: t('sidebar.financial'), icon: <CreditCard className="w-5 h-5" /> },
-        { id: "reconciliation", label: t('sidebar.bankReconciliation'), icon: <Building className="w-5 h-5" /> },
-        { id: "price-table", label: t('sidebar.priceTable'), icon: <Tag className="w-5 h-5" /> },
-        { id: "budgets", label: t('sidebar.budgets'), icon: <Receipt className="w-5 h-5" /> },
-        { id: "closing", label: t('sidebar.closing'), icon: <TrendingUp className="w-5 h-5" /> },
-        { id: "professionals", label: t('sidebar.professionals'), icon: <Users className="w-5 h-5" /> },
-        { id: "reports", label: t('sidebar.reports'), icon: <BarChart3 className="w-5 h-5" /> },
-        { id: "subscriptions", label: t('sidebar.subscriptions'), icon: <CreditCard className="w-5 h-5" /> },
-        { id: "support", label: t('sidebar.support'), icon: <HeadphonesIcon className="w-5 h-5" /> },
-        {
-            id: "tutorial",
-            label: t('sidebar.tutorial'),
-            icon: <PlayCircle className="w-5 h-5" />,
-            notification: !hasWatchedTutorial ? (
-                <div className="absolute -right-1 -top-1">
-                    <AlertCircle className="w-4 h-4 text-primary" />
-                </div>
-            ) : null
-        },
-        { id: "settings", label: t('sidebar.settings'), icon: <Settings className="w-5 h-5" /> },
-    ]
+    }, [subscription, user.email])
 
     useEffect(() => {
-        const sectionName = navItems.find(item => item.id === activeTab)?.label || t('sidebar.overview')
-        document.title = tTitles('dashboard', { section: sectionName })
-    }, [activeTab, tTitles, navItems])
+        const loadTutorialStatus = async () => {
+            try {
+                const { data: { user: currentUser } } = await supabase.auth.getUser()
+                if (!currentUser) return
+
+                const { data } = await supabase
+                    .from("user_settings")
+                    .select("has_watched_tutorial")
+                    .eq("user_id", currentUser.id)
+                    .maybeSingle()
+
+                const watched = data?.has_watched_tutorial || false
+                setHasWatchedTutorial(watched)
+
+                const hasSeenWelcome = localStorage.getItem("vwd:has_seen_welcome_modal")
+                if (!hasSeenWelcome && (isNewUser || !watched)) {
+                    setTimeout(() => setShowTutorial(true), 500)
+                } else {
+                    checkLeadStatus()
+                }
+            } catch (error) {
+                console.error("Error loading tutorial status:", error)
+            }
+        }
+        loadTutorialStatus()
+
+        // Deep-link entre abas (ex.: lembretes → tutorial)
+        const tabHandler = (e: Event) => {
+            const detail = (e as CustomEvent).detail
+            if (isDashboardTab(detail)) goToTab(detail)
+        }
+        window.addEventListener("vwd:goto_tab", tabHandler as EventListener)
+        return () => window.removeEventListener("vwd:goto_tab", tabHandler as EventListener)
+    }, [supabase, isNewUser, checkLeadStatus, goToTab])
+
+    // Detecção de teste gratuito apenas no cliente (evita divergência de hidratação)
+    useEffect(() => {
+        const lowerPlan = `${subscription?.plan_name || ""} ${subscription?.plan_type || ""} ${subscription?.user_plan || ""}`.toLowerCase()
+        setIsTrial(lowerPlan.includes("free") || lowerPlan.includes("trial") || document.cookie.includes("vwd_is_trial=true"))
+    }, [subscription])
+
+    // Fecha a gaveta com Esc e trava a rolagem do fundo enquanto aberta
+    useEffect(() => {
+        if (!sidebarOpen) return
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSidebarOpen(false)
+        const prevOverflow = document.body.style.overflow
+        document.body.style.overflow = "hidden"
+        window.addEventListener("keydown", onKey)
+        return () => {
+            document.body.style.overflow = prevOverflow
+            window.removeEventListener("keydown", onKey)
+        }
+    }, [sidebarOpen])
+
+    const activeItem = useMemo(
+        () => DASHBOARD_NAV.flatMap((g) => g.items).find((item) => item.id === activeTab),
+        [activeTab],
+    )
+    const sectionLabel = activeItem ? tSidebar(activeItem.labelKey) : tSidebar("overview")
+
+    useEffect(() => {
+        document.title = tTitles("dashboard", { section: sectionLabel })
+    }, [sectionLabel, tTitles])
+
+    const todayLabel = useMemo(() => {
+        return new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long" }).format(new Date())
+    }, [locale])
+
+    const markers = useMemo(
+        () => ({
+            ...(hasWatchedTutorial ? {} : { tutorial: "dot" as const }),
+            import: t("sidebar.new"),
+        }),
+        [hasWatchedTutorial, t],
+    )
+
+    const sidebarFooter = (
+        <div className="flex items-center gap-3 px-2 py-1.5">
+            <div
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary font-display text-sm font-semibold text-ink"
+                aria-hidden
+            >
+                {(user.name || user.email).slice(0, 1).toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-semibold text-ink">{user.name}</p>
+                <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+            </div>
+            <button
+                type="button"
+                onClick={onLogout}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-surface hover:text-ink"
+                aria-label={t("header.logout")}
+                title={t("header.logout")}
+            >
+                <LogOut className="h-4 w-4" aria-hidden />
+            </button>
+        </div>
+    )
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] font-sans">
+        <div className="min-h-screen bg-surface font-sans text-foreground">
             {showLeadForm && (
-                <LeadGenForm 
+                <LeadGenForm
                     onComplete={(data) => {
-                        try {
-                            fetch('/api/leads', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(data)
-                            });
-                        } catch (e) {
-                            console.error("Failed to save lead:", e)
-                        }
+                        fetch("/api/leads", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(data),
+                        }).catch((e) => console.error("Failed to save lead:", e))
                         setShowLeadForm(false)
-                        const leadSubmittedKey = `vwd:lead_gen_submitted_${user.email}`
-                        localStorage.setItem(leadSubmittedKey, "true")
-                        toast({
-                            title: t('leadForm.successTitle'),
-                            description: t('leadForm.successDesc'),
-                        })
-                    }} 
+                        try {
+                            localStorage.setItem(`vwd:lead_gen_submitted_${user.email}`, "true")
+                        } catch {
+                            // ignorado
+                        }
+                        toast({ title: t("leadForm.successTitle"), description: t("leadForm.successDesc") })
+                    }}
                 />
             )}
-            <TutorialModal 
-                open={showTutorial} 
+            <TutorialModal
+                open={showTutorial}
                 onOpenChange={(open) => {
                     if (!open) {
-                        dismissWelcomeModal()
+                        setShowTutorial(false)
+                        try {
+                            localStorage.setItem("vwd:has_seen_welcome_modal", "true")
+                        } catch {
+                            // ignorado
+                        }
                         checkLeadStatus()
                     } else {
                         setShowTutorial(true)
                     }
-                }} 
+                }}
             />
             <ImportOnboardingModal
                 open={showImportOnboarding}
                 onOpenChange={setShowImportOnboarding}
-                onNavigateToImport={() => {
-                    setActiveTab("import")
-                    setHasClickedImport(true)
-                }}
-                onDismiss={dismissImportOnboarding}
+                onNavigateToImport={() => goToTab("import")}
+                onDismiss={() => setShowImportOnboarding(false)}
             />
-            {/* Header */}
-            <header className="border-b border-slate-200 bg-white sticky top-0 z-40 h-14 sm:h-16">
-                <div className="flex items-center justify-between px-2 sm:px-6 h-full">
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className="lg:hidden p-2 hover:bg-muted rounded-lg transition-colors"
-                        >
-                            {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                        </button>
-                        <div className="flex items-center gap-1.5 sm:gap-3">
-                            <Image width={512} height={160} alt="ViraWeb logo" src="/viraweb3.png" className="w-24 sm:w-40" style={{ height: "auto" }} priority />
-                            {(() => {
-                                const lowerPlan = `${subscription?.plan_name || ""} ${subscription?.plan_type || ""} ${subscription?.user_plan || ""}`.toLowerCase()
-                                
-                                const isTrialOrFree = 
-                                    lowerPlan.includes("free") || lowerPlan.includes("trial") ||
-                                    (typeof window !== 'undefined' && document.cookie.includes('vwd_is_trial=true'))
 
-                                if (isTrialOrFree) {
-                                    return (
-                                        <span className="bg-primary text-primary-foreground text-[8px] sm:text-[10px] font-black px-1.5 py-0.5 rounded-none shadow-sm uppercase tracking-wider flex items-center gap-1 border border-primary/20">
-                                            <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                                            {t('header.freeTrial')}
-                                        </span>
-                                    )
-                                }
-                                return null
-                            })()}
-                        </div>
-                    </div>
+            {/* Barra lateral fixa (desktop) */}
+            <aside className="fixed inset-y-0 left-0 z-30 hidden w-[272px] border-r border-border lg:block" aria-label={BRAND.name}>
+                <DashboardSidebar activeTab={activeTab} onSelect={goToTab} markers={markers} footer={sidebarFooter} />
+            </aside>
 
-                    <div className="flex items-center gap-1 sm:gap-4">
-                        <LanguageToggle variant="icon" className="sm:flex lg:hidden" />
-                        <LanguageToggle variant="compact" className="hidden lg:flex" />
-                        <NotificationsPanel />
-                        <div className="text-right hidden sm:block">
-                            <p className="text-sm font-bold text-[#0f172a]">{user.name}</p>
-                            <p className="text-xs font-medium text-slate-500">{user.email}</p>
-                        </div>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={onLogout}
-                            className="flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-none h-8 sm:h-9"
-                        >
-                            <LogOut className="w-4 h-4" />
-                            <span className="hidden sm:inline">{t('header.logout')}</span>
-                        </Button>
-                    </div>
-                </div>
-            </header>
-
-            <div className="flex">
-                {/* Sidebar Overlay for Mobile */}
+            {/* Gaveta (mobile/tablet) */}
+            <AnimatePresence>
                 {sidebarOpen && (
-                    <div 
-                        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-                        onClick={() => setSidebarOpen(false)}
-                    />
-                )}
-                {/* Sidebar */}
-                 <aside
-                    className={`fixed inset-y-0 left-0 lg:relative z-50 transition-all duration-300 overflow-hidden shrink-0 border-r border-slate-200 bg-white flex flex-col ${
-                        sidebarOpen ? "w-full lg:w-64 translate-x-0" : "-translate-x-full lg:translate-x-0 w-0 lg:w-64"
-                    }`}
-                >
-                    {sidebarOpen && (
-                        <div className="flex-none flex items-center justify-between p-4 lg:hidden border-b sticky top-0 bg-white z-10">
-                            <Image width={512} height={160} alt="ViraWeb logo" src="/viraweb3.png" className="w-24" style={{ height: "auto" }} />
+                    <>
+                        <motion.div
+                            key="scrim"
+                            className="fixed inset-0 z-40 bg-[#0f1f33]/40 lg:hidden"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSidebarOpen(false)}
+                            aria-hidden
+                        />
+                        <motion.aside
+                            key="drawer"
+                            className="fixed inset-y-0 left-0 z-50 w-[min(86vw,320px)] border-r border-border shadow-xl lg:hidden"
+                            initial={{ x: "-100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "-100%" }}
+                            transition={{ type: "spring", stiffness: 300, damping: 32 }}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-label={tSidebar("navLabel")}
+                        >
                             <button
+                                type="button"
                                 onClick={() => setSidebarOpen(false)}
-                                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                                className="absolute right-2 top-2 z-10 flex h-12 w-12 items-center justify-center rounded-sm text-muted-foreground hover:bg-surface hover:text-ink"
+                                aria-label={t("header.closeMenu")}
                             >
-                                <X className="w-6 h-6" />
+                                <X className="h-5 w-5" aria-hidden />
                             </button>
-                        </div>
-                    )}
-                    <nav className="flex-1 p-4 space-y-1 overflow-y-auto w-full lg:w-64 scrollbar-visible">
-                        {navItems.map((item) => (
-                            <div key={item.id} className="relative">
-                                <NavItem
-                                    icon={item.icon}
-                                    label={item.label}
-                                    active={activeTab === item.id}
-                                    badge={(item as { badge?: string }).badge}
-                                    pulsing={(item as { pulsing?: boolean }).pulsing}
-                                    onClick={() => {
-                                        setActiveTab(item.id)
-                                        setSidebarOpen(false)
-                                        if (item.id === "import") {
-                                            setHasClickedImport(true)
-                                        }
-                                    }}
-                                />
-                                {(item as { notification?: React.ReactNode }).notification}
-                            </div>
-                        ))}
-                    </nav>
-                </aside>
+                            <DashboardSidebar activeTab={activeTab} onSelect={goToTab} markers={markers} footer={sidebarFooter} staticLogo />
+                        </motion.aside>
+                    </>
+                )}
+            </AnimatePresence>
 
-                {/* Main Content */}
-                <main className="flex-1 overflow-auto">
-                    <div className="p-4 sm:p-6 lg:p-8">
-                        <div className="max-w-7xl mx-auto">
-                            {activeTab === "overview" && <OverviewTab user={user} onNavigate={(tab) => setActiveTab(tab)} />}
-                            {activeTab === "import" && <ImportTab />}
-                            {activeTab === "notes" && <NotesTab />}
-                            {activeTab === "checklist" && <ChecklistTab />}
-                            {activeTab === "reminders" && <RemindersTab />}
-                            {activeTab === "ai" && <AISection planType={subscription?.plan_type || "basic"} />}
-                            {activeTab === "goals" && <GoalsSection />}
-                            {activeTab === "tutorial" && (
-                                <TutorialTab onMarkWatched={() => setHasWatchedTutorial(true)} />
-                            )}
-                            {activeTab === "appointments" && <AppointmentsTab />}
-                            {activeTab === "patients" && <PatientsTab />}
-                            {activeTab === "odontogram" && <OdontogramTab />}
-                            {activeTab === "treatments" && <TreatmentsTab />}
-                            {activeTab === "anamnesis" && <AnamnesisTab />}
-                            {activeTab === "dentalDocuments" && <DentalDocumentsTab />}
-                            {activeTab === "financial" && <FinancialTab />}
-                            {activeTab === "reconciliation" && <ReconciliationTab />}
-                            {activeTab === "price-table" && <PriceTableTab />}
-                            {activeTab === "budgets" && <BudgetTab />}
-                            {activeTab === "closing" && <ClosingTab />}
-                            {activeTab === "professionals" && <ProfessionalsTab />}
-                            {activeTab === "reports" && <ReportsTab />}
-                            {activeTab === "subscriptions" && <SubscriptionsTab subscription={subscription} />}
-                            {activeTab === "support" && <SupportTab />}
-                            {activeTab === "settings" && <SettingsTab />}
+            <div className="lg:pl-[272px]">
+                {/* Cabeçalho */}
+                <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+                    <div className="flex h-16 items-center gap-3 px-4 sm:px-6 lg:px-10">
+                        <button
+                            type="button"
+                            onClick={() => setSidebarOpen(true)}
+                            className="-ml-2 flex h-12 w-12 items-center justify-center rounded-sm text-ink hover:bg-surface lg:hidden"
+                            aria-label={t("header.openMenu")}
+                            aria-expanded={sidebarOpen}
+                        >
+                            <Menu className="h-5 w-5" aria-hidden />
+                        </button>
+                        <VwoMark className="w-7 lg:hidden" decorative />
+
+                        <div className="min-w-0 flex-1">
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.h1
+                                    key={activeTab}
+                                    initial={{ y: 10, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -8, opacity: 0 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                                    className="truncate font-display text-[17px] font-semibold tracking-[-0.01em] text-ink sm:text-lg"
+                                >
+                                    {sectionLabel}
+                                </motion.h1>
+                            </AnimatePresence>
+                            <p className="hidden truncate text-xs capitalize text-muted-foreground sm:block">{todayLabel}</p>
                         </div>
+
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            {isTrial && (
+                                <span className="hidden rounded-sm border border-primary/30 px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary sm:inline-block">
+                                    {t("header.freeTrial")}
+                                </span>
+                            )}
+                            <LanguageToggle variant="icon" className="lg:hidden" />
+                            <LanguageToggle variant="compact" className="hidden lg:flex" />
+                            <NotificationsPanel />
+                        </div>
+                    </div>
+                </header>
+
+                <main className="px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+                    <div className="mx-auto max-w-[1360px]">
+                        <AnimatePresence mode="wait" initial={false}>
+                            <motion.div
+                                key={activeTab}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -6 }}
+                                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                {activeTab === "overview" && (
+                                    <OverviewTab
+                                        user={user}
+                                        onNavigate={(tab: string) => {
+                                            if (isDashboardTab(tab)) goToTab(tab)
+                                        }}
+                                    />
+                                )}
+                                {activeTab === "import" && <ImportTab />}
+                                {activeTab === "reminders" && <RemindersTab />}
+                                {activeTab === "ai" && <AISection planType={subscription?.plan_type || "basic"} />}
+                                {activeTab === "goals" && <GoalsSection />}
+                                {activeTab === "tutorial" && <TutorialTab onMarkWatched={() => setHasWatchedTutorial(true)} />}
+                                {activeTab === "appointments" && <AppointmentsTab />}
+                                {activeTab === "patients" && <PatientsTab />}
+                                {activeTab === "odontogram" && <OdontogramTab />}
+                                {activeTab === "treatments" && <TreatmentsTab />}
+                                {activeTab === "anamnesis" && <AnamnesisTab />}
+                                {activeTab === "dentalDocuments" && <DentalDocumentsTab />}
+                                {activeTab === "financial" && <FinancialTab />}
+                                {activeTab === "reconciliation" && <ReconciliationTab />}
+                                {activeTab === "price-table" && <PriceTableTab />}
+                                {activeTab === "budgets" && <BudgetTab />}
+                                {activeTab === "closing" && <ClosingTab />}
+                                {activeTab === "professionals" && <ProfessionalsTab />}
+                                {activeTab === "subscriptions" && <SubscriptionsTab subscription={subscription} />}
+                                {activeTab === "support" && <SupportTab />}
+                                {activeTab === "settings" && <SettingsTab />}
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
                 </main>
             </div>
-
         </div>
-    )
-}
-
-function NavItem({
-    icon,
-    label,
-    active,
-    onClick,
-    badge,
-    pulsing,
-}: {
-    icon: React.ReactNode
-    label: string
-    active: boolean
-    onClick: () => void
-    badge?: string
-    pulsing?: boolean
-}) {
-    return (
-        <button
-            onClick={onClick}
-            className={`w-full cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-none transition-all duration-200 ${active
-                ? "bg-primary text-primary-foreground shadow-md"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                } ${pulsing ? "ring-2 ring-primary/40 ring-offset-1 ring-offset-white animate-pulse" : ""}`}
-        >
-            <div className={`${active ? "text-primary-foreground" : "text-slate-400 group-hover:text-slate-600"}`}>
-                {icon}
-            </div>
-            <span className={`text-[14px] ${active ? "font-bold" : "font-medium"}`}>{label}</span>
-            {badge && (
-                <span className="ml-auto text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-[#1e293b] text-white shadow-sm">
-                    {badge}
-                </span>
-            )}
-        </button>
     )
 }

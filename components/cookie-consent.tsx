@@ -58,11 +58,11 @@ export default function CookieConsent() {
         <Button
           variant="outline"
           onClick={decline}
-          className="flex-1 md:flex-none text-xs md:text-sm h-8 md:h-10 bg-transparent"
+          className="flex-1 md:flex-none text-xs md:text-sm h-11 bg-transparent"
         >
           Recusar
         </Button>
-        <Button onClick={accept} className="flex-1 md:flex-none text-xs md:text-sm h-8 md:h-10">
+        <Button onClick={accept} className="flex-1 md:flex-none text-xs md:text-sm h-11">
           Ativar cookies
         </Button>
       </div>

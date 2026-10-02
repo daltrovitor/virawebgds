@@ -57,8 +57,8 @@ export async function POST(request: NextRequest) {
     const userText = lastMessage?.role === "user" ? String(lastMessage.content).toLowerCase() : String(messages).toLowerCase()
 
     const FALLBACK = isEnglish
-      ? "I don't have the ability to answer that, but if you want to ask me something about your ViraWeb account I'll be happy to answer."
-      : "Não tenho capacidade para responder isso e quiser me perguntar algo sobre a sua conta da ViraWeb ficarei feliz em responder."
+      ? "I don't have the ability to answer that, but if you want to ask me something about your Vira Web Odonto account I'll be happy to answer."
+      : "Não tenho capacidade para responder isso e quiser me perguntar algo sobre a sua conta da Vira Web Odonto ficarei feliz em responder."
 
     // Helper DB queries
     const getCount = async (table: string) => {
@@ -107,9 +107,9 @@ export async function POST(request: NextRequest) {
       if (/quantos?.*cliente|quantos clientes|número de clientes|how many clients|number of clients/.test(userText)) {
         const n = await getCount("patients")
         if (isEnglish) {
-          return new Response(`You have ${n} client${n === 1 ? "" : "s"} registered in ViraWeb.`)
+          return new Response(`You have ${n} client${n === 1 ? "" : "s"} registered in Vira Web Odonto.`)
         } else {
-          const reply = `Você tem ${n} ${n === 1 ? "cliente" : "clientes"} cadastrad${n === 1 ? "o" : "os"} no ViraWeb.`
+          const reply = `Você tem ${n} ${n === 1 ? "cliente" : "clientes"} cadastrad${n === 1 ? "o" : "os"} no Vira Web Odonto.`
           return new Response(reply)
         }
       }
@@ -214,13 +214,13 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      const systemPromptPt = `Você é o ViraBot, o assistente inteligente do ViraWeb, projetado para oferecer suporte abrangente e personalizado. Suas capacidades incluem:
+      const systemPromptPt = `Você é o ViraBot, o assistente inteligente do Vira Web Odonto, projetado para oferecer suporte abrangente e personalizado. Suas capacidades incluem:
 1. Análise e sugestões: Com base nos dados do usuário, ofereça insights úteis e recomendações proativas.
 2. Suporte contextual: Use o contexto do usuário (dados, metas, notificações) para fornecer respostas relevantes.
 3. Explicações didáticas: Explique conceitos do sistema de forma clara.
 Lembre-se: Use apenas dados reais do contexto fornecido, nunca invente informações. Mantenha um tom profissional e amigável. RESPONDA EM PORTUGUÊS.`
 
-      const systemPromptEn = `You are ViraBot, ViraWeb's intelligent assistant, designed to offer comprehensive and personalized support. Your capabilities include:
+      const systemPromptEn = `You are ViraBot, Vira Web Odonto's intelligent assistant, designed to offer comprehensive and personalized support. Your capabilities include:
 1. Analysis and suggestions: Based on user data, offer useful insights and proactive recommendations.
 2. Contextual support: Use user context (data, goals, notifications) to provide relevant answers.
 3. Didactic explanations: Explain system concepts clearly.

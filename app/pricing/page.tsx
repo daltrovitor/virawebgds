@@ -207,11 +207,11 @@ export default function PricingPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Product",
-              name: "ViraWeb GDS - Software de Gestão",
+              name: "Vira Web Odonto - Software de Gestão",
               description: "Plataforma completa de gestão de agendamento, prontuário eletrônico e finanças.",
               brand: {
                 "@type": "Brand",
-                name: "ViraWeb"
+                name: "Vira Web Odonto"
               },
               offers: plans.map((plan) => ({
                 "@type": "Offer",

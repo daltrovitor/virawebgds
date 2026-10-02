@@ -149,7 +149,7 @@ export default function RemindersTab({ isDemo = false }: { isDemo?: boolean }) {
                 <div className="flex-1">
                     <h4 className="text-sm font-bold text-blue-900">{t('tutorialTitle') || "Tutorial do Aplicativo"}</h4>
                     <p className="text-xs text-blue-700/80 mt-0.5 mb-2 max-w-md">
-                        {t('tutorialDesc') || "Aprenda como instalar o ViraWeb no seu celular para receber lembretes mesmo com o app fechado e ter um acesso muito mais rápido."}
+                        {t('tutorialDesc') || "Aprenda como instalar o Vira Web Odonto no seu celular para receber lembretes mesmo com o app fechado e ter um acesso muito mais rápido."}
                     </p>
                     <Button 
                         variant="link" 

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     canonical: 'https://viraweb.online/gestor-de-consultorio',
   },
   openGraph: {
-    title: 'Gestor de Consultório | ViraWeb GDS',
+    title: 'Gestor de Consultório | Vira Web Odonto',
     description: 'Sistema completo para consultórios individuais de médicos, psicólogos, fisioterapeutas e dentistas.',
     url: 'https://viraweb.online/gestor-de-consultorio',
   },
@@ -22,7 +22,7 @@ export default function Page() {
       <main className="max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-4">Gestão Completa para Consultórios: Agenda, Prontuário e Cobrança</h1>
         <p className="text-lg text-muted-foreground mb-6">
-          Simplifique a rotina do seu consultório com o ViraWeb GDS. Reúna agendamento online de consultas, prontuário eletrônico com histórico de anamnese e controle financeiro integrado em uma única interface acessível por computador ou celular.
+          Simplifique a rotina do seu consultório com o Vira Web Odonto. Reúna agendamento online de consultas, prontuário eletrônico com histórico de anamnese e controle financeiro integrado em uma única interface acessível por computador ou celular.
         </p>
         <h2 className="text-2xl font-semibold mb-3">Recursos Essenciais para Consultórios Independente</h2>
         <ul className="list-disc pl-6 space-y-2 mb-8">

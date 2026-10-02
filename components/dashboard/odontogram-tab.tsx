@@ -86,7 +86,11 @@ export default function OdontogramTab({ isDemo = false }: { isDemo?: boolean }) 
         return
       }
 
-      // Default mock dental record for demonstration
+      // Paciente real sem registro: odontograma em branco. O exemplo abaixo existe apenas na demonstração.
+      if (!isDemo) {
+        setTeethData({})
+        return
+      }
       const initialRecord: Record<number, ToothData> = {
         16: { condition: "restored", notes: "Restauração em resina composta MOD" },
         11: { condition: "healthy", notes: "Hígido" },

@@ -5,7 +5,7 @@ import { useRouter, usePathname } from '@/i18n/routing';
 import { locales, localeShortNames, type Locale } from '@/i18n/config';
 import { useState, useRef, useEffect } from 'react';
 import { Globe, Check, ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface LanguageToggleProps {
     className?: string;
@@ -67,7 +67,7 @@ export default function LanguageToggle({ className = '', variant = 'compact' }: 
             <button
                 onClick={() => handleLocaleChange(otherLocale)}
                 className={`
-          px-3 py-2 rounded-none
+          min-h-11 px-3 py-2 rounded-sm
           bg-muted/50 hover:bg-muted
           border border-border/50 hover:border-border
           text-sm font-medium text-foreground
@@ -76,7 +76,7 @@ export default function LanguageToggle({ className = '', variant = 'compact' }: 
           group
           ${className}
         `}
-                aria-label={`Switch to ${localeShortNames[otherLocale]}`}
+                aria-label={`${localeShortNames[locale]} — ${otherLocale === 'en' ? 'mudar para inglês (EN)' : 'switch to Portuguese (PT)'}`}
             >
                 <Globe className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 <span className="font-semibold">{localeShortNames[locale]}</span>
@@ -100,7 +100,7 @@ export default function LanguageToggle({ className = '', variant = 'compact' }: 
           shadow-none hover:shadow-sm
           group
         `}
-                aria-label="Select language"
+                aria-label={`${localeShortNames[locale]} — Select language`}
                 aria-expanded={isOpen}
             >
                 <Globe className="w-4 h-4 text-primary transition-transform group-hover:rotate-12" />

@@ -168,9 +168,9 @@ export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkW
                 <div className="p-2 bg-primary text-white rounded-xl shadow-lg shadow-primary/20">
                   <PlayCircle className="w-6 h-6" />
                 </div>
-                ViraWeb no seu Celular
+                Vira Web Odonto no seu Celular
               </h2>
-              <p className="text-slate-500 font-medium mt-1">Transforme o ViraWeb em um Aplicativo para acesso imediato e notificações garantidas.</p>
+              <p className="text-slate-500 font-medium mt-1">Transforme o Vira Web Odonto em um Aplicativo para acesso imediato e notificações garantidas.</p>
             </div>
             
             <div className="flex p-1 bg-white border border-slate-100 rounded-2xl shadow-sm self-start md:self-center">
@@ -208,7 +208,7 @@ export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkW
                       "Acesse gdc.viraweb.online e faça login.",
                       "Toque nos três pontinhos (⋮) no canto superior direito.",
                       "Selecione 'Instalar aplicativo' ou 'Adicionar à tela inicial'.",
-                      "Pronto! Agora o ViraWeb está na sua lista de apps."
+                      "Pronto! Agora o Vira Web Odonto está na sua lista de apps."
                     ].map((step, i) => (
                       <li key={i} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-50 shadow-sm">
                         <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
@@ -229,7 +229,7 @@ export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkW
                       "Toque no botão de 'Compartilhar' (o quadrado com seta para cima icon) na barra inferior.",
                       "Desça a lista e toque em 'Adicionar à Tela de Início'.",
                       "Toque em 'Adicionar' no canto superior direito.",
-                      "O ícone do ViraWeb aparecerá junto aos seus outros aplicativos!"
+                      "O ícone do Vira Web Odonto aparecerá junto aos seus outros aplicativos!"
                     ].map((step, i) => (
                       <li key={i} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-50 shadow-sm">
                         <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
@@ -243,7 +243,7 @@ export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkW
               <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
                 <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" />
                 <p className="text-xs text-amber-800 font-medium leading-relaxed">
-                  <strong>IMPORTANTE:</strong> Ao instalar o app, você garante que as notificações de lembretes e agendamentos cheguem até você mesmo se o ViraWeb não estiver aberto.
+                  <strong>IMPORTANTE:</strong> Ao instalar o app, você garante que as notificações de lembretes e agendamentos cheguem até você mesmo se o Vira Web Odonto não estiver aberto.
                 </p>
               </div>
             </div>

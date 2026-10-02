@@ -60,7 +60,7 @@ export async function sendPushNotification(userId: string, targetPath: string, p
     const payloadString = JSON.stringify({
         title: payload.title,
         body: payload.body,
-        icon: payload.icon || '/viraweb6.png',
+        icon: payload.icon || '/brand/vwo-icon-192.png',
         url: targetPath
     })
 

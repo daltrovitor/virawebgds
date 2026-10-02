@@ -1,3 +1,4 @@
+// Hello World
 // ============================================================
 // Budget & Price Table – Shared TypeScript interfaces
 // ============================================================
@@ -48,9 +49,22 @@ export interface BudgetItem {
   total: number           // subtotal + tax_amount
   tooth?: number | null
   face?: string | null
+  /** Região codificada (ver lib/dental-regions) — coluna da migração 071. */
+  region?: string | null
+  /** Execução clínica do procedimento — coluna da migração 071. */
+  execution_status?: BudgetItemExecution | null
+  executed_at?: string | null
   created_at: string
   // Joined
   product?: ServiceProduct | null
+}
+
+export type BudgetItemExecution = 'pending' | 'in_progress' | 'completed'
+
+export const EXECUTION_LABELS: Record<BudgetItemExecution, string> = {
+  pending: 'Não realizado',
+  in_progress: 'Em andamento',
+  completed: 'Concluído',
 }
 
 export interface BudgetPaymentMethod {
@@ -83,6 +97,11 @@ export interface Budget {
   total_amount: number
   total_cost: number
   net_revenue: number      // total_amount - total_cost
+  // Migração 071 (opcionais: ausentes em bancos ainda não migrados)
+  professional_id?: string | null
+  discount_amount?: number | null
+  first_due_date?: string | null
+  payment_method?: string | null
   created_at: string
   updated_at: string
   // Joined
@@ -102,6 +121,7 @@ export interface BudgetItemDraft {
   tax_percent: number
   tooth?: number | null
   face?: string | null
+  region?: string | null
 }
 
 export interface BudgetDraft {
@@ -131,26 +151,35 @@ export const INSTALLMENT_INTERVAL_LABELS: Record<InstallmentInterval, string> = 
   monthly: 'Mensal',
 }
 
+// Vocabulário da recepção: orçamento "em andamento", "fechado" ou "reprovado".
 export const BUDGET_STATUS_LABELS: Record<BudgetStatus, string> = {
-  draft: 'Rascunho',
+  draft: 'Em andamento',
   sent: 'Enviado',
-  approved: 'Aprovado',
-  rejected: 'Rejeitado',
+  approved: 'Fechado',
+  rejected: 'Reprovado',
   expired: 'Expirado',
-  paid: 'Pago',
+  paid: 'Quitado',
 }
 
 export const BUDGET_STATUS_COLORS: Record<BudgetStatus, string> = {
-  draft: 'bg-slate-100 text-slate-700',
-  sent: 'bg-blue-100 text-blue-700',
-  approved: 'bg-emerald-100 text-emerald-700',
-  rejected: 'bg-red-100 text-red-700',
-  expired: 'bg-amber-100 text-amber-700',
-  paid: 'bg-green-100 text-green-700 ring-1 ring-green-400',
+  draft: 'bg-amber-50 text-amber-800 border border-amber-200',
+  sent: 'bg-sky-50 text-sky-800 border border-sky-200',
+  approved: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
+  rejected: 'bg-rose-50 text-rose-800 border border-rose-200',
+  expired: 'bg-slate-100 text-slate-700 border border-slate-200',
+  paid: 'bg-emerald-600 text-white border border-emerald-700',
+}
+
+/** Agrupamento usado nos filtros e KPIs. */
+export type BudgetPhase = 'open' | 'closed' | 'rejected'
+export function budgetPhase(status: BudgetStatus): BudgetPhase {
+  if (status === 'approved' || status === 'paid') return 'closed'
+  if (status === 'rejected' || status === 'expired') return 'rejected'
+  return 'open'
 }
 
 export const CATEGORY_COLORS = [
-  '#3396d3', '#ffd400', '#10b981', '#f59e0b',
+  '#0369a1', '#d9a50d', '#10b981', '#f59e0b',
   '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4',
   '#84cc16', '#f97316', '#6366f1', '#14b8a6',
 ]

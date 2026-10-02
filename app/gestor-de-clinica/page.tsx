@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     canonical: 'https://viraweb.online/gestor-de-clinica',
   },
   openGraph: {
-    title: 'Gestor de Clínica | ViraWeb GDS',
+    title: 'Gestor de Clínica | Vira Web Odonto',
     description: 'Sistema completo para gerenciar clínicas médicas, odontológicas e estéticas com facilidade e inteligência.',
     url: 'https://viraweb.online/gestor-de-clinica',
   },
@@ -22,7 +22,7 @@ export default function Page() {
       <main className="max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-4">Gestão Integrada para Clínicas Médicas, Odontológicas e de Saúde</h1>
         <p className="text-lg text-muted-foreground mb-6">
-          O ViraWeb GDS é a plataforma definitiva de gestão para clínicas de pequeno e médio porte. Centralize agendamentos online multi-profissional, prontuários eletrônicos de pacientes, gestão de salas e equipamentos, controle de estoque médico e relatório financeiro em tempo real.
+          O Vira Web Odonto é a plataforma definitiva de gestão para clínicas de pequeno e médio porte. Centralize agendamentos online multi-profissional, prontuários eletrônicos de pacientes, gestão de salas e equipamentos, controle de estoque médico e relatório financeiro em tempo real.
         </p>
         <h2 className="text-2xl font-semibold mb-3">Principais Recursos para Clínicas</h2>
         <ul className="list-disc pl-6 space-y-2 mb-8">

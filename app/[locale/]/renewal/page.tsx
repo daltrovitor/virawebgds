@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { VwoLogo } from "@/components/brand/vwo-logo"
 import { useAuth } from "@/hooks/use-auth"
 import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
@@ -8,7 +9,6 @@ import { fetchJson } from "@/lib/fetch-client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Check, Sparkles, Zap, Shield, Image as ImageIcon, FileText, Table2, Upload, Loader2, ArrowRight, XCircle, AlertTriangle } from "lucide-react"
-import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 export default function RenewalPage() {
@@ -93,7 +93,7 @@ export default function RenewalPage() {
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
             <nav className="p-6 flex items-center justify-between max-w-7xl mx-auto w-full">
-                <Image width={512} height={512} alt="ViraWeb logo" src="/viraweb3.png" className="w-32" />
+                <VwoLogo variant="stacked" />
                 <Button variant="ghost" onClick={signOut} className="font-bold text-xs uppercase tracking-widest text-slate-400">
                     Sair
                 </Button>

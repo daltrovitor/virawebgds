@@ -46,7 +46,7 @@ export async function sendEmail(options: EmailOptions) {
     });
 
     const info = await transporter.sendMail({
-      from: '"ViraWeb Suporte" <suporte@viraweb.online>',
+      from: '"Vira Web Odonto Suporte" <suporte@viraweb.online>',
       to: options.to,
       subject: options.subject,
       text: options.text || '',

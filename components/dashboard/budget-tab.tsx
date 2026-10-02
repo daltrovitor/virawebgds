@@ -1,1324 +1,770 @@
 // Hello World
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
+import { ArrowLeft, Check, Copy, Loader2, Plus, Printer, Receipt, Search, Trash2, X } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 import {
-  Plus, Trash2, Search, Loader2, Copy, Eye,
-  FileText, DollarSign, TrendingUp, BarChart3,
-  ChevronLeft, ChevronRight, Receipt, X, Check,
-  Sparkles,
-} from "lucide-react"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {
-  getBudgets,
+  closeBudgetWithPlan,
   createBudget,
-  updateBudgetStatus,
-  duplicateBudget,
   deleteBudget,
-  getBudgetDashboardStats,
+  duplicateBudget,
+  getBudgetInstallments,
+  getBudgets,
+  settleInstallment,
+  updateBudgetStatus,
+  type BudgetInstallmentRow,
 } from "@/app/actions/budget-actions"
 import { getProducts } from "@/app/actions/price-table-actions"
 import { getPatients } from "@/app/actions/patients"
+import { getProfessionals } from "@/app/actions/professionals"
+import { BudgetComposer, type BudgetSubmission, type ComposerPatient, type ComposerProfessional } from "./budget-composer"
+import { PanelHeader } from "@/components/dental/form-primitives"
 import {
-  calculateBudgetTotals,
-  calculateItemTotals,
-  suggestPaymentPlans,
-} from "@/lib/budget-calculations"
-import type {
-  Budget,
-  BudgetItemDraft,
-  BudgetStatus,
-  BudgetPaymentMethod,
-  InstallmentInterval,
-  ServiceProduct,
-} from "@/lib/budget-types"
-import {
-  BUDGET_STATUS_LABELS,
   BUDGET_STATUS_COLORS,
+  BUDGET_STATUS_LABELS,
+  EXECUTION_LABELS,
   PAYMENT_METHOD_LABELS,
-  INSTALLMENT_INTERVAL_LABELS,
+  budgetPhase,
+  type Budget,
+  type BudgetPhase,
+  type BudgetStatus,
+  type ServiceProduct,
 } from "@/lib/budget-types"
-import { useToast } from "@/hooks/use-toast"
-import { ToastAction } from "@/components/ui/toast"
-import { useTranslations } from "next-intl"
+import { regionLabel, regionShort, regionSortKey, resolveItemRegion } from "@/lib/dental-regions"
+import { BRL, buildPaymentPlan, formatDateBR, todayISO, type PlanPaymentMethod } from "@/lib/payment-plan"
+import { DEMO_PATIENTS, DEMO_PRODUCTS, DEMO_PROFESSIONALS, buildDemoBudgets } from "@/lib/demo-clinic"
 
-type Patient = { id: string; name: string; email?: string | null; phone?: string | null }
+/** Número curto exibido ao usuário (sufixo numérico quando houver; senão, início do UUID). */
+export function budgetCode(id: string): string {
+  const numeric = /(\d{3,})$/.exec(id)
+  return numeric ? numeric[1] : id.slice(0, 6).toUpperCase()
+}
 
-export default function BudgetTab() {
-  const t = useTranslations("dashboard.budgetTab")
+type Filter = "all" | BudgetPhase
+
+const FILTERS: { id: Filter; label: string }[] = [
+  { id: "all", label: "Todos" },
+  { id: "open", label: "Em andamento" },
+  { id: "closed", label: "Fechados" },
+  { id: "rejected", label: "Reprovados" },
+]
+
+function planFromBudget(budget: Budget) {
+  const method = (budget.payment_method as PlanPaymentMethod | undefined) || budget.payment_methods?.[0]?.method || "pix"
+  return buildPaymentPlan({
+    gross: budget.total_amount || 0,
+    discount: { mode: "amount", value: 0 },
+    downPayment: budget.down_payment || 0,
+    installments: budget.installment_count || 0,
+    firstDueDate: budget.first_due_date?.slice(0, 10) || todayISO(),
+    method,
+  })
+}
+
+export default function BudgetTab({ isDemo = false, initialPatientId }: { isDemo?: boolean; initialPatientId?: string }) {
+  const { toast } = useToast()
   const [budgets, setBudgets] = useState<Budget[]>([])
   const [products, setProducts] = useState<ServiceProduct[]>([])
-  const [patients, setPatients] = useState<Patient[]>([])
-  const [stats, setStats] = useState({
-    totalBudgets: 0, totalRevenue: 0, netRevenue: 0, conversionRate: 0, approvedCount: 0,
-  })
+  const [patients, setPatients] = useState<ComposerPatient[]>([])
+  const [professionals, setProfessionals] = useState<ComposerProfessional[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<BudgetStatus | "all">("all")
-  const [showWizard, setShowWizard] = useState(false)
-  const [viewingBudget, setViewingBudget] = useState<Budget | null>(null)
-  const { toast } = useToast()
+  const [filter, setFilter] = useState<Filter>("all")
+  const [query, setQuery] = useState("")
+  const [prefillPatientId, setPrefillPatientId] = useState(initialPatientId)
+  const [view, setView] = useState<{ kind: "list" } | { kind: "new" } | { kind: "detail"; id: string }>(
+    initialPatientId ? { kind: "new" } : { kind: "list" },
+  )
 
+  // "Novo orçamento" aberto a partir da ficha do paciente
   useEffect(() => {
-    loadData()
-  }, [])
-
-  const loadData = async () => {
     try {
-      const [b, p, pt, s] = await Promise.all([
-        getBudgets(),
-        getProducts(),
-        getPatients(),
-        getBudgetDashboardStats(),
-      ])
+      const fromRecord = sessionStorage.getItem("vwd:budget_prefill_patient")
+      if (fromRecord) {
+        sessionStorage.removeItem("vwd:budget_prefill_patient")
+        setPrefillPatientId(fromRecord)
+        setView({ kind: "new" })
+      }
+    } catch {
+      // armazenamento de sessão indisponível
+    }
+  }, [])
+  const [demoInstallments, setDemoInstallments] = useState<Record<string, BudgetInstallmentRow[]>>({})
+
+  const load = useCallback(async () => {
+    if (isDemo) {
+      setBudgets(buildDemoBudgets())
+      setProducts(DEMO_PRODUCTS)
+      setPatients(DEMO_PATIENTS.map((p) => ({ id: p.id, name: p.name, phone: p.phone })))
+      setProfessionals(DEMO_PROFESSIONALS.map((p) => ({ id: p.id, name: p.name })))
+      setLoading(false)
+      return
+    }
+    try {
+      const [b, p, pt, pr] = await Promise.all([getBudgets(), getProducts(), getPatients(), getProfessionals()])
       setBudgets(b)
       setProducts(p)
-      setPatients(pt as Patient[])
-      setStats(s)
+      setPatients(pt.map((x) => ({ id: x.id, name: x.name, phone: x.phone })))
+      setProfessionals(pr.filter((x) => x.status !== "inactive").map((x) => ({ id: x.id, name: x.name })))
     } catch (error) {
-      console.error("Error loading budget data:", error)
+      console.error("Error loading budgets:", error)
+      toast({ title: "Não foi possível carregar os orçamentos", variant: "destructive" })
     } finally {
       setLoading(false)
     }
-  }
+  }, [isDemo, toast])
 
-  const handleDuplicate = async (id: string) => {
-    const res = await duplicateBudget(id)
-    if (res.success) {
-      toast({ title: t("toasts.duplicated") })
-      await loadData()
-    } else {
-      toast({ title: t("toasts.errorLabel"), description: res.error, variant: "destructive" })
+  useEffect(() => {
+    load()
+  }, [load])
+
+  const stats = useMemo(() => {
+    const open = budgets.filter((b) => budgetPhase(b.status) === "open")
+    const closed = budgets.filter((b) => budgetPhase(b.status) === "closed")
+    const decided = budgets.filter((b) => budgetPhase(b.status) !== "open").length
+    const sum = (list: Budget[]) => list.reduce((s, b) => s + (b.total_amount || 0), 0)
+    return {
+      openCount: open.length,
+      openValue: sum(open),
+      closedCount: closed.length,
+      closedValue: sum(closed),
+      conversion: decided > 0 ? Math.round((closed.length / decided) * 100) : 0,
+      ticket: closed.length > 0 ? sum(closed) / closed.length : 0,
     }
-  }
+  }, [budgets])
 
-  const handleDelete = async (id: string) => {
-    toast({
-      title: "Excluir orçamento?",
-      description: "Esta ação não pode ser desfeita.",
-      variant: "destructive",
-      action: (
-        <ToastAction
-          altText="Excluir"
-          onClick={async () => {
-            const res = await deleteBudget(id)
-            if (res.success) {
-              toast({ title: t("toasts.deleted") })
-              await loadData()
-            } else {
-              toast({ title: t("toasts.errorLabel"), description: res.error, variant: "destructive" })
-            }
-          }}
-        >
-          {t("wizard.cancel") ? "Excluir" : "Excluir"}
-        </ToastAction>
-      ),
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return budgets.filter((b) => {
+      if (filter !== "all" && budgetPhase(b.status) !== filter) return false
+      if (!q) return true
+      return (b.patient?.name || "").toLowerCase().includes(q) || budgetCode(b.id).toLowerCase().includes(q)
     })
-  }
+  }, [budgets, filter, query])
 
-  const [isStatusLoading, setIsStatusLoading] = useState(false)
-  const handleStatusChange = async (id: string, status: BudgetStatus) => {
-    if (isStatusLoading) return
-    setIsStatusLoading(true)
-    try {
-      const res = await updateBudgetStatus(id, status)
-      if (res.success) {
-        toast({ title: t("toasts.statusUpdated", { status: t(`status.${status}`) }) })
-        await loadData()
-        // ✅ Update detail view if open
-        if (viewingBudget && viewingBudget.id === id) {
-          setViewingBudget({ ...viewingBudget, status })
-        }
-      } else {
-        toast({ 
-          title: t("toasts.errorLabel"), 
-          description: res.error || "Erro ao atualizar status", 
-          variant: "destructive" 
-        })
+  // ---------------------------------------------------------------- dados
+  const submit = async ({ payload, schedule, mode }: BudgetSubmission) => {
+    if (isDemo) {
+      const id = `demo-bud-${1903 + budgets.length}`
+      const patient = patients.find((p) => p.id === payload.patient_id)
+      const total = Math.round((payload.items.reduce((s, it) => s + it.unit_price * it.quantity, 0) - (payload.discount_amount || 0)) * 100) / 100
+      const created = new Date().toISOString()
+      const budget: Budget = {
+        id,
+        user_id: "demo",
+        patient_id: payload.patient_id,
+        status: mode === "close" ? "approved" : "draft",
+        notes: payload.notes || null,
+        valid_until: payload.valid_until || null,
+        down_payment: payload.down_payment,
+        installment_count: payload.installment_count,
+        installment_interval: "monthly",
+        installment_value: 0,
+        subtotal: total,
+        total_tax: 0,
+        total_amount: total,
+        total_cost: payload.items.reduce((s, it) => s + it.cost_per_unit, 0),
+        net_revenue: total,
+        professional_id: payload.professional_id,
+        discount_amount: payload.discount_amount,
+        first_due_date: payload.first_due_date,
+        payment_method: payload.payment_method,
+        created_at: created,
+        updated_at: created,
+        patient: patient ? { id: patient.id, name: patient.name } : null,
+        payment_methods: [],
+        items: payload.items.map((it, i) => ({
+          ...it,
+          id: `${id}-item-${i}`,
+          budget_id: id,
+          subtotal: it.unit_price,
+          tax_amount: 0,
+          total: it.unit_price,
+          execution_status: "pending",
+          created_at: created,
+        })),
       }
-    } catch (err) {
-      toast({ 
-        title: t("toasts.errorLabel"), 
-        description: err instanceof Error ? err.message : "Erro inesperado", 
-        variant: "destructive" 
-      })
-    } finally {
-      setIsStatusLoading(false)
+      setBudgets((prev) => [budget, ...prev])
+      if (mode === "close") {
+        setDemoInstallments((prev) => ({
+          ...prev,
+          [id]: schedule.map((s, i) => ({ id: `${id}-p-${i}`, amount: s.amount, status: "pending", due_date: s.dueDate, payment_date: null, notes: s.label, method: s.method, installment_number: s.number })),
+        }))
+      }
+      return { installmentsCreated: mode === "close" ? schedule.length : 0 }
     }
-  }
 
-  const filteredBudgets = budgets.filter((b) => {
-    const matchesSearch =
-      (b.patient?.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      b.id.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || b.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+    const res = await createBudget(payload)
+    if (!res.success || !res.data) throw new Error(res.error || "Erro ao salvar o orçamento.")
+    if (mode === "draft") return { installmentsCreated: 0 }
+    const closed = await closeBudgetWithPlan(res.data.id, schedule)
+    if (!closed.success) throw new Error(closed.error || "Orçamento salvo, mas as parcelas não foram lançadas.")
+    return { installmentsCreated: closed.created ?? 0 }
+  }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="flex h-64 items-center justify-center" role="status">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" aria-hidden />
+        <span className="sr-only">Carregando orçamentos…</span>
       </div>
     )
   }
 
-  // Full-screen wizard for creating budget
-  if (showWizard) {
+  if (view.kind === "new") {
     return (
-      <BudgetWizard t={t}
-        products={products}
+      <BudgetComposer
         patients={patients}
-        onClose={() => setShowWizard(false)}
-        onCreated={async () => {
-          setShowWizard(false)
-          await loadData()
+        products={products}
+        professionals={professionals}
+        initialPatientId={prefillPatientId}
+        submit={submit}
+        onCancel={() => {
+          setPrefillPatientId(undefined)
+          setView({ kind: "list" })
+        }}
+        onSaved={async () => {
+          setPrefillPatientId(undefined)
+          setView({ kind: "list" })
+          if (!isDemo) await load()
         }}
       />
     )
   }
 
-  // Full-screen budget detail view
-  if (viewingBudget) {
-    return (
-      <BudgetDetail t={t}
-        budget={viewingBudget}
-        onBack={() => { setViewingBudget(null); loadData() }}
-        onStatusChange={handleStatusChange}
-        onDuplicate={handleDuplicate}
-      />
-    )
+  if (view.kind === "detail") {
+    const budget = budgets.find((b) => b.id === view.id)
+    if (budget) {
+      return (
+        <BudgetDetail
+          budget={budget}
+          isDemo={isDemo}
+          professionals={professionals}
+          demoInstallments={demoInstallments[budget.id]}
+          onBack={() => setView({ kind: "list" })}
+          onChanged={async (patch) => {
+            if (isDemo) {
+              if (patch?.status) setBudgets((prev) => prev.map((b) => (b.id === budget.id ? { ...b, status: patch.status! } : b)))
+              if (patch?.installments) setDemoInstallments((prev) => ({ ...prev, [budget.id]: patch.installments! }))
+              if (patch?.deleted) {
+                setBudgets((prev) => prev.filter((b) => b.id !== budget.id))
+                setView({ kind: "list" })
+              }
+              return
+            }
+            if (patch?.deleted) setView({ kind: "list" })
+            await load()
+          }}
+        />
+      )
+    }
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">{t("title")}</h2>
-          <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
-        </div>
-        <Button
-          onClick={() => setShowWizard(true)}
-          className="bg-primary text-primary-foreground gap-2 shadow-lg"
-        >
-          <Plus className="w-4 h-4" />{t("newBudget")}</Button>
-      </div>
-
-      {/* Dashboard Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 border border-border">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 text-primary"><FileText className="w-5 h-5" /></div>
-            <div>
-              <p className="text-xs text-muted-foreground font-medium">{t("stats.budgets")}</p>
-              <p className="text-2xl font-bold text-foreground">{stats.totalBudgets}</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 border border-border">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 text-emerald-500"><DollarSign className="w-5 h-5" /></div>
-            <div>
-              <p className="text-xs text-muted-foreground font-medium">{t("stats.revenue")}</p>
-              <p className="text-2xl font-bold text-foreground">R$ {stats.totalRevenue.toFixed(0)}</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 border border-border">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-500/10 text-blue-500"><TrendingUp className="w-5 h-5" /></div>
-            <div>
-              <p className="text-xs text-muted-foreground font-medium">{t("stats.netRevenue")}</p>
-              <p className="text-2xl font-bold text-foreground">R$ {stats.netRevenue.toFixed(0)}</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 border border-border">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-500/10 text-amber-500"><BarChart3 className="w-5 h-5" /></div>
-            <div>
-              <p className="text-xs text-muted-foreground font-medium">{t("stats.conversion")}</p>
-              <p className="text-2xl font-bold text-foreground">{stats.conversionRate}%</p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder={t("searchPlaceholder")}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex gap-1 flex-wrap">
-          <Button variant={statusFilter === "all" ? "default" : "outline"} size="sm" onClick={() => setStatusFilter("all")}>{t("all")}</Button>
-          {(Object.keys(BUDGET_STATUS_LABELS) as BudgetStatus[]).map((s) => (
-            <Button key={s} variant={statusFilter === s ? "default" : "outline"} size="sm" onClick={() => setStatusFilter(s)}>
-              {BUDGET_STATUS_LABELS[s]}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {/* Budget List */}
-      {filteredBudgets.length === 0 ? (
-        <Card className="p-12 border border-border text-center">
-          <Receipt className="w-12 h-12 text-muted-foreground/40 mx-auto mb-4" />
-          <h3 className="text-lg font-bold text-foreground mb-2">{t("emptyTitle")}</h3>
-          <p className="text-muted-foreground mb-4">{t("emptyDesc")}</p>
-          <Button onClick={() => setShowWizard(true)} className="gap-2">
-            <Plus className="w-4 h-4" />{t("createBudget")}</Button>
-        </Card>
-      ) : (
-        <div className="space-y-3">
-          {filteredBudgets.map((budget) => (
-            <Card
-              key={budget.id}
-              className="p-4 sm:p-6 border border-border hover:shadow-lg transition-shadow cursor-pointer flex flex-col gap-4"
-              onClick={() => setViewingBudget(budget)}
-            >
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-bold text-foreground text-lg">
-                      {budget.patient?.name || t("noClient")}
-                    </h3>
-                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 ${BUDGET_STATUS_COLORS[budget.status]}`}>
-                      {t(`status.${budget.status}`)}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    <span>{(budget.items || []).length} {(budget.items || []).length === 1 ? t("item") : t("items")}</span>
-                    <span>{t("createdAt")} {new Date(budget.created_at).toLocaleDateString("pt-BR")}</span>
-                    {budget.valid_until && (
-                      <span>{t("validUntil")} {new Date(budget.valid_until).toLocaleDateString("pt-BR")}</span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground">
-                      {t("total")}: <span className="font-medium text-foreground">R$ {(budget.total_amount || 0).toFixed(2)}</span>
-                    </p>
-                    <p className="text-xs text-red-500 font-medium">
-                       {t("wizard.costs")}: - R$ {(budget.total_cost || 0).toFixed(2)}
-                    </p>
-                    <p className="text-xs text-muted-foreground whitespace-nowrap">
-                      {t("net")} <span className="text-emerald-600 font-bold">R$ {(budget.net_revenue || 0).toFixed(2)}</span>
-                    </p>
-                  </div>
-                  <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setViewingBudget(budget)}
-                      className="text-muted-foreground hover:bg-primary/10"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDuplicate(budget.id)} className="text-muted-foreground hover:bg-primary/10">
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(budget.id)} className="text-destructive hover:bg-destructive/10">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                    {budget.status === "approved" && (
-                      <Button 
-                        size="sm" 
-                        onClick={(e) => { e.stopPropagation(); handleStatusChange(budget.id, "paid") }}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white ml-2 shadow-sm font-bold h-8"
-                      >
-                        <Check className="w-4 h-4 mr-1" /> {t("status.paid")}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Status Update Row */}
-              <div 
-                className="pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("changeStatus")}:</span>
-                  <div className="flex flex-wrap gap-1">
-                    {(Object.keys(BUDGET_STATUS_LABELS) as BudgetStatus[]).map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => handleStatusChange(budget.id, s)}
-                        disabled={budget.status === s}
-                        className={`text-[9px] font-bold px-2 py-1 rounded transition-all transform hover:scale-105 ${
-                          budget.status === s 
-                          ? "opacity-30 cursor-not-allowed grayscale" 
-                          : `${BUDGET_STATUS_COLORS[s]} hover:brightness-110 shadow-sm`
-                        }`}
-                      >
-                        {t(`status.${s}`)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                
-                <p className="text-[9px] italic text-muted-foreground text-right mt-1">
-                  {t("detail.paidRequiredInfo")}
-                </p>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ============================================================
-// BUDGET WIZARD – Multi-step creation flow
-// ============================================================
-
-function BudgetWizard({
-  t,
-
-  products,
-  patients,
-  onClose,
-  onCreated,
-}: {
-  t: any
-  products: ServiceProduct[]
-  patients: Patient[]
-  onClose: () => void
-  onCreated: () => void
-}) {
-  const [step, setStep] = useState(1)
-  const [saving, setSaving] = useState(false)
-  const { toast } = useToast()
-
-  // Step 1: Select client
-  const [patientId, setPatientId] = useState("")
-  const [patientSearch, setPatientSearch] = useState("")
-
-  // Step 2: Products
-  const [items, setItems] = useState<BudgetItemDraft[]>([])
-  const [productSearch, setProductSearch] = useState("")
-
-  // Step 3: Payment
-  const [downPayment, setDownPayment] = useState(0)
-  const [installmentCount, setInstallmentCount] = useState(1)
-  const [installmentInterval, setInstallmentInterval] = useState<InstallmentInterval>("monthly")
-  const [paymentMethods, setPaymentMethods] = useState<{ method: BudgetPaymentMethod['method']; amount: number }[]>([])
-  const [notes, setNotes] = useState("")
-  const [validUntil, setValidUntil] = useState("")
-
-  const totals = useMemo(
-    () => calculateBudgetTotals(items, downPayment, installmentCount),
-    [items, downPayment, installmentCount],
-  )
-
-  const selectedPatient = patients.find((p) => p.id === patientId)
-
-  // Add product
-  const addProduct = (prod: ServiceProduct) => {
-    const existing = items.find((i) => i.product_id === prod.id)
-    if (existing) {
-      setItems(items.map((i) =>
-        i.product_id === prod.id ? { ...i, quantity: i.quantity + 1 } : i
-      ))
-    } else {
-      setItems([...items, {
-        product_id: prod.id,
-        product_name: prod.name,
-        quantity: 1,
-        unit_price: prod.base_price,
-        cost_per_unit: prod.cost || 0,
-        tax_percent: prod.tax_percent,
-      }])
-    }
-  }
-
-  const updateItem = (index: number, field: keyof BudgetItemDraft, value: number) => {
-    setItems(items.map((item, i) => i === index ? { ...item, [field]: value } : item))
-  }
-
-  const removeItem = (index: number) => {
-    setItems(items.filter((_, i) => i !== index))
-  }
-
-  const addPaymentMethod = () => {
-    setPaymentMethods([...paymentMethods, { method: "pix", amount: 0 }])
-  }
-
-  const updatePaymentMethod = (index: number, field: string, value: any) => {
-    setPaymentMethods(paymentMethods.map((pm, i) => i === index ? { ...pm, [field]: value } : pm))
-  }
-
-  const removePaymentMethod = (index: number) => {
-    setPaymentMethods(paymentMethods.filter((_, i) => i !== index))
-  }
-
-  const applySuggestedPlan = (plan: { downPayment: number; installments: number; interval: "monthly" }) => {
-    setDownPayment(plan.downPayment)
-    setInstallmentCount(plan.installments)
-    setInstallmentInterval(plan.interval)
-  }
-
-  const handleSubmit = async () => {
-    setSaving(true)
-    try {
-      const res = await createBudget({
-        patient_id: patientId,
-        items,
-        notes,
-        valid_until: validUntil,
-        down_payment: downPayment,
-        installment_count: installmentCount,
-        installment_interval: installmentInterval,
-        payment_methods: paymentMethods,
-      })
-      if (!res.success) throw new Error(res.error)
-      toast({ title: t("toasts.created") })
-      onCreated()
-    } catch (err) {
-      toast({
-        title: t("toasts.errorCreate"),
-        description: err instanceof Error ? err.message : "Erro desconhecido",
-        variant: "destructive",
-      })
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const canProceed = () => {
-    if (step === 1) return !!patientId
-    if (step === 2) return items.length > 0
-    return true
-  }
-
-  const filteredPatients = patients.filter((p) =>
-    p.name.toLowerCase().includes(patientSearch.toLowerCase())
-  )
-
-  const filteredProducts = products.filter((p) =>
-    p.active && p.name.toLowerCase().includes(productSearch.toLowerCase())
-  )
-
-  const suggestedPlans = useMemo(() => suggestPaymentPlans(totals.total_amount), [totals.total_amount])
-
-  const STEPS = [
-    { num: 1, label: t("wizard.steps.client") },
-    { num: 2, label: t("wizard.steps.products") },
-    { num: 3, label: t("wizard.steps.payment") },
-    { num: 4, label: t("wizard.steps.summary") },
-  ]
-
-  return (
-    <div className="space-y-6">
-      {/* Wizard Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">{t("newBudget")}</h2>
-          <p className="text-muted-foreground">{t("wizard.step", { step })}</p>
-        </div>
-        <Button variant="outline" onClick={onClose} className="gap-2">
-          <X className="w-4 h-4" />{t("wizard.cancel")}</Button>
-      </div>
-
-      {/* Steps indicator */}
-      <div className="flex items-center gap-2">
-        {STEPS.map((s, i) => (
-          <div key={s.num} className="flex items-center gap-2 flex-1">
-            <div className={`flex items-center justify-center w-8 h-8 text-sm font-bold transition-colors ${
-              step >= s.num
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground"
-            }`}>
-              {step > s.num ? <Check className="w-4 h-4" /> : s.num}
-            </div>
-            <span className={`text-sm font-medium hidden sm:block ${step >= s.num ? "text-foreground" : "text-muted-foreground"}`}>
-              {s.label}
-            </span>
-            {i < STEPS.length - 1 && (
-              <div className={`flex-1 h-0.5 ${step > s.num ? "bg-primary" : "bg-muted"}`} />
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Step Content */}
-      <Card className="p-6 border border-border min-h-[400px]">
-        {/* STEP 1: Client */}
-        {step === 1 && (
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-foreground mb-2">{t("wizard.clientTitle")}</h3>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder={t("wizard.searchClient")}
-                value={patientSearch}
-                onChange={(e) => setPatientSearch(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="grid gap-2 max-h-[400px] overflow-y-auto">
-              {filteredPatients.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => setPatientId(p.id)}
-                  className={`text-left p-4 border transition-all ${
-                    patientId === p.id
-                      ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border hover:border-primary/50 hover:bg-muted/50"
-                  }`}
-                >
-                  <p className="font-bold text-foreground">{p.name}</p>
-                  <div className="flex gap-3 text-sm text-muted-foreground mt-1">
-                    {p.email && <span>{p.email}</span>}
-                    {p.phone && <span>{p.phone}</span>}
-                  </div>
-                </button>
-              ))}
-              {filteredPatients.length === 0 && (
-                <p className="text-center text-muted-foreground py-8">{t("wizard.noClientFound")}</p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 2: Products */}
-        {step === 2 && (
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-foreground mb-2">{t("wizard.productsTitle")}</h3>
-
-            {/* Product search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder={t("wizard.searchProducts")}
-                value={productSearch}
-                onChange={(e) => setProductSearch(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-4">
-              {/* Available products grouped by category */}
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">{t("wizard.availableProducts")}</p>
-                <div className="max-h-[400px] overflow-y-auto space-y-4 border border-border p-3 bg-slate-50/50 dark:bg-slate-900/50">
-                  {Object.entries(
-                    filteredProducts.reduce((acc, p) => {
-                      const catName = p.category?.name || t("wizard.uncategorized")
-                      if (!acc[catName]) acc[catName] = []
-                      acc[catName].push(p)
-                      return acc
-                    }, {} as Record<string, ServiceProduct[]>)
-                  ).map(([category, items]) => (
-                    <div key={category} className="space-y-1">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-2 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        {category}
-                      </h4>
-                      <div className="grid gap-1">
-                        {items.map((prod) => (
-                          <button
-                            key={prod.id}
-                            onClick={() => addProduct(prod)}
-                            className="w-full text-left p-3 bg-white dark:bg-card hover:border-primary/50 hover:shadow-sm transition-all flex items-center justify-between border border-border rounded-lg group"
-                          >
-                            <div className="flex-1">
-                              <p className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{prod.name}</p>
-                              {prod.duration_minutes && (
-                                <p className="text-[10px] text-muted-foreground">
-                                  {prod.duration_minutes} min
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="text-sm font-bold text-foreground">R$ {prod.base_price.toFixed(2)}</span>
-                              <div className="p-1 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                                <Plus className="w-3 h-3" />
-                              </div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  {filteredProducts.length === 0 && (
-                    <p className="text-center text-muted-foreground py-8 text-sm italic">
-                      {t("wizard.noProducts")}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Selected items */}
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {t("wizard.itemsInBudget", { count: items.length })}
-                </p>
-                <div className="space-y-2">
-                  {items.length === 0 ? (
-                    <div className="p-8 border border-dashed border-border text-center text-muted-foreground">
-                      {t("wizard.clickToAdd")}
-                    </div>
-                  ) : (
-                    items.map((item, idx) => {
-                      const calc = calculateItemTotals(item)
-                      return (
-                        <div key={idx} className="p-3 border border-border bg-background">
-                          <div className="flex items-start justify-between mb-2">
-                            <p className="font-bold text-foreground text-sm">{item.product_name}</p>
-                            <button onClick={() => removeItem(idx)} className="text-destructive p-1 hover:bg-muted">
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                          {/* First row: Qty, Unit Price, Cost per Unit, Tax % */}
-                          <div className="grid grid-cols-4 gap-2 mb-2">
-                            <div>
-                              <label className="text-[10px] text-muted-foreground">{t("wizard.qty")}</label>
-                              <Input
-                                type="number"
-                                min={1}
-                                value={item.quantity}
-                                onChange={(e) => updateItem(idx, "quantity", parseInt(e.target.value) || 1)}
-                                className="h-8 text-sm"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[10px] text-muted-foreground">{t("wizard.unitPrice")}</label>
-                              <Input
-                                type="number"
-                                step="0.01"
-                                value={item.unit_price}
-                                onChange={(e) => updateItem(idx, "unit_price", parseFloat(e.target.value) || 0)}
-                                className="h-8 text-sm"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[10px] text-muted-foreground">Custo un.</label>
-                              <Input
-                                type="number"
-                                step="0.01"
-                                value={item.cost_per_unit}
-                                onChange={(e) => updateItem(idx, "cost_per_unit", parseFloat(e.target.value) || 0)}
-                                className="h-8 text-sm"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[10px] text-muted-foreground">Imposto %</label>
-                              <Input
-                                type="number"
-                                step="0.1"
-                                value={item.tax_percent}
-                                onChange={(e) => updateItem(idx, "tax_percent", parseFloat(e.target.value) || 0)}
-                                className="h-8 text-sm"
-                              />
-                            </div>
-                          </div>
-                          {/* Summary row */}
-                          <div className="grid grid-cols-2 gap-2 p-2 bg-slate-50/50 dark:bg-slate-900/50 rounded text-xs">
-                            <div className="flex justify-between">
-                              <span className="text-muted-foreground">{t("wizard.total")}:</span>
-                              <span className="font-bold text-emerald-600">R$ {calc.total.toFixed(2)}</span>
-                            </div>
-                            {(item.tax_percent > 0 || item.cost_per_unit > 0) && (
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Líqui.:</span>
-                                <span className="font-bold text-primary">
-                                  R$ {(calc.total + calc.tax_amount - (item.cost_per_unit * item.quantity)).toFixed(2)}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                          {(item.tax_percent > 0 || item.cost_per_unit > 0) && (
-                            <div className="text-[10px] text-muted-foreground mt-1 space-y-0.5">
-                              {item.tax_percent > 0 && (
-                                <p className="text-amber-600">
-                                  Imposto: R$ {calc.tax_amount.toFixed(2)} ({item.tax_percent}%)
-                                </p>
-                              )}
-                              {item.cost_per_unit > 0 && (
-                                <p className="text-destructive">
-                                  Custo: R$ {(item.cost_per_unit * item.quantity).toFixed(2)} ({item.quantity}x R$ {item.cost_per_unit.toFixed(2)})
-                                </p>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )
-                    })
-                  )}
-                </div>
-
-                {/* Real-time totals */}
-                {items.length > 0 && (
-                  <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-900 border border-border">
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t("wizard.subtotal")}</span>
-                        <span className="font-medium text-foreground">R$ {totals.subtotal.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t("wizard.totalTax")}</span>
-                        <span className="font-medium text-amber-600">R$ {totals.total_tax.toFixed(2)}</span>
-                      </div>
-                      
-                      <div className="flex justify-between items-end border-t border-border pt-2">
-                        <span className="font-bold text-foreground mb-1">{t("wizard.total")}</span>
-                        <span className="font-bold text-primary text-4xl">R$ {totals.total_amount.toFixed(2)}</span>
-                      </div>
-                      {totals.total_cost > 0 && (
-                        <>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">{t("wizard.costs")}</span>
-                            <span className="text-destructive">- R$ {totals.total_cost.toFixed(2)}</span>
-                          </div>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">{t("wizard.netRevenue")}</span>
-                            <span className="text-emerald-600 font-bold">R$ {totals.net_revenue.toFixed(2)}</span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
-                
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3: Payment Plan */}
-        {step === 3 && (
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-foreground mb-2">{t("wizard.paymentTitle")}</h3>
-
-            {/* Suggested plans */}
-            {suggestedPlans.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  <p className="text-sm font-medium text-foreground">{t("wizard.suggestions")}</p>
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                  {suggestedPlans.map((plan, i) => {
-                    const installmentValue = plan.installments > 0
-                      ? Math.round((totals.total_amount - plan.downPayment) / plan.installments * 100) / 100
-                      : 0
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => applySuggestedPlan(plan)}
-                        className="p-3 border border-border text-left hover:border-primary/50 hover:bg-primary/5 transition-all"
-                      >
-                        <p className="text-sm font-bold text-foreground">{plan.label}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {plan.label === 'À vista' || (plan.downPayment >= totals.total_amount && installmentValue <= 0) ? (
-                            `R$ ${totals.total_amount.toFixed(2)}`
-                          ) : (
-                            <>
-                              {plan.downPayment > 0 && `Entrada: R$ ${plan.downPayment.toFixed(2)}`}
-                              {installmentValue > 0 && (
-                                <>
-                                  {plan.downPayment > 0 ? ' + ' : ''}
-                                  {plan.installments}x de R$ {installmentValue.toFixed(2)}
-                                </>
-                              )}
-                            </>
-                          )}
-                        </p>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">{t("wizard.downPayment")}</label>
-                <Input
-                  type="number"
-                  step="0.01"
-                  value={downPayment}
-                  onChange={(e) => setDownPayment(parseFloat(e.target.value) || 0)}
-                  className="bg-background"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">{t("wizard.installments")}</label>
-                <Input
-                  type="number"
-                  min={1}
-                  value={installmentCount}
-                  onChange={(e) => setInstallmentCount(parseInt(e.target.value) || 1)}
-                  className="bg-background"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">{t("wizard.interval")}</label>
-                <select
-                  value={installmentInterval}
-                  onChange={(e) => setInstallmentInterval(e.target.value as InstallmentInterval)}
-                  className="w-full h-10 bg-background border border-input px-3 text-sm"
-                >
-                  {(Object.entries(INSTALLMENT_INTERVAL_LABELS)).map(([k, v]) => (
-                    <option key={k} value={k}>{v}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Installment preview */}
-            {installmentCount > 0 && (
-              <div className={`p-4 rounded-xl border-2 transition-all ${
-                downPayment >= totals.total_amount && installmentCount > 1 
-                ? "bg-amber-50 border-amber-200 dark:bg-amber-900/10 dark:border-amber-900/30"
-                : "bg-primary/5 border-primary/20"
-              }`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-sm text-foreground font-medium">{t("wizard.installmentValue")}</span>
-                    {downPayment >= totals.total_amount && installmentCount > 1 && (
-                      <span className="text-[10px] text-amber-600 font-bold uppercase tracking-tight">
-                        Atenção: entrada cobre o valor total
-                      </span>
-                    )}
-                  </div>
-                  <span className={`text-2xl font-bold ${
-                    downPayment >= totals.total_amount && installmentCount > 1 ? "text-amber-600" : "text-primary"
-                  }`}>
-                    R$ {totals.installment_value.toFixed(2)}
-                  </span>
-                </div>
-                
-                <div className="mt-2 pt-2 border-t border-dashed border-primary/20">
-                  {downPayment >= totals.total_amount ? (
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs text-muted-foreground font-medium">
-                        {installmentCount > 1 
-                          ? "O valor de entrada atual quita o orçamento integralmente." 
-                          : `Pagamento único de R$ ${downPayment.toFixed(2)}`
-                        }
-                      </p>
-                      {installmentCount > 1 && (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="h-7 text-[10px] border-amber-400 text-amber-700 hover:bg-amber-50"
-                          onClick={() => setDownPayment(0)}
-                        >
-                          Remover entrada e parcelar total
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-xs text-muted-foreground font-medium">
-                      Entrada: R$ {downPayment.toFixed(2)}
-                      {totals.installment_value > 0 && (
-                        <> + {installmentCount}x de R$ {totals.installment_value.toFixed(2)} ({INSTALLMENT_INTERVAL_LABELS[installmentInterval].toLowerCase()})</>
-                      )}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Payment methods */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-foreground">{t("wizard.paymentMethods")}</label>
-                <Button variant="outline" size="sm" onClick={addPaymentMethod} className="gap-1">
-                  <Plus className="w-3 h-3" />{t("wizard.addMethod")}
-                </Button>
-              </div>
-              {paymentMethods.length === 0 ? (
-                <p className="text-sm text-muted-foreground">{t("wizard.noMethod")}</p>
-              ) : (
-                <div className="space-y-2">
-                  {paymentMethods.map((pm, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <select
-                        value={pm.method}
-                        onChange={(e) => updatePaymentMethod(idx, "method", e.target.value)}
-                        className="h-10 bg-background border border-input px-3 text-sm flex-1"
-                      >
-                        {(Object.entries(PAYMENT_METHOD_LABELS)).map(([k, v]) => (
-                          <option key={k} value={k}>{v}</option>
-                        ))}
-                      </select>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder={t("wizard.value")}
-                        value={pm.amount || ""}
-                        onChange={(e) => updatePaymentMethod(idx, "amount", parseFloat(e.target.value) || 0)}
-                        className="w-32"
-                      />
-                      <Button variant="ghost" size="sm" onClick={() => removePaymentMethod(idx)} className="text-destructive">
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Notes & Validity */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">{t("wizard.notes")}</label>
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder={t("wizard.notesPlaceholder")}
-                  className="w-full bg-background border border-input px-3 py-2 text-sm min-h-[80px]"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">{t("validUntil")}</label>
-                <Input
-                  type="date"
-                  value={validUntil}
-                  onChange={(e) => setValidUntil(e.target.value)}
-                  className="bg-background"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 4: Summary */}
-        {step === 4 && (
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-foreground mb-2">Resumo do Orçamento</h3>
-
-            {/* Client */}
-            <div className="p-4 bg-primary/5 border border-primary/20">
-              <p className="text-xs text-muted-foreground">{t("wizard.client")}</p>
-              <p className="text-lg font-bold text-foreground">{selectedPatient?.name || "-"}</p>
-            </div>
-
-            {/* Items table */}
-            <div>
-              <p className="text-sm font-medium text-foreground mb-2">Itens</p>
-              <div className="border border-border overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted">
-                    <tr>
-                      <th className="text-left p-3 font-medium text-foreground">Produto</th>
-                      <th className="text-center p-3 font-medium text-foreground">{t("wizard.qty")}</th>
-                      <th className="text-right p-3 font-medium text-foreground">{t("wizard.unitPrice")}</th>
-                      <th className="text-right p-3 font-medium text-foreground">{t("wizard.tax")}</th>
-                      <th className="text-right p-3 font-medium text-foreground">{t("wizard.total")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item, idx) => {
-                      const calc = calculateItemTotals(item)
-                      return (
-                        <tr key={idx} className="border-t border-border">
-                          <td className="p-3 font-medium text-foreground">{item.product_name}</td>
-                          <td className="p-3 text-center text-foreground">{item.quantity}</td>
-                          <td className="p-3 text-right text-foreground">R$ {item.unit_price.toFixed(2)}</td>
-                          <td className="p-3 text-right text-amber-600">R$ {calc.tax_amount.toFixed(2)}</td>
-                          <td className="p-3 text-right font-bold text-foreground">R$ {calc.total.toFixed(2)}</td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Totals */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="p-4 border border-border space-y-2">
-                <h4 className="font-bold text-foreground mb-2">Financeiro</h4>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("wizard.subtotal")}</span>
-                  <span className="font-medium text-foreground">R$ {totals.subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("wizard.tax")}s</span>
-                  <span className="font-medium text-amber-600">R$ {totals.total_tax.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm border-t border-border pt-2">
-                  <span className="font-bold text-foreground">{t("wizard.totalValue")}</span>
-                  <span className="font-bold text-foreground text-lg">R$ {totals.total_amount.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("wizard.costs")}</span>
-                  <span className="text-destructive">R$ {totals.total_cost.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="font-bold text-emerald-600">{t("detail.net")}</span>
-                  <span className="font-bold text-emerald-600">R$ {totals.net_revenue.toFixed(2)}</span>
-                </div>
-              </div>
-
-              <div className="p-4 border border-border space-y-2">
-                <h4 className="font-bold text-foreground mb-2">{t("wizard.paymentInfo")}</h4>
-                {downPayment > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t("detail.downPayment")}</span>
-                    <span className="font-medium text-foreground">R$ {downPayment.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("detail.installments")}</span>
-                  <span className="font-medium text-foreground">
-                    {installmentCount}x de R$ {totals.installment_value.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("wizard.interval")}</span>
-                  <span className="font-medium text-foreground">
-                    {t(`intervals.${installmentInterval}`)}
-                  </span>
-                </div>
-                {paymentMethods.length > 0 && (
-                  <div className="border-t border-border pt-2 mt-2">
-                    <p className="text-xs text-muted-foreground mb-1">{t("wizard.paymentMethods")}</p>
-                    {paymentMethods.map((pm, i) => (
-                      <div key={i} className="flex justify-between text-sm">
-                        <span className="text-foreground">{t(`paymentMethods.${pm.method}`)}</span>
-                        <span className="font-medium text-foreground">R$ {pm.amount.toFixed(2)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {notes && (
-              <div className="p-3 bg-muted border border-border">
-                <p className="text-xs text-muted-foreground">{t("wizard.notes")}</p>
-                <p className="text-sm text-foreground">{notes}</p>
-              </div>
-            )}
-          </div>
-        )}
-      </Card>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          onClick={() => setStep(Math.max(1, step - 1))}
-          disabled={step === 1}
-          className="gap-2"
-        >
-          <ChevronLeft className="w-4 h-4" /> {t("common.previous")}
-        </Button>
-        {step < 4 ? (
-          <Button
-            onClick={() => setStep(step + 1)}
-            disabled={!canProceed()}
-            className="gap-2"
+      {/* Topo da pirâmide: KPIs */}
+      <section className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-border bg-border lg:grid-cols-4" aria-label="Indicadores de orçamentos">
+        {[
+          { label: "Em andamento", value: BRL.format(stats.openValue), meta: `${stats.openCount} orçamento(s)` },
+          { label: "Fechados", value: BRL.format(stats.closedValue), meta: `${stats.closedCount} orçamento(s)` },
+          { label: "Conversão", value: `${stats.conversion}%`, meta: "fechados ÷ decididos" },
+          { label: "Ticket médio", value: BRL.format(stats.ticket), meta: "por orçamento fechado" },
+        ].map((kpi, i) => (
+          <motion.div
+            key={kpi.label}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 28, delay: i * 0.05 }}
+            className="bg-background p-4 sm:p-5"
           >
-            {t("common.next")} <ChevronRight className="w-4 h-4" />
-          </Button>
-        ) : (
-          <Button onClick={handleSubmit} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-lg">
-            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            <Check className="w-4 h-4" />{t("createBudget")}</Button>
-        )}
+            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">{kpi.label}</p>
+            <p className="mt-2 font-display text-xl font-semibold tabular tracking-[-0.01em] text-ink sm:text-2xl">{kpi.value}</p>
+            <p className="mt-1 text-[12px] text-muted-foreground">{kpi.meta}</p>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* Meio: filtros e ação */}
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap gap-1 rounded-sm border border-border bg-background p-1" role="tablist" aria-label="Filtrar orçamentos">
+          {FILTERS.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              role="tab"
+              aria-selected={filter === f.id}
+              onClick={() => setFilter(f.id)}
+              className={cn("relative min-h-10 rounded-xs px-3.5 text-[13px] font-medium transition-colors", filter === f.id ? "text-ink" : "text-muted-foreground hover:text-ink")}
+            >
+              {filter === f.id && <motion.span layoutId="vwo-budget-filter" className="absolute inset-0 rounded-xs bg-accent" transition={{ type: "spring", stiffness: 380, damping: 32 }} aria-hidden />}
+              <span className="relative">{f.label}</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="relative sm:w-72">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Paciente ou número"
+              aria-label="Buscar orçamento"
+              className="h-11 w-full rounded-sm border border-input bg-background pl-9 pr-3 text-[14px] focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setView({ kind: "new" })}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-sm bg-primary px-5 text-[14px] font-semibold text-primary-foreground transition-transform hover:bg-primary/90 active:scale-[0.98]"
+          >
+            <Plus className="h-4 w-4" aria-hidden />
+            Novo orçamento
+          </button>
+        </div>
       </div>
+
+      {/* Base: lista */}
+      <section className="overflow-hidden rounded-md border border-border bg-background" aria-label="Orçamentos">
+        {filtered.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
+            <Receipt className="h-8 w-8 text-muted-foreground/60" aria-hidden />
+            <p className="font-display text-base font-semibold text-ink">Nenhum orçamento por aqui</p>
+            <p className="max-w-sm text-[13px] text-muted-foreground">Crie um orçamento marcando os procedimentos direto no odontograma.</p>
+          </div>
+        ) : (
+          <ul className="divide-y divide-hairline">
+            <li className="hidden grid-cols-[96px_1.6fr_1fr_1fr_120px] gap-4 px-5 py-2.5 text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground md:grid" aria-hidden>
+              <span>Nº</span>
+              <span>Paciente</span>
+              <span>Procedimentos</span>
+              <span className="text-right">Valor</span>
+              <span className="text-right">Status</span>
+            </li>
+            {filtered.map((b, i) => {
+              const items = b.items || []
+              const teeth = items.map((it) => resolveItemRegion(it).region).filter((r) => r.kind === "tooth").length
+              return (
+                <motion.li
+                  key={b.id}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30, delay: Math.min(i, 10) * 0.025 }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setView({ kind: "detail", id: b.id })}
+                    className="grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 px-4 py-3.5 text-left transition-colors hover:bg-surface sm:px-5 md:grid-cols-[96px_1.6fr_1fr_1fr_120px]"
+                  >
+                    <span className="font-display text-[13px] font-semibold tabular text-primary md:order-none">#{budgetCode(b.id)}</span>
+                    <span className="order-3 col-span-2 min-w-0 md:order-none md:col-span-1">
+                      <span className="block truncate text-[14.5px] font-semibold text-ink">{b.patient?.name || "Paciente"}</span>
+                      <span className="block text-[12px] text-muted-foreground">Cadastro {formatDateBR(b.created_at)}</span>
+                    </span>
+                    <span className="order-4 text-[13px] text-ink-soft md:order-none">
+                      {items.length} item(ns){teeth ? ` · ${teeth} dente(s)` : ""}
+                    </span>
+                    <span className="order-5 text-right font-display text-[15px] font-semibold tabular text-ink md:order-none">{BRL.format(b.total_amount || 0)}</span>
+                    <span className="order-2 text-right md:order-none">
+                      <span className={cn("inline-block rounded-xs px-2 py-0.5 text-[11px] font-semibold", BUDGET_STATUS_COLORS[b.status])}>{BUDGET_STATUS_LABELS[b.status]}</span>
+                    </span>
+                  </button>
+                </motion.li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
     </div>
   )
 }
 
-// ============================================================
-// BUDGET DETAIL VIEW
-// ============================================================
+/* ================================================================== */
+/* Detalhe                                                             */
+/* ================================================================== */
+
+interface DetailPatch {
+  status?: BudgetStatus
+  installments?: BudgetInstallmentRow[]
+  deleted?: boolean
+}
 
 function BudgetDetail({
-  t,
-
   budget,
+  isDemo,
+  professionals,
+  demoInstallments,
   onBack,
-  onStatusChange,
-  onDuplicate,
+  onChanged,
 }: {
   budget: Budget
+  isDemo: boolean
+  professionals: ComposerProfessional[]
+  demoInstallments?: BudgetInstallmentRow[]
   onBack: () => void
-  onStatusChange: (id: string, status: BudgetStatus) => void
-  t: any
-  onDuplicate: (id: string) => void
+  onChanged: (patch?: DetailPatch) => Promise<void>
 }) {
+  const { toast } = useToast()
+  const [installments, setInstallments] = useState<BudgetInstallmentRow[] | null>(null)
+  const [busy, setBusy] = useState<string | null>(null)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const phase = budgetPhase(budget.status)
+  const plan = useMemo(() => planFromBudget(budget), [budget])
+
+  useEffect(() => {
+    let active = true
+    if (isDemo) {
+      const fallback =
+        demoInstallments ??
+        (phase === "closed"
+          ? plan.schedule.map((s, i) => ({
+              id: `${budget.id}-p-${i}`,
+              amount: s.amount,
+              status: i < 2 ? "paid" : "pending",
+              due_date: s.dueDate,
+              payment_date: i < 2 ? s.dueDate : null,
+              notes: s.label,
+              method: s.method,
+              installment_number: s.number,
+            }))
+          : [])
+      setInstallments(fallback)
+      return
+    }
+    getBudgetInstallments(budget.id).then((rows) => active && setInstallments(rows))
+    return () => {
+      active = false
+    }
+  }, [budget.id, isDemo, demoInstallments, phase, plan])
+
+  const items = useMemo(
+    () =>
+      (budget.items || [])
+        .map((it) => ({ ...it, resolved: resolveItemRegion(it) }))
+        .sort((a, b) => regionSortKey(a.resolved.region) - regionSortKey(b.resolved.region)),
+    [budget.items],
+  )
+  const professional = professionals.find((p) => p.id === budget.professional_id)
+  const received = (installments || []).filter((p) => p.status === "paid").reduce((s, p) => s + p.amount, 0)
+  const today = todayISO()
+  const overdue = (installments || []).filter((p) => p.status !== "paid" && (p.due_date || "") < today).reduce((s, p) => s + p.amount, 0)
+  const toReceive = Math.max(0, (budget.total_amount || 0) - received)
+  const executed = items.filter((it) => it.execution_status === "completed").length
+
+  const run = async (key: string, action: () => Promise<DetailPatch | void>, success: string) => {
+    setBusy(key)
+    try {
+      const patch = await action()
+      await onChanged(patch || undefined)
+      toast({ title: success })
+    } catch (error) {
+      toast({ title: "Não foi possível concluir", description: error instanceof Error ? error.message : undefined, variant: "destructive" })
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  const closeBudget = () =>
+    run(
+      "close",
+      async () => {
+        if (isDemo) {
+          const rows = plan.schedule.map((s, i) => ({ id: `${budget.id}-p-${i}`, amount: s.amount, status: "pending", due_date: s.dueDate, payment_date: null, notes: s.label, method: s.method, installment_number: s.number }))
+          setInstallments(rows)
+          return { status: "approved", installments: rows }
+        }
+        const res = await closeBudgetWithPlan(budget.id, plan.schedule)
+        if (!res.success) throw new Error(res.error)
+      },
+      "Orçamento fechado e parcelas lançadas",
+    )
+
+  const setStatus = (status: BudgetStatus, message: string) =>
+    run(
+      status,
+      async () => {
+        if (isDemo) return { status }
+        const res = await updateBudgetStatus(budget.id, status)
+        if (!res.success) throw new Error(res.error)
+      },
+      message,
+    )
+
+  const receive = (row: BudgetInstallmentRow) =>
+    run(
+      `pay-${row.id}`,
+      async () => {
+        if (isDemo) {
+          const rows = (installments || []).map((p) => (p.id === row.id ? { ...p, status: "paid", payment_date: today } : p))
+          setInstallments(rows)
+          return { installments: rows }
+        }
+        const res = await settleInstallment(row.id)
+        if (!res.success) throw new Error(res.error)
+        setInstallments((prev) => (prev || []).map((p) => (p.id === row.id ? { ...p, status: "paid", payment_date: today } : p)))
+      },
+      "Recebimento registrado",
+    )
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Button variant="outline" onClick={onBack} className="gap-2">
-          <ChevronLeft className="w-4 h-4" /> {t("detail.back")}
-        </Button>
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={() => onDuplicate(budget.id)} className="gap-1">
-            <Copy className="w-4 h-4" /> {t("detail.duplicate")}
-          </Button>
-          {budget.status === "draft" && (
-            <Button size="sm" onClick={() => onStatusChange(budget.id, "sent")} className="gap-1">
-              {t("detail.sendToClient")}
-            </Button>
-          )}
-          {budget.status === "sent" && (
+      {/* Cabeçalho */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex items-start gap-3">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-border text-ink-soft hover:bg-surface hover:text-ink print:hidden"
+            aria-label="Voltar para a lista de orçamentos"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden />
+          </button>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="font-display text-2xl font-semibold tracking-[-0.02em] text-ink">Orçamento #{budgetCode(budget.id)}</h2>
+              <span className={cn("rounded-xs px-2 py-0.5 text-[11px] font-semibold", BUDGET_STATUS_COLORS[budget.status])}>{BUDGET_STATUS_LABELS[budget.status]}</span>
+            </div>
+            <p className="mt-1 text-[14px] text-ink-soft">
+              <span className="font-semibold text-ink">{budget.patient?.name || "Paciente"}</span>
+              {professional ? ` · ${professional.name}` : ""} · cadastro {formatDateBR(budget.created_at)}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2 print:hidden">
+          {phase === "open" && (
             <>
-              <Button size="sm" onClick={() => onStatusChange(budget.id, "approved")} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1">
-                <Check className="w-4 h-4" /> {t("detail.approve")}
-              </Button>
-              <Button size="sm" variant="outline" onClick={() => onStatusChange(budget.id, "rejected")} className="text-destructive gap-1">
-                <X className="w-4 h-4" /> {t("detail.reject")}
-              </Button>
+              <button
+                type="button"
+                onClick={closeBudget}
+                disabled={busy !== null}
+                className="inline-flex h-11 items-center gap-2 rounded-sm bg-primary px-5 text-[14px] font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+              >
+                {busy === "close" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Check className="h-4 w-4" aria-hidden />}
+                Fechar e lançar parcelas
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatus("rejected", "Orçamento reprovado")}
+                disabled={busy !== null}
+                className="inline-flex h-11 items-center gap-2 rounded-sm border border-rose-200 px-4 text-[14px] font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+              >
+                <X className="h-4 w-4" aria-hidden />
+                Reprovar
+              </button>
             </>
           )}
           {budget.status === "approved" && (
-              <Button size="sm" onClick={() => onStatusChange(budget.id, "paid")} className="bg-emerald-600 hover:bg-emerald-700 shadow text-white gap-1 font-bold">
-                <Check className="w-4 h-4" /> {t("detail.markAsPaid")} 
-              </Button>
+            <button
+              type="button"
+              onClick={() => setStatus("paid", "Orçamento quitado")}
+              disabled={busy !== null}
+              className="inline-flex h-11 items-center gap-2 rounded-sm border border-emerald-200 px-4 text-[14px] font-semibold text-emerald-700 hover:bg-emerald-50 disabled:opacity-50"
+            >
+              <Check className="h-4 w-4" aria-hidden />
+              Marcar como quitado
+            </button>
           )}
+          <button type="button" onClick={() => window.print()} className="inline-flex h-11 items-center gap-2 rounded-sm border border-border px-4 text-[14px] font-medium text-ink hover:bg-surface">
+            <Printer className="h-4 w-4" aria-hidden />
+            Imprimir
+          </button>
+          {!isDemo && (
+            <button
+              type="button"
+              onClick={() =>
+                run("dup", async () => {
+                  const res = await duplicateBudget(budget.id)
+                  if (!res.success) throw new Error(res.error)
+                }, "Orçamento duplicado")
+              }
+              className="inline-flex h-11 w-11 items-center justify-center rounded-sm border border-border text-ink-soft hover:bg-surface"
+              aria-label="Duplicar orçamento"
+              title="Duplicar"
+            >
+              <Copy className="h-4 w-4" aria-hidden />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setConfirmDelete(true)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-sm border border-border text-destructive hover:bg-destructive/5"
+            aria-label="Excluir orçamento"
+            title="Excluir"
+          >
+            <Trash2 className="h-4 w-4" aria-hidden />
+          </button>
         </div>
       </div>
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <h2 className="text-3xl font-bold text-foreground">{t("detail.budget")}</h2>
-            <span className={`text-xs uppercase font-bold px-2 py-1 ${BUDGET_STATUS_COLORS[budget.status]}`}>
-              {t(`status.${budget.status}`)}
-            </span>
+      {/* KPIs financeiros do orçamento (como na ficha: orçamento, recebido, a receber, atrasado) */}
+      <section className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-border bg-border lg:grid-cols-5" aria-label="Resumo financeiro">
+        {[
+          { label: "Orçamento", value: BRL.format(budget.total_amount || 0), tone: "text-ink" },
+          { label: "Recebido", value: BRL.format(received), tone: "text-emerald-700" },
+          { label: "A receber", value: BRL.format(toReceive), tone: "text-primary" },
+          { label: "Atrasado", value: BRL.format(overdue), tone: overdue > 0 ? "text-rose-700" : "text-ink" },
+          { label: "Tratamento", value: `${items.length ? Math.round((executed / items.length) * 100) : 0}%`, tone: "text-ink" },
+        ].map((k) => (
+          <div key={k.label} className="bg-background p-4">
+            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">{k.label}</p>
+            <p className={cn("mt-1.5 font-display text-lg font-semibold tabular", k.tone)}>{k.value}</p>
           </div>
-          <p className="text-muted-foreground mt-1 text-sm">
-            {t("wizard.client")}: <strong>{budget.patient?.name || "—"}</strong> • {t("createdAt")} {new Date(budget.created_at).toLocaleDateString("pt-BR")}
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-3xl font-bold text-foreground">R$ {budget.total_amount.toFixed(2)}</p>
-          <p className="text-sm text-emerald-600 font-medium">{t("net")} R$ {budget.net_revenue.toFixed(2)}</p>
-        </div>
-      </div>
+        ))}
+      </section>
 
-      {/* Items */}
-      <Card className="border border-border overflow-hidden">
-        <div className="p-4 bg-muted border-b border-border">
-          <h3 className="font-bold text-foreground">{t("detail.itemsTitle")}</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border bg-muted/50">
-                <th className="text-left p-3 font-medium text-foreground">{t("detail.product")}</th>
-                <th className="text-center p-3 font-medium text-foreground">{t("wizard.qty")}</th>
-                <th className="text-right p-3 font-medium text-foreground">{t("wizard.unitPrice")}</th>
-                <th className="text-right p-3 font-medium text-foreground">{t("wizard.subtotal")}</th>
-                <th className="text-right p-3 font-medium text-foreground">{t("wizard.tax")}</th>
-                <th className="text-right p-3 font-medium text-foreground">{t("wizard.total")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(budget.items || []).map((item) => (
-                <tr key={item.id} className="border-b border-border">
-                  <td className="p-3 font-medium text-foreground">{item.product_name}</td>
-                  <td className="p-3 text-center text-foreground">{item.quantity}</td>
-                  <td className="p-3 text-right text-foreground">R$ {item.unit_price.toFixed(2)}</td>
-                  <td className="p-3 text-right text-foreground">R$ {item.subtotal.toFixed(2)}</td>
-                  <td className="p-3 text-right text-amber-600">R$ {item.tax_amount.toFixed(2)}</td>
-                  <td className="p-3 text-right font-bold text-foreground">R$ {item.total.toFixed(2)}</td>
+      <div className="grid gap-6 xl:grid-cols-[1.618fr_1fr]">
+        {/* Procedimentos */}
+        <section className="min-w-0 rounded-md border border-border bg-background" aria-label="Procedimentos do orçamento">
+          <PanelHeader title="Procedimentos" aside={<span className="text-[12px] text-muted-foreground">{items.length} item(ns)</span>} />
+          <div className="overflow-x-auto" data-lenis-prevent>
+            <table className="w-full min-w-[520px] text-[13.5px]">
+              <thead>
+                <tr className="border-b border-hairline text-left text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
+                  <th scope="col" className="px-5 py-2.5 font-medium">Procedimento</th>
+                  <th scope="col" className="px-3 py-2.5 font-medium">Região</th>
+                  <th scope="col" className="px-3 py-2.5 font-medium">Execução</th>
+                  <th scope="col" className="px-5 py-2.5 text-right font-medium">Valor</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
-
-      {/* Summary */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Card className="p-6 border border-border bg-white dark:bg-card">
-          <h4 className="font-bold text-foreground mb-4">{t("detail.financialSummary")}</h4>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("wizard.subtotal")}</span>
-              <span className="text-foreground">R$ {budget.subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("wizard.totalTax")}</span>
-              <span className="text-amber-600">R$ {budget.total_tax.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm font-bold border-t border-border pt-2">
-              <span className="text-foreground">{t("wizard.total")}</span>
-              <span className="text-foreground text-lg">R$ {budget.total_amount.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("wizard.costs")}</span>
-              <span className="text-destructive">- R$ {budget.total_cost.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm font-bold">
-              <span className="text-emerald-600">{t("net")}</span>
-              <span className="text-emerald-600">R$ {(budget.net_revenue || 0).toFixed(2)}</span>
-            </div>
-            
-            {budget.status !== "paid" && (
-              <div className="mt-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/50">
-                <p className="text-[10px] text-amber-700 dark:text-amber-400 leading-tight">
-                  <span className="font-bold">💡 {t("total")}: </span>
-                  {t("detail.paidRequiredInfo")}
-                </p>
-              </div>
-            )}
-          </div>
-        </Card>
-
-        <Card className="p-6 border border-border bg-white dark:bg-card">
-          <h4 className="font-bold text-foreground mb-4">{t("detail.paymentPlan")}</h4>
-          <div className="space-y-2">
-            {budget.down_payment > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{t("detail.downPayment")}</span>
-                <span className="text-foreground font-medium">R$ {budget.down_payment.toFixed(2)}</span>
-              </div>
-            )}
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("detail.installments")}</span>
-              <span className="text-foreground font-medium">
-                {budget.installment_count}x de R$ {budget.installment_value.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("wizard.interval")}</span>
-              <span className="text-foreground">{t(`intervals.${budget.installment_interval}`)}</span>
-            </div>
-            {(budget.payment_methods || []).length > 0 && (
-              <div className="border-t border-border pt-2 mt-2 space-y-1">
-                <p className="text-xs text-muted-foreground font-medium">{t("wizard.paymentMethods")}</p>
-                {(budget.payment_methods || []).map((pm) => (
-                  <div key={pm.id} className="flex justify-between text-sm">
-                    <span className="text-foreground">{t(`paymentMethods.${pm.method}`)}</span>
-                    <span className="font-medium text-foreground">R$ {pm.amount.toFixed(2)}</span>
-                  </div>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                {items.map((it) => (
+                  <tr key={it.id}>
+                    <td className="px-5 py-3 font-medium text-ink">{it.resolved.name}</td>
+                    <td className="px-3 py-3 text-ink-soft" title={regionLabel(it.resolved.region)}>
+                      <span className="rounded-xs bg-secondary px-1.5 py-0.5 font-display text-[11px] font-semibold tabular">{regionShort(it.resolved.region)}</span>
+                    </td>
+                    <td className="px-3 py-3 text-[12.5px] text-muted-foreground">{EXECUTION_LABELS[it.execution_status || "pending"]}</td>
+                    <td className="px-5 py-3 text-right tabular text-ink">{BRL.format(it.total)}</td>
+                  </tr>
                 ))}
-              </div>
-            )}
+              </tbody>
+              <tfoot>
+                <tr className="border-t border-border">
+                  <td colSpan={3} className="px-5 py-3 text-right text-[12px] uppercase tracking-[0.1em] text-muted-foreground">
+                    {budget.discount_amount ? `Desconto ${BRL.format(budget.discount_amount)} · ` : ""}Total
+                  </td>
+                  <td className="px-5 py-3 text-right font-display text-base font-semibold tabular text-ink">{BRL.format(budget.total_amount || 0)}</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
-        </Card>
+          {budget.notes && <p className="whitespace-pre-line border-t border-hairline px-5 py-3 text-[13px] text-ink-soft">{budget.notes}</p>}
+        </section>
+
+        {/* Plano de pagamento / parcelas */}
+        <section className="min-w-0 self-start rounded-md border border-border bg-background" aria-label="Plano de pagamento">
+          <PanelHeader
+            title="Plano de pagamento"
+            aside={
+              <span className="text-[12px] text-muted-foreground">
+                {plan.downPayment > 0 ? `Entrada + ` : ""}
+                {budget.installment_count || 1}x · {PAYMENT_METHOD_LABELS[(budget.payment_method as PlanPaymentMethod) || "pix"] || "—"}
+              </span>
+            }
+          />
+          {installments === null ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" aria-hidden />
+            </div>
+          ) : installments.length === 0 ? (
+            <div className="px-5 py-6 text-[13px] text-muted-foreground">
+              <p>Previsão (ainda não lançada no contas a receber):</p>
+              <ul className="mt-3 divide-y divide-hairline">
+                {plan.schedule.map((s) => (
+                  <li key={`${s.number}-${s.dueDate}`} className="flex justify-between py-2 tabular">
+                    <span>
+                      {s.label} · {formatDateBR(s.dueDate)}
+                    </span>
+                    <span className="text-ink">{BRL.format(s.amount)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <ul className="divide-y divide-hairline">
+              <AnimatePresence initial={false}>
+                {installments.map((row, idx) => {
+                  const isPaid = row.status === "paid"
+                  const isLate = !isPaid && (row.due_date || "") < today
+                  return (
+                    <motion.li key={row.id} layout className="flex items-center gap-3 px-5 py-2.5">
+                      <span className="w-14 shrink-0 font-display text-[12px] font-semibold tabular text-ink-soft">
+                        {row.installment_number === 0 || /Entrada/.test(row.notes || "") ? "Entr." : `${row.installment_number ?? idx + 1}ª`}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[13.5px] tabular text-ink">{BRL.format(row.amount)}</span>
+                        <span className={cn("block text-[12px]", isLate ? "font-semibold text-rose-700" : "text-muted-foreground")}>
+                          {isPaid ? `Recebido em ${formatDateBR(row.payment_date)}` : `Vence ${formatDateBR(row.due_date)}${isLate ? " · atrasada" : ""}`}
+                        </span>
+                      </span>
+                      {isPaid ? (
+                        <span className="inline-flex h-9 items-center gap-1 rounded-xs bg-emerald-50 px-2.5 text-[12px] font-semibold text-emerald-800">
+                          <Check className="h-3.5 w-3.5" aria-hidden />
+                          Pago
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => receive(row)}
+                          disabled={busy !== null}
+                          className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-border px-3 text-[12.5px] font-semibold text-ink hover:border-primary hover:text-primary disabled:opacity-50 print:hidden"
+                        >
+                          {busy === `pay-${row.id}` && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />}
+                          Receber
+                        </button>
+                      )}
+                    </motion.li>
+                  )
+                })}
+              </AnimatePresence>
+            </ul>
+          )}
+        </section>
       </div>
 
-      {budget.notes && (
-        <Card className="p-4 border border-border">
-          <p className="text-xs text-muted-foreground">{t("wizard.notes")}</p>
-          <p className="text-sm text-foreground mt-1">{budget.notes}</p>
-        </Card>
-      )}
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir orçamento #{budgetCode(budget.id)}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Os procedimentos vinculados serão removidos. Parcelas já lançadas no contas a receber permanecem no financeiro.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() =>
+                run(
+                  "delete",
+                  async () => {
+                    if (!isDemo) {
+                      const res = await deleteBudget(budget.id)
+                      if (!res.success) throw new Error(res.error)
+                    }
+                    return { deleted: true }
+                  },
+                  "Orçamento excluído",
+                )
+              }
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

@@ -64,11 +64,11 @@ export async function sendNotification(userId: string, payload: { title: string;
           body: payload.body,
           url: payload.url || '/',
           notificationId: String(notification.id),
-          icon: '/viraweb6.png'
+          icon: '/brand/vwo-icon-192.png'
         },
         webpush: {
           notification: {
-            icon: '/viraweb6.png',
+            icon: '/brand/vwo-icon-192.png',
           },
           fcmOptions: {
             link: payload.url || '/',
@@ -83,7 +83,7 @@ export async function sendNotification(userId: string, payload: { title: string;
       // Cleanup invalid tokens
       if (response.failureCount > 0) {
         const failedDbTokens: string[] = []
-        response.responses.forEach((resp, idx) => {
+        response.responses.forEach((resp: { success: boolean; error?: unknown }, idx: number) => {
           if (!resp.success) {
             const error = resp.error as any
             if (error?.code === 'messaging/invalid-registration-token' || 

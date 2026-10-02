@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { VwoLogo } from "@/components/brand/vwo-logo"
 import { useAuth } from "@/hooks/use-auth"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Check, X, Sparkles, Loader2, Zap, Shield, ArrowRight, LogOut} from "lucide-react"
-import Image from "next/image"
 import { fetchJson } from "@/lib/fetch-client"
 import { useToast } from "@/hooks/use-toast"
 import { useSubscription } from "@/hooks/use-subscription"
@@ -153,7 +153,7 @@ export default function PlansSelectionPage() {
         <div className="min-h-screen bg-linear-to-br from-background to-secondary/5 font-sans">
             {/* Nav */}
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-between">
-                <Image width={120} height={36} alt="ViraWeb logo" src="/viraweb3.png" />
+                <VwoLogo variant="stacked" />
                 <div className="flex items-center gap-6">
                     <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:block">
                         Passo 2 de 2: Escolha seu plano
@@ -282,7 +282,7 @@ export default function PlansSelectionPage() {
                          </div>
                     </div>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
-                        © 2026 ViraWeb · Todos os direitos reservados
+                        © 2026 Vira Web Odonto · Todos os direitos reservados
                     </p>
                 </div>
             </div>

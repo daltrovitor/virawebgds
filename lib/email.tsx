@@ -416,8 +416,8 @@ export function generateSupportTicketEmail(data: {
             <p><strong>Ação necessária:</strong> Por favor, responda este ticket o mais rápido possível através do painel administrativo.</p>
             
             <div class="footer">
-              <p>Este é um email automático do sistema de suporte ViraWeb.</p>
-              <p>&copy; 2026 ViraWeb. Todos os direitos reservados.</p>
+              <p>Este é um email automático do sistema de suporte Vira Web Odonto.</p>
+              <p>&copy; 2026 Vira Web Odonto. Todos os direitos reservados.</p>
             </div>
           </div>
         </div>
@@ -438,8 +438,8 @@ ${data.message}
 
 Ação necessária: Por favor, responda este ticket o mais rápido possível através do painel administrativo.
 
-Este é um email automático do sistema de suporte ViraWeb.
-© 2026 ViraWeb. Todos os direitos reservados.
+Este é um email automático do sistema de suporte Vira Web Odonto.
+© 2026 Vira Web Odonto. Todos os direitos reservados.
   `
 
   return { html, text }
@@ -500,8 +500,8 @@ export function generateSupportReplyEmail(data: {
             <p><strong>Ação necessária:</strong> Por favor, responda esta mensagem através do painel administrativo.</p>
             
             <div class="footer">
-              <p>Este é um email automático do sistema de suporte ViraWeb.</p>
-              <p>&copy; 2026 ViraWeb. Todos os direitos reservados.</p>
+              <p>Este é um email automático do sistema de suporte Vira Web Odonto.</p>
+              <p>&copy; 2026 Vira Web Odonto. Todos os direitos reservados.</p>
             </div>
           </div>
         </div>
@@ -521,8 +521,8 @@ ${data.message}
 
 Ação necessária: Por favor, responda esta mensagem através do painel administrativo.
 
-Este é um email automático do sistema de suporte ViraWeb.
-© 2026 ViraWeb. Todos os rights reserved.
+Este é um email automático do sistema de suporte Vira Web Odonto.
+© 2026 Vira Web Odonto. Todos os rights reserved.
   `
 
   return { html, text }

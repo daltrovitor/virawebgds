@@ -37,7 +37,7 @@ export default function PrivacyPage() {
       content: (
         <>
           <p>
-            <strong>ViraWeb</strong> deeply values the privacy of its users. This Privacy Policy describes how we collect, use, store, share, and protect personal information when you use our management platform, available at{" "}
+            <strong>Vira Web Odonto</strong> deeply values the privacy of its users. This Privacy Policy describes how we collect, use, store, share, and protect personal information when you use our management platform, available at{" "}
             <a href="https://viraweb.online" target="_blank" rel="noopener noreferrer">
               viraweb.online
             </a>{" "}
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
             This policy was drafted in compliance with the <strong>General Data Protection Law (LGPD — Law No. 13,709/2018)</strong>, the <strong>Brazilian Civil Rights Framework for the Internet (Law No. 12,965/2014)</strong>, and other applicable data protection regulations in Brazil.
           </p>
           <InfoBox>
-            By using ViraWeb, you confirm that you have read and understood this Privacy Policy. We recommend reading this document in its entirety.
+            By using Vira Web Odonto, you confirm that you have read and understood this Privacy Policy. We recommend reading this document in its entirety.
           </InfoBox>
         </>
       ),
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
         <>
           <h3>Personal Data Provided by You</h3>
           <p>
-            When creating your account and using ViraWeb, we collect the following data that you provide directly:
+            When creating your account and using Vira Web Odonto, we collect the following data that you provide directly:
           </p>
           <DataList
             items={[
@@ -84,7 +84,7 @@ export default function PrivacyPage() {
             ]}
           />
           <WarningBox>
-            You, as the operator and controller of your clients/patients' data, are responsible for obtaining proper consent for processing this information according to LGPD. ViraWeb acts as the processor of this data.
+            You, as the operator and controller of your clients/patients' data, are responsible for obtaining proper consent for processing this information according to LGPD. Vira Web Odonto acts as the processor of this data.
           </WarningBox>
         </>
       ),
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
         content: (
           <>
             <p>
-              ViraWeb uses cookies and similar storage technologies. We request your explicit consent through a cookie banner for non-essential cookies.
+              Vira Web Odonto uses cookies and similar storage technologies. We request your explicit consent through a cookie banner for non-essential cookies.
             </p>
             <h3>Cookies Used</h3>
             <DataList
@@ -132,7 +132,7 @@ export default function PrivacyPage() {
         content: (
           <>
             <p>
-              ViraWeb adopts technical and administrative measures to protect your personal data against unauthorized access, destruction, loss, alteration or any form of inappropriate treatment.
+              Vira Web Odonto adopts technical and administrative measures to protect your personal data against unauthorized access, destruction, loss, alteration or any form of inappropriate treatment.
             </p>
             <ul>
                 <li><strong>Encryption in transit</strong> — All connections are protected by SSL/TLS (HTTPS)</li>
@@ -166,7 +166,7 @@ export default function PrivacyPage() {
       content: (
         <>
           <p>
-            A <strong>ViraWeb</strong> valoriza profundamente a privacidade dos seus usuários. Esta Política de
+            A <strong>Vira Web Odonto</strong> valoriza profundamente a privacidade dos seus usuários. Esta Política de
             Privacidade descreve como coletamos, utilizamos, armazenamos, compartilhamos e protegemos as
             informações pessoais quando você utiliza nossa plataforma de gestão, disponível em{" "}
             <a href="https://viraweb.online" target="_blank" rel="noopener noreferrer">
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
             regulamentações aplicáveis à proteção de dados no Brasil.
           </p>
           <InfoBox>
-            Ao utilizar o ViraWeb, você confirma que leu e compreendeu esta Política de Privacidade. Recomendamos
+            Ao utilizar o Vira Web Odonto, você confirma que leu e compreendeu esta Política de Privacidade. Recomendamos
             a leitura integral deste documento.
           </InfoBox>
         </>
@@ -194,7 +194,7 @@ export default function PrivacyPage() {
         <>
           <h3>Dados Pessoais Fornecidos por Você</h3>
           <p>
-            Ao criar sua conta e utilizar o ViraWeb, coletamos os seguintes dados que você nos fornece diretamente:
+            Ao criar sua conta e utilizar o Vira Web Odonto, coletamos os seguintes dados que você nos fornece diretamente:
           </p>
           <DataList
             items={[
@@ -219,7 +219,7 @@ export default function PrivacyPage() {
           />
           <WarningBox>
             Você, como operador e controlador dos dados de seus clientes/pacientes, é responsável por obter o
-            consentimento adequado para o tratamento dessas informações conforme a LGPD. O ViraWeb atua como
+            consentimento adequado para o tratamento dessas informações conforme a LGPD. O Vira Web Odonto atua como
             operador desses dados.
           </WarningBox>
         </>
@@ -262,7 +262,7 @@ export default function PrivacyPage() {
       content: (
         <>
           <p>
-            O ViraWeb utiliza cookies e tecnologias similares de armazenamento local. Antes de ativar cookies não
+            O Vira Web Odonto utiliza cookies e tecnologias similares de armazenamento local. Antes de ativar cookies não
             essenciais, solicitamos seu consentimento explícito.
           </p>
           <h3>Cookies Utilizados</h3>
@@ -282,7 +282,7 @@ export default function PrivacyPage() {
       content: (
         <>
           <p>
-            O ViraWeb adota medidas técnicas e administrativas para proteger seus dados pessoais contra acessos
+            O Vira Web Odonto adota medidas técnicas e administrativas para proteger seus dados pessoais contra acessos
             não autorizados, destruição, perda, alteração ou qualquer forma de tratamento inadequado.
           </p>
           <ul>

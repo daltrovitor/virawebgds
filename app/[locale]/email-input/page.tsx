@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { VwoLogo } from "@/components/brand/vwo-logo"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 
 export default function EmailInputPage() {
   const [email, setEmail] = useState('')
@@ -24,7 +24,7 @@ export default function EmailInputPage() {
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <div className="flex flex-col items-center mb-8">
           <div className=" w-20 flex items-center justify-center mb-4">
-           <Image width={214} height={191} alt='' className='' src="/viraweb6.png" />
+           <VwoLogo variant="stacked" />
           </div>
           <h1 className="text-2xl font-bold">Bem-vindo</h1>
           <p className="text-gray-600 text-center mt-2">

@@ -1,6 +1,8 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "odonto", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "odonto", "run", "dev"], "port": 3100 }
+    { "name": "odonto", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "odonto", "run", "dev"], "port": 3100 },
+    { "name": "vwo", "runtimeExecutable": "npx", "runtimeArgs": ["next", "dev", "-p", "3200"], "port": 3200, "env": { "NEXT_DIST_DIR": ".next-vwo-dev" } },
+    { "name": "vwo-prod", "runtimeExecutable": "npx", "runtimeArgs": ["next", "start", "-p", "3201"], "port": 3201, "env": { "NEXT_DIST_DIR": ".next-vwo" } }
   ]
 }

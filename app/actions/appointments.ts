@@ -5,6 +5,7 @@ import { createNotification } from "./notifications"
 import { getUserSubscription } from "./subscription"
 import { checkLimit } from "@/lib/usage-stats"
 import { updateGoalsForAction } from "./update-goals"
+import { CLINICAL_STATUS, isClinicalStatus, type ClinicalStatus } from "@/lib/appointment-status"
 
 export interface Appointment {
   id: string
@@ -18,6 +19,9 @@ export interface Appointment {
   notes: string | null
   planned_procedure?: string | null
   occurrence?: string | null
+  /** Migração 071 */
+  clinical_status?: string | null
+  first_visit?: boolean | null
   created_at: string
   updated_at: string
 }
@@ -523,4 +527,95 @@ export async function updateAppointmentOccurrence(appointmentId: string, occurre
   }
 
   return data as Appointment
+}
+
+function isMissingColumn(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false
+  return error.code === "42703" || error.code === "PGRST204" || /column .* does not exist|Could not find the '.*' column/i.test(error.message || "")
+}
+
+/**
+ * Atualiza o status clínico detalhado (Agendado, Confirmado, Na recepção, Faltou…).
+ * Grava sempre o status "grosso" aceito por qualquer versão do banco; o detalhe vai em
+ * `clinical_status` quando a migração 071 existir. Ao finalizar, reaproveita a integração financeira.
+ */
+export async function updateAppointmentClinicalStatus(
+  appointmentId: string,
+  clinicalStatus: ClinicalStatus,
+): Promise<{ success: boolean; persisted: "detailed" | "coarse"; error?: string }> {
+  if (!isClinicalStatus(clinicalStatus)) return { success: false, persisted: "coarse", error: "Status inválido" }
+  const coarse = CLINICAL_STATUS[clinicalStatus].coarse
+
+  const supabase = await createClient()
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) return { success: false, persisted: "coarse", error: "User not authenticated" }
+
+  const { data: current } = await supabase
+    .from("appointments")
+    .select("status")
+    .eq("id", appointmentId)
+    .eq("user_id", user.id)
+    .maybeSingle()
+
+  const now = new Date().toISOString()
+  let persisted: "detailed" | "coarse" = "detailed"
+  let { error } = await supabase
+    .from("appointments")
+    .update({ status: coarse, clinical_status: clinicalStatus, updated_at: now })
+    .eq("id", appointmentId)
+    .eq("user_id", user.id)
+
+  if (error && isMissingColumn(error)) {
+    persisted = "coarse"
+    ;({ error } = await supabase
+      .from("appointments")
+      .update({ status: coarse, updated_at: now })
+      .eq("id", appointmentId)
+      .eq("user_id", user.id))
+  }
+
+  if (error) {
+    console.error("Error updating clinical status:", error)
+    return { success: false, persisted, error: "Não foi possível atualizar o status." }
+  }
+
+  // Sessão financeira apenas na transição para "finalizado"
+  if (coarse === "completed" && current?.status !== "completed") {
+    try {
+      await updateAppointmentStatus(appointmentId, "completed")
+    } catch (e) {
+      console.error("Non-fatal: financial session for finished appointment:", e)
+    }
+  }
+
+  return { success: true, persisted }
+}
+
+/** Descrição do atendimento: Previsto, Realizado e Primeira consulta. */
+export async function updateAppointmentDetails(
+  appointmentId: string,
+  details: { planned_procedure?: string | null; occurrence?: string | null; first_visit?: boolean },
+): Promise<{ success: boolean; error?: string; skipped?: string[] }> {
+  const supabase = await createClient()
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) return { success: false, error: "User not authenticated" }
+
+  const now = new Date().toISOString()
+  const payload: Record<string, unknown> = { updated_at: now }
+  if (details.planned_procedure !== undefined) payload.planned_procedure = details.planned_procedure?.trim() || null
+  if (details.occurrence !== undefined) payload.occurrence = details.occurrence?.trim() || null
+  if (details.first_visit !== undefined) payload.first_visit = details.first_visit
+
+  let { error } = await supabase.from("appointments").update(payload).eq("id", appointmentId).eq("user_id", user.id)
+  const skipped: string[] = []
+  if (error && isMissingColumn(error) && "first_visit" in payload) {
+    delete payload.first_visit
+    skipped.push("first_visit")
+    ;({ error } = await supabase.from("appointments").update(payload).eq("id", appointmentId).eq("user_id", user.id))
+  }
+  if (error) {
+    console.error("Error updating appointment details:", error)
+    return { success: false, error: "Não foi possível salvar a descrição do atendimento." }
+  }
+  return { success: true, skipped }
 }

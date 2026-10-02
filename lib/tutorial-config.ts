@@ -1,4 +1,4 @@
-// Coloque aqui o link do vídeo do YouTube para o tutorial do ViraWeb.
+// Coloque aqui o link do vídeo do YouTube para o tutorial do Vira Web Odonto.
 // Exemplos aceitos:
 // - https://www.youtube.com/watch?v=VIDEO_ID
 // - https://youtu.be/VIDEO_ID

@@ -1,3 +1,4 @@
+// Hello World
 "use client"
 
 import { useState, useEffect } from "react"
@@ -8,13 +9,13 @@ import { useToast } from "@/hooks/use-toast"
 import { fetchJson } from "@/lib/fetch-client"
 import { useRouter } from "next/navigation"
 import type { User, Session, AuthError } from "@supabase/supabase-js"
-import Image from "next/image"
+import { VwoMark } from "@/components/brand/vwo-mark"
 import { useTranslations } from 'next-intl'
 import { routing } from "@/i18n/routing"
 
 // Dynamic components with skeletons/loading states
-const LandingPage = dynamic(() => import("@/components/landing-page-i18n"), {
-    loading: () => <div className="min-h-screen bg-black animate-pulse" />
+const LandingPage = dynamic(() => import("@/components/vwo/landing"), {
+    loading: () => <div className="min-h-screen bg-background" />
 })
 const LoginPage = dynamic(() => import("@/components/login-page-i18n"))
 const SignupPage = dynamic(() => import("@/components/signup-page-i18n"))
@@ -430,10 +431,10 @@ export default function Home() {
 
     if (authLoading || subLoading) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center">
-                    <Image src="/viraweb6.png" width={256} height={159} alt="ViraWeb logo" className="w-32" style={{ height: "auto" }} priority />
-                    <p className="text-muted-foreground">{t('common.loading')}</p>
+            <div className="min-h-screen bg-background flex items-center justify-center" role="status" aria-live="polite">
+                <div className="flex flex-col items-center gap-5">
+                    <VwoMark className="w-24" animate="mount" title="Vira Web Odonto" />
+                    <p className="text-[13px] text-muted-foreground">{t('common.loading')}</p>
                 </div>
             </div>
         )
@@ -442,7 +443,7 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-background">
             {currentPage === "landing" && (
-                <LandingPage onLoginClick={() => setCurrentPage("login")} onSignupClick={() => setCurrentPage("signup")} />
+                <LandingPage onLogin={() => setCurrentPage("login")} onStart={() => setCurrentPage("signup")} />
             )}
             {currentPage === "login" && (
                 <LoginPage

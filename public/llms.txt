@@ -1,73 +1,34 @@
-# ViraWeb GDS - Sistema de Gestão Inteligente para Clínicas e Consultórios
+# Vira Web Odonto (VWO) — Software de gestão para clínicas e consultórios odontológicos
 
-> O ViraWeb GDS é uma plataforma completa e intuitiva de gestão empresarial, agendamento online, prontuário eletrônico e controle financeiro projetada para clínicas médicas, consultórios de saúde, profissionais liberais e equipes de atendimento.
+> O Vira Web Odonto é uma plataforma em nuvem (SaaS) para a recepção e a cadeira odontológica: agenda semanal com status clínicos, ficha do paciente, orçamento direto no odontograma, plano de pagamento integrado ao contas a receber, anamnese, documentos clínicos, financeiro e conciliação bancária.
 
-## Visão Geral
-- **Nome Oficial**: ViraWeb GDS (Gestor de Clínicas, Consultórios e Empresas)
-- **Website Oficial**: https://viraweb.online
-- **Categoria**: Software de Gestão (SaaS / Web Application)
-- **Público-Alvo**: Clínicas médicas, odontológicas, estéticas, fisioterapia, psicologia, consultórios individuais, gestores de equipes e pequenas/médias empresas de serviços.
-- **Modelo de Negócio**: Teste Gratuito de 7 dias (sem necessidade de cartão de crédito) com planos de assinatura acessíveis e escaláveis.
+## Visão geral
+- **Nome oficial**: Vira Web Odonto (sigla VWO)
+- **Empresa**: ViraWeb Tecnologias
+- **Site**: https://viraweb.online
+- **Demonstração sem cadastro**: https://viraweb.online/pt-BR/demo
+- **Categoria**: Software de gestão odontológica (SaaS, web e PWA)
+- **Público**: clínicas e consultórios odontológicos, dentistas autônomos e equipes de recepção
+- **Teste**: 14 dias grátis; a cobrança começa após o período de teste e pode ser cancelada antes
 
-## Principais Funcionalidades
+## Fluxo principal
+1. **Agenda**: semana em blocos de 30 minutos, cor por status e 10 status de consulta (agendado, confirmado, cliente na recepção, em atendimento, finalizado, faltou, faltou — remarcado, desmarcado pelo paciente, desmarcado pela clínica, desmarcado — remarcado). Descrição "previsto" e "realizado", primeira consulta e confirmação pelo WhatsApp.
+2. **Ficha do paciente**: idade completa, contato, alertas da anamnese, agendamentos futuros, agendamentos sem baixa de status, faltas e desmarcações, imagens e orçamentos com tratamento (%), recebido, a receber e atrasado.
+3. **Orçamento no odontograma**: procedimento da tabela de preços aplicado por dente (numeração FDI, permanentes e decíduos), hemiarco, arcada ou "sem região"; cada dente vira uma linha. Status: em andamento, fechado, reprovado, quitado.
+4. **Plano de pagamento**: desconto em % ou R$, entrada e até 24 parcelas com vencimento ajustado ao fim do mês; ao fechar, as parcelas entram no contas a receber.
 
-### 1. Agendamento Online & Gestão de Horários
-- Agenda inteligente com suporte a múltiplos profissionais, salas e recursos.
-- Agendamento público para clientes com confirmação automática.
-- Visualização por dia, semana e mês.
-- Lembretes automáticos via mensagens (WhatsApp/Email) para redução de no-shows (faltas).
+## Outros módulos
+- Odontograma clínico por paciente, tratamentos, anamnese e documentos (receitas, atestados, termos)
+- Financeiro, fechamento do mês e conciliação bancária por extrato OFX
+- Tabela de preços por especialidade, profissionais, metas e lembretes
+- Assistente com IA para perguntas sobre agenda e caixa
+- App instalável (PWA) para iPhone, iPad e Android
 
-### 2. Prontuário Eletrônico & Gestão de Clientes/Pacientes
-- Historico completo de consultas, anamneses e procedimentos.
-- Anexo de documentos, fotos e exames em formato digital.
-- Ficha completa do paciente/cliente com dados de contato e histórico financeiro.
+## Planos (mensais)
+- **Básico**: R$ 74,90
+- **Premium**: R$ 147,90
+- **Master**: R$ 247,90
 
-### 3. Gestão Financeira Completa
-- Fluxo de caixa em tempo real, contas a pagar e contas a receber.
-- Faturamento automático de procedimentos e pacotes de atendimento.
-- Relatórios financeiros detalhados por profissional, serviço e período.
-- Integração com gateways de pagamento (Stripe) e emissão de cobranças.
-
-### 4. Inteligência Artificial Integrada (ViraWeb AI)
-- Assistente virtual de IA para suporte operacional e análise rápida de dados.
-- Automação de tarefas repetitivas e sugestões inteligentes de gestão.
-
-### 5. Gestão de Estoque & Recursos
-- Controle de insumos médicos e materiais de atendimento.
-- Alertas automáticos de estoque baixo e controle de entrada/saída.
-
-## Planos e Preços
-- **Teste Grátis**: 7 dias grátis com acesso completo.
-- **Plano Profissional / Individual**: Ideal para consultórios e autônomos.
-- **Plano Clínicas / Equipes**: Ideal para clínicas com múltiplos profissionais, gestão avançada de salas e relatórios consolidados.
-
-## Perguntas Frequentes (FAQ)
-
-### O que é o ViraWeb?
-O ViraWeb é um sistema de gestão em nuvem desenvolvido para otimizar a rotina de clínicas, consultórios e empresas de serviço através de agendamento online, prontuário eletrônico, financeiro e automações inteligentes.
-
-### Como o ViraWeb reduz faltas (no-shows) em consultas?
-O ViraWeb envia lembretes e confirmações de agendamento diretamente aos clientes/pacientes via notificações e mensagens, permitindo a confirmação ou reagendamento antecipado.
-
-### O ViraWeb serve para qual tipo de negócio?
-É especializado em clínicas médicas, odontológicas, estéticas, psicologia, fisioterapia, consultórios individuais, salões de beleza, estúdios e empresas de agendamento e prestação de serviços.
-
-### O ViraWeb funciona no celular?
-Sim, o ViraWeb é uma aplicação web responsiva e possui suporte a PWA (Progressive Web App), permitindo ser instalado diretamente na tela inicial do celular (Android e iOS).
-
-### Como posso começar a usar o ViraWeb?
-Basta se cadastrar gratuitamente em https://viraweb.online/free-trial e iniciar o teste de 7 dias sem compromisso.
-
-## Links Recomendados e Páginas Oficiais
-- **Página Principal**: https://viraweb.online
-- **Teste Gratuito**: https://viraweb.online/free-trial
-- **Planos e Preços**: https://viraweb.online/pricing
-- **Gestor para Clínicas**: https://viraweb.online/gestor-de-clinica
-- **Gestor para Consultórios**: https://viraweb.online/gestor-de-consultorio
-- **Gestor de Clientes**: https://viraweb.online/gestor-de-clientes
-- **Gestor para Empresas**: https://viraweb.online/gestor-de-empresa
-- **Manifesto**: https://viraweb.online/manifesto
-- **Privacidade & LGPD**: https://viraweb.online/privacidade
-
-## Documentação Detalhada
-Para obter o documento completo com especificações técnicas e módulos expandidos, acesse: https://viraweb.online/llms-full.txt
+## Contato
+- E-mail: suporte@viraweb.online
+- WhatsApp: (62) 9 8463-8578

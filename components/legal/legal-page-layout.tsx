@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Image from "next/image"
+import { VwoLogo } from "@/components/brand/vwo-logo"
+import { motion, AnimatePresence } from "motion/react"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -318,8 +318,8 @@ export default function LegalPageLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              <Image src="/viraweb6.png" alt="ViraWeb" width={32} height={20} className="w-8 h-auto" />
-              <span className="text-sm font-semibold text-slate-700">ViraWeb</span>
+              <VwoLogo variant="stacked" />
+              <span className="text-sm font-semibold text-slate-700">Vira Web Odonto</span>
               <span className="text-xs text-slate-400">© {new Date().getFullYear()}</span>
             </div>
 
