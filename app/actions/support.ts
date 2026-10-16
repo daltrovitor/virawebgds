@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { createServiceRoleClient } from "@/lib/supabase/service-role"
 import { sendNotification } from "@/lib/notifications"
+import { ADMIN_HOST, ADMIN_URL, APP_HOST, APP_URL } from "@/lib/brand"
 
 export interface SupportTicket {
   id: string
@@ -182,8 +183,8 @@ async function notifyDevAboutNewTicket(
         const result = await sendNotification(adminId, {
           title: `🎫 Novo Ticket Criado: ${subject}`,
           body: `🚨 Prioridade: ${priority === 'urgent' ? 'URGENTE (Responder Rápido)' : priority === 'high' ? 'ALTA' : priority === 'medium' ? 'MÉDIA' : 'BAIXA'}\n📝 ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}`,
-          url: `https://admin.viraweb.online/admin?tab=support`,
-          targetDomain: 'admin.viraweb.online'
+          url: `${ADMIN_URL}/admin?tab=support`,
+          targetDomain: ADMIN_HOST
         })
         if (!result.success) {
           console.error(`[SUPPORT] Failed to send push to admin ${adminId}:`, result.error)
@@ -229,8 +230,8 @@ async function notifyDevAboutSupportMessage(
         const result = await sendNotification(adminId, {
           title: `💬 Nova mensagem: ${ticketSubject}`,
           body: `${userEmail}: ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}`,
-          url: `https://admin.viraweb.online/admin?tab=support`,
-          targetDomain: 'admin.viraweb.online'
+          url: `${ADMIN_URL}/admin?tab=support`,
+          targetDomain: ADMIN_HOST
         })
         if (!result.success) {
           console.error(`[SUPPORT] Failed to send message push to admin ${adminId}:`, result.error)
@@ -288,8 +289,8 @@ export async function respondToTicket(ticketId: string, message: string): Promis
     await sendNotification(ticketData.user_id, {
       title: "📩 Resposta ao seu Suporte",
       body: `Nossa equipe respondeu ao seu ticket: ${ticketData.subject}`,
-      url: `https://gdc.viraweb.online/dashboard?tab=support`,
-      targetDomain: 'gdc.viraweb.online'
+      url: `${APP_URL}/dashboard?tab=support`,
+      targetDomain: APP_HOST
     })
   }
 

@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { PRODUCTS } from "@/lib/products"
+import { APP_URL } from "@/lib/brand"
 import { useTranslations } from 'next-intl'
 import { useFCM } from "@/hooks/use-fcm"
 import { respondToTicket, updateTicketStatusAction, deleteSupportTicket, broadcastNotification } from "@/app/actions/support"
@@ -116,7 +117,7 @@ export default function AdminPage() {
     // Broadcast state
     const [broadcastTitle, setBroadcastTitle] = useState("")
     const [broadcastBody, setBroadcastBody] = useState("")
-    const [broadcastUrl, setBroadcastUrl] = useState("https://gdc.viraweb.online")
+    const [broadcastUrl, setBroadcastUrl] = useState(APP_URL)
     const [sendingBroadcast, setSendingBroadcast] = useState(false)
     
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -1233,7 +1234,7 @@ export default function AdminPage() {
                                         <div className="space-y-2">
                                             <label className="text-xs font-black text-slate-700 uppercase tracking-widest px-1">URL de Destino (Opcional)</label>
                                             <Input 
-                                                placeholder="https://gdc.viraweb.online"
+                                                placeholder={APP_URL}
                                                 value={broadcastUrl}
                                                 onChange={(e) => setBroadcastUrl(e.target.value)}
                                                 className="h-12 rounded-xl bg-slate-50/50 border-slate-100 focus:bg-white focus:ring-primary/20 transition-all font-medium"

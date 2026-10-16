@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase-server"
 import { type NextRequest, NextResponse } from "next/server"
 import { getStripe } from "@/lib/stripe"
+import { APP_URL } from "@/lib/brand"
 import { getProductByPlanType } from "@/lib/products"
 
 export async function POST(request: NextRequest) {
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Always use the main app domain for checkout redirect URLs
-    const origin = "https://gdc.viraweb.online"
+    const origin = APP_URL
 
     // Defensive checks
     if (!process.env.STRIPE_SECRET_KEY) {

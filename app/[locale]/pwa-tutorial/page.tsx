@@ -4,6 +4,7 @@ import { Smartphone, Chrome, Menu, Plus, DownloadCloud, Home, Bell, Wifi } from 
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useTranslations } from "next-intl"
+import { APP_HOST } from "@/lib/brand"
 
 export default function PWATutorialPage() {
   const t = useTranslations("pwa")
@@ -104,7 +105,7 @@ export default function PWATutorialPage() {
                         {/* Special case for step 2 - URL display */}
                         {step.number === 2 && (
                           <div className="mt-4 p-4 bg-slate-100 rounded-lg border border-slate-300 font-mono text-sm text-slate-700">
-                            gdc.viraweb.online
+                            {APP_HOST}
                           </div>
                         )}
                       </div>

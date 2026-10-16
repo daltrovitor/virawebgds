@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
 import { GoogleButton } from "@/components/ui/google-button"
 import { createClient } from "@/lib/supabase-client"
+import { appOriginFor } from "@/lib/brand"
 
 export default function FreeTrialAuthPage() {
     const { signIn, signUp, signInWithGoogle } = useAuth() as any
@@ -38,8 +39,7 @@ export default function FreeTrialAuthPage() {
                 document.cookie = `vwd_goto=free-trial; Domain=.${domain}; Path=/; Max-Age=3600; SameSite=Lax`
             }
 
-            const isProd = host.includes('viraweb.online')
-            const baseOrigin = isProd ? 'https://gdc.viraweb.online' : window.location.origin
+            const baseOrigin = appOriginFor(window.location.origin)
             const redirectTo = `${baseOrigin}/${locale}?goto=free-trial`
             if (isLogin) {
                 const { error } = await signIn(email, password)
@@ -90,8 +90,7 @@ export default function FreeTrialAuthPage() {
                 document.cookie = `vwd_goto=free-trial; Domain=.${domain}; Path=/; Max-Age=3600; SameSite=Lax`
             }
 
-            const isProd = host.includes('viraweb.online')
-            const baseOrigin = isProd ? 'https://gdc.viraweb.online' : window.location.origin
+            const baseOrigin = appOriginFor(window.location.origin)
             const localePath = locale ? `/${locale}` : ''
             const afterAuthRedirect = `${baseOrigin}${localePath}?goto=free-trial`
             const redirectTo = `${baseOrigin}/auth/callback?flow=signup&next=${encodeURIComponent(afterAuthRedirect)}`

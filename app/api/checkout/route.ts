@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase-server"
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
+import { APP_URL } from "@/lib/brand"
 
 // 🚫 Impede execução no build
 export const dynamic = "force-dynamic"
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     const plan = PLANS[plan_type as keyof typeof PLANS]
     // Always use the main app domain for checkout redirect URLs
-    const origin = "https://gdc.viraweb.online"
+    const origin = APP_URL
 
     // Prepare discount options
     let discounts: { coupon?: string; promotion_code?: string }[] | undefined

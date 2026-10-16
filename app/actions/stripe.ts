@@ -1,6 +1,7 @@
 "use server"
 
 import { getStripe } from "@/lib/stripe"
+import { APP_URL } from "@/lib/brand"
 import { getProductByPlanType } from "@/lib/products"
 import { createClient } from "@/lib/supabase/server"
 
@@ -68,7 +69,7 @@ export async function startCheckoutSession(planType: "basic" | "premium" | "mast
   }
 
   // Always use the main app domain for checkout redirect URLs
-  const origin = "https://gdc.viraweb.online"
+  const origin = APP_URL
 
   // Prepare discount options
   let discounts: { coupon?: string; promotion_code?: string }[] | undefined

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
+import { APP_HOST } from "@/lib/brand"
 
 function getEmbedUrl(url: string) {
   try {
@@ -205,7 +206,7 @@ export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkW
                   <ul className="space-y-3">
                     {[
                       "Abra o Chrome no seu celular.",
-                      "Acesse gdc.viraweb.online e faça login.",
+                      `Acesse ${APP_HOST} e faça login.`,
                       "Toque nos três pontinhos (⋮) no canto superior direito.",
                       "Selecione 'Instalar aplicativo' ou 'Adicionar à tela inicial'.",
                       "Pronto! Agora o Vira Web Odonto está na sua lista de apps."
@@ -225,7 +226,7 @@ export default function TutorialTab({ onMarkWatched, isDemo = false }: { onMarkW
                   </h4>
                   <ul className="space-y-3">
                     {[
-                      "Abra o Safari e acesse gdc.viraweb.online",
+                      `Abra o Safari e acesse ${APP_HOST}`,
                       "Toque no botão de 'Compartilhar' (o quadrado com seta para cima icon) na barra inferior.",
                       "Desça a lista e toque em 'Adicionar à Tela de Início'.",
                       "Toque em 'Adicionar' no canto superior direito.",

@@ -6,6 +6,7 @@ import LegalPageLayout, {
   DataList,
   type LegalSection,
 } from "@/components/legal/legal-page-layout"
+import { ADMIN_HOST, APP_HOST } from "@/lib/brand"
 import {
   FileText,
   Shield,
@@ -40,7 +41,7 @@ export default function TermsPage() {
             <a href="https://viraweb.online" target="_blank" rel="noopener noreferrer">
               viraweb.online
             </a>{" "}
-            and its subdomains (including <code>gdc.viraweb.online</code> and <code>admin.viraweb.online</code>), you
+            and in the app at <code>{APP_HOST}</code> (admin panel at <code>{ADMIN_HOST}</code>), you
             declare that you have read, understood, and agree to these Terms of Service.
           </p>
           <WarningBox>
@@ -190,7 +191,7 @@ export default function TermsPage() {
             <a href="https://viraweb.online" target="_blank" rel="noopener noreferrer">
               viraweb.online
             </a>{" "}
-            e seus subdomínios (incluindo <code>gdc.viraweb.online</code> e <code>admin.viraweb.online</code>), você
+            e no aplicativo em <code>{APP_HOST}</code> (painel administrativo em <code>{ADMIN_HOST}</code>), você
             declara que leu, compreendeu e concorda com estes Termos de Serviço.
           </p>
           <WarningBox>

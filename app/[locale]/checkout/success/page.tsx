@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, Loader2 } from "lucide-react"
 import { handleCheckoutSuccess } from "@/app/actions/stripe"
 import { useToast } from "@/hooks/use-toast"
+import { APP_URL } from "@/lib/brand"
 
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
@@ -46,7 +47,7 @@ export default function CheckoutSuccessPage() {
         // Redirect to main dashboard after 1.5 seconds (reduced for better UX)
         setTimeout(() => {
           const locale = window.location.pathname.split('/')[1] || 'pt-BR'
-          window.location.href = `https://gdc.viraweb.online/${locale}`
+          window.location.href = `${APP_URL}/${locale}`
         }, 1500)
       })
       .catch((err) => {
