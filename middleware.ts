@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { updateSession } from "@/lib/supabase/proxy"
+import { isAdminHost } from "@/lib/admin-host"
 import createMiddleware from 'next-intl/middleware';
 import { routing } from '@/i18n/routing';
 
@@ -23,12 +24,9 @@ export async function middleware(request: NextRequest) {
   }
 
   const host = request.headers.get("host") || "";
-  const adminDomain = "admin.viraweb.online";
-
-
 
   // Handle admin subdomain rewrite (internal)
-  if (host.includes(adminDomain)) {
+  if (isAdminHost(host)) {
     const excludedPaths = ['/pt-BR/admin', '/en/admin', '/api', '/_next'];
     const shouldRewrite = !excludedPaths.some(p => pathname.startsWith(p));
     
